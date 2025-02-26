@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signalwavex/Features/current_order_page.dart';
 import 'package:signalwavex/component/buttonbarnav.dart';
 import 'package:signalwavex/feed/homepage.dart';
 
@@ -11,11 +12,9 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   int _indexSelection = 0;
-  List<Widget> _pages = [
-    Homepage(),
-    Container(
-      color: Colors.white,
-    ),
+  final List<Widget> _pages = [
+    const Homepage(),
+    const CurrentOrderPage(),
     Container(
       color: Colors.indigoAccent,
     ),

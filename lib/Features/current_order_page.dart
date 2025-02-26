@@ -249,6 +249,12 @@ class _CurrentOrderPageState extends State<CurrentOrderPage> {
               FancyContainerTwo(
                 height: 40,
                 width: 100,
+                action: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ConfirmOrderDialog(),
+                  );
+                },
                 borderColor: Colors.white.withAlpha(10),
                 borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(0), right: Radius.circular(10)),
