@@ -5,6 +5,7 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/router/api_route.dart';
+import 'package:signalwavex/testScreen/line_chart.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -190,6 +191,7 @@ class _HomepageState extends State<Homepage> {
           "\$97,3120",
           style: TextStyles.currencytext,
         ),
+        LineChart()
       ]
           //  LineChart() ],
           ),

@@ -22,6 +22,31 @@ dependencies:
   riverpod: ^2.6.1
   fl_chart: ^0.70.2
 
+
+  # for chart widget
+  http:
+  k_chart:
+  
+  # for the crypto
+  # crypto_market: 
+  #   git:
+  #     url: https://github.com/danoritic/crypto_market.git
+  # card_swiper:
+  # provider:
+  # get:
+  # candlesticks_plus:
+  # coingecko_api:
+  # sqflite:
+  # dio:
+  # shimmer:
+  # onscreen_num_keyboard:
+  # flutter_svg:
+  # intl_phone_number_input:
+  # flutter_animate:
+  # uuid:
+  # # fl_chart:
+  # for the crypto ENDED.....
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

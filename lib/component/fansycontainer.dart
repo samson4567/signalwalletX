@@ -35,6 +35,7 @@ class FancyContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        clipBehavior: Clip.hardEdge,
         padding: padding,
         margin: margin,
         width: width,

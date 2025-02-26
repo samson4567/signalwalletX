@@ -8,4 +8,5 @@ class MyAppRouteConstant {
   static const String convert = '/convert';
   static const String deposit = '/deposit';
   static const String transfer = '/transfer';
+  static const String testScreen = '/testScreen';
 }
