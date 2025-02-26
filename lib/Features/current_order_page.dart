@@ -198,9 +198,7 @@ class _CurrentOrderPageState extends State<CurrentOrderPage> {
                 ),
               ),
             ),
-            SizedBox(
-              width: 10,
-            ),
+            SizedBox(width: 10),
             Expanded(
               child: FancyContainerTwo(
                 height: 40,
@@ -218,6 +216,7 @@ class _CurrentOrderPageState extends State<CurrentOrderPage> {
             ),
           ],
         ),
+        SizedBox(height: 10),
         FancyContainerTwo(
           height: 40,
           width: double.infinity,
