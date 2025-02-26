@@ -1,6 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:signalwavex/Features/components/confirm_order_dialog.dart';
+import 'package:signalwavex/Features/components/order_followed_dialog.dart';
 import 'package:signalwavex/component/back_button.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
@@ -65,7 +67,16 @@ class _CurrentOrderPageState extends State<CurrentOrderPage> {
           child: buildBackArrow(context),
         ),
         leadingWidth: 76,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.menu))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => OrderFollowedDialog(),
+                );
+              },
+              icon: const Icon(Icons.menu))
+        ],
       ),
       body: Center(
         child: Padding(
