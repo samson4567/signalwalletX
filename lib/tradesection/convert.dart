@@ -212,8 +212,9 @@ class _ConvertState extends State<Convert> {
     String message = type == 'success'
         ? 'Your crypto has been successfully transferred.'
         : 'You don\'t have enough BTC to complete this transaction.';
-    String imagePath =
-        type == 'success' ? 'assets/success.png' : 'assets/insufficient.png';
+    String imagePath = type == 'success'
+        ? 'assets/icons/succeful.png'
+        : 'assets/icons/wrong.png';
 
     showDialog(
       context: context,

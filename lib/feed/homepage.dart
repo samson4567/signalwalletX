@@ -1,3 +1,4 @@
+// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -124,79 +125,120 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildFancyChartContainer(BuildContext context) {
-    return FancyContainer(
-      color: const Color(0xFF101112),
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF101112),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.grey, // Replace with your actual border color
+          width: 2,
+        ),
+      ),
       width: 400,
       height: 435,
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: ColorConstants.lineborder,
-        width: 2,
-      ),
       padding: const EdgeInsets.all(16),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Bitcoin USD (BTC - USD)",
-                    style: TextStyles.normaltext,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "+ 231.43 (1.02%)",
-                    style: TextStyles.normaltext
-                        .copyWith(fontSize: 12, color: ColorConstants.done
-                            // You can change this to any color you want
-                            ),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Bitcoin USD (BTC - USD)",
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "+ 231.43 (1.02%)",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.green, // Replace with your color constant
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: 125,
-              height: 37.5,
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(255, 255, 255, 0.1),
-                border: Border.all(color: ColorConstants.primaryGrayColor),
-                borderRadius: BorderRadius.circular(10),
+              Container(
+                width: 125,
+                height: 37.5,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 255, 255, 0.1),
+                  border: Border.all(
+                      color: Colors.grey), // Replace with your color constant
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "24 Hours",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down_sharp,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "24 Hours",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                  Icon(
-                    Icons.arrow_drop_down_sharp,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        // Add spacing between header and currency text
-        Text(
-          "\$97,3120",
-          style: TextStyles.currencytext,
-        ),
-        LineChart()
-      ]
-          //  LineChart() ],
+            ],
           ),
+          const SizedBox(height: 8),
+          const Text(
+            "\$97,3120",
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: LineChart(), // Call the function to create chart data
+          ),
+        ],
+      ),
     );
   }
+
+// ✅ Function to Create Line Chart Data
+  // LineChartData _buildChartData() {
+  //   return LineChartData(
+  //       gridData: const FlGridData(show: false),
+  //       titlesData: const FlTitlesData(show: false),
+  //       borderData: FlBorderData(show: false),
+  //       lineBarsData: [
+  //         LineChartBarData(
+  //           //gradient: const LinearGradient(colors: Colors.black12),
+  //           spots: [
+  //             const FlSpot(0, 2),
+  //             const FlSpot(1, 3),
+  //             const FlSpot(2, 2),
+  //             const FlSpot(3, 4),
+  //             const FlSpot(4, 3),
+  //             const FlSpot(5, 5),
+  //           ],
+  //           isCurved: true,
+  //           color: Colors.green,
+  //           //gradient: LinearGradient(colors: [Colors.green]),
+  //           barWidth: 3,
+  //           isStrokeCapRound: true,
+  //           belowBarData: BarAreaData(show: false),
+  //         ),
+  //         // const SizedBox(height: 8),
+  //         // // Add spacing between header and currency text
+  //         // Text(
+  //         //   "\$97,3120",
+  //         //   style: TextStyles.currencytext,
+  //         // ),
+  //         // LineChart()
+  //       ]
+  //       //  LineChart() ],
+  //       );
+  // }
 
   Widget _buildFancyRecentTransaction(BuildContext context) {
     final List<Map<String, String>> transactions = [
