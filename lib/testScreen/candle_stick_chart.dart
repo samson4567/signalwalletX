@@ -85,9 +85,10 @@ class _CandleStickChartState extends State<CandleStickChart> {
         FancyContainer(
           borderRadius: BorderRadius.circular(10),
           height: 450,
-          width: 450,
+          width: double.infinity,
+          // width: 450,
           color: Colors.black,
-          // width: double.infinity,
+
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: KChartWidget(

@@ -26,6 +26,8 @@ dependencies:
   # for chart widget
   http:
   k_chart:
+  uuid:
+  
   
   # for the crypto
   # crypto_market: 
@@ -46,6 +48,10 @@ dependencies:
   # uuid:
   # # fl_chart:
   # for the crypto ENDED.....
+
+  # fancy nancy
+  shimmer:
+  dropdown_button2:
 
 dev_dependencies:
   flutter_test:

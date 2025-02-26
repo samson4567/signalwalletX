@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:signalwavex/Features/current_order_page.dart';
+import 'package:signalwavex/feed/feed.dart';
 import 'package:signalwavex/testScreen/candle_stick_chart.dart';
 import 'package:signalwavex/testScreen/k_chart_sample.dart';
 import 'package:signalwavex/testScreen/line_chart.dart';
@@ -18,7 +20,8 @@ class _TestScreenState extends State<TestScreen> {
       body: Center(
         // child: KChartSample(),
         // child: LineChart(),
-        child: CandleStickChart(),
+        // child: CandleStickChart(),
+        child: CurrentOrderPage(),
       ),
     );
   }
