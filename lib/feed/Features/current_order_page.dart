@@ -1,8 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:signalwavex/Features/components/confirm_order_dialog.dart';
-import 'package:signalwavex/Features/components/order_followed_dialog.dart';
+import 'package:signalwavex/feed/Features/components/confirm_order_dialog.dart';
+import 'package:signalwavex/feed/Features/components/order_followed_dialog.dart';
 import 'package:signalwavex/component/back_button.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
@@ -13,14 +13,14 @@ import 'package:signalwavex/main.dart';
 import 'package:signalwavex/testScreen/candle_stick_chart.dart';
 import 'package:uuid/uuid.dart';
 
-class CurrentOrderPage extends StatefulWidget {
-  const CurrentOrderPage({super.key});
+class FeaturesCurrentOrder extends StatefulWidget {
+  const FeaturesCurrentOrder({super.key});
 
   @override
-  State<CurrentOrderPage> createState() => _CurrentOrderPageState();
+  State<FeaturesCurrentOrder> createState() => _FeaturesCurrentOrderState();
 }
 
-class _CurrentOrderPageState extends State<CurrentOrderPage> {
+class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   EdgeInsets externalPadding = const EdgeInsets.symmetric(horizontal: 20);
   String selectedText = "Perp";
   bool isDepth = false;
@@ -95,7 +95,7 @@ class _CurrentOrderPageState extends State<CurrentOrderPage> {
                       length: 4,
                       child: Column(
                         children: [
-                          TabBar(
+                          const TabBar(
                             tabs: [
                               Tab(text: "Current Order (1)"),
                               Tab(text: "Historical Order"),

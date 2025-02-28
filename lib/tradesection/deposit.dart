@@ -255,7 +255,11 @@ class _DepositPageState extends State<DepositPage> {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Address copied to clipboard'),
+                      backgroundColor: Colors.black,
+                      content: Text(
+                        'Address copied to clipboard',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   );
                 },

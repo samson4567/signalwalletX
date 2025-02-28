@@ -204,42 +204,6 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-// ✅ Function to Create Line Chart Data
-  // LineChartData _buildChartData() {
-  //   return LineChartData(
-  //       gridData: const FlGridData(show: false),
-  //       titlesData: const FlTitlesData(show: false),
-  //       borderData: FlBorderData(show: false),
-  //       lineBarsData: [
-  //         LineChartBarData(
-  //           //gradient: const LinearGradient(colors: Colors.black12),
-  //           spots: [
-  //             const FlSpot(0, 2),
-  //             const FlSpot(1, 3),
-  //             const FlSpot(2, 2),
-  //             const FlSpot(3, 4),
-  //             const FlSpot(4, 3),
-  //             const FlSpot(5, 5),
-  //           ],
-  //           isCurved: true,
-  //           color: Colors.green,
-  //           //gradient: LinearGradient(colors: [Colors.green]),
-  //           barWidth: 3,
-  //           isStrokeCapRound: true,
-  //           belowBarData: BarAreaData(show: false),
-  //         ),
-  //         // const SizedBox(height: 8),
-  //         // // Add spacing between header and currency text
-  //         // Text(
-  //         //   "\$97,3120",
-  //         //   style: TextStyles.currencytext,
-  //         // ),
-  //         // LineChart()
-  //       ]
-  //       //  LineChart() ],
-  //       );
-  // }
-
   Widget _buildFancyRecentTransaction(BuildContext context) {
     final List<Map<String, String>> transactions = [
       {

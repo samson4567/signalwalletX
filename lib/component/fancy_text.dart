@@ -77,32 +77,7 @@ class _FancyTextState extends State<FancyText> {
               widget.text,
               style: widget.rawTextStyle ?? textStyle,
               textAlign: widget.textAlign,
-            )
-            //  Container(
-            //   constraints: widget.constraints,
-            //   clipBehavior: Clip.hardEdge,
-            //   padding: widget.padding,
-            //   alignment: (widget.nulledAlign ?? false)
-            //       ? null
-            //       : widget.alignment ?? Alignment.center,
-            //   width: widget.width,
-            //   height: widget.height,
-            //   decoration: BoxDecoration(
-            //     boxShadow: widget.shadows,
-            //     borderRadius: widget.borderRadius ??
-            //         BorderRadius.circular(widget.radius ?? 8),
-            //     color: widget.backgroundColor,
-            //     border: widget.hasBorder!
-            //         ? Border.all(
-            //             color: widget.borderColor ?? const Color(0xFF000000),
-            //             width: widget.borderThickness ?? 1,
-            //           )
-            //         : null,
-            //   ),
-            //   child: widget.child,
-            // ),
-
-            )
+            ))
         : Container(
             // width: widget.width,
             // height: widget.height,

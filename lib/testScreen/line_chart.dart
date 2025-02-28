@@ -132,19 +132,6 @@ class _LineChartState extends State<LineChart> {
               child: const CircularProgressIndicator()),
       ]),
     );
-    // ListView(
-    //   shrinkWrap: true,
-    //   children: <Widget>[
-
-    //     // buildButtons(),
-    //     // if (_bids != null && _asks != null)
-    //     //   Container(
-    //     //     height: 230,
-    //     //     width: double.infinity,
-    //     //     child: DepthChart(_bids!, _asks!, chartColors),
-    //     //   )
-    //   ],
-    // );
   }
 
   Widget buildButtons() {

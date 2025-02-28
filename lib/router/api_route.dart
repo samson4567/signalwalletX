@@ -9,4 +9,6 @@ class MyAppRouteConstant {
   static const String deposit = '/deposit';
   static const String transfer = '/transfer';
   static const String testScreen = '/testScreen';
+  static const String withdraw = '/withdraw';
+  static const String settings = '/settings';
 }
