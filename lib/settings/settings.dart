@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:signalwavex/settings/language.dart';
+import 'package:signalwavex/settings/password.dart';
+import 'package:signalwavex/settings/profile.dart';
+import 'package:signalwavex/settings/verification.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -7,65 +11,78 @@ class Settings extends StatefulWidget {
   State<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
-  bool notificationsEnabled = true;
+class _SettingsState extends State<Settings>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Settings"),
-        backgroundColor: Colors.black,
-      ),
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "General",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            ListTile(
-              leading: const Icon(Icons.notifications, color: Colors.white),
-              title: const Text("Enable Notifications",
-                  style: TextStyle(color: Colors.white)),
-              trailing: Switch(
-                value: notificationsEnabled,
-                activeColor: Colors.yellow,
-                onChanged: (value) {
-                  setState(() {
-                    notificationsEnabled = value;
-                  });
-                },
-              ),
-            ),
-            const Divider(color: Colors.grey),
-            ListTile(
-              leading: const Icon(Icons.lock, color: Colors.white),
-              title: const Text("Privacy Settings",
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                // Navigate to Privacy Settings (Implement Later)
-              },
-            ),
-            const Divider(color: Colors.grey),
-            ListTile(
-              leading: const Icon(Icons.info, color: Colors.white),
-              title: const Text("About", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                // Show About Dialog or Navigate to About Page
-              },
-            ),
-          ],
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
         ),
+        title: const Text(
+          "Settings",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          TabBar(
+            unselectedLabelStyle: const TextStyle(fontSize: 10),
+            controller: _tabController,
+            labelColor: Colors.yellow,
+            unselectedLabelColor: Colors.white,
+            indicatorColor: Colors.yellow,
+            tabs: const [
+              Tab(text: "Profile"),
+              Tab(text: "Transaction History"),
+              Tab(text: "Password"),
+              Tab(text: "Verification"),
+              Tab(text: "Language"),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
+                ProfileSection(),
+                TransactionHistorySection(),
+                PasswordSection(),
+                VerificationSection(),
+                LanguageSection(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+class TransactionHistorySection extends StatelessWidget {
+  const TransactionHistorySection({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const Text("Transaction History",
+        style: TextStyle(color: Colors.white));
   }
 }

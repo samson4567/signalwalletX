@@ -1,7 +1,5 @@
-// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
@@ -16,29 +14,43 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = screenWidth * 0.05;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(screenWidth),
-            SizedBox(height: screenWidth * 0.04),
-            _buildFancyContainer(context),
-            SizedBox(height: screenWidth * 0.04),
-            _buildFancyChartContainer(context),
-            SizedBox(height: screenWidth * 0.04),
-            _buildFancyRecentTransaction(context),
-            SizedBox(height: screenWidth * 0.04),
-            _buildFancyRecentTopcoin(context),
-          ],
-        ),
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      key: _scaffoldKey, // Add scaffold key
+      drawer: _buildDrawer(context), // Drawer
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(screenWidth),
+          Expanded(
+            // Ensure scrolling works properly
+            child: SingleChildScrollView(
+              padding:
+                  EdgeInsets.symmetric(horizontal: padding, vertical: padding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: screenWidth * 0.04),
+                  _buildFancyContainer(context),
+                  SizedBox(height: screenWidth * 0.04),
+                  _buildFancyChartContainer(context),
+                  SizedBox(height: screenWidth * 0.04),
+                  _buildFancyRecentTransaction(context),
+                  SizedBox(height: screenWidth * 0.04),
+                  _buildFancyRecentTopcoin(context),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -60,8 +72,7 @@ class _HomepageState extends State<Homepage> {
                 Text(
                   'Good Morning, Mellisa',
                   style: TextStyles.smallText.copyWith(
-                    fontSize: screenWidth *
-                        0.04, // Consistent with heading font sizes
+                    fontSize: screenWidth * 0.04,
                     color: const Color.fromRGBO(255, 255, 255, 0.7),
                     fontWeight: FontWeight.bold,
                   ),
@@ -69,7 +80,7 @@ class _HomepageState extends State<Homepage> {
                 Text(
                   'Feb 12 2022.05:22',
                   style: TextStyles.bodyText.copyWith(
-                    fontSize: 10, // Consistent with heading font sizes
+                    fontSize: 10,
                     color: ColorConstants.primarydeepColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -81,15 +92,119 @@ class _HomepageState extends State<Homepage> {
               icon: Icon(
                 Icons.menu,
                 color: Colors.white,
-                size: screenWidth * 0.08, // Icon size matching the icon row
+                size: screenWidth * 0.08,
               ),
               onPressed: () {
-                // Add menu action
+                _scaffoldKey.currentState
+                    ?.openDrawer(); // Open drawer correctly
               },
             ),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: Container(
+        color: Colors.black, // Set the drawer background color to black
+        child: Column(
+          children: <Widget>[
+            Image.asset('assets/images/sign.png'),
+            ListTile(
+              leading: const Icon(Icons.tag,
+                  color: Colors.white, size: 18), // # icon
+              title: const Text('Home', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                context.go(MyAppRouteConstant.home);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+              title:
+                  const Text('Market', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                context.go(MyAppRouteConstant.market);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+              title: const Text('Perpetual',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                context.go(MyAppRouteConstant.perpetual);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+              title:
+                  const Text('Assets', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                context.go(MyAppRouteConstant.assets);
+              },
+            ),
+            const SizedBox(
+              height: 220,
+            ),
+            const Text(
+              'Help Center',
+              style: TextStyle(color: Color(0xFF313131)),
+            ),
+            ListTile(
+              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+              title:
+                  const Text('settings', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                context.go(MyAppRouteConstant.settings);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+              title:
+                  const Text('support', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                context.go(MyAppRouteConstant.assets);
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage('assets/images/profile.png'),
+                ),
+                const Column(
+                  children: [
+                    Text(
+                      'sam@mail.con',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    Text(
+                      'sam@mail.con',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Image.asset(
+                    'assets/images/signout.png',
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 

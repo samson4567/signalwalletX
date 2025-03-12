@@ -12,25 +12,40 @@ class _MarketState extends State<Market> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text("Market  Trading",
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'inter',
-                fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.black,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           children: [
+            Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(Icons.arrow_back, color: Colors.white),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                  ],
+                ),
+                const Text(
+                  "Market Trading",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             _buildSearchBar(),
-            const SizedBox(height: 30), // Added space below search bar
-            Expanded(
-                child:
-                    _buildFancyContractMarket(context)), // Wrapped in Expanded
+            const SizedBox(height: 30),
+            Expanded(child: _buildFancyContractMarket(context)),
           ],
         ),
       ),
@@ -40,7 +55,7 @@ class _MarketState extends State<Market> {
   Widget _buildSearchBar() {
     return Container(
       width: 399,
-      height: 39,
+      height: 48,
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xFF313131)),
         color: const Color(0xFF0D0D0D),
@@ -56,6 +71,7 @@ class _MarketState extends State<Market> {
       child: const TextField(
         decoration: InputDecoration(
           hintText: 'Search  by currency pair',
+          hintStyle: TextStyle(color: const Color(0xFF8F8F8F), fontSize: 10),
           border: InputBorder.none,
           prefixIcon: Icon(Icons.search, color: Colors.grey),
           contentPadding: EdgeInsets.symmetric(vertical: 10),
@@ -178,8 +194,11 @@ class _MarketState extends State<Market> {
                 final coin = coins[index];
                 return Row(
                   children: [
-                    const Icon(Icons.star_border,
-                        color: Colors.yellow, size: 24),
+                    const Icon(
+                      Icons.star_border,
+                      color: const Color(0xFF313131),
+                      size: 18,
+                    ),
                     const SizedBox(width: 12),
                     Image.asset(coin['icon']!, width: 32, height: 32),
                     const SizedBox(width: 16),
@@ -193,7 +212,7 @@ class _MarketState extends State<Market> {
                       ),
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           coin['price']!,
@@ -204,8 +223,10 @@ class _MarketState extends State<Market> {
                         ),
                         Text(
                           coin['percentage']!,
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: const Color(0xFF3BCC70),
+                          ),
                         ),
                       ],
                     ),

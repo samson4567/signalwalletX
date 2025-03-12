@@ -11,4 +11,9 @@ class MyAppRouteConstant {
   static const String testScreen = '/testScreen';
   static const String withdraw = '/withdraw';
   static const String settings = '/settings';
+  static const String home = '/home';
+  static const String market = '/market';
+  static const String features = '/features';
+  static const String perpetual = '/perpetual';
+  static const String assets = '/assets';
 }

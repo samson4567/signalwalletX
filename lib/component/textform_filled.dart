@@ -12,12 +12,19 @@ class TextFormFieldWithCustomStyles extends StatelessWidget {
   final Color borderColor;
   final Color labelColor;
   final Color hintColor;
-  final String? prefixImagePath; // Nullable prefix image path
-  final String? suffixImagePath; // Nullable suffix image path
-  final VoidCallback? onSuffixTap; // Action for suffix tap
+  final TextStyle? hintStyle;
+  final String? prefixImagePath;
+  final String? suffixImagePath;
+  final IconData? prefixIcon;
+  final IconData? suffixIcon;
+  final VoidCallback? onSuffixTap;
+  final BoxDecoration? boxDecoration;
+  final InputDecoration? inputDecoration;
+  final double? width;
+  final double? height;
 
   const TextFormFieldWithCustomStyles({
-    Key? key,
+    super.key,
     required this.controller,
     required this.label,
     required this.hintText,
@@ -29,50 +36,72 @@ class TextFormFieldWithCustomStyles extends StatelessWidget {
     this.borderColor = Colors.grey,
     this.labelColor = Colors.white,
     this.hintColor = const Color(0x80FFFFFF),
-    this.prefixImagePath, // Optional parameter for prefix
-    this.suffixImagePath, // Optional parameter for suffix
-    this.onSuffixTap, // Optional tap action for suffix icon
-  }) : super(key: key);
+    this.hintStyle,
+    this.prefixImagePath,
+    this.suffixImagePath,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.onSuffixTap,
+    this.boxDecoration,
+    this.inputDecoration,
+    this.width,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        labelStyle: TextStyle(color: labelColor),
-        hintStyle: TextStyle(color: hintColor),
-        filled: true,
-        fillColor: fillColor,
-        prefixIcon: prefixImagePath != null
-            ? Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.asset(prefixImagePath!, width: 20, height: 20),
-              )
-            : null, // Show prefix image if path is provided
-        suffixIcon: suffixImagePath != null
-            ? GestureDetector(
-                onTap: onSuffixTap,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.asset(suffixImagePath!, width: 20, height: 20),
-                ),
-              )
-            : null, // Show suffix image if path is provided
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: borderColor, width: 1.5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: borderColor, width: 2.0),
-        ),
+    return Container(
+      width: width,
+      height: height,
+      decoration: boxDecoration,
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        decoration: inputDecoration ??
+            InputDecoration(
+              labelText: label,
+              hintText: hintText,
+              labelStyle: TextStyle(color: labelColor),
+              hintStyle: hintStyle ?? TextStyle(color: hintColor),
+              filled: true,
+              fillColor: fillColor,
+              prefixIcon: prefixImagePath != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child:
+                          Image.asset(prefixImagePath!, width: 20, height: 20),
+                    )
+                  : prefixIcon != null
+                      ? Icon(prefixIcon, color: textColor)
+                      : null,
+              suffixIcon: suffixImagePath != null
+                  ? GestureDetector(
+                      onTap: onSuffixTap,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.asset(suffixImagePath!,
+                            width: 20, height: 20),
+                      ),
+                    )
+                  : suffixIcon != null
+                      ? GestureDetector(
+                          onTap: onSuffixTap,
+                          child: Icon(suffixIcon, color: textColor),
+                        )
+                      : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: borderColor, width: 1.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: borderColor, width: 2.0),
+              ),
+            ),
+        validator: validator,
+        style: TextStyle(color: textColor),
       ),
-      validator: validator,
-      style: TextStyle(color: textColor),
     );
   }
 }
