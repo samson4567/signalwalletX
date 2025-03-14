@@ -37,6 +37,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         return BottomNavigationBarItem(
           icon: Image.asset(
             item['icon']!,
+            fit: BoxFit.cover,
             width: 24,
             height: 24,
             color: widget.selectedIndex == navItems.indexOf(item)

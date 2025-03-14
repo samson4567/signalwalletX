@@ -16,7 +16,7 @@ class Assets extends StatefulWidget {
 
 class _AssetsState extends State<Assets> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _selectedIndex = 0;
+  int? _selectedIndex;
 
   @override
   Widget build(BuildContext context) {
