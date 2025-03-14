@@ -23,7 +23,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: DrawerComponent(),
+      drawer: const DrawerComponent(),
       backgroundColor: Colors.black,
       appBar: AppBar(
         leading: const Row(
@@ -59,7 +59,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             child: Column(
               children: [
                 _buildFirstRow(),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -110,7 +110,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Expanded(
                         child: Container(
                       // color: Colors.red,
@@ -118,7 +118,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                     )),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 FancyContainerTwo(
@@ -131,7 +131,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                           dividerColor: getFigmaColor("27282B"),
                           tabAlignment: TabAlignment.start,
                           isScrollable: true,
-                          tabs: [
+                          tabs: const [
                             Tab(text: "Position"),
                             Tab(text: "Trades"),
                           ],
@@ -309,7 +309,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                           ),
                         ],
                       ),
-                      SizedBox()
+                      const SizedBox()
                     ],
                   ),
                 ],

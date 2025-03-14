@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:signalwavex/component/color.dart';
-import 'package:signalwavex/component/fansycontainer.dart';
 
 class Withdraw extends StatefulWidget {
   const Withdraw({super.key});
