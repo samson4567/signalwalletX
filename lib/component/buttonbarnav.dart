@@ -36,6 +36,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       items: navItems.map((item) {
         return BottomNavigationBarItem(
           icon: Image.asset(
+            // dummy
             item['icon']!,
             fit: BoxFit.cover,
             width: 24,
