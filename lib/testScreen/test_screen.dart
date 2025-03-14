@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/feed/Features/current_order_page.dart';
 
 class TestScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _TestScreenState extends State<TestScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: FeaturesCurrentOrder(),
+        child: DrawerComponent(),
       ),
     );
   }
