@@ -9,6 +9,7 @@ import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
+import 'package:signalwavex/testScreen/candle_stick_chart.dart';
 
 class PerpetualScreen extends StatefulWidget {
   const PerpetualScreen({super.key});
@@ -627,40 +628,53 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
   Widget _buildTableBodyRow() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
-      child: SizedBox(
-        height: 15,
-        child: Stack(
-          children: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FancyText(
-                    "91,973.0",
-                    textColor: getFigmaColor("CA3F64"),
-                    size: 10,
-                  ),
-                  FancyText(
-                    "0.2550",
-                    size: 10,
-                  ),
-                  FancyText(
-                    "5.7867",
-                    size: 7,
-                  ),
-                ],
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: CandleStickChart(),
+                ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: FancyContainerTwo(
-                radius: 1,
-                height: double.infinity,
-                width: Random().nextInt(200) / 1,
-                backgroundColor: getFigmaColor("CA3F64", 15),
+          );
+        },
+        child: SizedBox(
+          height: 15,
+          child: Stack(
+            children: [
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FancyText(
+                      "91,973.0",
+                      textColor: getFigmaColor("CA3F64"),
+                      size: 10,
+                    ),
+                    FancyText(
+                      "0.2550",
+                      size: 10,
+                    ),
+                    FancyText(
+                      "5.7867",
+                      size: 7,
+                    ),
+                  ],
+                ),
               ),
-            )
-          ],
+              Align(
+                alignment: Alignment.centerRight,
+                child: FancyContainerTwo(
+                  radius: 1,
+                  height: double.infinity,
+                  width: Random().nextInt(200) / 1,
+                  backgroundColor: getFigmaColor("CA3F64", 15),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
