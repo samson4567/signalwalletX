@@ -122,36 +122,40 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                FancyContainerTwo(
-                  height: 450,
-                  child: DefaultTabController(
-                    length: 2,
-                    child: Column(
-                      children: [
-                        TabBar(
-                          dividerColor: getFigmaColor("27282B"),
-                          tabAlignment: TabAlignment.start,
-                          isScrollable: true,
-                          tabs: const [
-                            Tab(text: "Position"),
-                            Tab(text: "Trades"),
-                          ],
-                        ),
-                        Expanded(
-                          child: TabBarView(children: [
-                            _buildPositionTabBarView(),
-                            _buildTradesTabBarView()
-                          ]),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                if (tpOrslIsChecked) _buildPositionAndTradeTabView(),
               ],
             ),
           ),
         ),
       )),
+    );
+  }
+
+  FancyContainerTwo _buildPositionAndTradeTabView() {
+    return FancyContainerTwo(
+      height: 450,
+      child: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: [
+            TabBar(
+              dividerColor: getFigmaColor("27282B"),
+              tabAlignment: TabAlignment.start,
+              isScrollable: true,
+              tabs: const [
+                Tab(text: "Position"),
+                Tab(text: "Trades"),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(children: [
+                _buildPositionTabBarView(),
+                _buildTradesTabBarView()
+              ]),
+            )
+          ],
+        ),
+      ),
     );
   }
 
