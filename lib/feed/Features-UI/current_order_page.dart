@@ -1,8 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:signalwavex/feed/Features/components/confirm_order_dialog.dart';
-import 'package:signalwavex/feed/Features/components/order_followed_dialog.dart';
+import 'package:signalwavex/feed/Features-UI/components/confirm_order_dialog.dart';
+import 'package:signalwavex/feed/Features-UI/components/order_followed_dialog.dart';
 import 'package:signalwavex/component/back_button.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
