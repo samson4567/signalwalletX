@@ -166,151 +166,170 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(.0),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.all(.0),
+                        child: Row(
+                          children: [
+                            FancyText(
+                              "ETHUSDT",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                              size: 14.w,
+                            ),
+                            SizedBox(width: 10),
+                            FancyContainerTwo(
+                              backgroundColor: getFigmaColor("0ECB81", 20),
+                              radius: 5,
+                              child: Padding(
+                                padding: EdgeInsets.all(6.0.w),
+                                child: FancyText(
+                                  "Buy Long",
+                                  textColor: ColorConstants.fancyGreen,
+                                  size: 14.w,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  FittedBox(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        FancyText(
-                          "ETHUSDT",
-                          textColor: getFigmaColor("FFFFFF", 60),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Entry price",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "2491.04",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
                         ),
                         SizedBox(width: 10),
-                        FancyContainerTwo(
-                          backgroundColor: getFigmaColor("0ECB81", 20),
-                          radius: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: FancyText(
-                              "Buy Long",
-                              textColor: ColorConstants.fancyGreen,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Profit(USDT)",
+                              textColor: getFigmaColor("FFFFFF", 60),
                             ),
-                          ),
+                            FancyText(
+                              "+3.99",
+                              textColor: getFigmaColor("C6E229"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Max Quantity",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "0.56",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Entry price",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "2491.04",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Profit(USDT)",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "+3.99",
-                            textColor: getFigmaColor("C6E229"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Max Quantity",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "0.56",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                    ],
+                  FittedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Handling Fee",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "0.56",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Average Closing Price",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "100%",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Quantity",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "0.56 (ETH)",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Handling Fee",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "0.56",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Average Closing Price",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "100%",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Quantity",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "0.56 (ETH)",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Time",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "2025/2/25 02:16:09 (UTC+2)",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Type",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "Close",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      SizedBox()
-                    ],
+                  FittedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Time",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "2025/2/25 02:16:09 (UTC+2)",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "Type",
+                              textColor: getFigmaColor("FFFFFF", 60),
+                            ),
+                            FancyText(
+                              "Close",
+                              textColor: getFigmaColor("CED0D4"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10),
+                        SizedBox()
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -323,199 +342,219 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
 
   Padding _buildPositionTabBarView() {
     return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Column(
-        children: [
-          FancyContainerTwo(
-            hasBorder: true,
-            borderColor: Colors.white.withOpacity(.1),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(.0),
-                    child: Row(
-                      children: [
-                        FancyText(
-                          "ETHUSDT",
-                          textColor: getFigmaColor("FFFFFF", 60),
-                        ),
-                        SizedBox(width: 10),
-                        FancyContainerTwo(
-                          backgroundColor: getFigmaColor("0ECB81", 20),
-                          radius: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: FancyText(
-                              "Buy Long",
-                              textColor: ColorConstants.fancyGreen,
-                            ),
+      padding: EdgeInsets.all(18.0.w),
+      child: SizedBox(
+        child: Column(
+          children: [
+            FancyContainerTwo(
+              hasBorder: true,
+              borderColor: Colors.white.withOpacity(.1),
+              child: Padding(
+                padding: EdgeInsets.all(15.0.w),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(.0),
+                          child: Row(
+                            children: [
+                              FancyText(
+                                "ETHUSDT",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                                size: 14.w,
+                              ),
+                              SizedBox(width: 10),
+                              FancyContainerTwo(
+                                backgroundColor: getFigmaColor("0ECB81", 20),
+                                radius: 5,
+                                child: Padding(
+                                  padding: EdgeInsets.all(6.0.w),
+                                  child: FancyText(
+                                    "Buy Long",
+                                    textColor: ColorConstants.fancyGreen,
+                                    size: 14.w,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    FittedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Opening time",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "2025/2/25 02:16:09 (UTC+2)",
+                                textColor: getFigmaColor("CED0D4"),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Quantity",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "0.56",
+                                textColor: getFigmaColor("CED0D4"),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Profit(USDT)",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "+3.99",
+                                textColor: getFigmaColor("C6E229"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    FittedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Margin ratio",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "100%",
+                                textColor: getFigmaColor("CED0D4"),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Margin",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "1394.99",
+                                textColor: getFigmaColor("CED0D4"),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Entry price",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "2491.04",
+                                textColor: getFigmaColor("CED0D4"),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "Est. liq. Price",
+                                textColor: getFigmaColor("FFFFFF", 60),
+                              ),
+                              FancyText(
+                                "124.54",
+                                textColor: getFigmaColor("CED0D4"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            FittedBox(
+              child: Row(
+                children: [
+                  FancyContainerTwo(
+                    backgroundColor: getFigmaColor("222629"),
+                    radius: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: FancyText(
+                        "+Increase margin",
+                        textColor: ColorConstants.fancyGreen,
+                      ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Opening time",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "2025/2/25 02:16:09 (UTC+2)",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
+                  SizedBox(width: 20),
+                  FancyContainerTwo(
+                    backgroundColor: getFigmaColor("222629"),
+                    radius: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: FancyText(
+                        "TP/SL",
+                        textColor: ColorConstants.fancyGreen,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Quantity",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "0.56",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Profit(USDT)",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "+3.99",
-                            textColor: getFigmaColor("C6E229"),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Margin ratio",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "100%",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
+                  SizedBox(width: 20),
+                  FancyContainerTwo(
+                    backgroundColor: getFigmaColor("222629"),
+                    radius: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: FancyText(
+                        "Close",
+                        textColor: ColorConstants.fancyGreen,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Margin",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "1394.99",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  FancyContainerTwo(
+                    backgroundColor: getFigmaColor("222629"),
+                    radius: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: FancyText(
+                        "Close all",
+                        textColor: ColorConstants.fancyGreen,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Entry price",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "2491.04",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FancyText(
-                            "Est. liq. Price",
-                            textColor: getFigmaColor("FFFFFF", 60),
-                          ),
-                          FancyText(
-                            "124.54",
-                            textColor: getFigmaColor("CED0D4"),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              FancyContainerTwo(
-                backgroundColor: getFigmaColor("222629"),
-                radius: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: FancyText(
-                    "+Increase margin",
-                    textColor: ColorConstants.fancyGreen,
-                  ),
-                ),
-              ),
-              SizedBox(width: 20),
-              FancyContainerTwo(
-                backgroundColor: getFigmaColor("222629"),
-                radius: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: FancyText(
-                    "TP/SL",
-                    textColor: ColorConstants.fancyGreen,
-                  ),
-                ),
-              ),
-              SizedBox(width: 20),
-              FancyContainerTwo(
-                backgroundColor: getFigmaColor("222629"),
-                radius: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: FancyText(
-                    "Close",
-                    textColor: ColorConstants.fancyGreen,
-                  ),
-                ),
-              ),
-              SizedBox(width: 20),
-              FancyContainerTwo(
-                backgroundColor: getFigmaColor("222629"),
-                radius: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: FancyText(
-                    "Close all",
-                    textColor: ColorConstants.fancyGreen,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -564,17 +603,17 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             FancyText(
               "Price (USDT)",
               textColor: getFigmaColor("909090"),
-              size: 10,
+              size: 10.w,
             ),
             FancyText(
               "Amount (BTC)",
               textColor: getFigmaColor("909090"),
-              size: 10,
+              size: 10.w,
             ),
             FancyText(
               "Total (BTC)",
               textColor: getFigmaColor("909090"),
-              size: 10,
+              size: 10.w,
             ),
           ],
         ),
@@ -779,7 +818,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                 child: Checkbox(
                   // checkColor: ColorConstants.fancyGreen,
                   splashRadius: 20,
-                  value: reduceOnlyIsChecked,
+                  value: tpOrslIsChecked,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(3),
                     side: BorderSide(
@@ -791,7 +830,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                     color: getFigmaColor("4D4D4D"),
                   ),
                   onChanged: (value) {
-                    reduceOnlyIsChecked = value ?? false;
+                    tpOrslIsChecked = value ?? false;
                     setState(() {});
                   },
                 ),
@@ -1063,6 +1102,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
   }
 
   bool reduceOnlyIsChecked = false;
+  bool tpOrslIsChecked = false;
 
   String? selectedCryptoCurrency = "BTC";
   DropdownButtonHideUnderline _buildCryptoCurrencyDropDownButton() {
