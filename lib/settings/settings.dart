@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/language.dart';
 import 'package:signalwavex/settings/password.dart';
 import 'package:signalwavex/settings/profile.dart';
@@ -35,9 +37,8 @@ class _SettingsState extends State<Settings>
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => context.push(MyAppRouteConstant.home)),
         title: const Text(
           "Settings",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
