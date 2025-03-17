@@ -15,7 +15,7 @@ abstract class ApiClient<T> {
     required this.appPreferenceService,
   }) {
     dio
-      ..options.baseUrl = "https://signalwavex.com"
+      ..options.baseUrl = "https://api.signalwavex.com"
       ..options.connectTimeout = const Duration(seconds: 120)
       ..options.receiveTimeout = const Duration(seconds: 120)
       ..options.headers = {'Content-Type': 'application/json; charset=UTF-8'};
