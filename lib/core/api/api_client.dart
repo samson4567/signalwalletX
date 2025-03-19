@@ -15,10 +15,13 @@ abstract class ApiClient<T> {
     required this.appPreferenceService,
   }) {
     dio
-      ..options.baseUrl = "https://api.signalwavex.com"
+      ..options.baseUrl = "https://api.signalwavex.com/api"
       ..options.connectTimeout = const Duration(seconds: 120)
       ..options.receiveTimeout = const Duration(seconds: 120)
-      ..options.headers = {'Content-Type': 'application/json; charset=UTF-8'};
+      ..options.headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json'
+      };
 
     if (kDebugMode) {
       dio.interceptors.addAll([
@@ -26,6 +29,10 @@ abstract class ApiClient<T> {
         PrettyDioLogger(
           requestHeader: true,
           requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+          error: true,
+          compact: false,
         )
       ]);
     }

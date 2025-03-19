@@ -47,7 +47,8 @@ class AppRouter {
       GoRoute(
         name: MyAppRouteConstant.verifyEmail,
         path: MyAppRouteConstant.verifyEmail,
-        builder: (context, state) => const VerifyEmail(),
+        builder: (context, state) =>
+            VerifyEmail(email: (state.extra as Map)['email']),
       ),
       GoRoute(
         name: MyAppRouteConstant.feedPage,
@@ -108,7 +109,7 @@ class AppRouter {
         name: MyAppRouteConstant.assets,
         path: MyAppRouteConstant.assets,
         builder: (context, state) => const Assets(),
-      )
+      ),
     ],
   );
 }

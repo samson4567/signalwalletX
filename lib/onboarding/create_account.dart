@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 // SignUpScreen widget for the sign-up page
@@ -17,6 +21,8 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -30,41 +36,56 @@ class _CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
-              child: Image.asset(
-                'assets/images/sign.png',
-                width: screenWidth * 0.5,
-                height: screenHeight * 0.1,
-                fit: BoxFit.contain,
+        child: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is NewUserSignUpSuccessState) {
+              // Navigate to the verify email screen on success
+              context.push(MyAppRouteConstant.verifyEmail,
+                  extra: {'email': emailController.text});
+            } else if (state is NewUserSignUpErrorState) {
+              // Show an error message if sign-up fails
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage)),
+              );
+            }
+          },
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
+                child: Image.asset(
+                  'assets/images/sign.png',
+                  width: screenWidth * 0.5,
+                  height: screenHeight * 0.1,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ),
-            FancyContainer(
-              height: screenHeight * containerHeight,
-              width: screenWidth * containerWidth,
-              border: Border.all(color: ColorConstants.primaryGrayColor),
-              borderRadius: BorderRadius.circular(20.0),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              color: Colors.black,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTitle(screenHeight),
-                  _buildSubtitle(screenHeight),
-                  _buildEmailField(screenHeight),
-                  _buildPasswordField(screenHeight),
-                  _buildConfirmPassword(screenHeight),
-                  _buildRememberMe(screenHeight),
-                  _buildLoginButton(screenHeight),
-                  _buildDividerWithOr(screenHeight),
-                  _buildGoogleSignInButton(screenHeight),
-                  _buildCreateAccountRow(),
-                ],
+              FancyContainer(
+                height: screenHeight * containerHeight,
+                width: screenWidth * containerWidth,
+                border: Border.all(color: ColorConstants.primaryGrayColor),
+                borderRadius: BorderRadius.circular(20.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                color: Colors.black,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTitle(screenHeight),
+                    _buildSubtitle(screenHeight),
+                    _buildEmailField(screenHeight),
+                    _buildPasswordField(screenHeight),
+                    _buildConfirmPassword(screenHeight),
+                    _buildRememberMe(screenHeight),
+                    _buildCreateAccountButton(screenHeight),
+                    _buildDividerWithOr(screenHeight),
+                    _buildGoogleSignInButton(screenHeight),
+                    _buildLoginRow(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -147,7 +168,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Padding(
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
-        controller: passwordController,
+        controller: confirmPasswordController,
         label: 'Confirm Password',
         hintText: 'Enter your password',
         fillColor: Colors.black,
@@ -209,8 +230,8 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  // Log In button
-  Widget _buildLoginButton(double screenHeight) {
+  // Create Account button
+  Widget _buildCreateAccountButton(double screenHeight) {
     return SizedBox(
       width: double.infinity,
       child: FancyContainer(
@@ -218,14 +239,32 @@ class _CreateAccountState extends State<CreateAccount> {
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.yellow,
         onTap: () {
-          context.push(MyAppRouteConstant.verifyEmail);
+          context.read<AuthBloc>().add(
+                NewUserSignUpEvent(
+                  email: emailController.text,
+                  password: passwordController.text,
+                  confirmPassword: confirmPasswordController.text,
+                ),
+              );
         },
-        child: Center(
-          child: Text(
-            'Create Account',
-            style: TextStyles.normaltext
-                .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is NewUserSignUpLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 3.0,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                ),
+              );
+            }
+            return Center(
+              child: Text(
+                'Create Account',
+                style: TextStyles.normaltext
+                    .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -287,8 +326,8 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  // Create account navigation row
-  Widget _buildCreateAccountRow() {
+  // Login navigation row
+  Widget _buildLoginRow() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: Row(

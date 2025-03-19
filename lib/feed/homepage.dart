@@ -193,7 +193,9 @@ class _HomepageState extends State<Homepage> {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    context.push(MyAppRouteConstant.signupscreen);
+                  },
                   child: Image.asset(
                     'assets/images/signout.png',
                     width: 24,

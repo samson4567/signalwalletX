@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 
-// SignUpScreen widget for the sign-up page
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -17,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -24,52 +28,68 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final containerHeight = 590 / screenHeight;
+    final containerHeight = 630 / screenHeight;
     final containerWidth = 394 / screenWidth;
 
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
-              child: Image.asset(
-                'assets/images/sign.png',
-                width: screenWidth * 0.5,
-                height: screenHeight * 0.1,
-                fit: BoxFit.contain,
+        child: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is LoginSuccessState) {
+              context.push(MyAppRouteConstant.feedPage);
+            } else if (state is LoginErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.15),
+                child: Image.asset(
+                  'assets/images/sign.png',
+                  width: screenWidth * 0.5,
+                  height: screenHeight * 0.1,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ),
-            FancyContainer(
-              height: screenHeight * containerHeight,
-              width: screenWidth * containerWidth,
-              border: Border.all(color: ColorConstants.primaryGrayColor),
-              borderRadius: BorderRadius.circular(20.0),
-              padding: const EdgeInsets.all(20.0),
-              color: Colors.black,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTitle(screenHeight),
-                  _buildSubtitle(screenHeight),
-                  _buildEmailField(screenHeight),
-                  _buildPasswordField(screenHeight),
-                  _buildRememberMe(screenHeight),
-                  _buildLoginButton(screenHeight),
-                  _buildDividerWithOr(screenHeight),
-                  _buildGoogleSignInButton(screenHeight),
-                  _buildCreateAccountRow(),
-                ],
+              FancyContainer(
+                height: screenHeight * containerHeight,
+                width: screenWidth * containerWidth,
+                border: Border.all(color: ColorConstants.primaryGrayColor),
+                borderRadius: BorderRadius.circular(20.0),
+                padding: const EdgeInsets.all(20.0),
+                color: Colors.black,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTitle(screenHeight),
+                      _buildSubtitle(screenHeight),
+                      _buildEmailField(screenHeight),
+                      _buildPasswordField(screenHeight),
+                      _buildRememberMe(screenHeight),
+                      _buildLoginButton(screenHeight),
+                      _buildDividerWithOr(screenHeight),
+                      _buildGoogleSignInButton(screenHeight),
+                      _buildCreateAccountRow()
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Builds the title section at the top of the login form
   Widget _buildTitle(double screenHeight) {
     return Padding(
       padding: EdgeInsets.only(top: screenHeight * 0.05),
@@ -146,69 +166,73 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildRememberMe(double screenHeight) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: screenHeight * 0.004,
-      ),
-      child: Row(
-        children: [
-          Row(
-            children: [
-              Checkbox(
-                value: _rememberMe,
-                activeColor: Colors.yellow,
-                onChanged: (value) {
-                  setState(() {
-                    _rememberMe = value ?? false;
-                  });
-                },
-              ),
-              Text(
-                'Remember me for 30 days',
-                style: TextStyles.bodyText.copyWith(color: Colors.white),
-              ),
-            ],
+    return Row(
+      children: [
+        Checkbox(
+          value: _rememberMe,
+          activeColor: Colors.yellow,
+          onChanged: (value) {
+            setState(() {
+              _rememberMe = value ?? false;
+            });
+          },
+        ),
+        Text(
+          'Remember me for 30 days',
+          style: TextStyles.bodyText.copyWith(color: Colors.white),
+        ),
+        Spacer(),
+        TextButton(
+          onPressed: () {},
+          child: Text(
+            'Forgot password?',
+            style: TextStyles.bodyText.copyWith(color: Colors.blue),
           ),
-          TextButton(
-            onPressed: () {
-              // Handle forgot password
-            },
-            child: Text(
-              'Forgot password?',
-              style: TextStyles.bodyText.copyWith(color: Colors.blue),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginButton(double screenHeight) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.only(top: screenHeight * 0.03),
+          child: SizedBox(
+            width: double.infinity,
+            child: FancyContainer(
+              height: 50.0,
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.yellow,
+              onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  context.read<AuthBloc>().add(
+                        LoginEvent(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ),
+                      );
+                }
+              },
+              child: Center(
+                child: state is LoginLoadingState
+                    ? const CircularProgressIndicator(color: Colors.black)
+                    : const Text(
+                        'Log into Account',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   // Log In button
-  Widget _buildLoginButton(double screenHeight) {
-    return Padding(
-      padding: EdgeInsets.only(top: screenHeight * 0.03),
-      child: SizedBox(
-        width: double.infinity,
-        child: FancyContainer(
-          height: 50.0,
-          borderRadius: BorderRadius.circular(10.0),
-          color: Colors.yellow,
-          onTap: () {
-            context.push(MyAppRouteConstant.feedPage);
-          },
-          child: const Center(
-            child: Text(
-              'Log into Account',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildDividerWithOr(double screenHeight) {
     return Padding(
@@ -229,7 +253,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Google Sign-In button
   Widget _buildGoogleSignInButton(double screenHeight) {
     return Padding(
       padding: EdgeInsets.only(top: screenHeight * 0.02),
@@ -266,7 +289,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Create account navigation row
   Widget _buildCreateAccountRow() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),

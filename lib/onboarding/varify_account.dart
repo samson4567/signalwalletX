@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/router/api_route.dart';
 
 class VerifyEmail extends StatefulWidget {
-  const VerifyEmail({super.key});
+  final String email;
+
+  const VerifyEmail({super.key, required this.email});
 
   @override
+  // ignore: library_private_types_in_public_api
   _VerifyEmailState createState() => _VerifyEmailState();
 }
 
@@ -13,8 +22,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
       List.generate(6, (index) => TextEditingController());
 
   bool isVerifying = false;
+  bool isResending = false;
   int resendTimer = 6;
-  final String correctCode = "123456";
 
   @override
   void initState() {
@@ -38,7 +47,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
         _controllers.map((controller) => controller.text).join();
 
     if (enteredCode.length < 6) {
-      _showDialog('error');
+      _showDialog('error', 'Invalid OTP',
+          'The OTP you entered is incorrect - kindly try again.');
       return;
     }
 
@@ -46,15 +56,22 @@ class _VerifyEmailState extends State<VerifyEmail> {
       isVerifying = true;
     });
 
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        isVerifying = false;
-      });
-      _showDialog(enteredCode == correctCode ? 'success' : 'error');
-    });
+    context.read<AuthBloc>().add(
+          VerifyNewSignUpEmailEvent(email: widget.email, otp: enteredCode),
+        );
   }
 
-  void _showDialog(String type) {
+  void _resendOtp() {
+    if (resendTimer > 0) return;
+
+    setState(() {
+      isResending = true;
+    });
+
+    context.read<AuthBloc>().add(ResendOtpEvent(email: widget.email));
+  }
+
+  void _showDialog(String type, String title, String message) {
     showDialog(
       context: context,
       builder: (context) {
@@ -72,7 +89,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
               ),
               const SizedBox(height: 16),
               Text(
-                type == 'success' ? 'You are all set' : 'Invalid OTP',
+                title,
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -81,15 +98,13 @@ class _VerifyEmailState extends State<VerifyEmail> {
               ),
               const SizedBox(height: 8),
               Text(
-                type == 'success'
-                    ? 'Your account has been created successfully.'
-                    : 'The OTP you entered is incorrect - kindly try again.',
+                message,
                 style: const TextStyle(color: Colors.white70, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               _dialogButton(type == 'success' ? 'Login' : 'Try Again', () {
-                Navigator.of(context).pop();
+                context.push(MyAppRouteConstant.home);
               }),
             ],
           ),
@@ -128,104 +143,131 @@ class _VerifyEmailState extends State<VerifyEmail> {
             Navigator.pop(context);
           },
         ),
-        title: const Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [],
-        ),
-        centerTitle: true,
       ),
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/images/sign.png',
-              width: 200,
-              height: 129,
-            ),
-            Container(
-              width: 404,
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0D0D0D),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF242424), width: 1),
+        child: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is VerifyNewSignUpEmailSuccessState) {
+              setState(() => isVerifying = false);
+              _showDialog('success', 'You are all set',
+                  'Your account has been verified successfully.');
+            } else if (state is VerifyNewSignUpEmailErrorState) {
+              setState(() => isVerifying = false);
+              _showDialog(
+                  'error', 'Invalid OTP', 'The OTP you entered is incorrect.');
+            } else if (state is ResendOtpSuccessState) {
+              setState(() {
+                isResending = false;
+                resendTimer = 60; // Reset timer
+                _startResendTimer();
+              });
+              _showDialog('success', 'OTP Resent',
+                  'A new OTP has been sent to your email.');
+            } else if (state is ResendOtpErrorState) {
+              setState(() => isResending = false);
+              _showDialog('error', 'Resend Failed',
+                  'Unable to resend OTP. Please try again.');
+            }
+          },
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/sign.png',
+                width: 200,
+                height: 129,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Enter your email code',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'We have sent a code to your email',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(6, (index) {
-                      return SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: TextField(
-                          controller: _controllers[index],
-                          maxLength: 1,
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            counterText: '',
-                            filled: true,
-                            fillColor: const Color(0xFF333333),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.blue),
-                            ),
-                          ),
-                          style: const TextStyle(
-                              fontSize: 18, color: Colors.white),
-                        ),
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 24),
-                  GestureDetector(
-                    onTap: isVerifying ? null : _verifyCode,
-                    child: Container(
-                      height: 48,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: ColorConstants.numyelcolor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: isVerifying
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('Verify',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+              Container(
+                width: 404,
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0D0D0D),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF242424), width: 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Enter your email code',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    const Text(
+                      'We have sent a code to your email',
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(6, (index) {
+                        return SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: TextField(
+                            controller: _controllers[index],
+                            maxLength: 1,
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              counterText: '',
+                              filled: true,
+                              fillColor: const Color(0xFF333333),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
+                              ),
+                            ),
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 24),
+                    GestureDetector(
+                      onTap: isVerifying ? null : _verifyCode,
+                      child: Container(
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: ColorConstants.numyelcolor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: isVerifying
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Text('Verify',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: _resendOtp,
+                      child: Container(
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(resendTimer > 30
+                            ? 'Resend OTP in $resendTimer sec'
+                            : 'Resend OTP'),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
