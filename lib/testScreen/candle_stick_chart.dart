@@ -39,7 +39,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
   void initState() {
     super.initState();
     getData('1day');
-    rootBundle.loadString('depth.json').then((result) {
+    rootBundle.loadString('assets/depth.json').then((result) {
       final parseJson = json.decode(result);
       final tick = parseJson['tick'] as Map<String, dynamic>;
       final List<DepthEntity> bids = (tick['bids'] as List<dynamic>)

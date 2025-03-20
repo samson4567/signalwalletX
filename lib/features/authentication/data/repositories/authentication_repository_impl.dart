@@ -53,11 +53,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<Failure, LoginEntity>> login(
       {required String email, required String password}) async {
-    try {
-      await authenticationRemoteDatasource.login(
-          email: email, password: password);
-      return right(LoginEntity(email: email, password: password));
-    } catch (e) {
+    await authenticationRemoteDatasource.login(
+        email: email, password: password);
+    print("sjhdfjshfjhsdf");
+    return right(LoginEntity(email: email, password: password));
+    try {} catch (e) {
+      print("sjhdfjshfjhsdf>error");
       return left(mapExceptionToFailure(e));
     }
   }

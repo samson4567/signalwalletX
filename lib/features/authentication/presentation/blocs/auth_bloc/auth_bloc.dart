@@ -63,6 +63,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       email: event.email,
       password: event.password,
     );
+    print("bdshjhfsdjfhsdv${result}");
+    print("bdshjhfsdjfhsdv${result.runtimeType}");
+
     result.fold(
       (error) => emit(LoginErrorState(errorMessage: error.message)),
       (entity) => emit(

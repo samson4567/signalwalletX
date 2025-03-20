@@ -67,11 +67,11 @@ class AuthenticationRemoteDatasourceImpl
         "password": password,
       },
     );
-    if (response.data["token"]?.isNotEmpty ?? false) {
+    if (response.data?["token"]?.isNotEmpty ?? false) {
       await appPreferenceService.saveValue<String>(
           SecureKey.loginAuthTokenKey, response.data["token"]);
     }
-    print("kjdskjbfdskbfsdkjbf${[response.data, response.data["token"]]}");
+
     return response.message;
   }
 
@@ -79,6 +79,7 @@ class AuthenticationRemoteDatasourceImpl
   Future<String> logout({required String token}) async {
     final response = await networkClient.post(
       endpoint: EndpointConstant.logout,
+      isAuthHeaderRequired: true,
       options: Options(
         headers: {
           "Authorization": "Bearer $token",
