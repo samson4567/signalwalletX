@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
+import 'package:signalwavex/core/db/app_preference_service.dart';
+import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 
 abstract class AuthenticationRemoteDatasource {
@@ -15,8 +17,9 @@ class AuthenticationRemoteDatasourceImpl
     implements AuthenticationRemoteDatasource {
   AuthenticationRemoteDatasourceImpl({
     required this.networkClient,
-    required Object appPreferenceService,
+    required this.appPreferenceService,
   });
+  final AppPreferenceService appPreferenceService;
 
   final SignalWalletNetworkClient networkClient;
 
@@ -64,6 +67,11 @@ class AuthenticationRemoteDatasourceImpl
         "password": password,
       },
     );
+    if (response.data["token"]?.isNotEmpty ?? false) {
+      await appPreferenceService.saveValue<String>(
+          SecureKey.loginAuthTokenKey, response.data["token"]);
+    }
+    print("kjdskjbfdskbfsdkjbf${[response.data, response.data["token"]]}");
     return response.message;
   }
 

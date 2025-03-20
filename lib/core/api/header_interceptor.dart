@@ -19,7 +19,7 @@ class HeaderInterceptor extends Interceptor {
           appPreferenceService.getValue<String>(SecureKey.loginAuthTokenKey);
       if (tokenModel != null) {
         //final result = TokenModel.deserialize(tokenModel);
-        //options.headers['Authorization'] = 'Bearer ${result.accessToken}';
+        options.headers['Authorization'] = 'Bearer ${tokenModel}';
       }
     }
     options.extra.clear();
