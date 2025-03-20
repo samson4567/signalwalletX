@@ -12,4 +12,5 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, String>> resendOtp({required String email});
   Future<Either<Failure, LoginEntity>> login(
       {required String email, required String password});
+  Future<Either<Failure, String>> logout({required String token});
 }

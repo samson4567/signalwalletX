@@ -87,17 +87,41 @@ final class LoginLoadingState extends AuthState {
 
 final class LoginSuccessState extends AuthState {
   final String email;
+  final String message;
 
-  const LoginSuccessState({required this.email});
+  const LoginSuccessState({required this.email, required this.message});
 
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [email, message];
 }
 
 final class LoginErrorState extends AuthState {
   final String errorMessage;
 
   const LoginErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// Logout States
+final class LogoutLoadingState extends AuthState {
+  const LogoutLoadingState();
+}
+
+final class LogoutSuccessState extends AuthState {
+  final String message;
+
+  const LogoutSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class LogoutErrorState extends AuthState {
+  final String errorMessage;
+
+  const LogoutErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];

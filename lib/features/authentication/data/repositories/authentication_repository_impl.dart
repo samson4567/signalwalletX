@@ -5,7 +5,6 @@ import 'package:signalwavex/features/authentication/data/datasources/authenticat
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/login_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
-
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
@@ -58,6 +57,15 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       await authenticationRemoteDatasource.login(
           email: email, password: password);
       return right(LoginEntity(email: email, password: password));
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  Future<Either<Failure, String>> logout({required String token}) async {
+    try {
+      final result = await authenticationRemoteDatasource.logout(token: token);
+      return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));
     }

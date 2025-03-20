@@ -56,3 +56,12 @@ final class LoginEvent extends AuthEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+final class LogoutEvent extends AuthEvent {
+  final String token;
+
+  const LogoutEvent({required this.token});
+
+  @override
+  List<Object> get props => [token];
+}

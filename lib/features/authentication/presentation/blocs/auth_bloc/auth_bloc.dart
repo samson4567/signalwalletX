@@ -6,21 +6,26 @@ import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationRepository authenticationRepository;
+
   AuthBloc({required this.authenticationRepository})
       : super(const AuthInitial()) {
     on<NewUserSignUpEvent>(_onNewUserSignUpEvent);
     on<VerifyNewSignUpEmailEvent>(_onVerifyNewSignUpEmailEvent);
     on<ResendOtpEvent>(_onResendOtpEvent);
     on<LoginEvent>(_onLoginEvent);
+    on<LogoutEvent>(_onLogoutEvent);
   }
+
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
     emit(const NewUserSignUpLoadingState());
     final result = await authenticationRepository.newUserSignUp(
-        newUserRequest: NewUserRequestModel(
-            email: event.email,
-            password: event.password,
-            passwordConfirmation: event.confirmPassword));
+      newUserRequest: NewUserRequestModel(
+        email: event.email,
+        password: event.password,
+        passwordConfirmation: event.confirmPassword,
+      ),
+    );
     result.fold(
       (error) => emit(NewUserSignUpErrorState(errorMessage: error.message)),
       (message) => emit(NewUserSignUpSuccessState(message: message)),
@@ -60,7 +65,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (error) => emit(LoginErrorState(errorMessage: error.message)),
-      (entity) => emit(LoginSuccessState(email: entity.email)),
+      (entity) => emit(
+          LoginSuccessState(email: entity.email, message: "Login Successful")),
+    );
+  }
+
+  Future<void> _onLogoutEvent(
+      LogoutEvent event, Emitter<AuthState> emit) async {
+    emit(const LogoutLoadingState());
+
+    final result = await authenticationRepository.logout(token: event.token);
+
+    result.fold(
+      (error) => emit(LogoutErrorState(errorMessage: error.message)),
+      (message) => emit(LogoutSuccessState(message: message)),
     );
   }
 }

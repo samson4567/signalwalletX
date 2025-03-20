@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/testScreen/line_chart.dart';
 
@@ -106,107 +110,122 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: Colors.black, // Set the drawer background color to black
-        child: Column(
-          children: <Widget>[
-            Image.asset('assets/images/sign.png'),
-            ListTile(
-              leading: const Icon(Icons.tag,
-                  color: Colors.white, size: 18), // # icon
-              title: const Text('Home', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.home);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('Market', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.market);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title: const Text('Perpetual',
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.perpetual);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('Assets', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.assets);
-              },
-            ),
-            const SizedBox(
-              height: 220,
-            ),
-            const Text(
-              'Help Center',
-              style: TextStyle(color: Color(0xFF313131)),
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('settings', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.settings);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('support', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.assets);
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage('assets/images/profile.png'),
-                ),
-                const Column(
-                  children: [
-                    Text(
-                      'sam@mail.con',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'sam@mail.con',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
-                ),
-                GestureDetector(
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (BuildContext context, state) {
+        return Drawer(
+          child: Container(
+            color: Colors.black, // Set the drawer background color to black
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Image.asset('assets/images/sign.png'),
+                ListTile(
+                  leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+                  title:
+                      const Text('Home', style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    context.push(MyAppRouteConstant.signupscreen);
+                    Navigator.pop(context);
+                    context.go(MyAppRouteConstant.home);
                   },
-                  child: Image.asset(
-                    'assets/images/signout.png',
-                    width: 24,
-                    height: 24,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+                  title: const Text('Market',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go(MyAppRouteConstant.market);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+                  title: const Text('Perpetual',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go(MyAppRouteConstant.perpetual);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+                  title: const Text('Assets',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go(MyAppRouteConstant.assets);
+                  },
+                ),
+                const Spacer(),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Help Center',
+                    style: TextStyle(color: Color(0xFF313131)),
                   ),
                 ),
+                ListTile(
+                  leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+                  title: const Text('Settings',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go(MyAppRouteConstant.settings);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.tag, color: Colors.white, size: 18),
+                  title: const Text('Support',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go(MyAppRouteConstant.testScreen);
+                  },
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 20),
+                  child: Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 20,
+                        backgroundImage:
+                            AssetImage('assets/images/profile.png'),
+                      ),
+                      const SizedBox(width: 10),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('sam@mail.com',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
+                          Text('User ID: 1234',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
+                        ],
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          context
+                              .read<AuthBloc>()
+                              .add(const LogoutEvent(token: ''));
+                        },
+                        child: state is LogoutLoadingState
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : Image.asset('assets/images/signout.png',
+                                width: 24, height: 24),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
