@@ -5,6 +5,7 @@ abstract class AuthenticationLocalDatasource {
   Future<void> clearSession();
   Future<void> saveAuthToken(String token);
   Future<String?> getAuthToken();
+  Future<void> clearCachedUserData();
 }
 
 class AuthenticationLocalDatasourceImpl
@@ -28,5 +29,10 @@ class AuthenticationLocalDatasourceImpl
   @override
   Future<void> saveAuthToken(String token) async {
     await appPreferenceService.saveValue(SecureKey.loginAuthTokenKey, token);
+  }
+
+  @override
+  Future<void> clearCachedUserData() async {
+    await appPreferenceService.removeValue(SecureKey.loginAuthTokenKey);
   }
 }

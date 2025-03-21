@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
