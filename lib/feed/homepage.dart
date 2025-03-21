@@ -30,7 +30,7 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: Colors.black,
       key: _scaffoldKey, // Add scaffold key
-      drawer: DrawerComponent(), // Drawer
+      drawer: drawerComponent(context), // Drawer
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

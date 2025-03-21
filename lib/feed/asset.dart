@@ -26,7 +26,7 @@ class _AssetsState extends State<Assets> {
     return Scaffold(
       backgroundColor: Colors.black,
       key: _scaffoldKey, // Add scaffold key
-      drawer: DrawerComponent(),
+      drawer: drawerComponent(context),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
         child: SingleChildScrollView(
