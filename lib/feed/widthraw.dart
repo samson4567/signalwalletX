@@ -67,106 +67,108 @@ class _WithdrawState extends State<Withdraw> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Column(
-                children: [
-                  Text(
-                    'Withdrawal',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Cash out your assets',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'inter',
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              _buildSelectionContainer(
-                label: 'Please select the currency to withdraw',
-                selectedItem: selectedCoin,
-                imagePath: coinList.firstWhere(
-                    (coin) => coin['label'] == selectedCoin)['imagePath']!,
-                itemList: coinList.map((coin) => coin['label']!).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedCoin = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildInfoContainer(), // New container added here
-              const SizedBox(height: 16),
-              _buildSelectionContainer(
-                label: 'Select Chain',
-                selectedItem: selectedChain,
-                itemList: chainList,
-                onChanged: (value) {
-                  setState(() {
-                    selectedChain = value!;
-                  });
-                },
-                imagePath: '',
-              ),
-              const SizedBox(height: 16),
-              _buildConversionContainer(
-                'Quantity',
-                selectedToCoin,
-                toAmountController,
-                (value) {
-                  setState(() {
-                    selectedToCoin = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              _buildHeadFeeContainer(
-                'Handling Fee',
-                selectedToCoin,
-                toAmountController,
-                (value) {
-                  setState(() {
-                    selectedToCoin = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              Container(
-                decoration: BoxDecoration(
-                  color: ColorConstants.numyelcolor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                height: 41,
-                width: 370,
-                child: InkWell(
-                  onTap: () {
-                    _handleWithdraw();
-                  },
-                  child: const Center(
-                    child: Text(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Column(
+                  children: [
+                    Text(
                       'Withdrawal',
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Cash out your assets',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'inter',
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                _buildSelectionContainer(
+                  label: 'Please select the currency to withdraw',
+                  selectedItem: selectedCoin,
+                  imagePath: coinList.firstWhere(
+                      (coin) => coin['label'] == selectedCoin)['imagePath']!,
+                  itemList: coinList.map((coin) => coin['label']!).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCoin = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildInfoContainer(), // New container added here
+                const SizedBox(height: 16),
+                _buildSelectionContainer(
+                  label: 'Select Chain',
+                  selectedItem: selectedChain,
+                  itemList: chainList,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedChain = value!;
+                    });
+                  },
+                  imagePath: '',
+                ),
+                const SizedBox(height: 16),
+                _buildConversionContainer(
+                  'Quantity',
+                  selectedToCoin,
+                  toAmountController,
+                  (value) {
+                    setState(() {
+                      selectedToCoin = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                _buildHeadFeeContainer(
+                  'Handling Fee',
+                  selectedToCoin,
+                  toAmountController,
+                  (value) {
+                    setState(() {
+                      selectedToCoin = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    color: ColorConstants.numyelcolor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  height: 41,
+                  width: 370,
+                  child: InkWell(
+                    onTap: () {
+                      _handleWithdraw();
+                    },
+                    child: const Center(
+                      child: Text(
+                        'Withdrawal',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

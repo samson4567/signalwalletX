@@ -12,41 +12,44 @@ class _MarketState extends State<Market> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Column(
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back, color: Colors.white),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                  ],
-                ),
-                const Text(
-                  "Market Trading",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child:
+                            const Icon(Icons.arrow_back, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            _buildSearchBar(),
-            const SizedBox(height: 30),
-            Expanded(child: _buildFancyContractMarket(context)),
-          ],
+                  const Text(
+                    "Market Trading",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              _buildSearchBar(),
+              const SizedBox(height: 30),
+              Expanded(child: _buildFancyContractMarket(context)),
+            ],
+          ),
         ),
       ),
     );

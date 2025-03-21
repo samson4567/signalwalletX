@@ -31,31 +31,33 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: Colors.black,
       key: _scaffoldKey, // Add scaffold key
       drawer: drawerComponent(context), // Drawer
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(screenWidth),
-          Expanded(
-            // Ensure scrolling works properly
-            child: SingleChildScrollView(
-              padding:
-                  EdgeInsets.symmetric(horizontal: padding, vertical: padding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenWidth * 0.04),
-                  _buildFancyContainer(context),
-                  SizedBox(height: screenWidth * 0.04),
-                  _buildFancyChartContainer(context),
-                  SizedBox(height: screenWidth * 0.04),
-                  _buildFancyRecentTransaction(context),
-                  SizedBox(height: screenWidth * 0.04),
-                  _buildFancyRecentTopcoin(context),
-                ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(screenWidth),
+            Expanded(
+              // Ensure scrolling works properly
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                    horizontal: padding, vertical: padding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: screenWidth * 0.04),
+                    _buildFancyContainer(context),
+                    SizedBox(height: screenWidth * 0.04),
+                    _buildFancyChartContainer(context),
+                    SizedBox(height: screenWidth * 0.04),
+                    _buildFancyRecentTransaction(context),
+                    SizedBox(height: screenWidth * 0.04),
+                    _buildFancyRecentTopcoin(context),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

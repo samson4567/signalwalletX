@@ -6,6 +6,7 @@ import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';

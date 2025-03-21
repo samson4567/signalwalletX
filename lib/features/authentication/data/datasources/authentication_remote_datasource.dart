@@ -8,7 +8,7 @@ abstract class AuthenticationRemoteDatasource {
   Future<String> newUserSignUp({required NewUserRequestModel newUserRequest});
   Future<String> verifySignUp({required String email, required String otp});
   Future<String> resendOtp({required String email});
-  Future<String> login({required String email, required String password});
+  Future<Map> login({required String email, required String password});
   Future<String> logout({required String token});
   Future<String> updatePassword({
     required String currentPassword,
@@ -62,8 +62,7 @@ class AuthenticationRemoteDatasourceImpl
   }
 
   @override
-  Future<String> login(
-      {required String email, required String password}) async {
+  Future<Map> login({required String email, required String password}) async {
     // appPreferenceService.clearAll();
     final response = await networkClient.post(
       endpoint: EndpointConstant.login,
@@ -75,7 +74,7 @@ class AuthenticationRemoteDatasourceImpl
     // Map<String, dynamic> mapResponse = (response as Map<String, dynamic>);
     print("mapResponsemapResponse${response.data}");
 
-    return response.data["token"] ?? "";
+    return response.data;
   }
 
   @override
@@ -106,6 +105,7 @@ class AuthenticationRemoteDatasourceImpl
         "new_password_confirmation": newPasswordConfirmation,
       },
     );
+    print("responsesdjakdjakdbamessage${response.message}");
     return response.message;
   }
 }

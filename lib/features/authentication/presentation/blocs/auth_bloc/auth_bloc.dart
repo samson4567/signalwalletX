@@ -1,4 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
@@ -6,15 +9,15 @@ import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationRepository authenticationRepository;
+  AppBloc appBloc;
 
-  AuthBloc({required this.authenticationRepository})
+  AuthBloc({required this.authenticationRepository, required this.appBloc})
       : super(const AuthInitial()) {
     on<NewUserSignUpEvent>(_onNewUserSignUpEvent);
     on<VerifyNewSignUpEmailEvent>(_onVerifyNewSignUpEmailEvent);
     on<ResendOtpEvent>(_onResendOtpEvent);
     on<LoginEvent>(_onLoginEvent);
     on<LogoutEvent>(_onLogoutEvent);
-    on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
   }
 
   Future<void> _onNewUserSignUpEvent(
@@ -65,11 +68,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       password: event.password,
     );
 
-    result.fold(
-      (error) => emit(LoginErrorState(errorMessage: error.message)),
-      (entity) => emit(
-          LoginSuccessState(email: entity.email, message: "Login Successful")),
-    );
+    result.fold((error) => emit(LoginErrorState(errorMessage: error.message)),
+        (entity) {
+      print("dsjakdakjbsdn${entity}");
+      appBloc.add(
+        UserUpdateEvent(
+          updatedUserModel: UserModel.createFromLogin(
+            entity["user"],
+          ),
+        ),
+      );
+      emit(LoginSuccessState(
+          email: entity["user"]["email"], message: "Login Successful"));
+    });
   }
 
   Future<void> _onLogoutEvent(
@@ -80,23 +91,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (error) => emit(LogoutErrorState(errorMessage: error.message)),
-      (message) => emit(LogoutSuccessState(message: message)),
-    );
-  }
-
-  Future<void> _onUpdatePasswordEvent(
-      UpdatePasswordEvent event, Emitter<AuthState> emit) async {
-    emit(const UpdatePasswordLoadingState());
-
-    final result = await authenticationRepository.updatePassword(
-      currentPassword: event.currentPassword,
-      newPassword: event.newPassword,
-      newPasswordConfirmation: event.newPasswordConfirmation,
-    );
-
-    result.fold(
-      (error) => emit(UpdatePasswordErrorState(errorMessage: error.message)),
-      (message) => emit(UpdatePasswordSuccessState(message: message)),
+      (message) {
+        emit(LogoutSuccessState(message: message));
+      },
     );
   }
 }

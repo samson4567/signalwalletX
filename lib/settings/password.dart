@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/textform_filled.dart';
+
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 
 class PasswordSection extends StatefulWidget {
   const PasswordSection({super.key});
@@ -73,45 +75,79 @@ class _PasswordSectionState extends State<PasswordSection> {
           const SizedBox(height: 30),
           Align(
             alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: () {
-                final currentPassword = currentPasswordController.text.trim();
-                final newPassword = newPasswordController.text.trim();
-                final confirmPassword = confirmPasswordController.text.trim();
-
-                if (newPassword == confirmPassword && newPassword.isNotEmpty) {
-                  context.read<AuthBloc>().add(
-                        UpdatePasswordEvent(
-                          currentPassword: currentPassword,
-                          newPassword: newPassword,
-                          newPasswordConfirmation: confirmPassword,
-                        ),
-                      );
-                } else {
+            child: BlocConsumer<AuthBloc, AuthState>(
+              listener: (BuildContext context, AuthState state) {
+                if (state is UpdatePasswordSuccessState) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Passwords do not match"),
-                      backgroundColor: Colors.red,
+                      content: Text("password updated successfully"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else if (state is UpdatePasswordErrorState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text("password update Failed ${state.errorMessage}"),
+                      backgroundColor: Colors.green,
                     ),
                   );
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellow,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                "Save Changes",
-                style: TextStyle(
-                  fontFamily: 'inter',
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
-              ),
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: () {
+                    final currentPassword =
+                        currentPasswordController.text.trim();
+                    final newPassword = newPasswordController.text.trim();
+                    final confirmPassword =
+                        confirmPasswordController.text.trim();
+
+                    if (newPassword == confirmPassword &&
+                        newPassword.isNotEmpty) {
+                      context.read<AuthBloc>().add(
+                            UpdatePasswordEvent(
+                              currentPassword: currentPassword,
+                              newPassword: newPassword,
+                              newPasswordConfirmation: confirmPassword,
+                            ),
+                          );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Passwords do not match"),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellow,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: (state is UpdatePasswordLoadingState)
+                      ? SizedBox(
+                          height: 40,
+                          width: 150,
+                          child: Center(
+                            child: const CircularProgressIndicator.adaptive(
+                                backgroundColor: Colors.black),
+                          ),
+                        )
+                      : const Text(
+                          "Save Changes",
+                          style: TextStyle(
+                            fontFamily: 'inter',
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                        ),
+                );
+              },
             ),
           ),
         ],

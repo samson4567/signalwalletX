@@ -10,7 +10,7 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, VerifySignUpEntity>> verifySignUp(
       {required String email, required String otp});
   Future<Either<Failure, String>> resendOtp({required String email});
-  Future<Either<Failure, LoginEntity>> login(
+  Future<Either<Failure, Map>> login(
       {required String email, required String password});
   Future<Either<Failure, String>> logout({required String token});
   Future<Either<Failure, String>> updatePassword({
