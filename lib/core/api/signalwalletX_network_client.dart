@@ -71,9 +71,6 @@ class SignalWalletNetworkClient extends ApiClient {
       "token": (response as Map).remove("token"),
       "user": (response as Map).remove("user")
     };
-    print("sbbshdbsdjbxbckjxbckb--1${response.runtimeType}");
-    print("sbbshdbsdjbxbckjxbckb--2${response}");
-    // print("sbbshdbsdjbxbckjxbckb--2${response}");
 
     return BaseResponse.fromJson(response);
   }
