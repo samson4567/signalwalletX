@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/core/di/injector.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/router/router.dart';
 
@@ -22,6 +23,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
             create: (_) => getItInstance<AuthBloc>()), // Inject AuthBloc
+        BlocProvider(
+            create: (_) => getItInstance<AppBloc>()), // Inject AuthBloc
       ],
       child: ScreenUtilInit(
         designSize: const Size(440, 956),

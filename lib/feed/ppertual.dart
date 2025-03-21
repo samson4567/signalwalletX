@@ -52,82 +52,83 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
           ),
         ],
       ),
-      body: Center(
-          child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Column(
-              children: [
-                _buildFirstRow(),
-                const SizedBox(height: 30),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: FancyContainerTwo(
-                        height: 600,
-                        child: DefaultTabController(
-                          length: 3,
-                          child: Column(
-                            children: [
-                              TabBar(
-                                tabAlignment: TabAlignment.start,
-                                isScrollable: true,
-                                dividerColor: getFigmaColor("27282B"),
-                                tabs: [
-                                  Tab(
-                                    // text: "limit",
-                                    child: FancyText(
-                                      "limit",
-                                      size: 10,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: Column(
+                children: [
+                  _buildFirstRow(),
+                  const SizedBox(height: 30),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: FancyContainerTwo(
+                          height: 600,
+                          child: DefaultTabController(
+                            length: 3,
+                            child: Column(
+                              children: [
+                                TabBar(
+                                  tabAlignment: TabAlignment.start,
+                                  isScrollable: true,
+                                  dividerColor: getFigmaColor("27282B"),
+                                  tabs: [
+                                    Tab(
+                                      // text: "limit",
+                                      child: FancyText(
+                                        "limit",
+                                        size: 10,
+                                      ),
                                     ),
-                                  ),
-                                  Tab(
-                                    child: FancyText(
-                                      "Market",
-                                      size: 10,
+                                    Tab(
+                                      child: FancyText(
+                                        "Market",
+                                        size: 10,
+                                      ),
+                                      // text: "Market"
                                     ),
-                                    // text: "Market"
-                                  ),
-                                  Tab(
-                                    child: FancyText(
-                                      "TP/SL",
-                                      size: 10,
+                                    Tab(
+                                      child: FancyText(
+                                        "TP/SL",
+                                        size: 10,
+                                      ),
+                                      // text: "TP/SL",
                                     ),
-                                    // text: "TP/SL",
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: TabBarView(children: [
-                                  _buildLimitTabView(),
-                                  _buildLimitTabView(),
-                                  _buildLimitTabView(),
-                                ]),
-                              )
-                            ],
+                                  ],
+                                ),
+                                Expanded(
+                                  child: TabBarView(children: [
+                                    _buildLimitTabView(),
+                                    _buildLimitTabView(),
+                                    _buildLimitTabView(),
+                                  ]),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: Container(
-                      // color: Colors.red,
-                      child: _buildTheTabledSection(),
-                    )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                if (tpOrslIsChecked) _buildPositionAndTradeTabView(),
-              ],
+                      const SizedBox(width: 12),
+                      Expanded(
+                          child: Container(
+                        // color: Colors.red,
+                        child: _buildTheTabledSection(),
+                      )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  if (tpOrslIsChecked) _buildPositionAndTradeTabView(),
+                ],
+              ),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 

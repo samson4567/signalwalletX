@@ -53,12 +53,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, LoginEntity>> login(
+  Future<Either<Failure, Map>> login(
       {required String email, required String password}) async {
-    final result = await authenticationRemoteDatasource.login(
-        email: email, password: password);
-    await authenticationLocalDatasource.saveAuthToken(result);
-    return right(LoginEntity(email: email, password: password));
+    try {
+      final result = await authenticationRemoteDatasource.login(
+          email: email, password: password);
+      await authenticationLocalDatasource.saveAuthToken(result["token"]);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
   }
 
   @override
@@ -77,12 +81,15 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required String newPassword,
     required String newPasswordConfirmation,
   }) async {
+    print("AuthenticationRepositoryImplsakdhas-starting");
     try {
+      print("AuthenticationRepositoryImplsakdhas-starting-trying");
       final result = await authenticationRemoteDatasource.updatePassword(
         currentPassword: currentPassword,
         newPassword: newPassword,
         newPasswordConfirmation: newPasswordConfirmation,
       );
+      print("AuthenticationRepositoryImplsakdhas-updateCompleted-${result}");
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));
