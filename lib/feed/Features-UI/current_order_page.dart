@@ -355,17 +355,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   CandleStickChart(),
                   // Center(child: Text('Content of Tab 1')),
                   const Center(child: Text('Content of Tab 2')),
-
-                  // Container(
-                  //   color: Colors.green,
-                  //   width: double.infinity,
-                  //   height: 200,
-                  // ),
-                  // Container(
-                  //   color: Colors.red,
-                  //   width: double.infinity,
-                  //   height: 200,
-                  // ),
                 ]),
               ),
             ],

@@ -30,28 +30,10 @@ Widget buildBackArrow(
                   Icons.arrow_back_outlined,
                   size: 20,
                 ),
-                // SizedBox(width: ,),
                 Text("Back")
               ],
             ),
-            //  Container(
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(50),
-            //     border: Border.all(
-            //       width: 2.0,
-            //       color: const Color.fromARGB(255, 195, 195, 195),
-            //     ),
-            //     color: const Color.fromARGB(255, 217, 219, 220),
-            //   ),
-            //   height: 30,
-            //   width: 30,
-            //   child:
-            // ),
           ),
-          //  Image.asset(
-          //   "assets/icons/arrow.png",
-          //   fit: BoxFit.contain,
-          // ),
         ),
       ),
     ),
