@@ -24,7 +24,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: const DrawerComponent(),
+      drawer: drawerComponent(context),
       backgroundColor: Colors.black,
       appBar: AppBar(
         leading: const Row(

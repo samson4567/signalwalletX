@@ -75,6 +75,7 @@ flutter:
 
   # Asset directory configuration
   assets:
+    - assets/
     # Image assets
     - assets/images/
 

@@ -65,6 +65,7 @@ class AuthenticationRemoteDatasourceImpl
   @override
   Future<String> login(
       {required String email, required String password}) async {
+    // appPreferenceService.clearAll();
     final response = await networkClient.post(
       endpoint: EndpointConstant.login,
       data: {
@@ -78,6 +79,9 @@ class AuthenticationRemoteDatasourceImpl
 
   @override
   Future<String> logout({required String token}) async {
+    String? _token = await appPreferenceService
+        .getValue<String>(SecureKey.loginAuthTokenKey);
+
     final response = await networkClient.post(
       endpoint: EndpointConstant.logout,
       isAuthHeaderRequired: true,

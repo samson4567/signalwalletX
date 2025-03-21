@@ -13,9 +13,9 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: DrawerComponent(),
+        child: drawerComponent(context),
       ),
     );
   }
