@@ -110,7 +110,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
+  Widget buildDrawer(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (BuildContext context, state) {
         return Drawer(
@@ -125,7 +125,6 @@ class _HomepageState extends State<Homepage> {
                   title:
                       const Text('Home', style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.home);
                   },
                 ),
@@ -134,7 +133,6 @@ class _HomepageState extends State<Homepage> {
                   title: const Text('Market',
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.market);
                   },
                 ),
@@ -143,7 +141,6 @@ class _HomepageState extends State<Homepage> {
                   title: const Text('Perpetual',
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.perpetual);
                   },
                 ),
@@ -152,7 +149,6 @@ class _HomepageState extends State<Homepage> {
                   title: const Text('Assets',
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.assets);
                   },
                 ),
@@ -208,7 +204,6 @@ class _HomepageState extends State<Homepage> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          print("bbsdfjbsdbf");
                           context
                               .read<AuthBloc>()
                               .add(const LogoutEvent(token: ''));

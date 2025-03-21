@@ -20,7 +20,7 @@ import '../onboarding/splash_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: MyAppRouteConstant.splashScreen,
+    initialLocation: MyAppRouteConstant.login,
     // initialLocation: MyAppRouteConstant.testScreen,
 
     routes: [
@@ -35,8 +35,8 @@ class AppRouter {
         builder: (context, state) => const TestScreen(),
       ),
       GoRoute(
-        name: MyAppRouteConstant.signupscreen,
-        path: MyAppRouteConstant.signupscreen,
+        name: MyAppRouteConstant.login,
+        path: MyAppRouteConstant.login,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
