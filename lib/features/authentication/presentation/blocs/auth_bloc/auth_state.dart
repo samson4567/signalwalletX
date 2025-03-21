@@ -126,3 +126,49 @@ final class LogoutErrorState extends AuthState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+// Reset Password States
+final class ResetPasswordLoadingState extends AuthState {
+  const ResetPasswordLoadingState();
+}
+
+final class ResetPasswordSuccessState extends AuthState {
+  final String message;
+
+  const ResetPasswordSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class ResetPasswordErrorState extends AuthState {
+  final String errorMessage;
+
+  const ResetPasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// ✅ Added Update Password States
+final class UpdatePasswordLoadingState extends AuthState {
+  const UpdatePasswordLoadingState();
+}
+
+final class UpdatePasswordSuccessState extends AuthState {
+  final String message;
+
+  const UpdatePasswordSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class UpdatePasswordErrorState extends AuthState {
+  final String errorMessage;
+
+  const UpdatePasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
@@ -11,6 +10,11 @@ abstract class AuthenticationRemoteDatasource {
   Future<String> resendOtp({required String email});
   Future<String> login({required String email, required String password});
   Future<String> logout({required String token});
+  Future<String> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+    required newPasswordConfirmation,
+  });
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -68,12 +72,8 @@ class AuthenticationRemoteDatasourceImpl
         "password": password,
       },
     );
-    if (response.data?["token"]?.isNotEmpty ?? false) {
-      await appPreferenceService.saveValue<String>(
-          SecureKey.loginAuthTokenKey, response.data["token"]);
-    }
 
-    return response.message;
+    return response.token ?? '';
   }
 
   @override
@@ -84,12 +84,24 @@ class AuthenticationRemoteDatasourceImpl
     final response = await networkClient.post(
       endpoint: EndpointConstant.logout,
       isAuthHeaderRequired: true,
-      options: Options(
-        headers: {
-          "Authorization": "Bearer $token",
-          "Accept": "application/json",
-        },
-      ),
+    );
+    return response.message;
+  }
+
+  @override
+  Future<String> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+    required newPasswordConfirmation,
+  }) async {
+    final response = await networkClient.post(
+      endpoint: EndpointConstant.updatePassword,
+      isAuthHeaderRequired: true,
+      data: {
+        "current_password": currentPassword,
+        "new_password": newPassword,
+        "new_password_confirmation": newPasswordConfirmation,
+      },
     );
     return response.message;
   }

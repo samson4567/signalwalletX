@@ -65,3 +65,19 @@ final class LogoutEvent extends AuthEvent {
   @override
   List<Object> get props => [token];
 }
+
+final class UpdatePasswordEvent extends AuthEvent {
+  final String currentPassword;
+  final String newPassword;
+  final String newPasswordConfirmation;
+
+  const UpdatePasswordEvent({
+    required this.currentPassword,
+    required this.newPassword,
+    required this.newPasswordConfirmation,
+  });
+
+  @override
+  List<Object> get props =>
+      [currentPassword, newPassword, newPasswordConfirmation];
+}

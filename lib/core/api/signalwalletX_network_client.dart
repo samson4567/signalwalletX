@@ -44,29 +44,6 @@ class SignalWalletNetworkClient extends ApiClient {
       params: params,
     );
 
-    //  so ther is a special case here needed to be attended to by the backender,
-    // the formmat being inconsistent is making it not to se the  token
-    /* expected body format =  {
-      "message": "dummy message",
-      "data": {
-        "key": "value",
-      },
-      "success":true
-    };
-    
-    recieved body format={
-          "message": "Login successful",
-          "token": "87|aFukpw8qFUBd0isoYxrc5WUrHD3gDdKDziNjbdSv938f03d5",
-          "user": {
-              "id": 33,
-              "name": null,
-              "email": "Kederky658@gmail.com",
-              "role": "trader"
-         }
-     }
-    */
-
-    // adjustment to be made
     (response as Map<String, dynamic>)["data"] = {
       "token": (response as Map).remove("token"),
       "user": (response as Map).remove("user")
