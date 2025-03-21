@@ -1127,12 +1127,6 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
     return DropdownButtonHideUnderline(
         child: DropdownButton2(
       dropdownStyleData: const DropdownStyleData(width: 200),
-      // customButton: Icon(
-      //   Icons.arrow_drop_down_rounded,
-      //   color: getFigmaColor("848E9C"),
-      // ),
-      //  IconButton(
-      //     onPressed: () {}, icon: ),
       items: [
         DropdownMenuItem(
           value: "BTC",
@@ -1140,9 +1134,6 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             if (selectedCryptoCurrency != "BTC") {
               selectedCryptoCurrency = "BTC";
             }
-            // else {
-            // selectedCryptoCurrency = null;
-            // }
 
             setState(() {});
           },
@@ -1158,9 +1149,6 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             if (selectedCryptoCurrency != "BTC_2") {
               selectedCryptoCurrency = "BTC_2";
             }
-            //  else {
-            //   selectedCryptoCurrency = null;
-            // }
 
             setState(() {});
           },
@@ -1275,20 +1263,3 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
 
   String selectedText = "Perp";
 }
-
-
-
-// class MyTableRow implements TableRow{
-  // @override
-  // // TODO: implement children
-  // List<Widget> get children => throw UnimplementedError();
-
-  // @override
-  // // TODO: implement decoration
-  // Decoration? get decoration => throw UnimplementedError();
-
-  // @override
-  // // TODO: implement key
-  // LocalKey? get key => throw UnimplementedError();
-  
-// }
