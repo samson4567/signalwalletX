@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/router/api_route.dart';
@@ -25,7 +26,7 @@ class _AssetsState extends State<Assets> {
     return Scaffold(
       backgroundColor: Colors.black,
       key: _scaffoldKey, // Add scaffold key
-      drawer: _buildDrawer(context),
+      drawer: DrawerComponent(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
         child: SingleChildScrollView(

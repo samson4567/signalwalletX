@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
@@ -29,7 +30,7 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       backgroundColor: Colors.black,
       key: _scaffoldKey, // Add scaffold key
-      drawer: _buildDrawer(context), // Drawer
+      drawer: DrawerComponent(), // Drawer
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -207,6 +208,7 @@ class _HomepageState extends State<Homepage> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
+                          print("bbsdfjbsdbf");
                           context
                               .read<AuthBloc>()
                               .add(const LogoutEvent(token: ''));

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/back_button.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 import 'package:signalwavex/router/api_route.dart';
 
@@ -88,34 +91,44 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 context.go(MyAppRouteConstant.assets);
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage('assets/images/profile.png'),
-                ),
-                const Column(
-                  children: [
-                    Text(
-                      'sam@mail.con',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'sam@mail.con',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Image.asset(
-                    'assets/images/signout.png',
-                    width: 24,
-                    height: 24,
+            InkWell(
+              onTap: () {
+                print("dsnbfjkbdfbsfbsdkjfb");
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const CircleAvatar(
+                    radius: 20,
+                    backgroundImage: AssetImage('assets/images/profile.png'),
                   ),
-                ),
-              ],
+                  const Column(
+                    children: [
+                      Text(
+                        'sam@mail.con',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      Text(
+                        'sam@mail.con',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print("bbsdfjbsdbf");
+                      context
+                          .read<AuthBloc>()
+                          .add(const LogoutEvent(token: ''));
+                    },
+                    child: Image.asset(
+                      'assets/images/signout.png',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
