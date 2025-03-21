@@ -72,19 +72,22 @@ class AuthenticationRemoteDatasourceImpl
         "password": password,
       },
     );
+    // Map<String, dynamic> mapResponse = (response as Map<String, dynamic>);
+    print("mapResponsemapResponse${response.data}");
 
-    return response.token ?? '';
+    return response.data["token"] ?? "";
   }
 
   @override
   Future<String> logout({required String token}) async {
-    String? _token = await appPreferenceService
-        .getValue<String>(SecureKey.loginAuthTokenKey);
+    String? _token =
+        appPreferenceService.getValue<String>(SecureKey.loginAuthTokenKey);
 
     final response = await networkClient.post(
       endpoint: EndpointConstant.logout,
       isAuthHeaderRequired: true,
     );
+    print("dasgdsadjashgd${response.runtimeType}");
     return response.message;
   }
 

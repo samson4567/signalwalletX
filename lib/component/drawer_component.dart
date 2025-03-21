@@ -74,7 +74,7 @@ Drawer drawerComponent(BuildContext context) {
                 const Text('settings', style: TextStyle(color: Colors.white)),
             onTap: () {
               Navigator.pop(context);
-              context.go(MyAppRouteConstant.assets);
+              context.go(MyAppRouteConstant.settings);
             },
           ),
           ListTile(
@@ -82,7 +82,7 @@ Drawer drawerComponent(BuildContext context) {
             title: const Text('support', style: TextStyle(color: Colors.white)),
             onTap: () {
               Navigator.pop(context);
-              context.go(MyAppRouteConstant.assets);
+              context.go(MyAppRouteConstant.settings);
             },
           ),
           InkWell(
