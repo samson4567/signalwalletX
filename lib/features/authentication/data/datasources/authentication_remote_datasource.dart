@@ -1,6 +1,7 @@
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
+import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 
 abstract class AuthenticationRemoteDatasource {
@@ -70,22 +71,17 @@ class AuthenticationRemoteDatasourceImpl
         "password": password,
       },
     );
-    // Map<String, dynamic> mapResponse = (response as Map<String, dynamic>);
-    print("mapResponsemapResponse${response.data}");
-
     return response.data["token"] ?? "";
   }
 
   @override
   Future<String> logout({required String token}) async {
-    String? _token =
-        appPreferenceService.getValue<String>(SecureKey.loginAuthTokenKey);
+    appPreferenceService.getValue<String>(SecureKey.loginAuthTokenKey);
 
     final response = await networkClient.post(
       endpoint: EndpointConstant.logout,
       isAuthHeaderRequired: true,
     );
-    print("dasgdsadjashgd${response.runtimeType}");
     return response.message;
   }
 
