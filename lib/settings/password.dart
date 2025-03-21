@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/textform_filled.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 
-class PasswordSection extends StatelessWidget {
+class PasswordSection extends StatefulWidget {
   const PasswordSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController =
-        TextEditingController();
+  State<PasswordSection> createState() => _PasswordSectionState();
+}
 
+class _PasswordSectionState extends State<PasswordSection> {
+  final TextEditingController currentPasswordController =
+      TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -25,14 +35,19 @@ class PasswordSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            "New passoword",
-            style: TextStyle(
-              fontFamily: 'inter',
-              color: Colors.white,
-              fontSize: 15,
-            ),
+          _buildLabel("Current Password"),
+          const SizedBox(height: 10),
+          TextFormFieldWithCustomStyles(
+            height: 34,
+            width: 386,
+            fillColor: Colors.black,
+            controller: currentPasswordController,
+            label: "Current Password",
+            hintText: "Enter current password",
+            obscureText: true,
           ),
+          const SizedBox(height: 20),
+          _buildLabel("New Password"),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             height: 34,
@@ -44,21 +59,14 @@ class PasswordSection extends StatelessWidget {
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          const Text(
-            "Comfirm passoword",
-            style: TextStyle(
-              fontFamily: 'inter',
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
+          _buildLabel("Confirm Password"),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             fillColor: Colors.black,
             height: 34,
             width: 386,
             controller: confirmPasswordController,
-            label: "XXXXXX",
+            label: "Confirm Password",
             hintText: "Re-enter new password",
             obscureText: true,
           ),
@@ -67,7 +75,26 @@ class PasswordSection extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () {
-                // Handle save action
+                final currentPassword = currentPasswordController.text.trim();
+                final newPassword = newPasswordController.text.trim();
+                final confirmPassword = confirmPasswordController.text.trim();
+
+                if (newPassword == confirmPassword && newPassword.isNotEmpty) {
+                  context.read<AuthBloc>().add(
+                        UpdatePasswordEvent(
+                          currentPassword: currentPassword,
+                          newPassword: newPassword,
+                          newPasswordConfirmation: confirmPassword,
+                        ),
+                      );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Passwords do not match"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow,
@@ -88,6 +115,17 @@ class PasswordSection extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLabel(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontFamily: 'inter',
+        color: Colors.white,
+        fontSize: 15,
       ),
     );
   }

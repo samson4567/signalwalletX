@@ -13,4 +13,9 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, LoginEntity>> login(
       {required String email, required String password});
   Future<Either<Failure, String>> logout({required String token});
+  Future<Either<Failure, String>> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String newPasswordConfirmation,
+  });
 }
