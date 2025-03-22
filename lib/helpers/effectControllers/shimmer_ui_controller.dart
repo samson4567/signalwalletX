@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
-import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 
 class ShimmerUiHandler {
-  // Widget getUI() {
-  //   return SizedBox();
-  // }
   Widget getQuadilateralShimer({
     double? height,
     double? width,
@@ -24,7 +19,6 @@ class ShimmerUiHandler {
       height: height,
       width: width,
     );
-
     return
         // child;
         shimmerize(child);

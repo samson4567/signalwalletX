@@ -4,7 +4,6 @@ import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_local_datasource.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_remote_datasource.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
-import 'package:signalwavex/features/authentication/domain/entities/login_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 
@@ -81,15 +80,13 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required String newPassword,
     required String newPasswordConfirmation,
   }) async {
-    print("AuthenticationRepositoryImplsakdhas-starting");
     try {
-      print("AuthenticationRepositoryImplsakdhas-starting-trying");
       final result = await authenticationRemoteDatasource.updatePassword(
         currentPassword: currentPassword,
         newPassword: newPassword,
         newPasswordConfirmation: newPasswordConfirmation,
       );
-      print("AuthenticationRepositoryImplsakdhas-updateCompleted-${result}");
+
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));

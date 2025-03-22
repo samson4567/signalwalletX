@@ -63,7 +63,6 @@ class AuthenticationRemoteDatasourceImpl
 
   @override
   Future<Map> login({required String email, required String password}) async {
-    // appPreferenceService.clearAll();
     final response = await networkClient.post(
       endpoint: EndpointConstant.login,
       data: {
@@ -71,8 +70,6 @@ class AuthenticationRemoteDatasourceImpl
         "password": password,
       },
     );
-    // Map<String, dynamic> mapResponse = (response as Map<String, dynamic>);
-    print("mapResponsemapResponse${response.data}");
 
     return response.data;
   }
@@ -103,7 +100,6 @@ class AuthenticationRemoteDatasourceImpl
         "new_password_confirmation": newPasswordConfirmation,
       },
     );
-    print("responsesdjakdjakdbamessage${response.message}");
     return response.message;
   }
 }

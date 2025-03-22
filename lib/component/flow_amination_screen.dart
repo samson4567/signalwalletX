@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
-import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 
+// ignore: must_be_immutable
 class FlowWidget extends StatefulWidget {
   FlowWidgetController? flowWidgetController;
   FlowWidget({super.key, this.flowWidgetController}) {
