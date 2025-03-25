@@ -15,7 +15,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'Remember me for 30 days',
           style: TextStyles.bodyText.copyWith(color: Colors.white),
         ),
-        Spacer(),
+        const Spacer(),
         TextButton(
           onPressed: () {},
           child: Text(
