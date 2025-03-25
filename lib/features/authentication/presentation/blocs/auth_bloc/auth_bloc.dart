@@ -18,6 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ResendOtpEvent>(_onResendOtpEvent);
     on<LoginEvent>(_onLoginEvent);
     on<LogoutEvent>(_onLogoutEvent);
+    on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
   }
 
   Future<void> _onNewUserSignUpEvent(
@@ -93,6 +94,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (message) {
         emit(LogoutSuccessState(message: message));
       },
+    );
+  }
+
+  Future<void> _onUpdatePasswordEvent(
+      UpdatePasswordEvent event, Emitter<AuthState> emit) async {
+    emit(const UpdatePasswordLoadingState());
+
+    final result = await authenticationRepository.updatePassword(
+      currentPassword: event.currentPassword,
+      newPassword: event.newPassword,
+      newPasswordConfirmation: event.newPasswordConfirmation,
+    );
+
+    result.fold(
+      (error) => emit(UpdatePasswordErrorState(errorMessage: error.message)),
+      (message) => emit(UpdatePasswordSuccessState(message: message)),
     );
   }
 }

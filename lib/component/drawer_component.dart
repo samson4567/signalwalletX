@@ -14,7 +14,7 @@ Drawer drawerComponent(BuildContext context) {
       child: BlocListener<AuthBloc, AuthState>(
     listener: (context, state) {
       if (state is LogoutSuccessState) {
-        context.go(MyAppRouteConstant.signupscreen);
+        context.go(MyAppRouteConstant.login);
       } else if (state is LogoutErrorState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

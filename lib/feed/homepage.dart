@@ -5,6 +5,8 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
@@ -35,7 +37,7 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(screenWidth),
+            _buildHeader(screenWidth, _scaffoldKey),
             Expanded(
               // Ensure scrolling works properly
               child: SingleChildScrollView(
@@ -62,57 +64,68 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildHeader(double screenWidth) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Image.asset(
-              'assets/icons/flower.png',
-              fit: BoxFit.contain,
-            ),
-            SizedBox(width: screenWidth * 0.03),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Good Morning, Mellisa',
-                  style: TextStyles.smallText.copyWith(
-                    fontSize: screenWidth * 0.04,
-                    color: const Color.fromRGBO(255, 255, 255, 0.7),
-                    fontWeight: FontWeight.bold,
+  Widget _buildHeader(
+      double screenWidth, GlobalKey<ScaffoldState> scaffoldKey) {
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (context, state) {
+        final user = state.user;
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/flower.png',
+                    fit: BoxFit.contain,
+                    height: screenWidth * 0.1,
                   ),
-                ),
-                Text(
-                  'Feb 12 2022.05:22',
-                  style: TextStyles.bodyText.copyWith(
-                    fontSize: 10,
-                    color: ColorConstants.primarydeepColor,
-                    fontWeight: FontWeight.bold,
+                  SizedBox(width: screenWidth * 0.03),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Good Morning, ${user?.email}', // Display user email
+                        style: TextStyles.smallText.copyWith(
+                          fontSize: screenWidth * 0.028,
+                          color: Colors.white.withOpacity(0.7),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Feb 12 2022 • 05:22', // Format this dynamically if needed
+                        style: TextStyles.bodyText.copyWith(
+                          fontSize: screenWidth * 0.035,
+                          color: ColorConstants.primarydeepColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: screenWidth * 0.08,
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                      size: screenWidth * 0.08,
+                    ),
+                    onPressed: () {
+                      scaffoldKey.currentState?.openDrawer();
+                    },
+                  ),
+                ],
               ),
-              onPressed: () {
-                _scaffoldKey.currentState
-                    ?.openDrawer(); // Open drawer correctly
-              },
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        );
+        // Return an empty container if the state is not authenticated
+      },
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
+  Widget buildDrawer(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (BuildContext context, state) {
         return Drawer(
@@ -127,7 +140,6 @@ class _HomepageState extends State<Homepage> {
                   title:
                       const Text('Home', style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.home);
                   },
                 ),
@@ -136,7 +148,6 @@ class _HomepageState extends State<Homepage> {
                   title: const Text('Market',
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.market);
                   },
                 ),
@@ -145,7 +156,6 @@ class _HomepageState extends State<Homepage> {
                   title: const Text('Perpetual',
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.perpetual);
                   },
                 ),
@@ -154,7 +164,6 @@ class _HomepageState extends State<Homepage> {
                   title: const Text('Assets',
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    Navigator.pop(context);
                     context.go(MyAppRouteConstant.assets);
                   },
                 ),
@@ -210,7 +219,6 @@ class _HomepageState extends State<Homepage> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          print("bbsdfjbsdbf");
                           context
                               .read<AuthBloc>()
                               .add(const LogoutEvent(token: ''));

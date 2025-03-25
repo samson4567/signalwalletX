@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class FancyText extends StatefulWidget {
   String text;
   final Color? textColor;

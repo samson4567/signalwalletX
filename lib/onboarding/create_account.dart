@@ -340,7 +340,7 @@ class _CreateAccountState extends State<CreateAccount> {
           ),
           TextButton(
             onPressed: () {
-              context.push(MyAppRouteConstant.signupscreen);
+              context.push(MyAppRouteConstant.login);
             },
             child: const Text(
               'Login',

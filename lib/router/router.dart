@@ -35,8 +35,8 @@ class AppRouter {
         builder: (context, state) => const TestScreen(),
       ),
       GoRoute(
-        name: MyAppRouteConstant.signupscreen,
-        path: MyAppRouteConstant.signupscreen,
+        name: MyAppRouteConstant.login,
+        path: MyAppRouteConstant.login,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(

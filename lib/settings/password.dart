@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/textform_filled.dart';
-
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
@@ -130,11 +129,11 @@ class _PasswordSectionState extends State<PasswordSection> {
                     ),
                   ),
                   child: (state is UpdatePasswordLoadingState)
-                      ? SizedBox(
+                      ? const SizedBox(
                           height: 40,
                           width: 150,
                           child: Center(
-                            child: const CircularProgressIndicator.adaptive(
+                            child: CircularProgressIndicator.adaptive(
                                 backgroundColor: Colors.black),
                           ),
                         )
