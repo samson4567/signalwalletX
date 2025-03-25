@@ -70,7 +70,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold((error) => emit(LoginErrorState(errorMessage: error.message)),
         (entity) {
-      print("dsjakdakjbsdn${entity}");
       appBloc.add(
         UserUpdateEvent(
           updatedUserModel: UserModel.createFromLogin(
