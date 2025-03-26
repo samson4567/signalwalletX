@@ -3,8 +3,10 @@ import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
+import 'package:signalwavex/features/trading_system/data/models/live_market_price_model.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 
-abstract class AuthenticationRemoteDatasource {
+abstract class TradingSystemRemoteDatasource {
   Future<String> newUserSignUp({required NewUserRequestModel newUserRequest});
   Future<String> verifySignUp({required String email, required String otp});
   Future<String> resendOtp({required String email});
@@ -15,11 +17,12 @@ abstract class AuthenticationRemoteDatasource {
     required String newPassword,
     required newPasswordConfirmation,
   });
+  Future<List<LiveMarketPriceEntity>> fetchLiveMarketPrices();
 }
 
-class AuthenticationRemoteDatasourceImpl
-    implements AuthenticationRemoteDatasource {
-  AuthenticationRemoteDatasourceImpl({
+class TradingSystemRemoteDatasourceImpl
+    implements TradingSystemRemoteDatasource {
+  TradingSystemRemoteDatasourceImpl({
     required this.networkClient,
     required this.appPreferenceService,
   });
@@ -101,5 +104,23 @@ class AuthenticationRemoteDatasourceImpl
       },
     );
     return response.message;
+  }
+
+  @override
+  Future<List<LiveMarketPriceEntity>> fetchLiveMarketPrices() async {
+    // fetchLiveMarketPrices
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.fetchLiveMarketPrices,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+    List rawList = (response.data as Map)["trade_calls"];
+    List<LiveMarketPriceEntity> result = rawList
+        .map(
+          (e) => LiveMarketPriceModel.fromJson(e),
+        )
+        .toList();
+
+    return result;
   }
 }

@@ -1,22 +1,50 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 
-sealed class AuthState extends Equatable {
-  const AuthState();
+sealed class TradingSystemState extends Equatable {
+  const TradingSystemState();
 
   @override
   List<Object> get props => [];
 }
 
-final class AuthInitial extends AuthState {
-  const AuthInitial();
+final class TradingSystemInitial extends TradingSystemState {
+  const TradingSystemInitial();
 }
 
+///// FetchLiveMarketPrices
+final class FetchLiveMarketPricesLoadingState extends TradingSystemState {
+  const FetchLiveMarketPricesLoadingState();
+}
+
+final class FetchLiveMarketPricesSuccessState extends TradingSystemState {
+  final List<LiveMarketPriceEntity> listOfLiveMarketPriceEntity;
+
+  const FetchLiveMarketPricesSuccessState(
+      {required this.listOfLiveMarketPriceEntity});
+
+  @override
+  List<Object> get props => [listOfLiveMarketPriceEntity];
+}
+
+final class FetchLiveMarketPricesErrorState extends TradingSystemState {
+  final String errorMessage;
+
+  const FetchLiveMarketPricesErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// FetchLiveMarketPrices ended .....
+
+///// old states
+
 // Sign Up States
-final class NewUserSignUpLoadingState extends AuthState {
+final class NewUserSignUpLoadingState extends TradingSystemState {
   const NewUserSignUpLoadingState();
 }
 
-final class NewUserSignUpSuccessState extends AuthState {
+final class NewUserSignUpSuccessState extends TradingSystemState {
   final String message;
 
   const NewUserSignUpSuccessState({required this.message});
@@ -25,7 +53,7 @@ final class NewUserSignUpSuccessState extends AuthState {
   List<Object> get props => [message];
 }
 
-final class NewUserSignUpErrorState extends AuthState {
+final class NewUserSignUpErrorState extends TradingSystemState {
   final String errorMessage;
 
   const NewUserSignUpErrorState({required this.errorMessage});
@@ -35,11 +63,11 @@ final class NewUserSignUpErrorState extends AuthState {
 }
 
 // Verify Sign Up States
-final class VerifyNewSignUpEmailLoadingState extends AuthState {
+final class VerifyNewSignUpEmailLoadingState extends TradingSystemState {
   const VerifyNewSignUpEmailLoadingState();
 }
 
-final class VerifyNewSignUpEmailSuccessState extends AuthState {
+final class VerifyNewSignUpEmailSuccessState extends TradingSystemState {
   final String message;
 
   const VerifyNewSignUpEmailSuccessState({required this.message});
@@ -48,7 +76,7 @@ final class VerifyNewSignUpEmailSuccessState extends AuthState {
   List<Object> get props => [message];
 }
 
-final class VerifyNewSignUpEmailErrorState extends AuthState {
+final class VerifyNewSignUpEmailErrorState extends TradingSystemState {
   final String errorMessage;
 
   const VerifyNewSignUpEmailErrorState({required this.errorMessage});
@@ -58,11 +86,11 @@ final class VerifyNewSignUpEmailErrorState extends AuthState {
 }
 
 // Resend OTP States
-final class ResendOtpLoadingState extends AuthState {
+final class ResendOtpLoadingState extends TradingSystemState {
   const ResendOtpLoadingState();
 }
 
-final class ResendOtpSuccessState extends AuthState {
+final class ResendOtpSuccessState extends TradingSystemState {
   final String message;
 
   const ResendOtpSuccessState({required this.message});
@@ -71,7 +99,7 @@ final class ResendOtpSuccessState extends AuthState {
   List<Object> get props => [message];
 }
 
-final class ResendOtpErrorState extends AuthState {
+final class ResendOtpErrorState extends TradingSystemState {
   final String errorMessage;
 
   const ResendOtpErrorState({required this.errorMessage});
@@ -81,11 +109,11 @@ final class ResendOtpErrorState extends AuthState {
 }
 
 // Login States
-final class LoginLoadingState extends AuthState {
+final class LoginLoadingState extends TradingSystemState {
   const LoginLoadingState();
 }
 
-final class LoginSuccessState extends AuthState {
+final class LoginSuccessState extends TradingSystemState {
   final String email;
   final String message;
 
@@ -95,7 +123,7 @@ final class LoginSuccessState extends AuthState {
   List<Object> get props => [email, message];
 }
 
-final class LoginErrorState extends AuthState {
+final class LoginErrorState extends TradingSystemState {
   final String errorMessage;
 
   const LoginErrorState({required this.errorMessage});
@@ -105,11 +133,11 @@ final class LoginErrorState extends AuthState {
 }
 
 // Logout States
-final class LogoutLoadingState extends AuthState {
+final class LogoutLoadingState extends TradingSystemState {
   const LogoutLoadingState();
 }
 
-final class LogoutSuccessState extends AuthState {
+final class LogoutSuccessState extends TradingSystemState {
   final String message;
 
   const LogoutSuccessState({required this.message});
@@ -118,7 +146,7 @@ final class LogoutSuccessState extends AuthState {
   List<Object> get props => [message];
 }
 
-final class LogoutErrorState extends AuthState {
+final class LogoutErrorState extends TradingSystemState {
   final String errorMessage;
 
   const LogoutErrorState({required this.errorMessage});
@@ -128,11 +156,11 @@ final class LogoutErrorState extends AuthState {
 }
 
 // Reset Password States
-final class ResetPasswordLoadingState extends AuthState {
+final class ResetPasswordLoadingState extends TradingSystemState {
   const ResetPasswordLoadingState();
 }
 
-final class ResetPasswordSuccessState extends AuthState {
+final class ResetPasswordSuccessState extends TradingSystemState {
   final String message;
 
   const ResetPasswordSuccessState({required this.message});
@@ -141,7 +169,7 @@ final class ResetPasswordSuccessState extends AuthState {
   List<Object> get props => [message];
 }
 
-final class ResetPasswordErrorState extends AuthState {
+final class ResetPasswordErrorState extends TradingSystemState {
   final String errorMessage;
 
   const ResetPasswordErrorState({required this.errorMessage});
@@ -151,11 +179,11 @@ final class ResetPasswordErrorState extends AuthState {
 }
 
 // ✅ Added Update Password States
-final class UpdatePasswordLoadingState extends AuthState {
+final class UpdatePasswordLoadingState extends TradingSystemState {
   const UpdatePasswordLoadingState();
 }
 
-final class UpdatePasswordSuccessState extends AuthState {
+final class UpdatePasswordSuccessState extends TradingSystemState {
   final String message;
 
   const UpdatePasswordSuccessState({required this.message});
@@ -164,7 +192,7 @@ final class UpdatePasswordSuccessState extends AuthState {
   List<Object> get props => [message];
 }
 
-final class UpdatePasswordErrorState extends AuthState {
+final class UpdatePasswordErrorState extends TradingSystemState {
   final String errorMessage;
 
   const UpdatePasswordErrorState({required this.errorMessage});

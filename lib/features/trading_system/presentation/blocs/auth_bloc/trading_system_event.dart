@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-abstract class AuthEvent extends Equatable {
-  const AuthEvent();
+abstract class TradingSystemEvent extends Equatable {
+  const TradingSystemEvent();
 
   @override
   List<Object> get props => [];
 }
 
-final class NewUserSignUpEvent extends AuthEvent {
+final class NewUserSignUpEvent extends TradingSystemEvent {
   final String email;
   final String password;
   final String confirmPassword;
@@ -22,7 +22,7 @@ final class NewUserSignUpEvent extends AuthEvent {
   List<Object> get props => [email, password, confirmPassword];
 }
 
-final class VerifyNewSignUpEmailEvent extends AuthEvent {
+final class VerifyNewSignUpEmailEvent extends TradingSystemEvent {
   final String email;
   final String otp;
 
@@ -35,7 +35,7 @@ final class VerifyNewSignUpEmailEvent extends AuthEvent {
   List<Object> get props => [email, otp];
 }
 
-final class ResendOtpEvent extends AuthEvent {
+final class ResendOtpEvent extends TradingSystemEvent {
   final String email;
 
   const ResendOtpEvent({required this.email});
@@ -44,7 +44,7 @@ final class ResendOtpEvent extends AuthEvent {
   List<Object> get props => [email];
 }
 
-final class LoginEvent extends AuthEvent {
+final class LoginEvent extends TradingSystemEvent {
   final String email;
   final String password;
 
@@ -57,7 +57,7 @@ final class LoginEvent extends AuthEvent {
   List<Object> get props => [email, password];
 }
 
-final class LogoutEvent extends AuthEvent {
+final class LogoutEvent extends TradingSystemEvent {
   final String token;
 
   const LogoutEvent({required this.token});
@@ -66,7 +66,7 @@ final class LogoutEvent extends AuthEvent {
   List<Object> get props => [token];
 }
 
-final class UpdatePasswordEvent extends AuthEvent {
+final class UpdatePasswordEvent extends TradingSystemEvent {
   final String currentPassword;
   final String newPassword;
   final String newPasswordConfirmation;
@@ -80,4 +80,12 @@ final class UpdatePasswordEvent extends AuthEvent {
   @override
   List<Object> get props =>
       [currentPassword, newPassword, newPasswordConfirmation];
+}
+
+// FetchLiveMarketPrices
+final class FetchLiveMarketPricesEvent extends TradingSystemEvent {
+  const FetchLiveMarketPricesEvent();
+
+  @override
+  List<Object> get props => [];
 }

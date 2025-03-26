@@ -1,16 +1,17 @@
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
 
-abstract class AuthenticationLocalDatasource {
+abstract class WalletSystemUserBalanceAndTradeCallingLocalDatasource {
   Future<void> clearSession();
   Future<void> saveAuthToken(String token);
   Future<String?> getAuthToken();
   Future<void> clearCachedUserData();
 }
 
-class AuthenticationLocalDatasourceImpl
-    implements AuthenticationLocalDatasource {
-  AuthenticationLocalDatasourceImpl({required this.appPreferenceService});
+class WalletSystemUserBalanceAndTradeCallingLocalDatasourceImpl
+    implements WalletSystemUserBalanceAndTradeCallingLocalDatasource {
+  WalletSystemUserBalanceAndTradeCallingLocalDatasourceImpl(
+      {required this.appPreferenceService});
   final AppPreferenceService appPreferenceService;
 
   @override

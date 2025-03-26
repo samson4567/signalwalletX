@@ -7,11 +7,12 @@ import 'package:signalwavex/features/authentication/domain/repositories/authenti
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class TradingSystemBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationRepository authenticationRepository;
   AppBloc appBloc;
 
-  AuthBloc({required this.authenticationRepository, required this.appBloc})
+  TradingSystemBloc(
+      {required this.authenticationRepository, required this.appBloc})
       : super(const AuthInitial()) {
     on<NewUserSignUpEvent>(_onNewUserSignUpEvent);
     on<VerifyNewSignUpEmailEvent>(_onVerifyNewSignUpEmailEvent);

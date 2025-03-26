@@ -2,8 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 
-abstract class AuthenticationRepository {
+abstract class TradingSystemRepository {
   Future<Either<Failure, String>> newUserSignUp(
       {required NewUserRequestModel newUserRequest});
   Future<Either<Failure, VerifySignUpEntity>> verifySignUp(
@@ -17,4 +18,5 @@ abstract class AuthenticationRepository {
     required String newPassword,
     required String newPasswordConfirmation,
   });
+  Future<Either<Failure, List<LiveMarketPriceEntity>>> fetchLiveMarketPrices();
 }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:signalwavex/core/api/api_client.dart';
 import 'package:signalwavex/core/api/base_response.dart';
+import 'package:signalwavex/core/constants/endpoint_constant.dart';
 
 class SignalWalletNetworkClient extends ApiClient {
   SignalWalletNetworkClient({
@@ -14,6 +15,7 @@ class SignalWalletNetworkClient extends ApiClient {
     Options? options,
     Map<String, dynamic>? params,
     bool isAuthHeaderRequired = false,
+    bool returnRawData = false,
   }) async {
     final requestOptions = options ?? Options();
     requestOptions.extra ??= {};
@@ -23,7 +25,12 @@ class SignalWalletNetworkClient extends ApiClient {
       options: requestOptions,
       params: params,
     );
-    return BaseResponse.fromJson(response);
+    BaseResponse baseResponse = BaseResponse.fromJson(response);
+    if (returnRawData) {
+      baseResponse.data = response;
+    }
+
+    return baseResponse;
   }
 
   @override
@@ -33,6 +40,7 @@ class SignalWalletNetworkClient extends ApiClient {
     Options? options,
     Map<String, dynamic>? params,
     bool isAuthHeaderRequired = false,
+    bool returnRawData = false,
   }) async {
     final requestOptions = options ?? Options();
     requestOptions.extra ??= {};
@@ -43,13 +51,18 @@ class SignalWalletNetworkClient extends ApiClient {
       options: requestOptions,
       params: params,
     );
+    if (endpoint == EndpointConstant.login) {
+      (response as Map<String, dynamic>)["data"] = {
+        "token": (response as Map).remove("token"),
+        "user": (response as Map).remove("user")
+      };
+    }
+    BaseResponse baseResponse = BaseResponse.fromJson(response);
+    if (returnRawData) {
+      baseResponse.data = response;
+    }
 
-    (response as Map<String, dynamic>)["data"] = {
-      "token": (response as Map).remove("token"),
-      "user": (response as Map).remove("user")
-    };
-
-    return BaseResponse.fromJson(response);
+    return baseResponse;
   }
 
   @override
@@ -59,6 +72,7 @@ class SignalWalletNetworkClient extends ApiClient {
     Options? options,
     Map<String, dynamic>? params,
     bool isAuthHeaderRequired = false,
+    bool returnRawData = false,
   }) async {
     final requestOptions = options ?? Options();
     requestOptions.extra ??= {};
@@ -68,7 +82,12 @@ class SignalWalletNetworkClient extends ApiClient {
         data: data,
         options: requestOptions,
         params: params);
-    return BaseResponse.fromJson(response);
+    BaseResponse baseResponse = BaseResponse.fromJson(response);
+    if (returnRawData) {
+      baseResponse.data = response;
+    }
+
+    return baseResponse;
   }
 
   @override
@@ -78,6 +97,7 @@ class SignalWalletNetworkClient extends ApiClient {
     Options? options,
     Map<String, dynamic>? params,
     bool isAuthHeaderRequired = false,
+    bool returnRawData = false,
   }) async {
     final requestOptions = options ?? Options();
     requestOptions.extra ??= {};
@@ -87,7 +107,12 @@ class SignalWalletNetworkClient extends ApiClient {
         data: data,
         options: requestOptions,
         params: params);
-    return BaseResponse.fromJson(response);
+    BaseResponse baseResponse = BaseResponse.fromJson(response);
+    if (returnRawData) {
+      baseResponse.data = response;
+    }
+
+    return baseResponse;
   }
 
   @override
@@ -97,6 +122,7 @@ class SignalWalletNetworkClient extends ApiClient {
     Options? options,
     Map<String, dynamic>? params,
     bool isAuthHeaderRequired = false,
+    bool returnRawData = false,
   }) async {
     final requestOptions = options ?? Options();
     requestOptions.extra ??= {};
@@ -106,6 +132,11 @@ class SignalWalletNetworkClient extends ApiClient {
         data: data,
         options: requestOptions,
         params: params);
-    return BaseResponse.fromJson(response);
+    BaseResponse baseResponse = BaseResponse.fromJson(response);
+    if (returnRawData) {
+      baseResponse.data = response;
+    }
+
+    return baseResponse;
   }
 }
