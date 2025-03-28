@@ -25,7 +25,7 @@ final class FetchAllAccountBalanceLoadingState
 
 final class FetchAllAccountBalanceSuccessState
     extends WalletSystemUserBalanceAndTradeCallingState {
-  final List<WalletAccountBalanceEntity> listOfWalletsBalances;
+  final List<WalletAccountEntity> listOfWalletsBalances;
 
   const FetchAllAccountBalanceSuccessState(
       {required this.listOfWalletsBalances});

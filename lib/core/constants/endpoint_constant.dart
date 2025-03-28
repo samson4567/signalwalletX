@@ -19,7 +19,15 @@ class EndpointConstant {
   static const String setWithdrawalPassword = '/wallet/set-withdraw-password';
   static const String getpnl = '/user/pnl';
 
-// trading system endpoint
+//  /market/orderbook?symbol=BTCUSDT
 
   static const String fetchLiveMarketPrices = '/market/ticker';
+  static const String fetchOrderBook = '/market/orderbook';
+  static const String placeABuyOrSellOrderRequest = '/trade/order';
+  static const String fetchCompletedTrade = '/trade/history';
+  static const String convert = '/wallet/convert';
+  static const String getConversions = '/wallet/conversions';
 }
+
+// /wallet/conversions
+// PlaceABuyOrSellOrderRequest

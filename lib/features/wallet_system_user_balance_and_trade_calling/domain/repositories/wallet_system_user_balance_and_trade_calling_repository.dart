@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
-import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
-import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/admin_pending_withdrawal_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
@@ -11,7 +9,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 
 abstract class WalletSystemUserBalanceAndTradeCallingRepository {
-  Future<Either<Failure, List<WalletAccountBalanceEntity>>> fetchAllBalances();
+  Future<Either<Failure, List<WalletAccountEntity>>> fetchAllBalances();
   Future<Either<Failure, DepositAddressEntity>> retriveDepositAddress(
       {required String chain, required String currency});
 

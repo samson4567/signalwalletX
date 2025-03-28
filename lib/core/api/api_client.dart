@@ -68,6 +68,10 @@ abstract class ApiClient<T> {
     Map<String, dynamic>? params,
   }) async {
     try {
+      // final response = await dio.post(endpoint,
+      //     data: data, options: options, queryParameters: params);
+      // return response.data;
+
       if (await ConnectivityHelper.hasInternetConnection()) {
         final response = await dio.post(endpoint,
             data: data, options: options, queryParameters: params);
@@ -75,7 +79,9 @@ abstract class ApiClient<T> {
       } else {
         throw const NetworkException();
       }
+      // try {
     } on DioException catch (e) {
+      print("freshbsjjasasja>>${e}");
       _handleError(e);
       rethrow;
     }

@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class WalletAccountBalanceEntity extends Equatable {
+class WalletAccountEntity extends Equatable {
   final String? accountType;
   final String? currency;
   final String? actualQuantity;
   final String? freezeQuantity;
 
-  const WalletAccountBalanceEntity({
+  const WalletAccountEntity({
     required this.accountType,
     required this.actualQuantity,
     required this.currency,

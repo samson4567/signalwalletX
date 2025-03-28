@@ -1,7 +1,7 @@
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 
-class WalletAccountBalanceModel extends WalletAccountBalanceEntity {
-  const WalletAccountBalanceModel({
+class WalletAccountModel extends WalletAccountEntity {
+  const WalletAccountModel({
     super.accountType,
     super.actualQuantity,
     super.currency,
@@ -17,8 +17,8 @@ class WalletAccountBalanceModel extends WalletAccountBalanceEntity {
     };
   }
 
-  factory WalletAccountBalanceModel.fromJson(Map jsonMap) {
-    return WalletAccountBalanceModel(
+  factory WalletAccountModel.fromJson(Map jsonMap) {
+    return WalletAccountModel(
       accountType: jsonMap["account_type"],
       actualQuantity: jsonMap["actual_quantity"],
       currency: jsonMap["currency"],
@@ -26,8 +26,8 @@ class WalletAccountBalanceModel extends WalletAccountBalanceEntity {
     );
   }
 
-  factory WalletAccountBalanceModel.empty(Map jsonMap) {
-    return WalletAccountBalanceModel();
+  factory WalletAccountModel.empty(Map jsonMap) {
+    return WalletAccountModel();
   }
 
   @override

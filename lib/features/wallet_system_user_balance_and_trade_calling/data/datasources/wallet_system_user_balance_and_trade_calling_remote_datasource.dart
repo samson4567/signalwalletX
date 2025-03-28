@@ -17,7 +17,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 
 abstract class WalletSystemUserBalanceAndTradeCallingRemoteDatasource {
-  Future<List<WalletAccountBalanceEntity>> fetchAllBalances();
+  Future<List<WalletAccountEntity>> fetchAllBalances();
   Future<DepositAddressEntity> retriveDepositAddress(
       {required String currency, required String chain});
   Future<TradeWithdrawalRequestResponseEntity> requestTradeWithdrawal(
@@ -54,15 +54,15 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
 
   final SignalWalletNetworkClient networkClient;
   @override
-  Future<List<WalletAccountBalanceEntity>> fetchAllBalances() async {
+  Future<List<WalletAccountEntity>> fetchAllBalances() async {
     final response = await networkClient.get(
         endpoint: EndpointConstant.fetchAllBalances,
         isAuthHeaderRequired: true,
         returnRawData: true);
     List rawList = (response.data as Map)["wallets"];
-    List<WalletAccountBalanceEntity> result = rawList
+    List<WalletAccountEntity> result = rawList
         .map(
-          (e) => WalletAccountBalanceModel.fromJson(e),
+          (e) => WalletAccountModel.fromJson(e),
         )
         .toList();
 

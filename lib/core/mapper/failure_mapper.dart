@@ -16,7 +16,7 @@ Failure mapExceptionToFailure(Object e) {
     return BadRequestFailure(message: e.message, description: e.description);
   } else {
     // Default case for unknown exceptions
-    return const UnKnownFailure(
-        message: 'Something went wrong', description: 'Try again later');
+    return UnKnownFailure(
+        message: 'Something went wrong \n$e', description: 'Try again later');
   }
 }

@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
-import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
-import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/datasources/wallet_system_user_balance_and_trade_calling_local_datasource.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/datasources/wallet_system_user_balance_and_trade_calling_remote_datasource.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/admin_pending_withdrawal_request_entity.dart';
@@ -27,8 +25,7 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
       walletSystemUserBalanceAndTradeCallingLocalDatasource;
 
   @override
-  Future<Either<Failure, List<WalletAccountBalanceEntity>>>
-      fetchAllBalances() async {
+  Future<Either<Failure, List<WalletAccountEntity>>> fetchAllBalances() async {
     try {
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource

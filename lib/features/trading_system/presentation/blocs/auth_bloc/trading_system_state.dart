@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 
 sealed class TradingSystemState extends Equatable {
   const TradingSystemState();
@@ -37,166 +40,104 @@ final class FetchLiveMarketPricesErrorState extends TradingSystemState {
 }
 ///// FetchLiveMarketPrices ended .....
 
-///// old states
+// FetchOrderBook
 
-// Sign Up States
-final class NewUserSignUpLoadingState extends TradingSystemState {
-  const NewUserSignUpLoadingState();
+///// FetchOrderBook
+final class FetchOrderBookLoadingState extends TradingSystemState {
+  const FetchOrderBookLoadingState();
 }
 
-final class NewUserSignUpSuccessState extends TradingSystemState {
+final class FetchOrderBookSuccessState extends TradingSystemState {
+  final OrderBookEntity orderBookEntity;
+
+  const FetchOrderBookSuccessState({required this.orderBookEntity});
+
+  @override
+  List<Object> get props => [orderBookEntity];
+}
+
+final class FetchOrderBookErrorState extends TradingSystemState {
+  final String errorMessage;
+
+  const FetchOrderBookErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// FetchOrderBook ended .....
+
+///// PlaceABuyOrSellOrderRequest
+final class PlaceABuyOrSellOrderRequestLoadingState extends TradingSystemState {
+  const PlaceABuyOrSellOrderRequestLoadingState();
+}
+
+final class PlaceABuyOrSellOrderRequestSuccessState extends TradingSystemState {
   final String message;
 
-  const NewUserSignUpSuccessState({required this.message});
+  const PlaceABuyOrSellOrderRequestSuccessState({required this.message});
 
   @override
   List<Object> get props => [message];
 }
 
-final class NewUserSignUpErrorState extends TradingSystemState {
+final class PlaceABuyOrSellOrderRequestErrorState extends TradingSystemState {
   final String errorMessage;
 
-  const NewUserSignUpErrorState({required this.errorMessage});
+  const PlaceABuyOrSellOrderRequestErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];
 }
+///// PlaceABuyOrSellOrderRequest ended .....
 
-// Verify Sign Up States
-final class VerifyNewSignUpEmailLoadingState extends TradingSystemState {
-  const VerifyNewSignUpEmailLoadingState();
+///// Conversion
+final class ConversionLoadingState extends TradingSystemState {
+  const ConversionLoadingState();
 }
 
-final class VerifyNewSignUpEmailSuccessState extends TradingSystemState {
-  final String message;
+final class ConversionSuccessState extends TradingSystemState {
+  final ConversionEntity conversionEntity;
 
-  const VerifyNewSignUpEmailSuccessState({required this.message});
+  const ConversionSuccessState({required this.conversionEntity});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [conversionEntity];
 }
 
-final class VerifyNewSignUpEmailErrorState extends TradingSystemState {
+final class ConversionErrorState extends TradingSystemState {
   final String errorMessage;
 
-  const VerifyNewSignUpEmailErrorState({required this.errorMessage});
+  const ConversionErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];
 }
+///// Conversion ended .....
 
-// Resend OTP States
-final class ResendOtpLoadingState extends TradingSystemState {
-  const ResendOtpLoadingState();
+///// GetConversion
+final class GetConversionLoadingState extends TradingSystemState {
+  const GetConversionLoadingState();
 }
 
-final class ResendOtpSuccessState extends TradingSystemState {
-  final String message;
+final class GetConversionSuccessState extends TradingSystemState {
+  final List<ConversionEntity> listOfConversionEntity;
 
-  const ResendOtpSuccessState({required this.message});
+  const GetConversionSuccessState({required this.listOfConversionEntity});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [listOfConversionEntity];
 }
 
-final class ResendOtpErrorState extends TradingSystemState {
+final class GetConversionErrorState extends TradingSystemState {
   final String errorMessage;
 
-  const ResendOtpErrorState({required this.errorMessage});
+  const GetConversionErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];
 }
+///// GetConversion ended .....
 
-// Login States
-final class LoginLoadingState extends TradingSystemState {
-  const LoginLoadingState();
-}
 
-final class LoginSuccessState extends TradingSystemState {
-  final String email;
-  final String message;
 
-  const LoginSuccessState({required this.email, required this.message});
-
-  @override
-  List<Object> get props => [email, message];
-}
-
-final class LoginErrorState extends TradingSystemState {
-  final String errorMessage;
-
-  const LoginErrorState({required this.errorMessage});
-
-  @override
-  List<Object> get props => [errorMessage];
-}
-
-// Logout States
-final class LogoutLoadingState extends TradingSystemState {
-  const LogoutLoadingState();
-}
-
-final class LogoutSuccessState extends TradingSystemState {
-  final String message;
-
-  const LogoutSuccessState({required this.message});
-
-  @override
-  List<Object> get props => [message];
-}
-
-final class LogoutErrorState extends TradingSystemState {
-  final String errorMessage;
-
-  const LogoutErrorState({required this.errorMessage});
-
-  @override
-  List<Object> get props => [errorMessage];
-}
-
-// Reset Password States
-final class ResetPasswordLoadingState extends TradingSystemState {
-  const ResetPasswordLoadingState();
-}
-
-final class ResetPasswordSuccessState extends TradingSystemState {
-  final String message;
-
-  const ResetPasswordSuccessState({required this.message});
-
-  @override
-  List<Object> get props => [message];
-}
-
-final class ResetPasswordErrorState extends TradingSystemState {
-  final String errorMessage;
-
-  const ResetPasswordErrorState({required this.errorMessage});
-
-  @override
-  List<Object> get props => [errorMessage];
-}
-
-// ✅ Added Update Password States
-final class UpdatePasswordLoadingState extends TradingSystemState {
-  const UpdatePasswordLoadingState();
-}
-
-final class UpdatePasswordSuccessState extends TradingSystemState {
-  final String message;
-
-  const UpdatePasswordSuccessState({required this.message});
-
-  @override
-  List<Object> get props => [message];
-}
-
-final class UpdatePasswordErrorState extends TradingSystemState {
-  final String errorMessage;
-
-  const UpdatePasswordErrorState({required this.errorMessage});
-
-  @override
-  List<Object> get props => [errorMessage];
-}
+// GetConversion

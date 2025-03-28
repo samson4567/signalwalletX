@@ -6,111 +6,86 @@ import 'package:signalwavex/features/authentication/data/models/new_user_request
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/features/trading_system/domain/repositories/trading_system_repository.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 
-class TradingSystemBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthenticationRepository authenticationRepository;
+class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
+  final TradingSystemRepository tradingSystemRepository;
   AppBloc appBloc;
 
   TradingSystemBloc(
-      {required this.authenticationRepository, required this.appBloc})
-      : super(const AuthInitial()) {
-    on<NewUserSignUpEvent>(_onNewUserSignUpEvent);
-    on<VerifyNewSignUpEmailEvent>(_onVerifyNewSignUpEmailEvent);
-    on<ResendOtpEvent>(_onResendOtpEvent);
-    on<LoginEvent>(_onLoginEvent);
-    on<LogoutEvent>(_onLogoutEvent);
-    on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
+      {required this.tradingSystemRepository, required this.appBloc})
+      : super(const TradingSystemInitial()) {
+    on<FetchLiveMarketPricesEvent>(_onFetchLiveMarketPricesEvent);
+    on<FetchOrderBookEvent>(_onFetchOrderBookEvent);
+    on<PlaceABuyOrSellOrderRequestEvent>(_onPlaceABuyOrSellOrderRequestEvent);
+
+    on<ConversionEvent>(_onConversionEvent);
+    on<GetConversionEvent>(_onGetConversionEvent);
+
+    // GetConversionEvent
   }
 
-  Future<void> _onNewUserSignUpEvent(
-      NewUserSignUpEvent event, Emitter<AuthState> emit) async {
-    emit(const NewUserSignUpLoadingState());
-    final result = await authenticationRepository.newUserSignUp(
-      newUserRequest: NewUserRequestModel(
-        email: event.email,
-        password: event.password,
-        passwordConfirmation: event.confirmPassword,
-      ),
-    );
-    result.fold(
-      (error) => emit(NewUserSignUpErrorState(errorMessage: error.message)),
-      (message) => emit(NewUserSignUpSuccessState(message: message)),
-    );
-  }
-
-  Future<void> _onVerifyNewSignUpEmailEvent(
-      VerifyNewSignUpEmailEvent event, Emitter<AuthState> emit) async {
-    emit(const VerifyNewSignUpEmailLoadingState());
-    final result = await authenticationRepository.verifySignUp(
-      email: event.email,
-      otp: event.otp,
-    );
+  Future<void> _onFetchLiveMarketPricesEvent(FetchLiveMarketPricesEvent event,
+      Emitter<TradingSystemState> emit) async {
+    emit(const FetchLiveMarketPricesLoadingState());
+    final result = await tradingSystemRepository.fetchLiveMarketPrices();
     result.fold(
       (error) =>
-          emit(VerifyNewSignUpEmailErrorState(errorMessage: error.message)),
-      (entity) =>
-          emit(VerifyNewSignUpEmailSuccessState(message: entity.message)),
+          emit(FetchLiveMarketPricesErrorState(errorMessage: error.message)),
+      (message) => emit(FetchLiveMarketPricesSuccessState(
+          listOfLiveMarketPriceEntity: message)),
     );
   }
 
-  Future<void> _onResendOtpEvent(
-      ResendOtpEvent event, Emitter<AuthState> emit) async {
-    emit(const ResendOtpLoadingState());
-    final result = await authenticationRepository.resendOtp(email: event.email);
+  Future<void> _onFetchOrderBookEvent(
+      FetchOrderBookEvent event, Emitter<TradingSystemState> emit) async {
+    emit(const FetchOrderBookLoadingState());
+    final result =
+        await tradingSystemRepository.fetchOrderBook(symbol: event.symbol);
     result.fold(
-      (error) => emit(ResendOtpErrorState(errorMessage: error.message)),
-      (message) => emit(ResendOtpSuccessState(message: message)),
+      (error) => emit(FetchOrderBookErrorState(errorMessage: error.message)),
+      (orderBookEntity) =>
+          emit(FetchOrderBookSuccessState(orderBookEntity: orderBookEntity)),
     );
   }
 
-  Future<void> _onLoginEvent(LoginEvent event, Emitter<AuthState> emit) async {
-    emit(const LoginLoadingState());
-    final result = await authenticationRepository.login(
-      email: event.email,
-      password: event.password,
-    );
-
-    result.fold((error) => emit(LoginErrorState(errorMessage: error.message)),
-        (entity) {
-      appBloc.add(
-        UserUpdateEvent(
-          updatedUserModel: UserModel.createFromLogin(
-            entity["user"],
-          ),
-        ),
-      );
-      emit(LoginSuccessState(
-          email: entity["user"]["email"], message: "Login Successful"));
-    });
-  }
-
-  Future<void> _onLogoutEvent(
-      LogoutEvent event, Emitter<AuthState> emit) async {
-    emit(const LogoutLoadingState());
-
-    final result = await authenticationRepository.logout(token: event.token);
-
+  Future<void> _onPlaceABuyOrSellOrderRequestEvent(
+      PlaceABuyOrSellOrderRequestEvent event,
+      Emitter<TradingSystemState> emit) async {
+    emit(const PlaceABuyOrSellOrderRequestLoadingState());
+    final result = await tradingSystemRepository.placeABuyOrSellOrderRequest(
+        placeABuyOrSellOrderRequestEntity:
+            event.placeABuyOrSellOrderRequestEntity);
     result.fold(
-      (error) => emit(LogoutErrorState(errorMessage: error.message)),
-      (message) {
-        emit(LogoutSuccessState(message: message));
-      },
+      (error) => emit(
+          PlaceABuyOrSellOrderRequestErrorState(errorMessage: error.message)),
+      (message) =>
+          emit(PlaceABuyOrSellOrderRequestSuccessState(message: message)),
     );
   }
 
-  Future<void> _onUpdatePasswordEvent(
-      UpdatePasswordEvent event, Emitter<AuthState> emit) async {
-    emit(const UpdatePasswordLoadingState());
-
-    final result = await authenticationRepository.updatePassword(
-      currentPassword: event.currentPassword,
-      newPassword: event.newPassword,
-      newPasswordConfirmation: event.newPasswordConfirmation,
-    );
-
+  Future<void> _onConversionEvent(
+      ConversionEvent event, Emitter<TradingSystemState> emit) async {
+    emit(const ConversionLoadingState());
+    final result = await tradingSystemRepository.convert(
+        conversionEntity: event.conversionEntity);
     result.fold(
-      (error) => emit(UpdatePasswordErrorState(errorMessage: error.message)),
-      (message) => emit(UpdatePasswordSuccessState(message: message)),
+      (error) => emit(ConversionErrorState(errorMessage: error.message)),
+      (conversionEntity) =>
+          emit(ConversionSuccessState(conversionEntity: conversionEntity)),
+    );
+  }
+
+  Future<void> _onGetConversionEvent(
+      GetConversionEvent event, Emitter<TradingSystemState> emit) async {
+    emit(const GetConversionLoadingState());
+    final result = await tradingSystemRepository.getConversions();
+    result.fold(
+      (error) => emit(GetConversionErrorState(errorMessage: error.message)),
+      (listOfConversionEntity) => emit(GetConversionSuccessState(
+          listOfConversionEntity: listOfConversionEntity)),
     );
   }
 }

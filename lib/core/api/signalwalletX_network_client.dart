@@ -51,6 +51,7 @@ class SignalWalletNetworkClient extends ApiClient {
       options: requestOptions,
       params: params,
     );
+    print("fresh>>${response}");
     if (endpoint == EndpointConstant.login) {
       (response as Map<String, dynamic>)["data"] = {
         "token": (response as Map).remove("token"),
