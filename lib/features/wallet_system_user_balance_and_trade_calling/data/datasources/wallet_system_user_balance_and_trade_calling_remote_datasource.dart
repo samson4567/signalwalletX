@@ -73,13 +73,14 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   Future<DepositAddressEntity> retriveDepositAddress(
       {required String currency, required String chain}) async {
     final response = await networkClient.post(
-        endpoint: EndpointConstant.retriveDepositAddress,
-        isAuthHeaderRequired: true,
-        returnRawData: true,
-        data: {
-          "currency": currency,
-          "chain": chain,
-        });
+      endpoint: EndpointConstant.retriveDepositAddress,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+      data: {
+        "currency": currency,
+        "chain": chain,
+      },
+    );
     DepositAddressModel result = DepositAddressModel.fromJson(response.data);
     return result;
   }
@@ -105,7 +106,9 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
     final response = await networkClient.post(
         endpoint: EndpointConstant.adminSetCharges,
         isAuthHeaderRequired: true,
-        data: {"withdrawal_fee": withdrawalFee});
+        data: {
+          "withdrawal_fee": withdrawalFee,
+        });
 
     return response.message;
   }

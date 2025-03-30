@@ -8,6 +8,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc({required this.appRepository}) : super(AppInitial()) {
     on<UserUpdateEvent>(_onUserUpdate);
+    on<StorePNLEvent>(_onStorePNLEvent);
+
+    // StorePNLEvent
   }
 
   Future<void> _onUserUpdate(
@@ -15,4 +18,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(UserUpdateLoadingState());
     emit(UserUpdateSuccessState(user: event.updatedUserModel));
   }
+
+  Future<void> _onStorePNLEvent(
+      StorePNLEvent event, Emitter<AppState> emit) async {
+    emit(StorePNLLoadingState());
+    emit(StorePNLSuccessState(pnl: event.pnl));
+  }
+
+  // _onStorePNLEvent
 }

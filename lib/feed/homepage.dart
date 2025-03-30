@@ -5,6 +5,7 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/router/api_route.dart';
@@ -20,6 +21,12 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    getAndSetInitialData(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -576,14 +583,26 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         SizedBox(width: screenWidth * 0.01), // 1% spacing
-        Text(
-          '+\$132',
-          style: TextStyles.smallText.copyWith(
-            fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
-            color: ColorConstants.numyelcolor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        BlocConsumer<AppBloc, AppState>(
+            listener: (BuildContext context, AppState state) {
+          if (state is StorePNLSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("password updated successfully"),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        }, builder: (context, state) {
+          return Text(
+            '+\$${state.pnl ?? 0}',
+            style: TextStyles.smallText.copyWith(
+              fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
+              color: ColorConstants.numyelcolor,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        }),
       ],
     );
   }

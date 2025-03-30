@@ -18,3 +18,14 @@ final class UserUpdateEvent extends AppEvent {
   @override
   List<Object> get props => [updatedUserModel.toJson()];
 }
+
+final class StorePNLEvent extends AppEvent {
+  final String pnl;
+
+  const StorePNLEvent({
+    required this.pnl,
+  });
+
+  @override
+  List<Object> get props => [pnl];
+}

@@ -3,8 +3,9 @@ import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
 
 // ignore: must_be_immutable
 sealed class AppState extends Equatable {
-  AppState({this.user});
+  AppState({this.user, this.pnl});
   UserModel? user = UserModel.empty();
+  String? pnl;
 
   @override
   List<Object> get props => [];
@@ -37,6 +38,32 @@ final class UserUpdateErrorState extends AppState {
   final String errorMessage;
 
   UserUpdateErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// user update States
+final class StorePNLLoadingState extends AppState {
+  StorePNLLoadingState();
+}
+
+// ignore: must_be_immutable
+final class StorePNLSuccessState extends AppState {
+  @override
+  // ignore: overridden_fields
+  // String ? user = UserModel.empty();
+  StorePNLSuccessState({super.pnl});
+
+  @override
+  List<Object> get props => [user!];
+}
+
+// ignore: must_be_immutable
+final class StorePNLErrorState extends AppState {
+  final String errorMessage;
+
+  StorePNLErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];
