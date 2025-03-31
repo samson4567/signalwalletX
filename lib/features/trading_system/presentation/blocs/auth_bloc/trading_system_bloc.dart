@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/trading_system/domain/repositories/trading_system_repository.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -90,8 +91,10 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
     final result = await tradingSystemRepository.getCoins();
     result.fold(
       (error) => emit(GetCoinListErrorState(errorMessage: error.message)),
-      (listOfConversionEntity) => emit(GetCoinListSuccessState(
-          listOfConversionEntity: listOfConversionEntity)),
+      (listOfCoinEntity) {
+        appBloc.add(StoreCoinsEvent(listOfCoinEntity: listOfCoinEntity));
+        emit(GetCoinListSuccessState(listOfCoinEntity: listOfCoinEntity));
+      },
     );
   }
 

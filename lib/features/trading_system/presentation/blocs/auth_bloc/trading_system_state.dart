@@ -145,12 +145,12 @@ final class GetCoinListLoadingState extends TradingSystemState {
 }
 
 final class GetCoinListSuccessState extends TradingSystemState {
-  final List<CoinEntity> listOfConversionEntity;
+  final List<CoinEntity> listOfCoinEntity;
 
-  const GetCoinListSuccessState({required this.listOfConversionEntity});
+  const GetCoinListSuccessState({required this.listOfCoinEntity});
 
   @override
-  List<Object> get props => [listOfConversionEntity];
+  List<Object> get props => [listOfCoinEntity];
 }
 
 final class GetCoinListErrorState extends TradingSystemState {

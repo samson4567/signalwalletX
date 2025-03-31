@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
+import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/deposit_address_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
-import 'package:signalwavex/settings/password.dart';
 
 class DepositPage extends StatefulWidget {
   const DepositPage({super.key});
@@ -18,10 +20,13 @@ class DepositPage extends StatefulWidget {
 }
 
 class _DepositPageState extends State<DepositPage> {
-  String selectedCoin = 'BTC';
-  String selectedChain = 'TRC20';
+  String? selectedCoin;
+  CoinModel? selectedCoinModel;
+
+  String? selectedChain;
   String walletAddress = 'trtiueorwqrieotreppweoitrrioewpt';
 
+  DepositAddressModel? selectedDepositAddressModel;
   final List<Map<String, String>> coinList = [
     {'label': 'BTC', 'imagePath': 'assets/icons/bitcoin.png'},
     {'label': 'ETH', 'imagePath': 'assets/icons/sol.png'},
@@ -39,7 +44,7 @@ class _DepositPageState extends State<DepositPage> {
     super.initState();
   }
 
-  List<CoinModel>? listOFCoins;
+  List<CoinModel>? listOfCoins;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +77,7 @@ class _DepositPageState extends State<DepositPage> {
       body: BlocConsumer<TradingSystemBloc, TradingSystemState>(
           listener: (BuildContext context, TradingSystemState state) {
         if (state is GetCoinListSuccessState) {
-          listOFCoins = (state.listOfConversionEntity as List<CoinModel>);
+          listOfCoins = (state.listOfCoinEntity as List<CoinModel>);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("coin successfully"),
@@ -120,63 +125,80 @@ class _DepositPageState extends State<DepositPage> {
                             label: 'Select the coins you want to deposit',
                             selectedItem: selectedCoin,
                             imagePath: "assets/icons/bitcoin.png",
-                            itemList: listOFCoins
+                            itemList: listOfCoins
                                     ?.map((coin) => coin.symbol!)
                                     .toList() ??
                                 [],
                             onChanged: (value) {
-                              setState(() {
-                                selectedCoin = value!;
-                                if (selectedCoin.isNotEmpty &&
-                                    selectedChain.isNotEmpty) {
-                                  context
-                                      .read<
-                                          WalletSystemUserBalanceAndTradeCallingBloc>()
-                                      .add(DepositAddressRetrivalEvent(
-                                          currency: selectedCoin,
-                                          chain: selectedChain));
-                                }
-                              });
+                              selectedChain = null;
+                              setState(() {});
+
+                              selectedCoin = value!;
+                              listOfCoins?.forEach(
+                                (element) {
+                                  if (selectedCoin == element.symbol) {
+                                    selectedCoinModel = element;
+                                  }
+                                },
+                              );
+                              if ((selectedCoin?.isNotEmpty ?? false) &&
+                                  (selectedChain?.isNotEmpty ?? false)) {
+                                context
+                                    .read<
+                                        WalletSystemUserBalanceAndTradeCallingBloc>()
+                                    .add(DepositAddressRetrivalEvent(
+                                        currency: selectedCoin!,
+                                        chain: selectedChain!));
+                              }
+                              setState(() {});
                             },
                           ),
                           const SizedBox(height: 16),
-                          _buildSelectionContainer(
+                          _buildSelectionContainer2(
                             label: 'Select Chain',
                             selectedItem: selectedChain,
+                            coinModel: selectedCoinModel,
                             itemList: chainList,
                             onChanged: (value) {
                               setState(() {
                                 selectedChain = value!;
-                                if (selectedCoin.isNotEmpty &&
-                                    selectedChain.isNotEmpty) {
+                                if ((selectedCoin?.isNotEmpty ?? false) &&
+                                    (selectedChain?.isNotEmpty ?? false)) {
                                   context
                                       .read<
                                           WalletSystemUserBalanceAndTradeCallingBloc>()
-                                      .add(DepositAddressRetrivalEvent(
-                                          currency: selectedCoin,
-                                          chain: selectedChain));
+                                      .add(
+                                        DepositAddressRetrivalEvent(
+                                          currency: selectedCoin!,
+                                          chain: selectedChain!,
+                                        ),
+                                      );
                                 }
                               });
                             },
                             imagePath: '',
                           ),
                           const SizedBox(height: 16),
-                          BlocConsumer<TradingSystemBloc, TradingSystemState>(
+                          BlocConsumer<
+                                  WalletSystemUserBalanceAndTradeCallingBloc,
+                                  WalletSystemUserBalanceAndTradeCallingState>(
                               listener: (BuildContext context,
-                                  TradingSystemState state) {
-                            if (state is GetCoinListSuccessState) {
-                              listOFCoins = (state.listOfConversionEntity
-                                  as List<CoinModel>);
+                                  WalletSystemUserBalanceAndTradeCallingState
+                                      state) {
+                            if (state is DepositAddressRetrivalSuccessState) {
+                              selectedDepositAddressModel = state
+                                  .depositAddressEntity as DepositAddressModel;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("coin successfully"),
+                                  content: Text(
+                                      "deposit detail fetched successfully"),
                                   backgroundColor: Colors.green,
                                 ),
                               );
 // _showDialog('success');
                             }
 
-                            if (state is GetCoinListErrorState) {
+                            if (state is DepositAddressRetrivalErrorState) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(state.errorMessage),
@@ -185,8 +207,7 @@ class _DepositPageState extends State<DepositPage> {
                               );
                             }
                           }, builder: (context, state) {
-                            return (selectedChain.isNotEmpty &&
-                                    selectedCoin.isNotEmpty)
+                            return (selectedDepositAddressModel != null)
                                 ? ((state is DepositAddressRetrivalLoadingState)
                                     ? const Center(
                                         child: SizedBox(
@@ -198,7 +219,8 @@ class _DepositPageState extends State<DepositPage> {
                                           ),
                                         ),
                                       )
-                                    : _buildAddressContainer())
+                                    : _buildAddressContainer(
+                                        selectedDepositAddressModel!))
                                 : FancyContainerTwo(
                                     child:
                                         const Text("Select A chain and a coin"),
@@ -209,29 +231,34 @@ class _DepositPageState extends State<DepositPage> {
                     ),
                     // Address + QR Code Section
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Address',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
-                          const SizedBox(height: 8),
-                          Image.asset(
-                            'assets/icons/qr.png', // Replace with actual QR code asset
-                            width: 100,
-                            height: 100,
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Save QR Code',
-                            style: TextStyle(fontSize: 14, color: Colors.grey),
-                          ),
-                        ],
+                    if ((selectedDepositAddressModel != null))
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Address',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
+                            const SizedBox(height: 8),
+                            Image.memory(
+                              getImageDataFromString(
+                                  selectedDepositAddressModel!.qRCode!),
+                              // 'assets/icons/qr.png', // Replace with actual QR code asset
+                              width: 100,
+                              height: 100,
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Save QR Code',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                     const SizedBox(height: 16),
                     // Disclaimer Section
                     Container(
@@ -283,7 +310,7 @@ class _DepositPageState extends State<DepositPage> {
 
   Widget _buildSelectionContainer({
     required String label,
-    required String selectedItem,
+    required String? selectedItem,
     required String imagePath,
     required List<String> itemList,
     required ValueChanged<String?> onChanged,
@@ -315,7 +342,7 @@ class _DepositPageState extends State<DepositPage> {
                     ),
                   const SizedBox(width: 8),
                   Text(
-                    selectedItem,
+                    selectedItem ?? "select a coin",
                     style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ],
@@ -341,7 +368,72 @@ class _DepositPageState extends State<DepositPage> {
     );
   }
 
-  Widget _buildAddressContainer() {
+  Widget _buildSelectionContainer2({
+    required String label,
+    required String? selectedItem,
+    required String imagePath,
+    required List<String> itemList,
+    required ValueChanged<String?> onChanged,
+    required CoinModel? coinModel,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131313),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: (selectedItem == null && coinModel == null)
+          ? Text("Select a coin")
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        if (imagePath.isNotEmpty)
+                          Image.asset(
+                            imagePath,
+                            width: 24,
+                            height: 24,
+                          ),
+                        const SizedBox(width: 8),
+                        Text(
+                          selectedItem ?? "Select a chain",
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    DropdownButton<String>(
+                      value: selectedItem,
+                      dropdownColor: Colors.black,
+                      style: const TextStyle(color: Colors.white),
+                      icon:
+                          const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                      underline: const SizedBox(),
+                      onChanged: onChanged,
+                      items: coinModel!.chains?.map((item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildAddressContainer(DepositAddressModel depositAddressModel) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -361,7 +453,7 @@ class _DepositPageState extends State<DepositPage> {
             children: [
               Expanded(
                 child: Text(
-                  walletAddress,
+                  depositAddressModel.depositAddress!,
                   style: const TextStyle(fontSize: 16, color: Colors.white),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -369,6 +461,8 @@ class _DepositPageState extends State<DepositPage> {
               IconButton(
                 icon: const Icon(Icons.copy, color: Colors.grey),
                 onPressed: () {
+                  Clipboard.setData(
+                      ClipboardData(text: depositAddressModel.depositAddress!));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       backgroundColor: Colors.black,

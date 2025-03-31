@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
@@ -22,6 +23,10 @@ getUserCoinBalances(BuildContext context) {
   context
       .read<WalletSystemUserBalanceAndTradeCallingBloc>()
       .add(FetchAllAccountBalanceEvent());
+}
+
+getCoins(BuildContext context) {
+  context.read<TradingSystemBloc>().add(GetCoinListEvent());
 }
 
 WalletAccountEntity? getCoinWaletDetails(

@@ -3,11 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
+import 'package:signalwavex/component/fancy_container_two.dart';
+import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
+import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/testScreen/line_chart.dart';
 
@@ -25,8 +31,12 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getAndSetInitialData(context);
+    selectedCoin = context.read<AppBloc>().state.listOfCoinEntity?.first;
     super.initState();
   }
+
+  CoinEntity? selectedCoin;
+  Map askBids = {};
 
   @override
   Widget build(BuildContext context) {
@@ -179,17 +189,54 @@ class _HomepageState extends State<Homepage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Bitcoin USD (BTC - USD)",
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                      overflow: TextOverflow.ellipsis,
+                    FancyText(
+                      "${selectedCoin!.name!} USDT (${selectedCoin!.symbol!} - USDT)",
+                      action: () async {
+                        selectedCoin = await showDialog<CoinEntity>(
+                              context: context,
+                              builder: (context) {
+                                List<CoinEntity> listOfCoinModel = context
+                                        .read<AppBloc>()
+                                        .state
+                                        .listOfCoinEntity ??
+                                    [];
+                                // listOfCoinModel
+                                return Dialog(
+                                  child: FancyContainerTwo(
+                                    nulledAlign: true,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: listOfCoinModel
+                                            .map(
+                                              (e) => Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                    "${e.name}(${e.symbol})"),
+                                              ),
+                                            )
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ) ??
+                            selectedCoin;
+                        setState(() {});
+                      },
+                      // style: TextStyle(fontSize: 14, color: Colors.white),
+                      size: 14, textColor: Colors.white,
+                      // overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 5),
-                    Text(
+                    const SizedBox(height: 5),
+                    const Text(
                       "+ 231.43 (1.02%)",
                       style: TextStyle(
                         fontSize: 12,
@@ -232,14 +279,59 @@ class _HomepageState extends State<Homepage> {
                 fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           const SizedBox(height: 8),
-          Expanded(
-            child: LineChart(), // Call the function to create chart data
-          ),
+          BlocConsumer<TradingSystemBloc, TradingSystemState>(
+              listener: (BuildContext context, TradingSystemState state) {
+            if (state is FetchOrderBookSuccessState) {
+              askBids = {
+                "asks": state.orderBookEntity.asks,
+                "bids": state.orderBookEntity.bids,
+              };
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   const SnackBar(
+              //     content: Text("password updated successfully"),
+              //     backgroundColor: Colors.green,
+              //   ),
+              // );
+            } else if (state is FetchOrderBookErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          }, builder: (context, state) {
+            return Expanded(
+              child: (state is FetchOrderBookLoadingState)
+                  ? const Center(
+                      child: SizedBox(
+                        height: 50,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                      ),
+                    )
+                  : (selectedCoin != null)
+                      ? LineChart(
+                          chartDetails: {
+                            "symbol":
+                                "${selectedCoin!.symbol!.toUpperCase()}USDT",
+                            "period": period,
+                            "askAndBids": askBids
+                          },
+                        )
+                      : FancyContainerTwo(
+                          child: const Text("Select A coin"),
+                        ), // Call the function to create chart data
+            );
+          }),
         ],
       ),
     );
   }
 
+  String period = "1day";
   Widget _buildFancyRecentTransaction(BuildContext context) {
     final List<Map<String, String>> transactions = [
       {

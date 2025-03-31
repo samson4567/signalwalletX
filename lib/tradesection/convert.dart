@@ -72,7 +72,7 @@ class _ConvertState extends State<Convert> {
         child: BlocConsumer<TradingSystemBloc, TradingSystemState>(
             listener: (BuildContext context, TradingSystemState state) {
           if (state is GetCoinListSuccessState) {
-            listOFCoin = (state.listOfConversionEntity as List<CoinModel>);
+            listOFCoin = (state.listOfCoinEntity as List<CoinModel>);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("coin successfully"),

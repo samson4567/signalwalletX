@@ -10,6 +10,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<UserUpdateEvent>(_onUserUpdate);
     on<StorePNLEvent>(_onStorePNLEvent);
     on<StoreUserBalancesEvent>(_onStoreUserBalancesEvent);
+    on<StoreCoinsEvent>(_onStoreCoinsEvent);
 
     // StoreUserBalancesEvent
   }
@@ -26,6 +27,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(StorePNLSuccessState(pnl: event.pnl));
   }
 
+  Future<void> _onStoreCoinsEvent(
+      StoreCoinsEvent event, Emitter<AppState> emit) async {
+    emit(StoreCoinsLoadingState());
+    emit(StoreCoinsSuccessState(listOfCoinEntity: event.listOfCoinEntity));
+  }
+
   Future<void> _onStoreUserBalancesEvent(
       StoreUserBalancesEvent event, Emitter<AppState> emit) async {
     emit(StoreUserBalancesLoadingState());
@@ -33,5 +40,5 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         listOfWalletAccounts: event.listOfWalletAccountEntity));
   }
 
-  // _onStoreUserBalancesEvent
+  // _onStoreCoinsEvent
 }

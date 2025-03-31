@@ -9,9 +9,11 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 
 class LineChart extends StatefulWidget {
-  LineChart({Key? key, this.title}) : super(key: key);
+  LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
 
   final String? title;
+  // final Map? askAndBids;
+  final Map? chartDetails;
 
   @override
   _LineChartState createState() => _LineChartState();
@@ -35,14 +37,45 @@ class _LineChartState extends State<LineChart> {
 
   ChartStyle chartStyle = ChartStyle();
   ChartColors chartColors = ChartColors();
+  Map tick = {};
+
+  Map formatAskBid(Map askBid) {
+    Map bids = askBid["bids"];
+    Map asks = askBid["asks"];
+    List newBids = [];
+    List newAsks = [];
+
+    bids.forEach(
+      (key, value) => newBids.add([key, value]),
+    );
+    asks.forEach(
+      (key, value) => newAsks.add([key, value]),
+    );
+    askBid["asks"] = newAsks;
+    askBid["bids"] = newBids;
+    return askBid;
+  }
 
   @override
   void initState() {
     super.initState();
     getData('1day');
-    rootBundle.loadString('assets/depth.json').then((result) {
-      final parseJson = json.decode(result);
-      final tick = parseJson['tick'] as Map<String, dynamic>;
+    if (widget.chartDetails?["askAndBids"] == null) {
+      rootBundle.loadString('assets/depth.json').then((result) {
+        final parseJson = json.decode(result);
+        tick = parseJson['tick'] as Map<String, dynamic>;
+        final List<DepthEntity> bids = (tick['bids'] as List<dynamic>)
+            .map<DepthEntity>(
+                (item) => DepthEntity(item[0] as double, item[1] as double))
+            .toList();
+        final List<DepthEntity> asks = (tick['asks'] as List<dynamic>)
+            .map<DepthEntity>(
+                (item) => DepthEntity(item[0] as double, item[1] as double))
+            .toList();
+        initDepth(bids, asks);
+      });
+    } else {
+      tick = formatAskBid(widget.chartDetails!["askAndBids"]);
       final List<DepthEntity> bids = (tick['bids'] as List<dynamic>)
           .map<DepthEntity>(
               (item) => DepthEntity(item[0] as double, item[1] as double))
@@ -52,7 +85,7 @@ class _LineChartState extends State<LineChart> {
               (item) => DepthEntity(item[0] as double, item[1] as double))
           .toList();
       initDepth(bids, asks);
-    });
+    }
   }
 
   void initDepth(List<DepthEntity>? bids, List<DepthEntity>? asks) {
@@ -165,17 +198,17 @@ class _LineChartState extends State<LineChart> {
             onPressed: () => _showNowPrice = !_showNowPrice),
         button("Customize UI", onPressed: () {
           setState(() {
-            this.isChangeUI = !this.isChangeUI;
-            if (this.isChangeUI) {
+            isChangeUI = !isChangeUI;
+            if (isChangeUI) {
               chartColors.selectBorderColor = Colors.red;
               chartColors.selectFillColor = Colors.red;
               chartColors.lineFillColor = Colors.red;
               chartColors.kLineColor = Colors.yellow;
             } else {
-              chartColors.selectBorderColor = Color(0xff6C7A86);
-              chartColors.selectFillColor = Color(0xff0D1722);
-              chartColors.lineFillColor = Color(0x554C86CD);
-              chartColors.kLineColor = Color(0xff4C86CD);
+              chartColors.selectBorderColor = const Color(0xff6C7A86);
+              chartColors.selectFillColor = const Color(0xff0D1722);
+              chartColors.lineFillColor = const Color(0x554C86CD);
+              chartColors.kLineColor = const Color(0xff4C86CD);
             }
           });
         }),
@@ -231,7 +264,7 @@ class _LineChartState extends State<LineChart> {
   //获取火币数据，需要翻墙
   Future<String> getChatDataFromInternet(String? period) async {
     var url =
-        'https://api.huobi.br.com/market/history/kline?period=${period ?? '1day'}&size=300&symbol=btcusdt';
+        'https://api.huobi.br.com/market/history/kline?period=${widget.chartDetails?["period"] ?? '1day'}&size=300&symbol=${widget.chartDetails?["symbol"] ?? "BTCUSDT".toLowerCase()}';
     late String result;
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
