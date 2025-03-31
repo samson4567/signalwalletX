@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/component/fancy_container_two.dart';
+import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
+import 'package:signalwavex/settings/password.dart';
 
 class DepositPage extends StatefulWidget {
   const DepositPage({super.key});
@@ -23,6 +33,13 @@ class _DepositPageState extends State<DepositPage> {
 
   final List<String> chainList = ['TRC20', 'ERC20', 'BEP20'];
 
+  @override
+  void initState() {
+    context.read<TradingSystemBloc>().add(const GetCoinListEvent());
+    super.initState();
+  }
+
+  List<CoinModel>? listOFCoins;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,116 +69,215 @@ class _DepositPageState extends State<DepositPage> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1C1C1C),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSelectionContainer(
-                    label: 'Select the coins you want to deposit',
-                    selectedItem: selectedCoin,
-                    imagePath: coinList.firstWhere(
-                        (coin) => coin['label'] == selectedCoin)['imagePath']!,
-                    itemList: coinList.map((coin) => coin['label']!).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCoin = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildSelectionContainer(
-                    label: 'Select Chain',
-                    selectedItem: selectedChain,
-                    itemList: chainList,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedChain = value!;
-                      });
-                    },
-                    imagePath: '',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildAddressContainer(),
-                ],
-              ),
+      body: BlocConsumer<TradingSystemBloc, TradingSystemState>(
+          listener: (BuildContext context, TradingSystemState state) {
+        if (state is GetCoinListSuccessState) {
+          listOFCoins = (state.listOfConversionEntity as List<CoinModel>);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("coin successfully"),
+              backgroundColor: Colors.green,
             ),
-            // Address + QR Code Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Address',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Image.asset(
-                    'assets/icons/qr.png', // Replace with actual QR code asset
-                    width: 100,
-                    height: 100,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Save QR Code',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Disclaimer Section
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1C1C1C),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Icon or image asset to the left of the disclaimer
+          );
+// _showDialog('success');
+        }
 
-                  SizedBox(width: 8), // Space between the image and text
-                  // Text content
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
+        if (state is GetCoinListErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      }, builder: (context, state) {
+        // listOFCoins
+        return (state is GetCoinListLoadingState)
+            ? const Center(
+                child: SizedBox(
+                  height: 50,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                ),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1C1C1C),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextSpan(
-                            text: 'Disclaimer !!! ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          _buildSelectionContainer(
+                            label: 'Select the coins you want to deposit',
+                            selectedItem: selectedCoin,
+                            imagePath: "assets/icons/bitcoin.png",
+                            itemList: listOFCoins
+                                    ?.map((coin) => coin.symbol!)
+                                    .toList() ??
+                                [],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedCoin = value!;
+                                if (selectedCoin.isNotEmpty &&
+                                    selectedChain.isNotEmpty) {
+                                  context
+                                      .read<
+                                          WalletSystemUserBalanceAndTradeCallingBloc>()
+                                      .add(DepositAddressRetrivalEvent(
+                                          currency: selectedCoin,
+                                          chain: selectedChain));
+                                }
+                              });
+                            },
                           ),
-                          TextSpan(
-                            text:
-                                'Please double-check the address and the selected chain before making a deposit. Depositing funds to the wrong address or chain may result in the loss of your assets.',
+                          const SizedBox(height: 16),
+                          _buildSelectionContainer(
+                            label: 'Select Chain',
+                            selectedItem: selectedChain,
+                            itemList: chainList,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedChain = value!;
+                                if (selectedCoin.isNotEmpty &&
+                                    selectedChain.isNotEmpty) {
+                                  context
+                                      .read<
+                                          WalletSystemUserBalanceAndTradeCallingBloc>()
+                                      .add(DepositAddressRetrivalEvent(
+                                          currency: selectedCoin,
+                                          chain: selectedChain));
+                                }
+                              });
+                            },
+                            imagePath: '',
+                          ),
+                          const SizedBox(height: 16),
+                          BlocConsumer<TradingSystemBloc, TradingSystemState>(
+                              listener: (BuildContext context,
+                                  TradingSystemState state) {
+                            if (state is GetCoinListSuccessState) {
+                              listOFCoins = (state.listOfConversionEntity
+                                  as List<CoinModel>);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("coin successfully"),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+// _showDialog('success');
+                            }
+
+                            if (state is GetCoinListErrorState) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(state.errorMessage),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            }
+                          }, builder: (context, state) {
+                            return (selectedChain.isNotEmpty &&
+                                    selectedCoin.isNotEmpty)
+                                ? ((state is DepositAddressRetrivalLoadingState)
+                                    ? const Center(
+                                        child: SizedBox(
+                                          height: 50,
+                                          child: AspectRatio(
+                                            aspectRatio: 1,
+                                            child: CircularProgressIndicator
+                                                .adaptive(),
+                                          ),
+                                        ),
+                                      )
+                                    : _buildAddressContainer())
+                                : FancyContainerTwo(
+                                    child:
+                                        const Text("Select A chain and a coin"),
+                                  );
+                          }),
+                        ],
+                      ),
+                    ),
+                    // Address + QR Code Section
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Address',
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                          const SizedBox(height: 8),
+                          Image.asset(
+                            'assets/icons/qr.png', // Replace with actual QR code asset
+                            width: 100,
+                            height: 100,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Save QR Code',
                             style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                    const SizedBox(height: 16),
+                    // Disclaimer Section
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1C1C1C),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Icon or image asset to the left of the disclaimer
+
+                          SizedBox(
+                              width: 8), // Space between the image and text
+                          // Text content
+                          Expanded(
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Disclaimer !!! ',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        'Please double-check the address and the selected chain before making a deposit. Depositing funds to the wrong address or chain may result in the loss of your assets.',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+      }),
     );
   }
 

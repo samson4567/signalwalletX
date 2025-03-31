@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
@@ -31,4 +32,5 @@ abstract class TradingSystemRepository {
   Future<Either<Failure, ConversionEntity>> convert(
       {required ConversionEntity conversionEntity});
   Future<Either<Failure, List<ConversionEntity>>> getConversions();
+  Future<Either<Failure, List<CoinEntity>>> getCoins();
 }

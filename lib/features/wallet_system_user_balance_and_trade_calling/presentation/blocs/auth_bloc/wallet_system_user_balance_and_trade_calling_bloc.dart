@@ -34,7 +34,7 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     on<SetWithdrawalPasswordEvent>(_onSetWithdrawalPasswordEvent);
     on<GetpnlEvent>(_onGetpnlEvent);
 
-    // GetpnlEvent
+    //
   }
 
   Future<void> _onFetchAllAccountBalanceEvent(FetchAllAccountBalanceEvent event,
@@ -45,8 +45,13 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     result.fold(
       (error) =>
           emit(FetchAllAccountBalanceErrorState(errorMessage: error.message)),
-      (listOfWalletsBalances) => emit(FetchAllAccountBalanceSuccessState(
-          listOfWalletsBalances: listOfWalletsBalances)),
+      (listOfWalletsBalances) {
+        appBloc.add(StoreUserBalancesEvent(
+            listOfWalletAccountEntity: listOfWalletsBalances));
+
+        emit(FetchAllAccountBalanceSuccessState(
+            listOfWalletsBalances: listOfWalletsBalances));
+      },
     );
   }
 

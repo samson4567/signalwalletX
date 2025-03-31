@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
@@ -138,6 +139,30 @@ final class GetConversionErrorState extends TradingSystemState {
 }
 ///// GetConversion ended .....
 
+///// GetCoinList
+final class GetCoinListLoadingState extends TradingSystemState {
+  const GetCoinListLoadingState();
+}
+
+final class GetCoinListSuccessState extends TradingSystemState {
+  final List<CoinEntity> listOfConversionEntity;
+
+  const GetCoinListSuccessState({required this.listOfConversionEntity});
+
+  @override
+  List<Object> get props => [listOfConversionEntity];
+}
+
+final class GetCoinListErrorState extends TradingSystemState {
+  final String errorMessage;
+
+  const GetCoinListErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// GetCoinList ended .....
 
 
-// GetConversion
+
+// GetCoinList

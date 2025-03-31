@@ -27,6 +27,7 @@ class EndpointConstant {
   static const String fetchCompletedTrade = '/trade/history';
   static const String convert = '/wallet/convert';
   static const String getConversions = '/wallet/conversions';
+  static const String getTradableCoin = "/market/tradable-coins";
 }
 
 // /wallet/conversions

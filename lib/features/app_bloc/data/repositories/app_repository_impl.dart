@@ -3,8 +3,9 @@ import 'package:signalwavex/core/error/failure.dart';
 
 import 'package:signalwavex/features/app_bloc/data/datasources/app_local_datasource.dart';
 import 'package:signalwavex/features/app_bloc/data/datasources/app_remote_datasource.dart';
-import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
+
 import 'package:signalwavex/features/app_bloc/domain/repositories/app_repository.dart';
+import 'package:signalwavex/features/user/data/models/user_model.dart';
 
 class AppRepositoryImpl implements AppRepository {
   AppRepositoryImpl({

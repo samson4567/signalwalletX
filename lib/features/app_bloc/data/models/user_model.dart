@@ -1,107 +1,76 @@
-import 'package:signalwavex/features/app_bloc/domain/entities/user_entity.dart';
+// export '';
 
-class UserModel extends UserEntity {
-  UserModel({
-    required super.email,
-    required super.id,
-    required super.name,
-    required super.pid,
-    required super.username,
-    required super.verified,
-    required super.isBanned,
-    required super.slug,
-    required super.hasInterests,
-    required super.authProvider,
-    required super.ipAddress,
-    required super.twoFactorPassed,
-    required super.walletAddress,
-    required super.bragWalletBalance,
-    required super.createdAt,
-    required super.updatedAt,
-  });
+// import 'package:signalwavex/features/user/domain/entities/user_entity.dart';
+// import 'package:uuid/uuid.dart';
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      // email: json['email'],
-      email: json["email"],
-      id: json["id"],
-      name: json["name"],
-      pid: json["pid"],
-      username: json["username"],
-      verified: json["verified"],
-      isBanned: json["isBanned"],
-      slug: json["slug"],
-      hasInterests: json["hasInterests"],
-      authProvider: json["authProvider"],
-      ipAddress: json["ipAddress"],
-      twoFactorPassed: json["twoFactorPassed"],
-      walletAddress: json["walletAddress"],
-      bragWalletBalance: json["bragWalletBalance"],
-      createdAt: json["createdAt"],
-      updatedAt: json["updatedAt"],
-    );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "email": email,
-      "id": id,
-      "name": name,
-      "pid": pid,
-      "username": username,
-      "verified": verified,
-      "isBanned": isBanned,
-      "slug": slug,
-      "hasInterests": hasInterests,
-      "authProvider": authProvider,
-      "ipAddress": ipAddress,
-      "twoFactorPassed": twoFactorPassed,
-      "walletAddress": walletAddress,
-      "bragWalletBalance": bragWalletBalance,
-      "createdAt": createdAt,
-      "updatedAt": updatedAt,
-    };
-  }
+// class UserModel extends UserEntity {
+//   UserModel({
+//     super.email,
+//     super.id,
+//     super.name,
+//     super.uid,
+//     super.wallets,
+//     super.role,
+//     super.isVerified,
+//   });
 
-  factory UserModel.empty() {
-    return UserModel(
-      email: "",
-      id: 0,
-      name: "",
-      pid: "",
-      username: "",
-      verified: true,
-      isBanned: 0,
-      slug: "",
-      hasInterests: 0,
-      authProvider: "",
-      ipAddress: "",
-      twoFactorPassed: 0,
-      walletAddress: "",
-      bragWalletBalance: "",
-      createdAt: "",
-      updatedAt: "",
-    );
-  }
+//   factory UserModel.fromJson(Map<String, dynamic> json) {
+//     return UserModel(
+//       email: json["email"],
+//       id: json["id"],
+//       name: json["name"],
+//       uid: json["uid"],
+//       wallets: json["wallets"],
+//       role: json["role"],
+//       isVerified: json["is_verified"],
+//     );
+//     // (
+//     //   // email: json['email'],
+//     //   email: json["email"],
+//     //   id: json["id"],
+//     //   name: json["name"],
 
-  factory UserModel.createFromLogin(Map json) {
-    return UserModel(
-      email: json["email"] ?? "",
-      id: json["id"] ?? 0,
-      name: json["name"] ?? "",
-      pid: "",
-      username: "",
-      verified: true,
-      isBanned: 0,
-      slug: "",
-      hasInterests: 0,
-      authProvider: "",
-      ipAddress: "",
-      twoFactorPassed: 0,
-      walletAddress: "",
-      bragWalletBalance: "",
-      createdAt: "",
-      updatedAt: "",
-    );
-  }
-}
+//     // );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       "email": email,
+//       "id": id,
+//       "name": name,
+//       "uid": uid,
+//       "wallets": wallets,
+//       "role": role,
+//       "is_verified": isVerified,
+//     };
+//   }
+
+//   factory UserModel.empty() {
+//     return UserModel(
+//       email: "dummers@gmail.com",
+//       id: 1311,
+//       name: "dummer joe",
+//       uid: Uuid().v4(),
+//       wallets: [],
+//       role: "trader",
+//       isVerified: true,
+//     );
+//     // (
+//     //   email: "",
+//     //   id: 0,
+//     //   name: "",
+
+//     // );
+//   }
+
+  // factory UserModel.createFromLogin(Map json) {
+  //   return UserModel(
+  //     email: json["email"] ?? "",
+  //     id: json["id"] ?? 0,
+  //     name: json["name"] ?? "",
+  //     uid: json["uid"] ?? "",
+  //     role: json["role"] ?? "",
+  //   );
+  // }
+// }

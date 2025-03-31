@@ -1,11 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
-import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
-import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
-import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/features/trading_system/domain/repositories/trading_system_repository.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -23,8 +17,9 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
 
     on<ConversionEvent>(_onConversionEvent);
     on<GetConversionEvent>(_onGetConversionEvent);
+    on<GetCoinListEvent>(_onGetCoinListEvent);
 
-    // GetConversionEvent
+    // GetCoinListEvent
   }
 
   Future<void> _onFetchLiveMarketPricesEvent(FetchLiveMarketPricesEvent event,
@@ -88,4 +83,17 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
           listOfConversionEntity: listOfConversionEntity)),
     );
   }
+
+  Future<void> _onGetCoinListEvent(
+      GetCoinListEvent event, Emitter<TradingSystemState> emit) async {
+    emit(const GetCoinListLoadingState());
+    final result = await tradingSystemRepository.getCoins();
+    result.fold(
+      (error) => emit(GetCoinListErrorState(errorMessage: error.message)),
+      (listOfConversionEntity) => emit(GetCoinListSuccessState(
+          listOfConversionEntity: listOfConversionEntity)),
+    );
+  }
+
+  // _onGetCoinListEvent
 }

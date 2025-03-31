@@ -6,6 +6,7 @@ import 'package:signalwavex/features/authentication/data/models/new_user_request
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/features/user/data/models/user_model.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationRepository authenticationRepository;
@@ -23,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
+    print("debug_print__onNewUserSignUpEvent-start");
     emit(const NewUserSignUpLoadingState());
     final result = await authenticationRepository.newUserSignUp(
       newUserRequest: NewUserRequestModel(
@@ -31,6 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         passwordConfirmation: event.confirmPassword,
       ),
     );
+    print("debug_print__onNewUserSignUpEvent-result_is_${result}");
     result.fold(
       (error) => emit(NewUserSignUpErrorState(errorMessage: error.message)),
       (message) => emit(NewUserSignUpSuccessState(message: message)),

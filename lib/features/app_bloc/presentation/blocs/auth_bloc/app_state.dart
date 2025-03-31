@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
-import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
+
+import 'package:signalwavex/features/user/data/models/user_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 
 // ignore: must_be_immutable
 sealed class AppState extends Equatable {
-  AppState({this.user, this.pnl});
+  AppState({this.user, this.pnl, this.listOfWalletAccounts});
   UserModel? user = UserModel.empty();
   String? pnl;
+  List<WalletAccountEntity>? listOfWalletAccounts;
 
   @override
   List<Object> get props => [];
@@ -43,7 +46,7 @@ final class UserUpdateErrorState extends AppState {
   List<Object> get props => [errorMessage];
 }
 
-// user update States
+// StorePNL
 final class StorePNLLoadingState extends AppState {
   StorePNLLoadingState();
 }
@@ -68,3 +71,29 @@ final class StorePNLErrorState extends AppState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+// StoreUserBalances
+final class StoreUserBalancesLoadingState extends AppState {
+  StoreUserBalancesLoadingState();
+}
+
+// ignore: must_be_immutable
+final class StoreUserBalancesSuccessState extends AppState {
+  @override
+  StoreUserBalancesSuccessState({super.listOfWalletAccounts});
+
+  @override
+  List<Object> get props => [user!];
+}
+
+// ignore: must_be_immutable
+final class StoreUserBalancesErrorState extends AppState {
+  final String errorMessage;
+
+  StoreUserBalancesErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// StoreUserBalances ended ....

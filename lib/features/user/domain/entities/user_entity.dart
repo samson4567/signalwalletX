@@ -3,12 +3,12 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 
 class UserEntity extends Equatable {
   final String? uid;
-  final double? id;
+  final int? id;
   final String? name;
 
   final String? email;
   final String? role;
-  final String? isVerified;
+  final bool? isVerified;
 
   final List<WalletAccountModel>? wallets;
 

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 
@@ -45,6 +46,13 @@ final class ConversionEvent extends TradingSystemEvent {
 final class GetConversionEvent extends TradingSystemEvent {
   final ConversionEntity conversionEntity;
   const GetConversionEvent(this.conversionEntity);
+
+  @override
+  List<Object> get props => [];
+}
+
+final class GetCoinListEvent extends TradingSystemEvent {
+  const GetCoinListEvent();
 
   @override
   List<Object> get props => [];

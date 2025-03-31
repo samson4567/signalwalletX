@@ -8,6 +8,7 @@ import 'package:signalwavex/features/authentication/domain/entities/verify_sign_
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_local_datasource.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_remote_datasource.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
@@ -82,6 +83,17 @@ class TradingSystemRepositoryImpl implements TradingSystemRepository {
   Future<Either<Failure, List<ConversionEntity>>> getConversions() async {
     try {
       final result = await tradingSystemRemoteDatasource.getConversions();
+
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CoinEntity>>> getCoins() async {
+    try {
+      final result = await tradingSystemRemoteDatasource.getCoins();
 
       return right(result);
     } catch (e) {

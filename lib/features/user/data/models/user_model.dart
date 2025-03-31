@@ -43,8 +43,18 @@ class UserModel extends UserEntity {
     );
   }
 
-  factory UserModel.empty(Map jsonMap) {
+  factory UserModel.empty() {
     return UserModel();
+  }
+
+  factory UserModel.createFromLogin(Map json) {
+    return UserModel(
+      email: json["email"] ?? "",
+      id: json["id"] ?? 0,
+      name: json["name"] ?? "",
+      uid: json["uid"] ?? "",
+      role: json["role"] ?? "",
+    );
   }
 
   @override

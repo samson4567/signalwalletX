@@ -16,7 +16,7 @@ class BaseResponse {
         : json['success'].toString();
     return BaseResponse(
         success: status,
-        message: json['message'],
+        message: json['message'] ?? "",
         data: json['data'],
         token: json['token']);
   }
