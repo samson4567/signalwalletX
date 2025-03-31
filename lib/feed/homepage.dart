@@ -305,6 +305,7 @@ class _HomepageState extends State<Homepage> {
               child: (state is FetchOrderBookLoadingState)
                   ? const Center(
                       child: SizedBox(
+                        // bjksbdjk,d
                         height: 50,
                         child: AspectRatio(
                           aspectRatio: 1,
