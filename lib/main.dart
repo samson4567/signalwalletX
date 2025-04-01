@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/di/injector.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
@@ -19,7 +23,30 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  InternetConnection internetConnection =
+      InternetConnection.createInstance(enableStrictCheck: false);
+  StreamSubscription? streamSubscription;
+  @override
+  void initState() {
+    internetConnection.hasInternetAccess.then(
+      (value) {
+        hasInternet = value;
+      },
+    );
+    streamSubscription = InternetConnection().onStatusChange.listen(
+      (internetStatus) {
+        hasInternet = (internetStatus == InternetStatus.connected);
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

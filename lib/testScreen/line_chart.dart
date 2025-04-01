@@ -46,10 +46,10 @@ class _LineChartState extends State<LineChart> {
     List newAsks = [];
 
     bids.forEach(
-      (key, value) => newBids.add([key, value]),
+      (key, value) => newBids.add([double.parse(key), double.parse(value)]),
     );
     asks.forEach(
-      (key, value) => newAsks.add([key, value]),
+      (key, value) => newAsks.add([double.parse(key), double.parse(value)]),
     );
     askBid["asks"] = newAsks;
     askBid["bids"] = newBids;
@@ -264,7 +264,8 @@ class _LineChartState extends State<LineChart> {
   //获取火币数据，需要翻墙
   Future<String> getChatDataFromInternet(String? period) async {
     var url =
-        'https://api.huobi.br.com/market/history/kline?period=${widget.chartDetails?["period"] ?? '1day'}&size=300&symbol=${widget.chartDetails?["symbol"] ?? "BTCUSDT".toLowerCase()}';
+        'https://api.huobi.br.com/market/history/kline?period=${widget.chartDetails?["period"] ?? '1day'}&size=300&symbol=${(widget.chartDetails?["symbol"] as String?)?.toLowerCase() ?? "BTCUSDT".toLowerCase()}';
+    print("debug_print_linechart-getChatDataFromInternet-url_is=$url");
     late String result;
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {

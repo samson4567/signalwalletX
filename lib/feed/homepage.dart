@@ -12,6 +12,7 @@ import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_b
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/testScreen/line_chart.dart';
@@ -31,6 +32,11 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     getAndSetInitialData(context);
     selectedCoin = context.read<AppBloc>().state.listOfCoinEntity?.first;
+    if (selectedCoin != null) {
+      context
+          .read<TradingSystemBloc>()
+          .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
+    }
     super.initState();
   }
 
@@ -200,6 +206,9 @@ class _HomepageState extends State<Homepage> {
 
         if (state is GetCoinListSuccessState) {
           selectedCoin = state.listOfCoinEntity.first;
+          context
+              .read<TradingSystemBloc>()
+              .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
         }
       }, builder: (context, state) {
         return (state is GetCoinListLoadingState)
@@ -216,98 +225,105 @@ class _HomepageState extends State<Homepage> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FancyText(
-                              "${selectedCoin!.name!} USDT (${selectedCoin!.symbol!} - USDT)",
-                              action: () async {
-                                selectedCoin = await showDialog<CoinEntity>(
-                                      context: context,
-                                      builder: (context) {
-                                        List<CoinEntity> listOfCoinModel =
-                                            context
-                                                    .read<AppBloc>()
-                                                    .state
-                                                    .listOfCoinEntity ??
-                                                [];
-                                        // listOfCoinModel
-                                        return Dialog(
-                                          child: FancyContainerTwo(
-                                            nulledAlign: true,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: listOfCoinModel
-                                                    .map(
-                                                      (e) => Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Text(
-                                                            "${e.name}(${e.symbol})"),
-                                                      ),
-                                                    )
-                                                    .toList(),
+                  if (selectedCoin != null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FancyText(
+                                "${selectedCoin!.name!} USDT (${selectedCoin!.symbol!} - USDT)",
+                                action: () async {
+                                  selectedCoin = await showDialog<CoinEntity>(
+                                        context: context,
+                                        builder: (context) {
+                                          List<CoinEntity> listOfCoinModel =
+                                              context
+                                                      .read<AppBloc>()
+                                                      .state
+                                                      .listOfCoinEntity ??
+                                                  [];
+                                          print(
+                                              "listOfCoinModellistOfCoinModellistOfCoinModellistOfCoinModel${listOfCoinModel}");
+                                          // listOfCoinModel
+                                          return Dialog(
+                                            child: FancyContainerTwo(
+                                              nulledAlign: true,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: listOfCoinModel
+                                                      .map(
+                                                        (e) => Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                              "${e.name}(${e.symbol})"),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ) ??
-                                    selectedCoin;
-                                setState(() {});
-                              },
-                              // style: TextStyle(fontSize: 14, color: Colors.white),
-                              size: 14, textColor: Colors.white,
-                              // overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              "+ 231.43 (1.02%)",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors
-                                    .green, // Replace with your color constant
+                                          );
+                                        },
+                                      ) ??
+                                      selectedCoin;
+                                  context.read<TradingSystemBloc>().add(
+                                      FetchOrderBookEvent(
+                                          "${selectedCoin!.symbol}USDT"));
+                                  setState(() {});
+                                },
+                                // style: TextStyle(fontSize: 14, color: Colors.white),
+                                size: 14, textColor: Colors.white,
+                                // overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                              const SizedBox(height: 5),
+                              const Text(
+                                "+ 231.43 (1.02%)",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors
+                                      .green, // Replace with your color constant
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 125,
-                        height: 37.5,
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(255, 255, 255, 0.1),
-                          border: Border.all(
-                              color: Colors
-                                  .grey), // Replace with your color constant
-                          borderRadius: BorderRadius.circular(10),
+                        Container(
+                          width: 125,
+                          height: 37.5,
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(255, 255, 255, 0.1),
+                            border: Border.all(
+                                color: Colors
+                                    .grey), // Replace with your color constant
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "24 Hours",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.arrow_drop_down_sharp,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "24 Hours",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down_sharp,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   const SizedBox(height: 8),
                   const Text(
                     "\$97,3120",
@@ -330,7 +346,7 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               ),
                             )
-                          : (selectedCoin != null)
+                          : (selectedCoin != null && askBids.isNotEmpty)
                               ? LineChart(
                                   chartDetails: {
                                     "symbol":
@@ -696,17 +712,10 @@ class _HomepageState extends State<Homepage> {
         SizedBox(width: screenWidth * 0.01), // 1% spacing
         BlocConsumer<AppBloc, AppState>(
             listener: (BuildContext context, AppState state) {
-          if (state is StorePNLSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("password updated successfully"),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
+          if (state is StorePNLSuccessState) {}
         }, builder: (context, state) {
           return Text(
-            '+\$${state.pnl ?? 0}',
+            '+\$${state.pnl?.substring(0, 4) ?? 0}',
             style: TextStyles.smallText.copyWith(
               fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
               color: ColorConstants.numyelcolor,
