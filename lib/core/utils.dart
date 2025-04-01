@@ -17,6 +17,7 @@ getAndSetInitialData(BuildContext context) {
       .read<WalletSystemUserBalanceAndTradeCallingBloc>()
       .add(const GetpnlEvent());
   getUserCoinBalances(context);
+  getCoins(context);
 }
 
 getUserCoinBalances(BuildContext context) {

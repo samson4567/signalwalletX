@@ -103,10 +103,10 @@ class _ConvertState extends State<Convert> {
           }
         }, builder: (context, state) {
           return (state is GetCoinListLoadingState)
-              ? Center(
+              ? const Center(
                   child: SizedBox(
                     height: 50,
-                    child: const AspectRatio(
+                    child: AspectRatio(
                       aspectRatio: 1,
                       child: CircularProgressIndicator.adaptive(),
                     ),

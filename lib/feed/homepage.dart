@@ -10,7 +10,6 @@ import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
-import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -183,152 +182,171 @@ class _HomepageState extends State<Homepage> {
       width: 400,
       height: 435,
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FancyText(
-                      "${selectedCoin!.name!} USDT (${selectedCoin!.symbol!} - USDT)",
-                      action: () async {
-                        selectedCoin = await showDialog<CoinEntity>(
-                              context: context,
-                              builder: (context) {
-                                List<CoinEntity> listOfCoinModel = context
-                                        .read<AppBloc>()
-                                        .state
-                                        .listOfCoinEntity ??
-                                    [];
-                                // listOfCoinModel
-                                return Dialog(
-                                  child: FancyContainerTwo(
-                                    nulledAlign: true,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: listOfCoinModel
-                                            .map(
-                                              (e) => Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                    "${e.name}(${e.symbol})"),
+      child: BlocConsumer<TradingSystemBloc, TradingSystemState>(
+          listener: (BuildContext context, TradingSystemState state) {
+        if (state is FetchOrderBookSuccessState) {
+          askBids = {
+            "asks": state.orderBookEntity.asks,
+            "bids": state.orderBookEntity.bids,
+          };
+        } else if (state is FetchOrderBookErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+
+        if (state is GetCoinListSuccessState) {
+          selectedCoin = state.listOfCoinEntity.first;
+        }
+      }, builder: (context, state) {
+        return (state is GetCoinListLoadingState)
+            ? const Center(
+                child: SizedBox(
+                  // bjksbdjk,d
+                  height: 50,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                ),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FancyText(
+                              "${selectedCoin!.name!} USDT (${selectedCoin!.symbol!} - USDT)",
+                              action: () async {
+                                selectedCoin = await showDialog<CoinEntity>(
+                                      context: context,
+                                      builder: (context) {
+                                        List<CoinEntity> listOfCoinModel =
+                                            context
+                                                    .read<AppBloc>()
+                                                    .state
+                                                    .listOfCoinEntity ??
+                                                [];
+                                        // listOfCoinModel
+                                        return Dialog(
+                                          child: FancyContainerTwo(
+                                            nulledAlign: true,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: listOfCoinModel
+                                                    .map(
+                                                      (e) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Text(
+                                                            "${e.name}(${e.symbol})"),
+                                                      ),
+                                                    )
+                                                    .toList(),
                                               ),
-                                            )
-                                            .toList(),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ) ??
+                                    selectedCoin;
+                                setState(() {});
                               },
-                            ) ??
-                            selectedCoin;
-                        setState(() {});
-                      },
-                      // style: TextStyle(fontSize: 14, color: Colors.white),
-                      size: 14, textColor: Colors.white,
-                      // overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 5),
-                    const Text(
-                      "+ 231.43 (1.02%)",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.green, // Replace with your color constant
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 125,
-                height: 37.5,
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 255, 255, 0.1),
-                  border: Border.all(
-                      color: Colors.grey), // Replace with your color constant
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "24 Hours",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_sharp,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "\$97,3120",
-            style: TextStyle(
-                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          const SizedBox(height: 8),
-          BlocConsumer<TradingSystemBloc, TradingSystemState>(
-              listener: (BuildContext context, TradingSystemState state) {
-            if (state is FetchOrderBookSuccessState) {
-              askBids = {
-                "asks": state.orderBookEntity.asks,
-                "bids": state.orderBookEntity.bids,
-              };
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   const SnackBar(
-              //     content: Text("password updated successfully"),
-              //     backgroundColor: Colors.green,
-              //   ),
-              // );
-            } else if (state is FetchOrderBookErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            }
-          }, builder: (context, state) {
-            return Expanded(
-              child: (state is FetchOrderBookLoadingState)
-                  ? const Center(
-                      child: SizedBox(
-                        // bjksbdjk,d
-                        height: 50,
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: CircularProgressIndicator.adaptive(),
+                              // style: TextStyle(fontSize: 14, color: Colors.white),
+                              size: 14, textColor: Colors.white,
+                              // overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 5),
+                            const Text(
+                              "+ 231.43 (1.02%)",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors
+                                    .green, // Replace with your color constant
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                  : (selectedCoin != null)
-                      ? LineChart(
-                          chartDetails: {
-                            "symbol":
-                                "${selectedCoin!.symbol!.toUpperCase()}USDT",
-                            "period": period,
-                            "askAndBids": askBids
-                          },
-                        )
-                      : FancyContainerTwo(
-                          child: const Text("Select A coin"),
-                        ), // Call the function to create chart data
-            );
-          }),
-        ],
-      ),
+                      Container(
+                        width: 125,
+                        height: 37.5,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(255, 255, 255, 0.1),
+                          border: Border.all(
+                              color: Colors
+                                  .grey), // Replace with your color constant
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "24 Hours",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down_sharp,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    "\$97,3120",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  const SizedBox(height: 8),
+                  Builder(builder: (context) {
+                    return Expanded(
+                      child: (state is FetchOrderBookLoadingState)
+                          ? const Center(
+                              child: SizedBox(
+                                // bjksbdjk,d
+                                height: 50,
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                              ),
+                            )
+                          : (selectedCoin != null)
+                              ? LineChart(
+                                  chartDetails: {
+                                    "symbol":
+                                        "${selectedCoin!.symbol!.toUpperCase()}USDT",
+                                    "period": period,
+                                    "askAndBids": askBids
+                                  },
+                                )
+                              : FancyContainerTwo(
+                                  child: const Text("Select A coin"),
+                                ), // Call the function to create chart data
+                    );
+                  }),
+                ],
+              );
+      }),
     );
   }
 
