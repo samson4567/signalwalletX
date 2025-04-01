@@ -6,7 +6,6 @@ import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/data/models/conversion_model.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -79,7 +78,6 @@ class _ConvertState extends State<Convert> {
                 backgroundColor: Colors.green,
               ),
             );
-// _showDialog('success');
           }
 
           if (state is GetCoinListErrorState) {
