@@ -38,7 +38,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     //     UserUpdateSuccessState.fromAppState(state.fromMap(formerDetail));
 
     // print("formerDetailformerDetail--4444${userUpdateSuccessState.user}");
-    // UserUpdateSuccessState(user: user).;
+    // UserUpdateSuccessState(user: user).;`
     emit(state.fromMap(formerDetail));
   }
 
@@ -58,7 +58,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     StorePNLSuccessState storePNLSuccessState =
         StorePNLSuccessState.fromAppState(state.fromMap(formerDetail));
     print(
-        "debug_print__onStorePNLEvent-storePNLSuccessState${storePNLSuccessState.toMap()}");
+        "debug_print__onStorePNLEvent-storePNLSuccessState${state.fromMap(formerDetail)}");
     emit(state.fromMap(formerDetail));
   }
 
@@ -66,7 +66,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       StoreCoinsEvent event, Emitter<AppState> emit) async {
     Map formerDetail = state.toMap();
     print(
-        "debug_print__onStorePNLEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
+        "debug_print__onStoreCoinsEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
     // emit(StoreCoinsLoadingState.fromAppState(state.fromMap(formerDetail)));
 
     Map newDetail =
@@ -86,7 +86,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       StoreUserBalancesEvent event, Emitter<AppState> emit) async {
     Map formerDetail = state.toMap();
     print(
-        "debug_print__onStorePNLEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
+        "debug_print__onStoreUserBalancesEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
     // emit(StoreUserBalancesLoadingState.fromAppState(
     //     state.fromMap(formerDetail)));
 
