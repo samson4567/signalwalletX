@@ -56,7 +56,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              padding: const EdgeInsets.symmetric(horizontal: 17.0),
               child: Column(
                 children: [
                   _buildFirstRow(),
