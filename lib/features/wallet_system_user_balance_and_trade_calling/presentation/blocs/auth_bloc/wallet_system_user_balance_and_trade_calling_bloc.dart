@@ -33,6 +33,7 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     on<FetchAllTradesEvent>(_onFetchAllTradesEvent);
     on<SetWithdrawalPasswordEvent>(_onSetWithdrawalPasswordEvent);
     on<GetpnlEvent>(_onGetpnlEvent);
+    on<WithdrawalEvent>(_onWithdrawalEvent);
 
     //
   }
@@ -202,5 +203,20 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
       },
     );
   }
+
+  Future<void> _onWithdrawalEvent(
+    WithdrawalEvent event,
+    Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
+  ) async {
+    emit(const WithdrawalLoadingState());
+    final result = await walletSystemUserBalanceAndTradeCallingRepository
+        .processWithdrawal(withdrawEntity: event.withdrawEntity);
+    result.fold(
+      (error) => emit(WithdrawalErrorState(errorMessage: error.message)),
+      (message) => emit(
+        WithdrawalSuccessState(
+            message: message, withdrawEntity: event.withdrawEntity),
+      ),
+    );
+  }
 }
-// _onGetpnlEvent

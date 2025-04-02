@@ -7,6 +7,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_response_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
 
 abstract class WalletSystemUserBalanceAndTradeCallingRepository {
   Future<Either<Failure, List<WalletAccountEntity>>> fetchAllBalances();
@@ -36,4 +37,8 @@ abstract class WalletSystemUserBalanceAndTradeCallingRepository {
       {required String withdrawPassword,
       required String withdrawPasswordConfirmation});
   Future<Either<Failure, String>> getpnl();
+
+  Future<Either<Failure, String>> processWithdrawal({
+    required WithdrawEntity withdrawEntity,
+  });
 }
