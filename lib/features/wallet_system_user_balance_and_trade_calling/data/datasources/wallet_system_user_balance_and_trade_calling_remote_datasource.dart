@@ -28,11 +28,7 @@ abstract class WalletSystemUserBalanceAndTradeCallingRemoteDatasource {
       getAdminPendingWithdrawalRequest();
   Future<String> doInternalTransfer(
       {required InternalTransferEntity internalTransferEntity});
-
-// trading_system (Spot Trading, Orders & Market Data)
-
   Future<String> followTradeCall({required String tradeCallID});
-
   Future<List<TradeEntity>> listTradesAUserIsFollowing();
   Future<TradeEntity> createTradeCallBySuperAdmin(
       {required TradeEntity tradeEntity});

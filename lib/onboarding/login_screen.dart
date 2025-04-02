@@ -38,7 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is LoginSuccessState) {
-              context.push(MyAppRouteConstant.feedPage);
+              context.push(MyAppRouteConstant.feedPage,
+                  extra: {'email': state.email});
             } else if (state is LoginErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

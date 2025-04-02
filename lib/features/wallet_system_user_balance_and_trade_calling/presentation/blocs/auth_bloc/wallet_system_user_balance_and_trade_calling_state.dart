@@ -43,9 +43,7 @@ final class FetchAllAccountBalanceErrorState
   @override
   List<Object> get props => [errorMessage];
 }
-///// FetchAllAccountBalance ended .....
 
-///// DepositAddressRetrival
 final class DepositAddressRetrivalLoadingState
     extends WalletSystemUserBalanceAndTradeCallingState {
   const DepositAddressRetrivalLoadingState();
