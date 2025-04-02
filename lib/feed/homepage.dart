@@ -31,7 +31,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getAndSetInitialData(context);
-    selectedCoin = context.read<AppBloc>().state.listOfCoinEntity?.first;
+    selectedCoin = context.read<AppBloc>().state.listOfCoinEntity?.firstOrNull;
     if (selectedCoin != null) {
       context
           .read<TradingSystemBloc>()
@@ -47,6 +47,12 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = screenWidth * 0.05;
+    print(
+        "sdabkjbdabsdbakjdbasbkds-11111${context.read<AppBloc>().state.listOfCoinEntity}");
+    print(
+        "sdabkjbdabsdbakjdbasbkds-22222${context.read<AppBloc>().state.listOfWalletAccounts}");
+    print("sdabkjbdabsdbakjdbasbkds-33333${context.read<AppBloc>().state.pnl}");
+    print("sdabkjbdabsdbakjdbasbkds-444${context.read<AppBloc>().state.user}");
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -87,7 +93,7 @@ class _HomepageState extends State<Homepage> {
       double screenWidth, GlobalKey<ScaffoldState> scaffoldKey) {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        final user = state.user;
+        final user = context.read<AppBloc>().state.user;
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: Column(
@@ -95,10 +101,16 @@ class _HomepageState extends State<Homepage> {
             children: [
               Row(
                 children: [
-                  Image.asset(
-                    'assets/icons/flower.png',
-                    fit: BoxFit.contain,
-                    height: screenWidth * 0.1,
+                  InkWell(
+                    onTap: () {
+                      context.read<TradingSystemBloc>().add(
+                          FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
+                    },
+                    child: Image.asset(
+                      'assets/icons/flower.png',
+                      fit: BoxFit.contain,
+                      height: screenWidth * 0.1,
+                    ),
                   ),
                   SizedBox(width: screenWidth * 0.03),
                   Column(
@@ -205,7 +217,7 @@ class _HomepageState extends State<Homepage> {
         }
 
         if (state is GetCoinListSuccessState) {
-          selectedCoin = state.listOfCoinEntity.first;
+          selectedCoin = state.listOfCoinEntity.firstOrNull;
           context
               .read<TradingSystemBloc>()
               .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));

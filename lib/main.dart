@@ -36,10 +36,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     internetConnection.hasInternetAccess.then(
       (value) {
+        print("debug_print_internetConnection.hasInternetAccess${value}");
         hasInternet = value;
       },
     );
-    streamSubscription = InternetConnection().onStatusChange.listen(
+    streamSubscription = internetConnection.onStatusChange.listen(
       (internetStatus) {
         hasInternet = (internetStatus == InternetStatus.connected);
       },

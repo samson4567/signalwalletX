@@ -27,11 +27,21 @@ class CoinModel extends CoinEntity {
     return CoinModel();
   }
 
+// fromEntity
+
   factory CoinModel.createFromLogin(Map jsonMap) {
     return CoinModel(
       chains: jsonMap["chains"],
       symbol: jsonMap["symbol"],
       name: jsonMap["name"],
+    );
+  }
+
+  factory CoinModel.fromEntity(CoinEntity coinEntity) {
+    return CoinModel(
+      chains: coinEntity.chains,
+      name: coinEntity.name,
+      symbol: coinEntity.symbol,
     );
   }
 

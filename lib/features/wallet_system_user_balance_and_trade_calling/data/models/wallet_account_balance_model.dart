@@ -25,6 +25,15 @@ class WalletAccountModel extends WalletAccountEntity {
       freezeQuantity: jsonMap["freeze_quantity"],
     );
   }
+  factory WalletAccountModel.fromEntity(
+      WalletAccountEntity walletAccountEntity) {
+    return WalletAccountModel(
+      accountType: walletAccountEntity.accountType,
+      actualQuantity: walletAccountEntity.actualQuantity,
+      currency: walletAccountEntity.currency,
+      freezeQuantity: walletAccountEntity.freezeQuantity,
+    );
+  }
 
   factory WalletAccountModel.empty(Map jsonMap) {
     return WalletAccountModel();
