@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/custom_image_viewer.dart';
 import 'package:signalwavex/component/snackbars.dart';
-import 'package:signalwavex/core/utils.dart';
-import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
-import 'package:signalwavex/features/trading_system/data/models/conversion_model.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 
 class Convert extends StatefulWidget {
   const Convert({super.key});
@@ -22,23 +14,24 @@ class _ConvertState extends State<Convert> {
   CoinEntity? selectedToCoin;
   final TextEditingController fromAmountController = TextEditingController();
   final TextEditingController toAmountController = TextEditingController();
+  bool isLoading = false;
 
-  final List<Map<String, String>> coinList = [
-    {'label': 'BTC', 'imagePath': 'assets/icons/bitcoin.png'},
-    {'label': 'ETH', 'imagePath': 'assets/icons/sol.png'},
-    {'label': 'TON', 'imagePath': 'assets/icons/ton.png'},
-    {'label': 'XRP', 'imagePath': 'assets/icons/xrp.png'},
-    {'label': 'BCH', 'imagePath': 'assets/icons/bch.png'},
-    {'label': 'LTC', 'imagePath': 'assets/icons/lit.png'},
+  // Mock coin data
+  final List<CoinEntity> coinList = [
+    CoinEntity(
+        symbol: 'BTC', name: 'Bitcoin', imagePath: 'assets/icons/bitcoin.png'),
+    CoinEntity(
+        symbol: 'ETH', name: 'Ethereum', imagePath: 'assets/icons/sol.png'),
+    CoinEntity(
+        symbol: 'TON', name: 'Toncoin', imagePath: 'assets/icons/ton.png'),
+    CoinEntity(
+        symbol: 'XRP', name: 'Ripple', imagePath: 'assets/icons/xrp.png'),
+    CoinEntity(
+        symbol: 'BCH', name: 'Bitcoin Cash', imagePath: 'assets/icons/bch.png'),
+    CoinEntity(
+        symbol: 'LTC', name: 'Litecoin', imagePath: 'assets/icons/lit.png'),
   ];
 
-  @override
-  void initState() {
-    context.read<TradingSystemBloc>().add(const GetCoinListEvent());
-    super.initState();
-  }
-
-  List<CoinModel>? listOFCoin;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,123 +41,65 @@ class _ConvertState extends State<Convert> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Column(
           children: [
-            Text(
-              'Convert',
-              style: TextStyle(color: Colors.white),
-            ),
+            Text('Convert', style: TextStyle(color: Colors.white)),
             Text(
               'Zeroes trading fees',
               style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: BlocConsumer<TradingSystemBloc, TradingSystemState>(
-            listener: (BuildContext context, TradingSystemState state) {
-          if (state is GetCoinListSuccessState) {
-            listOFCoin = (state.listOfCoinEntity as List<CoinModel>);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("coin successfully"),
-                backgroundColor: Colors.green,
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C1C1C),
+                borderRadius: BorderRadius.circular(16),
               ),
-            );
-          }
-
-          if (state is GetCoinListErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("${state.errorMessage}"),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-          if (state is ConversionSuccessState) {
-            _showDialog('success');
-          }
-          if (state is ConversionErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("${state.errorMessage}"),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-        }, builder: (context, state) {
-          return (state is GetCoinListLoadingState)
-              ? const Center(
-                  child: SizedBox(
-                    height: 50,
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: CircularProgressIndicator.adaptive(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildConversionContainer(
+                    'From',
+                    selectedFromCoin,
+                    fromAmountController,
+                    (value) => setState(() => selectedFromCoin = value),
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Image.asset(
+                      'assets/icons/button.png',
+                      width: 40,
+                      height: 40,
                     ),
                   ),
-                )
-              : Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(16),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1C1C1C),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildConversionContainer(
-                            'From',
-                            selectedFromCoin,
-                            fromAmountController,
-                            (value) {
-                              setState(() {
-                                selectedFromCoin = value!;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          Center(
-                            child: Image.asset(
-                              'assets/icons/button.png', // Replace with your actual image path
-                              width: 40,
-                              height: 40,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          _buildConversionContainer(
-                            'To',
-                            selectedToCoin,
-                            toAmountController,
-                            (value) {
-                              setState(() {
-                                selectedToCoin = value!;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Exchange rate: 1 USDT = 0.0000123 BTC',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 16),
-                          _buildConvertButton(),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-        }),
+                  const SizedBox(height: 16),
+                  _buildConversionContainer(
+                    'To',
+                    selectedToCoin,
+                    toAmountController,
+                    (value) => setState(() => selectedToCoin = value),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Exchange rate: 1 USDT = 0.0000123 BTC',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildConvertButton(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -185,10 +120,7 @@ class _ConvertState extends State<Convert> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
+          Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,18 +145,18 @@ class _ConvertState extends State<Convert> {
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 underline: const SizedBox(),
                 onChanged: onChanged,
-                items: listOFCoin?.map((coin) {
+                items: coinList.map((coin) {
                   return DropdownMenuItem<CoinEntity>(
                     value: coin,
                     child: Row(
                       children: [
                         CustomImageView(
-                          imagePath: "assets/icons/bitcoin.png",
+                          imagePath: coin.imagePath,
                           width: 24,
                           height: 24,
                         ),
                         const SizedBox(width: 8),
-                        Text(coin.name!),
+                        Text(coin.name),
                       ],
                     ),
                   );
@@ -239,37 +171,20 @@ class _ConvertState extends State<Convert> {
 
   Widget _buildConvertButton() {
     return GestureDetector(
-      onTap: () {
-        if (selectedFromCoin != null) {
-          double enteredAmount =
-              double.tryParse(fromAmountController.text) ?? 0;
-          double availableBalance = double.parse(
-              getCoinWaletDetails(context, selectedFromCoin!)?.actualQuantity ??
-                  "0");
-          //  0.000019; // Simulating balance for demo
-
-          if (enteredAmount > availableBalance) {
-            _showDialog('insufficient',
-                why: "availableBalance-${availableBalance}");
-          } else {
-            ConversionModel conversionEntity = ConversionModel(
-              fromCurrency: selectedFromCoin?.symbol,
-              symbol: null,
-              toCurrency: selectedToCoin?.symbol,
-              fromAmount: fromAmountController.text,
-              toAmount: null,
-              rate: null,
-              createdAt: null,
-            );
-            context
-                .read<TradingSystemBloc>()
-                .add(ConversionEvent(conversionEntity));
-          }
-        } else {
-          // ('select coin')
+      onTap: () async {
+        if (selectedFromCoin == null) {
           ScaffoldMessenger.of(context)
               .showSnackBar(generalSnackBar("Select A Coin"));
+          return;
         }
+
+        setState(() => isLoading = true);
+
+        // Mock conversion logic
+        await Future.delayed(const Duration(seconds: 1));
+
+        setState(() => isLoading = false);
+        _showDialog('success');
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -278,79 +193,89 @@ class _ConvertState extends State<Convert> {
           color: Colors.yellow,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Text(
-          'Convert',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                  strokeWidth: 2,
+                ),
+              )
+            : const Text(
+                'Convert',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ),
     );
   }
 
-  void _showDialog(String type, {String? why}) {
+  void _showDialog(String type) {
     String title =
         type == 'success' ? 'Transaction Successful' : 'Insufficient Funds';
     String message = type == 'success'
-        ? 'Your crypto has been successfully transferred.\n${why ?? ''}'
-        : 'You don\'t have enough BTC to complete this transaction.\n${why ?? ''}';
+        ? 'Your crypto has been successfully transferred.'
+        : 'You don\'t have enough funds to complete this transaction.';
     String imagePath = type == 'success'
         ? 'assets/icons/succeful.png'
         : 'assets/icons/wrong.png';
 
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.black,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(imagePath, width: 80, height: 80),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.black,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(imagePath, width: 80, height: 80),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 8),
-              Text(
-                message,
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
-                textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: const TextStyle(color: Colors.white70, fontSize: 14),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.yellow,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.yellow,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Continue',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ],
+              child: const Text(
+                'Continue',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-        );
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
+}
+
+class CoinEntity {
+  final String symbol;
+  final String name;
+  final String imagePath;
+
+  CoinEntity({
+    required this.symbol,
+    required this.name,
+    required this.imagePath,
+  });
 }

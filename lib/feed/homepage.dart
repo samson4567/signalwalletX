@@ -14,6 +14,9 @@ import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/testScreen/line_chart.dart';
 
@@ -105,7 +108,7 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Good Morning, ${user?.email}', // Display user email
+                        'Good Morning, ${user?.email}',
                         style: TextStyles.smallText.copyWith(
                           fontSize: screenWidth * 0.022,
                           color: Colors.white.withOpacity(0.7),
@@ -165,10 +168,10 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTotalAssetsSection(containerWidth),
+          _buildTotalAssetsSection(containerWidth, context),
           SizedBox(height: containerWidth * 0.04),
           _buildPnLSection(containerWidth),
-          SizedBox(height: containerWidth * 0.2),
+          SizedBox(height: containerWidth * 0.1),
           _buildIconRow(containerWidth),
         ],
       ),
@@ -659,42 +662,78 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildTotalAssetsSection(double screenWidth) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildTotalAssetsSection(double screenWidth, BuildContext context) {
+    final walletBloc =
+        BlocProvider.of<WalletSystemUserBalanceAndTradeCallingBloc>(context);
+
+    return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
+        WalletSystemUserBalanceAndTradeCallingState>(
+      listener: (context, state) {
+        if (state is FetchAllAccountBalanceErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is FetchAllAccountBalanceLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        double totalBalance = 0;
+        if (state is FetchAllAccountBalanceSuccessState) {
+          totalBalance = state.listOfWalletsBalances.fold(0, (sum, wallet) {
+            final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+            return sum + balance;
+          });
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      'Total Assets',
+                      style: TextStyles.title.copyWith(
+                        fontSize: screenWidth * 0.045, // 4.5% of screen width
+                        color: const Color.fromRGBO(255, 255, 255, 0.7),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    IconButton(
+                      icon: Icon(
+                        Icons.remove_red_eye_outlined,
+                        color: Colors.white,
+                        size: screenWidth * 0.06,
+                      ),
+                      onPressed: () {
+                        // Refresh balances when the eye icon is pressed
+                        walletBloc.add(FetchAllAccountBalanceEvent());
+                      },
+                    ),
+                  ],
+                ),
                 Text(
-                  'Total Assets',
-                  style: TextStyles.title.copyWith(
-                    fontSize: 20, // Font size 4.5% of screen width
-                    color: const Color.fromRGBO(255, 255, 255, 0.7),
+                  // Display real balance or placeholder
+                  state is FetchAllAccountBalanceSuccessState
+                      ? '\$${totalBalance.toStringAsFixed(2)}'
+                      : 'Loading...',
+                  style: TextStyles.smallText.copyWith(
+                    fontSize: screenWidth * 0.08,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: screenWidth * 0.02), // 2% spacing
-                Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Colors.white,
-                  size: screenWidth * 0.06, // Icon size 6% of screen width
-                ),
               ],
             ),
-            Text(
-              '\$3,256.00',
-              style: TextStyles.smallText.copyWith(
-                fontSize: screenWidth * 0.08, // Font size 8% of screen width
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 

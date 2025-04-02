@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
@@ -81,6 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ),
         ),
       );
+
       emit(LoginSuccessState(
           email: entity["user"]["email"], message: "Login Successful"));
     });
