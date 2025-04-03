@@ -11,7 +11,6 @@ import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
-import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/utils.dart';
@@ -53,7 +52,9 @@ class _HomepageState extends State<Homepage> {
     liveDataFecthRepeater = Timer.periodic(
       20.seconds,
       (timer) {
-        context.read<TradingSystemBloc>().add(FetchLiveMarketPricesEvent());
+        context
+            .read<TradingSystemBloc>()
+            .add(const FetchLiveMarketPricesEvent());
       },
     );
     super.initState();
@@ -274,13 +275,7 @@ class _HomepageState extends State<Homepage> {
                                         builder: (context) {
                                           List<CoinEntity> listOfCoinModel =
                                               listOfCoinEntityG;
-                                          // context
-                                          //         .read<AppBloc>()
-                                          //         .state
-                                          //         .listOfCoinEntity ??
-                                          //     [];
-                                          print(
-                                              "listOfCoinModellistOfCoinModellistOfCoinModellistOfCoinModel${listOfCoinModel}");
+
                                           // listOfCoinModel
                                           return Dialog(
                                             child: FancyContainerTwo(
@@ -313,6 +308,7 @@ class _HomepageState extends State<Homepage> {
                                         },
                                       ) ??
                                       selectedCoin;
+                                  // ignore: use_build_context_synchronously
                                   context.read<TradingSystemBloc>().add(
                                       FetchOrderBookEvent(
                                           "${selectedCoin!.symbol}USDT"));
@@ -619,14 +615,7 @@ class _HomepageState extends State<Homepage> {
                       extractPercentageValue(a.twentyFourHourChange!)));
             },
           );
-        } else if (state is FetchLiveMarketPricesErrorState) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text(state.errorMessage),
-          //     backgroundColor: Colors.green,
-          //   ),
-          // );
-        }
+        } else if (state is FetchLiveMarketPricesErrorState) {}
       }, builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -737,7 +726,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   String extractPercentageValue(String rawValue) {
-    print("debug_print_extractPercentageValue-rawValue=${rawValue}");
     String result = rawValue;
     if (result.startsWith(RegExp("^[^a-zA-Z0-9]"))) {
       result = result.substring(1);
@@ -745,7 +733,6 @@ class _HomepageState extends State<Homepage> {
     if (result.endsWith("%")) {
       result = result.substring(0, result.length - 1);
     }
-    print("debug_print_extractPercentageValue-result=${result}");
 
     return result;
   }
