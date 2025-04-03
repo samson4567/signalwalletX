@@ -100,4 +100,20 @@ class TradingSystemRepositoryImpl implements TradingSystemRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> getExchangeRate(
+      {required String from, required String to}) async {
+    print("debug_print_getExchangeRate-start");
+    try {
+      final result =
+          await tradingSystemRemoteDatasource.getExchangeRate(from, to);
+      print("debug_print_getExchangeRate-result=${result}");
+
+      return right(result);
+    } catch (e) {
+      print("debug_print_getExchangeRate-error=${e}");
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }

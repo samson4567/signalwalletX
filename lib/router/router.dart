@@ -58,7 +58,7 @@ class AppRouter {
       GoRoute(
         name: MyAppRouteConstant.trade,
         path: MyAppRouteConstant.trade,
-        builder: (context, state) => TradePage(),
+        builder: (context, state) => const TransferPage(),
       ),
       GoRoute(
         name: MyAppRouteConstant.convert,

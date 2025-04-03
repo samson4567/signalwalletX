@@ -18,6 +18,7 @@ class SignalWalletNetworkClient extends ApiClient {
     bool returnRawData = false,
   }) async {
     final requestOptions = options ?? Options();
+
     requestOptions.extra ??= {};
     requestOptions.extra?['isAuthHeaderRequired'] = isAuthHeaderRequired;
     final response = await super.get(
@@ -25,9 +26,11 @@ class SignalWalletNetworkClient extends ApiClient {
       options: requestOptions,
       params: params,
     );
-    BaseResponse baseResponse = BaseResponse.fromJson(response);
+    BaseResponse baseResponse = BaseResponse.fromJson({});
     if (returnRawData) {
       baseResponse.data = response;
+    } else {
+      baseResponse = BaseResponse.fromJson(response);
     }
 
     return baseResponse;

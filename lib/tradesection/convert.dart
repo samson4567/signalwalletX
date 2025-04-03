@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/custom_image_viewer.dart';
 import 'package:signalwavex/component/snackbars.dart';
+import 'package:signalwavex/features/trading_system/data/models/conversion_model.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 
 class Convert extends StatefulWidget {
   const Convert({super.key});
@@ -71,7 +76,28 @@ class _ConvertState extends State<Convert> {
                     'From',
                     selectedFromCoin,
                     fromAmountController,
-                    (value) => setState(() => selectedFromCoin = value),
+                    (value) {
+                      selectedFromCoin = value;
+                      if (selectedFromCoin != null &&
+                          selectedToCoin != null &&
+                          fromAmountController.text.isNotEmpty) {
+                        print(
+                            "debug_print_GetExchangeRateEvent_trigger-inputs=${[
+                          selectedToCoin!.symbol,
+                          selectedFromCoin!.symbol,
+                        ]}");
+                        // assert(selectedToCoin!.symbol != null);
+                        // assert(selectedFromCoin!.symbol != null);
+
+                        context.read<TradingSystemBloc>().add(
+                              GetExchangeRateEvent(
+                                selectedFromCoin!.symbol,
+                                selectedToCoin!.symbol,
+                              ),
+                            );
+                      }
+                      setState(() {});
+                    },
                   ),
                   const SizedBox(height: 16),
                   Center(
@@ -86,13 +112,78 @@ class _ConvertState extends State<Convert> {
                     'To',
                     selectedToCoin,
                     toAmountController,
-                    (value) => setState(() => selectedToCoin = value),
+                    (value) {
+                      selectedToCoin = value;
+                      if (selectedFromCoin != null &&
+                          selectedToCoin != null &&
+                          fromAmountController.text.isNotEmpty) {
+                        context.read<TradingSystemBloc>().add(
+                              GetExchangeRateEvent(
+                                selectedFromCoin!.symbol,
+                                selectedToCoin!.symbol,
+                              ),
+                            );
+                      }
+                      setState(() {});
+                    },
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Exchange rate: 1 USDT = 0.0000123 BTC',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
+                  BlocConsumer<TradingSystemBloc, TradingSystemState>(listener:
+                      (BuildContext context, TradingSystemState state) {
+                    // isLoading
+                    // if (state is ConversionLoadingState) {
+                    //   isLoading = true;
+                    // }
+                    if (state is GetExchangeRateSuccessState) {
+                      exchangeRate = state.rate;
+                      exchangeRate =
+                          (double.parse(exchangeRate!)).toStringAsFixed(6);
+                      exchangeRate = (double.parse(exchangeRate!) == 0)
+                          ? state.rate
+                          : exchangeRate;
+                      toAmountController.text = (double.parse(exchangeRate!) *
+                              double.parse(fromAmountController.text))
+                          .toStringAsFixed(6);
+                      toAmountController.text =
+                          (double.parse(toAmountController.text) == 0)
+                              ? (double.parse(exchangeRate!) *
+                                      double.parse(fromAmountController.text))
+                                  .toStringAsFixed(6)
+                              : toAmountController.text;
+                      setState(() {});
+                    } else if (state is GetExchangeRateErrorState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.errorMessage),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  }, builder: (context, state) {
+                    if (selectedFromCoin != null &&
+                        selectedToCoin != null &&
+                        fromAmountController.text.isNotEmpty) {
+                      return (state is GetExchangeRateLoadingState)
+                          ? const Text(
+                              'Fetching Exchange Rate...',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14),
+                            )
+                          : (state is GetExchangeRateErrorState)
+                              ? Text(
+                                  'Exchange rate: not found',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 14),
+                                )
+                              : Text(
+                                  'Exchange rate: 1 ${selectedFromCoin?.symbol} = ${exchangeRate} ${selectedToCoin?.symbol}',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 14),
+                                );
+                    } else {
+                      return SizedBox();
+                    }
+                  }),
                   const SizedBox(height: 16),
                   _buildConvertButton(),
                 ],
@@ -104,6 +195,7 @@ class _ConvertState extends State<Convert> {
     );
   }
 
+  String? exchangeRate;
   Widget _buildConversionContainer(
     String label,
     CoinEntity? selectedCoin,
@@ -129,16 +221,24 @@ class _ConvertState extends State<Convert> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: TextField(
-                  controller: controller,
-                  style: const TextStyle(color: Colors.white),
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter amount',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: InputBorder.none,
-                  ),
-                ),
+                child: (isTo)
+                    ? Text(
+                        controller.text,
+                        style: TextStyle(color: Colors.grey),
+                      )
+                    : TextField(
+                        controller: controller,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        style: const TextStyle(color: Colors.white),
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter amount',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: InputBorder.none,
+                        ),
+                      ),
               ),
               DropdownButton<CoinEntity>(
                 value: selectedCoin,
@@ -176,43 +276,66 @@ class _ConvertState extends State<Convert> {
       onTap: () async {
         if (selectedFromCoin == null) {
           ScaffoldMessenger.of(context)
-              .showSnackBar(generalSnackBar("Select A Coin"));
+              .showSnackBar(generalSnackBar("Select A from Coin"));
+          return;
+        }
+        if (selectedToCoin == null) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(generalSnackBar("Select A to Coin"));
+          return;
+        }
+        if (fromAmountController.text.isEmpty) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(generalSnackBar("Enter an amount"));
           return;
         }
 
-        setState(() => isLoading = true);
-
-        // Mock conversion logic
-        await Future.delayed(const Duration(seconds: 1));
-
-        setState(() => isLoading = false);
-        _showDialog('success');
+        final ConversionModel conversionEntity = ConversionModel(
+            fromCurrency: selectedFromCoin!.symbol,
+            toCurrency: selectedToCoin!.symbol,
+            fromAmount: fromAmountController.text);
+        context
+            .read<TradingSystemBloc>()
+            .add(ConversionEvent(conversionEntity));
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.yellow,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: isLoading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                  strokeWidth: 2,
+      child: BlocConsumer<TradingSystemBloc, TradingSystemState>(
+          listener: (BuildContext context, TradingSystemState state) {
+        // isLoading
+        if (state is ConversionErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      }, builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.yellow,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: (state is ConversionLoadingState)
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text(
+                  'Convert',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              )
-            : const Text(
-                'Convert',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-      ),
+        );
+      }),
     );
   }
 

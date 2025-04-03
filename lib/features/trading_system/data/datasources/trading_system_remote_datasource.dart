@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
+import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/data/models/conversion_model.dart';
@@ -23,7 +29,44 @@ abstract class TradingSystemRemoteDatasource {
       {required ConversionEntity conversionEntity});
   Future<List<ConversionEntity>> getConversions();
   Future<List<CoinEntity>> getCoins();
+
+  Future<Map<String, dynamic>> getRange(
+    String from,
+    String to,
+  );
+  Future<String> getExchangeRate(
+    String from,
+    String to,
+  );
 }
+
+// Future<String> getExchangeRate(
+//   String from,
+//   String to,
+// ) async {
+//   String result = '';
+
+//   Map<String, dynamic> range = await getRange(from, to);
+
+//   Uri url = Uri.https(
+//     baseurl,
+//     '/get_estimated',
+//   );
+//   Map<String, dynamic> body = {
+//     'fixed': 'false',
+//     'currency_from': from,
+//     'currency_to': to,
+//     'amount': range['min']
+//   };
+
+//   dynamic rawResult = await requestResources(
+//       "$baseURL/get_estimated", body, {}, "encoded_post");
+
+//   String conversionRate = getPerOne(range['min'] as String, rawResult);
+//   result = '1: $conversionRate';
+
+//   return result;
+// }
 
 class TradingSystemRemoteDatasourceImpl
     implements TradingSystemRemoteDatasource {
@@ -38,18 +81,25 @@ class TradingSystemRemoteDatasourceImpl
   @override
   Future<List<LiveMarketPriceEntity>> fetchLiveMarketPrices() async {
     // fetchLiveMarketPrices
+    print(
+        "debug_print_TradingSystemRemoteDatasource-fetchLiveMarketPrices-start");
     final response = await networkClient.get(
       endpoint: EndpointConstant.fetchLiveMarketPrices,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    List rawList = (response.data as Map)["trade_calls"];
+    print(
+        "debug_print_TradingSystemRemoteDatasource-fetchLiveMarketPrices-response${response}");
+    List rawList = (response.data as List);
+    print(
+        "debug_print_TradingSystemRemoteDatasource-fetchLiveMarketPrices-rawList${rawList}");
     List<LiveMarketPriceEntity> result = rawList
         .map(
           (e) => LiveMarketPriceModel.fromJson(e),
         )
         .toList();
-
+    print(
+        "debug_print_TradingSystemRemoteDatasource-fetchLiveMarketPrices-result${result}");
     return result;
   }
 
@@ -82,11 +132,12 @@ class TradingSystemRemoteDatasourceImpl
   @override
   Future<ConversionEntity> convert(
       {required ConversionEntity conversionEntity}) async {
-    final response = await networkClient.get(
+    Map data = (conversionEntity as ConversionModel).toConvertRequestMap();
+    final response = await networkClient.post(
         endpoint: EndpointConstant.convert,
         isAuthHeaderRequired: true,
         returnRawData: true,
-        params: (conversionEntity as ConversionModel).toConvertRequestMap());
+        data: data);
 
     ConversionModel result =
         ConversionModel.fromConvertResponseMap((response.data as Map));
@@ -133,6 +184,81 @@ class TradingSystemRemoteDatasourceImpl
       rawList,
       result,
     ]}");
+
+    return result;
+  }
+
+  @override
+  Future<String> getExchangeRate(String from, String to) async {
+    String result = '';
+    print("sdkjdkasdjsadkjhasjdhasj-getExchangeRate-start");
+    Map<String, dynamic> range = await getRange(from, to);
+
+// /v3/estimates
+    Map<String, dynamic> body = {
+      'fixed': 'false',
+      'tickerFrom': from,
+      'tickerTo': to,
+      "networkFrom": from,
+      "networkTo": to,
+      'amount': range['min']
+    };
+
+    // dynamic rawResult = await requestResources(
+    //     "$simpleswapBaseUrl/v3/estimates", body, {}, "encoded_post");
+    Map<String, String> headers = {
+      "x-api-key": "0396787a-215a-44b0-8c94-35a020d3b37f"
+    };
+    headers["Content-Type"] = "application/json";
+    http.Response r = await http.get(
+        Uri.https("$simpleswapBaseUrl", "/v3/estimates", body),
+        headers: headers);
+    // estimatedAmount
+    dynamic rawResult = jsonDecode(r.body);
+    print("sdkjdkasdjsadkjhasjdhasj-getExchangeRate-rawResult${rawResult}");
+    String conversionRate = getPerOne(
+        range['min'] as String, rawResult['result']['estimatedAmount']);
+    result = '$conversionRate';
+
+    return result;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getRange(String from, String to) async {
+    Map<String, dynamic> result = {};
+    print("sdkjdkasdjsadkjhasjdhasj-getRange-start");
+
+    Map<String, dynamic> body = {
+      'fixed': 'false',
+      'tickerFrom': from,
+      'tickerTo': to,
+      "networkFrom": from,
+      "networkTo": to,
+      "reverse": "false"
+    };
+    body;
+    Map<String, String> headers = {
+      "x-api-key": "0396787a-215a-44b0-8c94-35a020d3b37f"
+    };
+    headers["Content-Type"] = "application/json";
+
+    http.Response r = await http.get(
+        Uri.https("$simpleswapBaseUrl", "/v3/ranges", body),
+        headers: headers);
+    dynamic rawResult = jsonDecode(r.body);
+    // await requestResources(
+    //     "$simpleswapBaseUrl/get_range", body, {}, "encoded_post");
+
+    print("sdkjdkasdjsadkjhasjdhasj-getRange-rawResult${rawResult}");
+
+    result = rawResult['result'];
+    //https://api.simpleswap.io/v3/ranges?
+    //fixed=false&
+    //tickerFrom=btc&
+    //tickerTo=eth&
+    //networkFrom=btc&
+    //networkTo=eth&
+    //reverse=false
 
     return result;
   }

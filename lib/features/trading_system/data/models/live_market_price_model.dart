@@ -1,5 +1,4 @@
 import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 
 // TradeEntity
 
@@ -8,6 +7,7 @@ class LiveMarketPriceModel extends LiveMarketPriceEntity {
     super.price,
     super.symbol,
     super.twentyFourHourChange,
+    super.didIncrease,
   });
 
   Map<String, dynamic> toJson() {
@@ -15,15 +15,17 @@ class LiveMarketPriceModel extends LiveMarketPriceEntity {
       "symbol": symbol,
       "price": price,
       "24h_change": twentyFourHourChange,
+      "didIncrease": didIncrease,
     };
   }
 
   factory LiveMarketPriceModel.fromJson(Map jsonMap) {
+    bool inced = (jsonMap["24h_change"] as String?)?.startsWith("-") ?? false;
     return LiveMarketPriceModel(
-      symbol: jsonMap["symbol"],
-      price: jsonMap["price"],
-      twentyFourHourChange: jsonMap["24h_change"],
-    );
+        symbol: jsonMap["symbol"],
+        price: jsonMap["price"],
+        twentyFourHourChange: jsonMap["24h_change"],
+        didIncrease: inced);
   }
 
   factory LiveMarketPriceModel.empty(Map jsonMap) {

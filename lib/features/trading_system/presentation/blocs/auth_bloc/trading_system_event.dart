@@ -57,3 +57,17 @@ final class GetCoinListEvent extends TradingSystemEvent {
   @override
   List<Object> get props => [];
 }
+
+final class GetExchangeRateEvent extends TradingSystemEvent {
+  final String to;
+  final String from;
+
+  const GetExchangeRateEvent(this.to, this.from);
+
+  @override
+  List<Object> get props => [];
+}
+
+
+
+// getExchangeRate

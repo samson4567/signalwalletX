@@ -80,12 +80,12 @@ Drawer drawerComponent(BuildContext context) {
                             Text(
                               state.user?.email ?? 'No email',
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
+                                  color: Colors.white, fontSize: 13),
                             ),
                             Text(
                               '${state.user?.id ?? 'No ID'}',
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
+                                  color: Colors.white, fontSize: 13),
                             ),
                           ],
                         ),

@@ -9,9 +9,9 @@ class TransferPage extends StatefulWidget {
 
 class _TransferPageState extends State<TransferPage> {
   String selectedAction = 'Trade';
-  String selectedToOption = 'Bloc';
+  String selectedToOption = 'TRC20';
   final List<String> actionList = ['Trade', 'Convert', 'Transfer'];
-  final List<String> toOptionsList = ['Bloc', 'Stuff'];
+  final List<String> toOptionsList = ['TRC20', 'ERC20'];
 
   double availableBalance = 30000; // Available balance
   TextEditingController amountController =

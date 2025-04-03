@@ -32,4 +32,8 @@ abstract class TradingSystemRepository {
       {required ConversionEntity conversionEntity});
   Future<Either<Failure, List<ConversionEntity>>> getConversions();
   Future<Either<Failure, List<CoinEntity>>> getCoins();
+  Future<Either<Failure, String>> getExchangeRate(
+      {required String from, required String to});
+
+  // getExchangeRate
 }

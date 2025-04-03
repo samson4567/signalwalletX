@@ -28,7 +28,7 @@ class ConversionModel extends ConversionEntity {
     return {
       "from_currency": fromCurrency,
       "to_currency": toCurrency,
-      "amount": fromAmount,
+      "amount": double.tryParse(fromAmount ?? ""),
     };
   }
 

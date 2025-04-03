@@ -48,6 +48,8 @@ abstract class ApiClient<T> {
       Options? options,
       Map<String, dynamic>? params}) async {
     try {
+      // Options o = BaseOptions();
+      ;
       if (await ConnectivityHelper.hasInternetConnection()) {
         final response =
             await dio.get(endpoint, queryParameters: params, options: options);
