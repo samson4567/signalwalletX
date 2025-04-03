@@ -743,7 +743,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   String extractPercentageValue(String rawValue) {
-    print("debug_print_extractPercentageValue-rawValue=${rawValue}");
+    
     String result = rawValue;
     if (result.startsWith(RegExp("^[^a-zA-Z0-9]"))) {
       result = result.substring(1);
@@ -751,7 +751,7 @@ class _HomepageState extends State<Homepage> {
     if (result.endsWith("%")) {
       result = result.substring(0, result.length - 1);
     }
-    print("debug_print_extractPercentageValue-result=${result}");
+    
 
     return result;
   }
