@@ -10,6 +10,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_response_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/repositories/wallet_system_user_balance_and_trade_calling_repository.dart';
 
 class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
@@ -191,6 +192,20 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource.getpnl();
 
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> processWithdrawal({
+    required WithdrawEntity withdrawEntity,
+  }) async {
+    try {
+      final result =
+          await walletSystemUserBalanceAndTradeCallingRemoteDatasource
+              .processWithdrawal(withdrawEntity: withdrawEntity);
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));

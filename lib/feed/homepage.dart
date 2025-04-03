@@ -807,7 +807,7 @@ class _HomepageState extends State<Homepage> {
                       ),
                       onPressed: () {
                         // Refresh balances when the eye icon is pressed
-                        walletBloc.add(FetchAllAccountBalanceEvent());
+                        walletBloc.add(const FetchAllAccountBalanceEvent());
                       },
                     ),
                   ],

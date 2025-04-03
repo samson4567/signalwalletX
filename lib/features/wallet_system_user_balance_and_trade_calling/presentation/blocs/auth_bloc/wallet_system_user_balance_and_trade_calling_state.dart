@@ -4,6 +4,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
 
 sealed class WalletSystemUserBalanceAndTradeCallingState extends Equatable {
   const WalletSystemUserBalanceAndTradeCallingState();
@@ -348,3 +349,29 @@ final class GetpnlErrorState
 ///// Getpnl ended .....
 
 // Getpnl
+
+final class WithdrawalLoadingState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  const WithdrawalLoadingState();
+}
+
+final class WithdrawalSuccessState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final WithdrawEntity withdrawEntity;
+
+  const WithdrawalSuccessState(
+      {required this.withdrawEntity, required message});
+
+  @override
+  List<Object> get props => [withdrawEntity];
+}
+
+final class WithdrawalErrorState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final String errorMessage;
+
+  const WithdrawalErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}

@@ -37,3 +37,21 @@ class WalletSystemUserBalanceAndTradeCallingLocalDatasourceImpl
     await appPreferenceService.removeValue(SecureKey.loginAuthTokenKey);
   }
 }
+
+
+  // @override
+  // Future<String> withdraw({required String currency, required String chain, required double amount, required String withdrawAddress}) async {
+  //   final response = await networkClient.post(
+  //     endpoint: EndpointConstant.tradeWithdrawRequest,
+  //     isAuthHeaderRequired: true,
+  //     returnRawData: true,
+  //     data: {
+  //       "currency": currency,
+  //       "chain": chain,
+  //       "amount": amount,
+  //       "withdraw_address": withdrawAddress,
+  //     },
+  //   );
+
+  //   return response.data != null ? response.data["status"] : "Error: No response data";
+  // }

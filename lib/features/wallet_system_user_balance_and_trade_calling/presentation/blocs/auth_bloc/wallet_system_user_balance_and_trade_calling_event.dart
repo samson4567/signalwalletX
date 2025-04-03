@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_request_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
 
 abstract class WalletSystemUserBalanceAndTradeCallingEvent extends Equatable {
   const WalletSystemUserBalanceAndTradeCallingEvent();
@@ -127,4 +128,15 @@ final class GetpnlEvent extends WalletSystemUserBalanceAndTradeCallingEvent {
 
   @override
   List<Object> get props => [];
+}
+
+///// Withdrawal Event
+final class WithdrawalEvent
+    extends WalletSystemUserBalanceAndTradeCallingEvent {
+  final WithdrawEntity withdrawEntity;
+
+  const WithdrawalEvent({required this.withdrawEntity});
+
+  @override
+  List<Object> get props => [withdrawEntity];
 }

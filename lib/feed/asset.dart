@@ -1,11 +1,17 @@
 // import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
+import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 class Assets extends StatefulWidget {
@@ -193,52 +199,88 @@ class _AssetsState extends State<Assets> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTotalAssetsSection(containerWidth),
+          _buildTotalAssetsSection(containerWidth, context),
           SizedBox(height: containerWidth * 0.04),
           _buildPnLSection(containerWidth),
-          SizedBox(height: containerWidth * 0.2),
+          SizedBox(height: containerWidth * 0.1),
           _buildIconRow(containerWidth),
         ],
       ),
     );
   }
 
-  Widget _buildTotalAssetsSection(double screenWidth) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildTotalAssetsSection(double screenWidth, BuildContext context) {
+    final walletBloc =
+        BlocProvider.of<WalletSystemUserBalanceAndTradeCallingBloc>(context);
+
+    return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
+        WalletSystemUserBalanceAndTradeCallingState>(
+      listener: (context, state) {
+        if (state is FetchAllAccountBalanceErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is FetchAllAccountBalanceLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        double totalBalance = 0;
+        if (state is FetchAllAccountBalanceSuccessState) {
+          totalBalance = state.listOfWalletsBalances.fold(0, (sum, wallet) {
+            final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+            return sum + balance;
+          });
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      'Total Assets',
+                      style: TextStyles.title.copyWith(
+                        fontSize: screenWidth * 0.045, // 4.5% of screen width
+                        color: const Color.fromRGBO(255, 255, 255, 0.7),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    IconButton(
+                      icon: Icon(
+                        Icons.remove_red_eye_outlined,
+                        color: Colors.white,
+                        size: screenWidth * 0.06,
+                      ),
+                      onPressed: () {
+                        // Refresh balances when the eye icon is pressed
+                        walletBloc.add(const FetchAllAccountBalanceEvent());
+                      },
+                    ),
+                  ],
+                ),
                 Text(
-                  'Total Assets',
-                  style: TextStyles.title.copyWith(
-                    fontSize: 20,
-                    color: const Color.fromRGBO(255, 255, 255, 0.7),
+                  // Display real balance or placeholder
+                  state is FetchAllAccountBalanceSuccessState
+                      ? '\$${totalBalance.toStringAsFixed(2)}'
+                      : 'Loading...',
+                  style: TextStyles.smallText.copyWith(
+                    fontSize: screenWidth * 0.08,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: screenWidth * 0.02),
-                Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Colors.white,
-                  size: screenWidth * 0.06,
-                ),
               ],
             ),
-            Text(
-              '\$3,256.00',
-              style: TextStyles.smallText.copyWith(
-                fontSize: screenWidth * 0.08,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -254,14 +296,19 @@ class _AssetsState extends State<Assets> {
           ),
         ),
         SizedBox(width: screenWidth * 0.01), // 1% spacing
-        Text(
-          '+\$132',
-          style: TextStyles.smallText.copyWith(
-            fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
-            color: ColorConstants.numyelcolor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        BlocConsumer<AppBloc, AppState>(
+            listener: (BuildContext context, AppState state) {
+          if (state is StorePNLSuccessState) {}
+        }, builder: (context, state) {
+          return Text(
+            '+\$${state.pnl?.substring(0, 4) ?? 0}',
+            style: TextStyles.smallText.copyWith(
+              fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
+              color: ColorConstants.numyelcolor,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        }),
       ],
     );
   }

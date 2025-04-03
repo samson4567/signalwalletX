@@ -126,7 +126,6 @@ class TradingSystemRemoteDatasourceImpl
       returnRawData: true,
     );
 
-// TODO the success message is still missing ask the backend and display appropriate info
     return response.message;
   }
 
