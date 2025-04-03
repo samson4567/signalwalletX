@@ -50,17 +50,11 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = screenWidth * 0.05;
-    print(
-        "sdabkjbdabsdbakjdbasbkds-11111${context.read<AppBloc>().state.listOfCoinEntity}");
-    print(
-        "sdabkjbdabsdbakjdbasbkds-22222${context.read<AppBloc>().state.listOfWalletAccounts}");
-    print("sdabkjbdabsdbakjdbasbkds-33333${context.read<AppBloc>().state.pnl}");
-    print("sdabkjbdabsdbakjdbasbkds-444${context.read<AppBloc>().state.user}");
 
     return Scaffold(
       backgroundColor: Colors.black,
-      key: _scaffoldKey, // Add scaffold key
-      drawer: drawerComponent(context), // Drawer
+      key: _scaffoldKey,
+      drawer: drawerComponent(context),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
