@@ -866,7 +866,7 @@ class _HomepageState extends State<Homepage> {
         'imagePath': 'assets/icons/double.png',
         'label': 'Trade',
         'action': () {
-          context.push(MyAppRouteConstant.trade);
+          context.push(MyAppRouteConstant.perpetual);
         }
       },
       {
