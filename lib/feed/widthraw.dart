@@ -17,9 +17,10 @@ class Withdraw extends StatefulWidget {
 class _WithdrawState extends State<Withdraw> {
   String selectedCoin = 'BTC';
   String selectedChain = 'TRC20';
-  String walletAddress = 'trtiueorwqrieotreppweoitrrioewpt';
+  String walletAddress = '';
   final TextEditingController fromAmountController = TextEditingController();
   final TextEditingController toAmountController = TextEditingController();
+  final TextEditingController walletAddressController = TextEditingController();
 
   final List<Map<String, String>> coinList = [
     {'label': 'BTC', 'imagePath': 'assets/icons/bitcoin.png'},
@@ -36,7 +37,7 @@ class _WithdrawState extends State<Withdraw> {
     double withdrawAmount = double.tryParse(toAmountController.text) ?? 0;
     String address = walletAddress.trim();
 
-    if (address.length < 25) {
+    if (address.isEmpty || address.length < 25) {
       _showDialog('invalid');
       return;
     }
@@ -51,9 +52,8 @@ class _WithdrawState extends State<Withdraw> {
       amount: withdrawAmount,
       address: address,
       chain: selectedChain,
-      currency: selectedCoin, // Set the selected coin as the currency
-      withdrawAddress:
-          address, // Set the wallet address as the withdraw address
+      currency: selectedCoin,
+      withdrawAddress: address,
     );
 
     // Dispatch the event to the WalletBloc
@@ -154,24 +154,12 @@ class _WithdrawState extends State<Withdraw> {
                     const SizedBox(height: 16),
                     _buildConversionContainer(
                       'Quantity',
-                      selectedCoin,
                       toAmountController,
-                      (value) {
-                        setState(() {
-                          selectedCoin = value!;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16),
                     _buildHeadFeeContainer(
                       'Handling Fee',
-                      selectedCoin,
                       toAmountController,
-                      (value) {
-                        setState(() {
-                          selectedCoin = value!;
-                        });
-                      },
                     ),
                     const SizedBox(height: 16),
                     Container(
@@ -280,7 +268,7 @@ class _WithdrawState extends State<Withdraw> {
           ),
           const SizedBox(height: 8),
           TextField(
-            controller: TextEditingController(),
+            controller: walletAddressController, // Use the controller here
             style: const TextStyle(fontSize: 16, color: Colors.white),
             decoration: const InputDecoration(
               hintText: 'Enter Address',
@@ -300,9 +288,7 @@ class _WithdrawState extends State<Withdraw> {
 
   Widget _buildConversionContainer(
     String label,
-    String selectedCoin,
     TextEditingController controller,
-    ValueChanged<String?> onChanged,
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -342,9 +328,7 @@ class _WithdrawState extends State<Withdraw> {
 
   Widget _buildHeadFeeContainer(
     String label,
-    String selectedCoin,
     TextEditingController controller,
-    ValueChanged<String?> onChanged,
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -409,7 +393,12 @@ class _WithdrawState extends State<Withdraw> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(imagePath, width: 80, height: 80),
+              Image.asset(
+                imagePath,
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
+              ),
               const SizedBox(height: 16),
               Text(
                 title,
@@ -423,31 +412,23 @@ class _WithdrawState extends State<Withdraw> {
               const SizedBox(height: 8),
               Text(
                 message,
-                style: const TextStyle(color: Colors.white70, fontSize: 14),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.yellow,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Close',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
-                ],
+                ),
               ),
             ],
           ),
