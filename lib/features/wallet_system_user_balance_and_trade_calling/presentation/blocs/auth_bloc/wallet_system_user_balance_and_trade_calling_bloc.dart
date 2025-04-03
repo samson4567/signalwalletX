@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/admin_pending_withdrawal_request_model.dart';
@@ -48,7 +49,7 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
       (listOfWalletsBalances) {
         appBloc.add(StoreUserBalancesEvent(
             listOfWalletAccountEntity: listOfWalletsBalances));
-
+        listOfWalletAccountEntityG = listOfWalletsBalances;
         emit(FetchAllAccountBalanceSuccessState(
             listOfWalletsBalances: listOfWalletsBalances));
       },

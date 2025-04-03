@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/trading_system/domain/repositories/trading_system_repository.dart';
@@ -19,6 +20,7 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
     on<ConversionEvent>(_onConversionEvent);
     on<GetConversionEvent>(_onGetConversionEvent);
     on<GetCoinListEvent>(_onGetCoinListEvent);
+    on<GetExchangeRateEvent>(_onGetExchangeRateEvent);
 
     // GetCoinListEvent
   }
@@ -93,10 +95,26 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
       (error) => emit(GetCoinListErrorState(errorMessage: error.message)),
       (listOfCoinEntity) {
         appBloc.add(StoreCoinsEvent(listOfCoinEntity: listOfCoinEntity));
+        listOfCoinEntityG = listOfCoinEntity;
         emit(GetCoinListSuccessState(listOfCoinEntity: listOfCoinEntity));
       },
     );
   }
 
-  // _onGetCoinListEvent
+  Future<void> _onGetExchangeRateEvent(
+      GetExchangeRateEvent event, Emitter<TradingSystemState> emit) async {
+    emit(const GetExchangeRateLoadingState());
+    print("debug_print__onGetExchangeRateEvent-start");
+    final result = await tradingSystemRepository.getExchangeRate(
+        from: event.from, to: event.to);
+    print("debug_print__onGetExchangeRateEvent-result=${result}");
+    result.fold(
+      (error) => emit(GetExchangeRateErrorState(errorMessage: error.message)),
+      (rate) {
+        emit(GetExchangeRateSuccessState(rate: rate));
+      },
+    );
+  }
+
+  // _onGetExchangeRateEvent
 }

@@ -163,6 +163,30 @@ final class GetCoinListErrorState extends TradingSystemState {
 }
 ///// GetCoinList ended .....
 
+///// GetExchangeRate
+final class GetExchangeRateLoadingState extends TradingSystemState {
+  const GetExchangeRateLoadingState();
+}
+
+final class GetExchangeRateSuccessState extends TradingSystemState {
+  final String rate;
+
+  const GetExchangeRateSuccessState({required this.rate});
+
+  @override
+  List<Object> get props => [rate];
+}
+
+final class GetExchangeRateErrorState extends TradingSystemState {
+  final String errorMessage;
+
+  const GetExchangeRateErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// GetExchangeRate ended .....
+
+// GetExchangeRate
 
 
-// GetCoinList

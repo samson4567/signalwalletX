@@ -4,8 +4,10 @@ class LiveMarketPriceEntity extends Equatable {
   final String? symbol;
   final String? price;
   final String? twentyFourHourChange;
+  final bool? didIncrease;
 
   const LiveMarketPriceEntity({
+    required this.didIncrease,
     required this.twentyFourHourChange,
     required this.symbol,
     required this.price,

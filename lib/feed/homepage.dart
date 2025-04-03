@@ -1,16 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/component/custom_image_viewer.dart';
+import 'package:signalwavex/component/date_time_display.dart';
 import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
+import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -40,9 +48,18 @@ class _HomepageState extends State<Homepage> {
           .read<TradingSystemBloc>()
           .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
     }
+
+    // FetchLiveMarketPricesEvent
+    liveDataFecthRepeater = Timer.periodic(
+      20.seconds,
+      (timer) {
+        context.read<TradingSystemBloc>().add(FetchLiveMarketPricesEvent());
+      },
+    );
     super.initState();
   }
 
+  Timer? liveDataFecthRepeater;
   CoinEntity? selectedCoin;
   Map askBids = {};
 
@@ -128,14 +145,21 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        'Feb 12 2022 • 05:22', // Format this dynamically if needed
-                        style: TextStyles.bodyText.copyWith(
+                      LiveDateTimeWidget(
+                        textStyle: TextStyles.bodyText.copyWith(
                           fontSize: screenWidth * 0.035,
                           color: ColorConstants.primarydeepColor,
                           fontWeight: FontWeight.w600,
                         ),
-                      ),
+                      )
+                      // Text(
+                      //   'Feb 12 2022 • 05:22', // Format this dynamically if needed
+                      // style: TextStyles.bodyText.copyWith(
+                      //   fontSize: screenWidth * 0.035,
+                      //   color: ColorConstants.primarydeepColor,
+                      //   fontWeight: FontWeight.w600,
+                      // ),
+                      // ),
                     ],
                   ),
                   const Spacer(),
@@ -255,11 +279,12 @@ class _HomepageState extends State<Homepage> {
                                         context: context,
                                         builder: (context) {
                                           List<CoinEntity> listOfCoinModel =
-                                              context
-                                                      .read<AppBloc>()
-                                                      .state
-                                                      .listOfCoinEntity ??
-                                                  [];
+                                              listOfCoinEntityG;
+                                          // context
+                                          //         .read<AppBloc>()
+                                          //         .state
+                                          //         .listOfCoinEntity ??
+                                          //     [];
                                           print(
                                               "listOfCoinModellistOfCoinModellistOfCoinModellistOfCoinModel${listOfCoinModel}");
                                           // listOfCoinModel
@@ -278,8 +303,12 @@ class _HomepageState extends State<Homepage> {
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          child: Text(
-                                                              "${e.name}(${e.symbol})"),
+                                                          child: FancyText(
+                                                            "${e.name}(${e.symbol})",
+                                                            action: () {
+                                                              context.pop(e);
+                                                            },
+                                                          ),
                                                         ),
                                                       )
                                                       .toList(),
@@ -521,6 +550,8 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  List<LiveMarketPriceEntity> listOfLiveMarketPriceEntity = [];
+
   Widget _buildFancyRecentTopcoin(BuildContext context) {
     final List<Map<String, String>> coins = [
       {
@@ -577,101 +608,152 @@ class _HomepageState extends State<Homepage> {
         width: 2,
       ),
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Top performing coins', style: TextStyles.normaltext.copyWith()),
-          const SizedBox(height: 8),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Name',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
+      child: BlocConsumer<TradingSystemBloc, TradingSystemState>(
+          listener: (BuildContext context, TradingSystemState state) {
+        if (state is FetchLiveMarketPricesSuccessState) {
+          listOfLiveMarketPriceEntity = state.listOfLiveMarketPriceEntity;
+          listOfLiveMarketPriceEntity.removeWhere(
+            (element) {
+              return !(element.symbol?.toLowerCase().endsWith("usdt") ?? true);
+            },
+          );
+          listOfLiveMarketPriceEntity.sort(
+            (a, b) {
+              return double.parse(
+                      extractPercentageValue(b.twentyFourHourChange!))
+                  .compareTo(double.parse(
+                      extractPercentageValue(a.twentyFourHourChange!)));
+            },
+          );
+        } else if (state is FetchLiveMarketPricesErrorState) {
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(state.errorMessage),
+          //     backgroundColor: Colors.green,
+          //   ),
+          // );
+        }
+      }, builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Top performing coins',
+                style: TextStyles.normaltext.copyWith()),
+            const SizedBox(height: 8),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Name',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              Text(
-                'Price',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
+                Text(
+                  'Price',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: ListView.separated(
-              itemCount: coins.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Color(0xFF313131),
-                thickness: 1,
-                height: 16,
-              ),
-              itemBuilder: (context, index) {
-                final coin = coins[index];
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.star_border,
-                      color: Colors.yellow,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 12),
-                    Image.asset(
-                      coin['icon']!,
-                      width: 32,
-                      height: 32,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
+              ],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: ListView.separated(
+                itemCount: listOfLiveMarketPriceEntity.length,
+                separatorBuilder: (context, index) => const Divider(
+                  color: Color(0xFF313131),
+                  thickness: 1,
+                  height: 16,
+                ),
+                itemBuilder: (context, index) {
+                  final coin = listOfLiveMarketPriceEntity[index];
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.star_border,
+                        color: Colors.yellow,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      CustomImageView(
+                        // coin['icon']!,
+                        imagePath: "assets/icons/bitcoin.png",
+                        // coin.symbol!,
+
+                        width: 32,
+                        height: 32,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              // coin['name']!,
+                              coin.symbol!,
+
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            coin['name']!,
-                            style: const TextStyle(
+                            // coin['price']!,
+                            coin.price!,
+                            style: TextStyle(
                               fontSize: 14,
+                              color: !(coin.didIncrease ?? false)
+                                  ? Colors.green
+                                  : Colors.red,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            // coin['percentage']!,
+                            coin.twentyFourHourChange!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          coin['price']!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          coin['percentage']!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
+  }
+
+  String extractPercentageValue(String rawValue) {
+    print("debug_print_extractPercentageValue-rawValue=${rawValue}");
+    String result = rawValue;
+    if (result.startsWith(RegExp("^[^a-zA-Z0-9]"))) {
+      result = result.substring(1);
+    }
+    if (result.endsWith("%")) {
+      result = result.substring(0, result.length - 1);
+    }
+    print("debug_print_extractPercentageValue-result=${result}");
+
+    return result;
   }
 
   Widget _buildTotalAssetsSection(double screenWidth, BuildContext context) {
