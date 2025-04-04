@@ -185,7 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const Spacer(),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            context.push(MyAppRouteConstant.forgetPassowrd);
+          },
           child: Text(
             'Forgot password?',
             style: TextStyles.bodyText.copyWith(color: Colors.blue),

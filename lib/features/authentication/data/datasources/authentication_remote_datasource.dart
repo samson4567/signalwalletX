@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
@@ -15,6 +16,8 @@ abstract class AuthenticationRemoteDatasource {
     required String newPassword,
     required newPasswordConfirmation,
   });
+  Future<Map<String, dynamic>> googleAuth({required String token});
+  Future<String> forgetPassword({required String email});
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -105,6 +108,52 @@ class AuthenticationRemoteDatasourceImpl
         "new_password": newPassword,
         "new_password_confirmation": newPasswordConfirmation,
       },
+    );
+    return response.message;
+  }
+
+  @override
+  Future<Map<String, dynamic>> googleAuth({required String token}) async {
+    try {
+      final response = await networkClient.post(
+        endpoint: EndpointConstant.googleauth,
+        data: {"id_token": token, "provider": "google"},
+      );
+
+      if (response.data == null || response.data['user'] == null) {
+        throw Exception('Invalid response from server');
+      }
+
+      final authToken = response.data['token'];
+      if (authToken != null) {
+        await appPreferenceService.saveValue(
+            SecureKey.loginAuthTokenKey, authToken);
+
+        final refreshToken = response.data['refresh_token'];
+        if (refreshToken != null) {
+          await appPreferenceService.saveValue(
+              SecureKey.loginUserDataKey, refreshToken);
+        }
+      }
+
+      return response.data;
+    } catch (e) {
+      if (e is! DioException) {
+        throw DioException(
+          requestOptions: RequestOptions(path: EndpointConstant.googleauth),
+          error: e,
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> forgetPassword({required String email}) async {
+    final response = await networkClient.post(
+      endpoint:
+          EndpointConstant.forgetpassword, // Use your endpoint constant here
+      data: {"email": email},
     );
     return response.message;
   }

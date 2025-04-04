@@ -16,4 +16,7 @@ class MyAppRouteConstant {
   static const String features = '/features';
   static const String perpetual = '/perpetual';
   static const String assets = '/assets';
+  static const String forgetPassowrd = '/forgetPassowrd';
+  static const String forgetPassowrdOTP = '/forgetPassowrdOtp';
+  static const String setNewpassoword = '/setNewpassoword';
 }

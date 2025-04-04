@@ -19,6 +19,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginEvent>(_onLoginEvent);
     on<LogoutEvent>(_onLogoutEvent);
     on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
+    on<GoogleAuthEvent>(_onGoogleAuthEvent);
+    on<ForgetPasswordEvent>(_onForgetPasswordEvent);
   }
 
   Future<void> _onNewUserSignUpEvent(
@@ -113,6 +115,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (error) => emit(UpdatePasswordErrorState(errorMessage: error.message)),
       (message) => emit(UpdatePasswordSuccessState(message: message)),
+    );
+  }
+
+  Future<void> _onGoogleAuthEvent(
+    GoogleAuthEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const GoogleAuthLoadingState());
+
+    // Call the googleSignIn method from the repository
+    final result = await authenticationRepository.googleSignIn();
+
+    result.fold(
+      (error) => emit(GoogleAuthErrorState(error.message, errorMessage: '')),
+      (idToken) {
+        appBloc.add(
+          UserUpdateEvent(
+            updatedUserModel: UserModel.createFromLogin({
+              "email": event.googleUser.email,
+              "idToken": idToken,
+            }),
+          ),
+        );
+        emit(const GoogleAuthSuccessState(message: '')); // Emit success state
+      },
+    );
+  }
+
+  Future<void> _onForgetPasswordEvent(
+      ForgetPasswordEvent event, Emitter<AuthState> emit) async {
+    emit(const ForgetPasswordLoadingState());
+
+    final result = await authenticationRepository.forgetPassword(
+      email: event.email,
+    );
+
+    result.fold(
+      (error) => emit(ForgetPasswordErrorState(errorMessage: error.message)),
+      (message) => emit(ForgetPasswordSuccessState(message: message)),
     );
   }
 }

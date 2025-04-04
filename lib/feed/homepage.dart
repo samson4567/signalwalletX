@@ -17,7 +17,6 @@ import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -540,8 +539,6 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  List<LiveMarketPriceEntity> listOfLiveMarketPriceEntity = [];
-
   Widget _buildFancyRecentTopcoin(BuildContext context) {
     final List<Map<String, String>> coins = [
       {
@@ -598,130 +595,100 @@ class _HomepageState extends State<Homepage> {
         width: 2,
       ),
       padding: const EdgeInsets.all(16),
-      child: BlocConsumer<TradingSystemBloc, TradingSystemState>(
-          listener: (BuildContext context, TradingSystemState state) {
-        if (state is FetchLiveMarketPricesSuccessState) {
-          listOfLiveMarketPriceEntity = state.listOfLiveMarketPriceEntity;
-          listOfLiveMarketPriceEntity.removeWhere(
-            (element) {
-              return !(element.symbol?.toLowerCase().endsWith("usdt") ?? true);
-            },
-          );
-          listOfLiveMarketPriceEntity.sort(
-            (a, b) {
-              return double.parse(
-                      extractPercentageValue(b.twentyFourHourChange!))
-                  .compareTo(double.parse(
-                      extractPercentageValue(a.twentyFourHourChange!)));
-            },
-          );
-        } else if (state is FetchLiveMarketPricesErrorState) {}
-      }, builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Top performing coins',
-                style: TextStyles.normaltext.copyWith()),
-            const SizedBox(height: 8),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Name',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Top performing coins', style: TextStyles.normaltext.copyWith()),
+          const SizedBox(height: 8),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Name',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
                 ),
-                Text(
-                  'Price',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
+              ),
+              Text(
+                'Price',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView.separated(
-                itemCount: listOfLiveMarketPriceEntity.length,
-                separatorBuilder: (context, index) => const Divider(
-                  color: Color(0xFF313131),
-                  thickness: 1,
-                  height: 16,
-                ),
-                itemBuilder: (context, index) {
-                  final coin = listOfLiveMarketPriceEntity[index];
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.star_border,
-                        color: Colors.yellow,
-                        size: 24,
-                      ),
-                      const SizedBox(width: 12),
-                      CustomImageView(
-                        // coin['icon']!,
-                        imagePath: "assets/icons/bitcoin.png",
-                        // coin.symbol!,
-
-                        width: 32,
-                        height: 32,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              // coin['name']!,
-                              coin.symbol!,
-
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView.separated(
+              itemCount: coins.length,
+              separatorBuilder: (context, index) => const Divider(
+                color: Color(0xFF313131),
+                thickness: 1,
+                height: 16,
+              ),
+              itemBuilder: (context, index) {
+                final coin = coins[index];
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.star_border,
+                      color: Colors.yellow,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    CustomImageView(
+                      imagePath: coin['icon']!,
+                      width: 32,
+                      height: 32,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            // coin['price']!,
-                            coin.price!,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: !(coin.didIncrease ?? false)
-                                  ? Colors.green
-                                  : Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            // coin['percentage']!,
-                            coin.twentyFourHourChange!,
+                            coin['name']!,
                             style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          coin['price']!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          coin['percentage']!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        );
-      }),
+          ),
+        ],
+      ),
     );
   }
 

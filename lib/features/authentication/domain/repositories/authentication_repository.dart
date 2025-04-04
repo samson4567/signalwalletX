@@ -17,4 +17,7 @@ abstract class AuthenticationRepository {
     required String newPassword,
     required String newPasswordConfirmation,
   });
+
+  Future<Either<Failure, String>> googleSignIn();
+  Future<Either<Failure, String>> forgetPassword({required String email});
 }

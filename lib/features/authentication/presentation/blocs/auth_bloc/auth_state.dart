@@ -172,3 +172,48 @@ final class UpdatePasswordErrorState extends AuthState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class GoogleAuthLoadingState extends AuthState {
+  const GoogleAuthLoadingState();
+}
+
+class GoogleAuthSuccessState extends AuthState {
+  final String message;
+
+  const GoogleAuthSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class GoogleAuthErrorState extends AuthState {
+  final String errorMessage;
+
+  const GoogleAuthErrorState(String message, {required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// ✅ Forget Password States
+final class ForgetPasswordLoadingState extends AuthState {
+  const ForgetPasswordLoadingState();
+}
+
+final class ForgetPasswordSuccessState extends AuthState {
+  final String message;
+
+  const ForgetPasswordSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class ForgetPasswordErrorState extends AuthState {
+  final String errorMessage;
+
+  const ForgetPasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}

@@ -26,4 +26,6 @@ class EndpointConstant {
   static const String getConversions = '/wallet/conversions';
   static const String getTradableCoin = "/market/tradable-coins";
   static const String interTransfer = "/wallet/transfer";
+  static const String googleauth = "/auth/google";
+  static const String forgetpassword = "/auth/forgot-password";
 }

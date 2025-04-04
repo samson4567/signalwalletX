@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textform_filled.dart';
@@ -80,7 +81,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     _buildRememberMe(screenHeight),
                     _buildCreateAccountButton(screenHeight),
                     _buildDividerWithOr(screenHeight),
-                    _buildGoogleSignInButton(screenHeight),
+                    _buildGoogleSignInButton(screenHeight, context),
                     _buildLoginRow(),
                   ],
                 ),
@@ -219,7 +220,7 @@ class _CreateAccountState extends State<CreateAccount> {
           ),
           TextButton(
             onPressed: () {
-              // Handle forgot password
+              context.push(MyAppRouteConstant.forgetPassowrd);
             },
             child: Text(
               'Forgot password?',
@@ -291,7 +292,7 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   // Google Sign-In button
-  Widget _buildGoogleSignInButton(double screenHeight) {
+  Widget _buildGoogleSignInButton(double screenHeight, BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: screenHeight * 0.02),
       child: SizedBox(
@@ -304,8 +305,37 @@ class _CreateAccountState extends State<CreateAccount> {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          onPressed: () {
-            // Handle Google sign-in action
+          onPressed: () async {
+            final GoogleSignIn googleSignIn = GoogleSignIn();
+
+            try {
+              // Start Google Sign-In flow
+              final GoogleSignInAccount? googleUser =
+                  await googleSignIn.signIn();
+              if (googleUser == null) {
+                return; // User canceled sign-in
+              }
+
+              final GoogleSignInAuthentication googleAuth =
+                  await googleUser.authentication;
+              final String googleToken = googleAuth.idToken ?? '';
+
+              // If token is retrieved, trigger the GoogleAuthEvent in the AuthBloc
+              if (googleToken.isNotEmpty) {
+                context.read<AuthBloc>().add(GoogleAuthEvent(
+                    googleUser: googleUser,
+                    googleToken: googleToken,
+                    token: ''));
+              }
+
+              // Navigate to the home screen after a successful Google sign-in
+              context.push(MyAppRouteConstant.home);
+            } catch (error) {
+              // Handle any errors during the Google Sign-In process
+              print("Google Sign-In error: $error");
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Google Sign-In failed: $error")));
+            }
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
