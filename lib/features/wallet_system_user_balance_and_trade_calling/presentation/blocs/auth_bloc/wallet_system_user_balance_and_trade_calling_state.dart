@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/admin_pending_withdrawal_request_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_withdrawal_request_response_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
@@ -371,6 +372,29 @@ final class WithdrawalErrorState
   final String errorMessage;
 
   const WithdrawalErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// BtcDataChart
+final class BtcDataChartLoadingState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  const BtcDataChartLoadingState();
+}
+
+class BtcDataChartSuccessState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final BtcDataChartEntity btcDataChart;
+
+  const BtcDataChartSuccessState({required this.btcDataChart});
+}
+
+final class BtcDataChartErrorState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final String errorMessage;
+
+  const BtcDataChartErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];

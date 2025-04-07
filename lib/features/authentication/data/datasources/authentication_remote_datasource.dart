@@ -4,6 +4,8 @@ import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
+import 'package:signalwavex/features/authentication/data/models/recent_transaction_model.dart';
+import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 abstract class AuthenticationRemoteDatasource {
   Future<String> newUserSignUp({required NewUserRequestModel newUserRequest});
@@ -18,6 +20,8 @@ abstract class AuthenticationRemoteDatasource {
   });
   Future<Map<String, dynamic>> googleAuth({required String token});
   Future<String> forgetPassword({required String email});
+  Future<List<RecentTransactionEntity>> getRecentTransactions(
+      {required String userId});
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -156,5 +160,19 @@ class AuthenticationRemoteDatasourceImpl
       data: {"email": email},
     );
     return response.message;
+  }
+
+  @override
+  Future<List<RecentTransactionEntity>> getRecentTransactions({
+    required String userId,
+  }) async {
+    final response = await networkClient.get(
+      endpoint:
+          '${EndpointConstant.recentTransaction}/$userId', // adjust if needed
+      isAuthHeaderRequired: true,
+    );
+
+    final List<dynamic> data = response.data;
+    return data.map((json) => RecentTransactionModel.fromJson(json)).toList();
   }
 }

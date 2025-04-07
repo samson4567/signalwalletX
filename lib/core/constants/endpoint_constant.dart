@@ -18,7 +18,6 @@ class EndpointConstant {
   static const String fetchAllTrades = '/admin/trade-calls';
   static const String setWithdrawalPassword = '/wallet/set-withdraw-password';
   static const String getpnl = '/user/pnl';
-  static const String fetchLiveMarketPrices = '/market/ticker';
   static const String fetchOrderBook = '/market/orderbook';
   static const String placeABuyOrSellOrderRequest = '/trade/order';
   static const String fetchCompletedTrade = '/trade/history';
@@ -28,4 +27,7 @@ class EndpointConstant {
   static const String interTransfer = "/wallet/transfer";
   static const String googleauth = "/auth/google";
   static const String forgetpassword = "/auth/forgot-password";
+  static const String fetchMarketLiveCoinPrice = "/market/market-coins";
+  static const String recentTransaction = "/trade/history";
+  static const String btcData = "/market/btc/chart";
 }

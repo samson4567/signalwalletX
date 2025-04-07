@@ -21,11 +21,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UpdatePasswordEvent>(_onUpdatePasswordEvent);
     on<GoogleAuthEvent>(_onGoogleAuthEvent);
     on<ForgetPasswordEvent>(_onForgetPasswordEvent);
+    on<FetchRecentTransactions>(_onRecentTransactionEvent);
   }
 
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
-    print("debug_print__onNewUserSignUpEvent-start");
     emit(const NewUserSignUpLoadingState());
     final result = await authenticationRepository.newUserSignUp(
       newUserRequest: NewUserRequestModel(
@@ -34,7 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         passwordConfirmation: event.confirmPassword,
       ),
     );
-    print("debug_print__onNewUserSignUpEvent-result_is_${result}");
+
     result.fold(
       (error) => emit(NewUserSignUpErrorState(errorMessage: error.message)),
       (message) => emit(NewUserSignUpSuccessState(message: message)),
@@ -155,5 +155,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (error) => emit(ForgetPasswordErrorState(errorMessage: error.message)),
       (message) => emit(ForgetPasswordSuccessState(message: message)),
     );
+  }
+
+  Future<void> _onRecentTransactionEvent(
+    FetchRecentTransactions event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const RecentTransactionLoadingState());
+
+    try {
+      final result = await authenticationRepository.getRecentTransactions(
+        userId: event.userId,
+      );
+
+      // Handle the result of the repository call
+      result.fold(
+        (error) {
+          // In case of failure, emit the error state
+          emit(RecentTransactionErrorState(errorMessage: error.message));
+        },
+        (transactions) {
+          // In case of success, check if the transaction list is empty
+          if (transactions.isEmpty) {
+            // If the list is empty, emit success with an empty list
+            emit(const RecentTransactionSuccessState(transactions: []));
+          } else {
+            // If the list is not empty, emit success with the transaction data
+            emit(RecentTransactionSuccessState(transactions: transactions));
+          }
+        },
+      );
+    } catch (e) {
+      // Emit error state if an exception occurs
+      emit(RecentTransactionErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
   }
 }

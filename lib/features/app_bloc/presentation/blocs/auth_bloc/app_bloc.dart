@@ -19,9 +19,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> _onUserUpdate(
       UserUpdateEvent event, Emitter<AppState> emit) async {
     Map formerDetail = state.toMap();
-    print("debug_print__onUserUpdate-bsakjdkjdakdhh_initial-");
-    print("formerDetailformerDetail--111-asdjasdaskjdasbd${formerDetail}");
-    // emit(UserUpdateLoadingState.fromAppState(state.fromMap(formerDetail)));
 
     Map newDetail = UserUpdateSuccessState(
       user: event.updatedUserModel,
@@ -32,22 +29,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         formerDetail[key] = value;
       },
     );
-    print("formerDetailformerDetail--2222${newDetail}");
-    print("formerDetailformerDetail--3333${formerDetail}");
-    // UserUpdateSuccessState userUpdateSuccessState =
-    //     UserUpdateSuccessState.fromAppState(state.fromMap(formerDetail));
 
-    // print("formerDetailformerDetail--4444${userUpdateSuccessState.user}");
-    // UserUpdateSuccessState(user: user).;`
     emit(state.fromMap(formerDetail));
   }
 
   Future<void> _onStorePNLEvent(
       StorePNLEvent event, Emitter<AppState> emit) async {
     Map formerDetail = state.toMap();
-    print(
-        "debug_print__onStorePNLEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
-    // emit(StorePNLLoadingState.fromAppState(state.fromMap(formerDetail)));
 
     Map newDetail = StorePNLSuccessState(pnl: event.pnl).toMap();
     newDetail.forEach(
@@ -65,9 +53,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> _onStoreCoinsEvent(
       StoreCoinsEvent event, Emitter<AppState> emit) async {
     Map formerDetail = state.toMap();
-    print(
-        "debug_print__onStoreCoinsEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
-    // emit(StoreCoinsLoadingState.fromAppState(state.fromMap(formerDetail)));
 
     Map newDetail =
         StoreCoinsSuccessState(listOfCoinEntity: event.listOfCoinEntity)
@@ -85,10 +70,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> _onStoreUserBalancesEvent(
       StoreUserBalancesEvent event, Emitter<AppState> emit) async {
     Map formerDetail = state.toMap();
-    print(
-        "debug_print__onStoreUserBalancesEvent-formerDetail-asdjasdaskjdasbd${formerDetail}");
-    // emit(StoreUserBalancesLoadingState.fromAppState(
-    //     state.fromMap(formerDetail)));
 
     Map newDetail = StoreUserBalancesSuccessState(
             listOfWalletAccounts: event.listOfWalletAccountEntity)

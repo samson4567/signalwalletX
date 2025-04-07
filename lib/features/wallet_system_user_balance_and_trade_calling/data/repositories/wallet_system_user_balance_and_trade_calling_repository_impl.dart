@@ -4,6 +4,7 @@ import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/datasources/wallet_system_user_balance_and_trade_calling_local_datasource.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/datasources/wallet_system_user_balance_and_trade_calling_remote_datasource.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/admin_pending_withdrawal_request_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
@@ -209,6 +210,24 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BtcDataChartEntity>> fetchBtcDataChart({
+    required String symbol,
+  }) async {
+    try {
+      // Call the remote datasource to fetch the BTC chart data
+      final result =
+          await walletSystemUserBalanceAndTradeCallingRemoteDatasource
+              .fetchBtcDataChart(symbol: symbol);
+
+      return right(
+          result); // Assuming the result is a String (or adjust accordingly)
+    } catch (e) {
+      return left(
+          mapExceptionToFailure(e)); // Handle any errors and map to Failure
     }
   }
 }

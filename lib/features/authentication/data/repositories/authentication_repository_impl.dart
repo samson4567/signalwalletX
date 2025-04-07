@@ -5,6 +5,7 @@ import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_local_datasource.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_remote_datasource.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
+import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 
@@ -130,6 +131,21 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       final result =
           await authenticationRemoteDatasource.forgetPassword(email: email);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RecentTransactionEntity>>> getRecentTransactions({
+    required String userId,
+  }) async {
+    try {
+      final result = await authenticationRemoteDatasource.getRecentTransactions(
+        userId: userId,
+      );
+
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));

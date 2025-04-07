@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 sealed class AuthState extends Equatable {
   const AuthState();
@@ -213,6 +214,31 @@ final class ForgetPasswordErrorState extends AuthState {
   final String errorMessage;
 
   const ForgetPasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+final class RecentTransactionLoadingState extends AuthState {
+  const RecentTransactionLoadingState();
+
+  @override
+  List<Object> get props => []; // Add empty props array
+}
+
+final class RecentTransactionSuccessState extends AuthState {
+  final List<RecentTransactionEntity> transactions;
+
+  const RecentTransactionSuccessState({required this.transactions});
+
+  @override
+  List<Object> get props => [transactions];
+}
+
+final class RecentTransactionErrorState extends AuthState {
+  final String errorMessage;
+
+  const RecentTransactionErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];

@@ -101,3 +101,16 @@ final class ForgetPasswordEvent extends AuthEvent {
   @override
   List<Object> get props => [email];
 }
+
+/// Event to fetch recent transactions for a specific user
+final class FetchRecentTransactions extends AuthEvent {
+  final String userId;
+
+  const FetchRecentTransactions({required this.userId});
+
+  @override
+  List<Object> get props => [userId];
+
+  @override
+  String toString() => 'FetchRecentTransactions(userId: $userId)';
+}

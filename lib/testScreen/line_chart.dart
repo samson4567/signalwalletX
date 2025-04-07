@@ -9,7 +9,7 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 
 class LineChart extends StatefulWidget {
-  LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
+  const LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
 
   final String? title;
   // final Map? askAndBids;
