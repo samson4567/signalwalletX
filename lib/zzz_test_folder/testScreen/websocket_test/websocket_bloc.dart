@@ -43,6 +43,7 @@ class WebSocketBloc extends Bloc<WebSocketEvent, WebSocketState> {
       );
       emit(WebSocketConnectedState());
     } catch (e) {
+      // ss
       emit(WebSocketErrorState(e.toString()));
     }
   }
