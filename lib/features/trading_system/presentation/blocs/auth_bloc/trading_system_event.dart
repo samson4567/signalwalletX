@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 
@@ -10,13 +9,12 @@ abstract class TradingSystemEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// FetchLiveMarketPrices
-final class FetchLiveMarketPricesEvent extends TradingSystemEvent {
-  const FetchLiveMarketPricesEvent();
+// final class FetchLiveMarketPricesEvent extends TradingSystemEvent {
+//   const FetchLiveMarketPricesEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
 final class FetchOrderBookEvent extends TradingSystemEvent {
   final String symbol;
@@ -70,4 +68,19 @@ final class GetExchangeRateEvent extends TradingSystemEvent {
 
 
 
-// getExchangeRate
+
+
+
+
+
+
+
+
+
+
+// final class FetchBinanceTicker24hEvent extends TradingSystemEvent {
+//   const FetchBinanceTicker24hEvent();
+
+//   @override
+//   List<Object> get props => [];
+// }

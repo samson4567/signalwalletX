@@ -7,14 +7,16 @@ import 'package:signalwavex/feed/market.dart';
 import 'package:signalwavex/feed/ppertual.dart';
 import 'package:signalwavex/feed/widthraw.dart';
 import 'package:signalwavex/onboarding/create_account.dart';
+import 'package:signalwavex/onboarding/forget_passoword.dart';
+import 'package:signalwavex/onboarding/forget_passoword_otp.dart';
 import 'package:signalwavex/onboarding/login_screen.dart';
+import 'package:signalwavex/onboarding/set_newpassword.dart';
 import 'package:signalwavex/onboarding/varify_account.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/settings.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/test_screen.dart';
 import 'package:signalwavex/tradesection/convert.dart';
 import 'package:signalwavex/tradesection/deposit.dart';
-import 'package:signalwavex/tradesection/trade.dart';
 import 'package:signalwavex/tradesection/transfer.dart';
 import '../onboarding/splash_screen.dart';
 
@@ -46,11 +48,32 @@ class AppRouter {
         builder: (context, state) => const CreateAccount(),
       ),
       GoRoute(
+        name: MyAppRouteConstant.forgetPassowrd,
+        path: MyAppRouteConstant.forgetPassowrd,
+        builder: (context, state) => const ForgetPassoword(),
+      ),
+      GoRoute(
+        name: MyAppRouteConstant.forgetPassowrdOTP,
+        path: MyAppRouteConstant.forgetPassowrdOTP,
+        builder: (context, state) {
+          final extra = state.extra;
+          final email = (extra is Map && extra['email'] is String)
+              ? extra['email'] as String
+              : '';
+
+          return VerifyForgetPasswordOtp(email: email);
+        },
+      ),
+      GoRoute(
         name: MyAppRouteConstant.verifyEmail,
         path: MyAppRouteConstant.verifyEmail,
         builder: (context, state) =>
             VerifyEmail(email: (state.extra as Map)['email']),
       ),
+      GoRoute(
+          name: MyAppRouteConstant.setNewpassoword,
+          path: MyAppRouteConstant.setNewpassoword,
+          builder: (context, state) => const SetNewPassoword()),
       GoRoute(
         name: MyAppRouteConstant.feedPage,
         path: MyAppRouteConstant.feedPage,
@@ -59,7 +82,7 @@ class AppRouter {
       GoRoute(
         name: MyAppRouteConstant.trade,
         path: MyAppRouteConstant.trade,
-        builder: (context, state) => TradePage(),
+        builder: (context, state) => const TransferPage(),
       ),
       GoRoute(
         name: MyAppRouteConstant.convert,

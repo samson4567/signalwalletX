@@ -11,6 +11,8 @@ class InternalTransferEntity extends Equatable {
     required this.fromAccount,
     required this.currency,
     required this.amount,
+    required String fromWallet,
+    required String toWallet,
   });
 
   @override

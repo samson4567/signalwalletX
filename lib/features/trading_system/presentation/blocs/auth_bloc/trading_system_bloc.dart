@@ -13,7 +13,6 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
   TradingSystemBloc(
       {required this.tradingSystemRepository, required this.appBloc})
       : super(const TradingSystemInitial()) {
-    on<FetchLiveMarketPricesEvent>(_onFetchLiveMarketPricesEvent);
     on<FetchOrderBookEvent>(_onFetchOrderBookEvent);
     on<PlaceABuyOrSellOrderRequestEvent>(_onPlaceABuyOrSellOrderRequestEvent);
 
@@ -21,20 +20,6 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
     on<GetConversionEvent>(_onGetConversionEvent);
     on<GetCoinListEvent>(_onGetCoinListEvent);
     on<GetExchangeRateEvent>(_onGetExchangeRateEvent);
-
-    // GetCoinListEvent
-  }
-
-  Future<void> _onFetchLiveMarketPricesEvent(FetchLiveMarketPricesEvent event,
-      Emitter<TradingSystemState> emit) async {
-    emit(const FetchLiveMarketPricesLoadingState());
-    final result = await tradingSystemRepository.fetchLiveMarketPrices();
-    result.fold(
-      (error) =>
-          emit(FetchLiveMarketPricesErrorState(errorMessage: error.message)),
-      (message) => emit(FetchLiveMarketPricesSuccessState(
-          listOfLiveMarketPriceEntity: message)),
-    );
   }
 
   Future<void> _onFetchOrderBookEvent(
@@ -104,10 +89,8 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
   Future<void> _onGetExchangeRateEvent(
       GetExchangeRateEvent event, Emitter<TradingSystemState> emit) async {
     emit(const GetExchangeRateLoadingState());
-    print("debug_print__onGetExchangeRateEvent-start");
     final result = await tradingSystemRepository.getExchangeRate(
         from: event.from, to: event.to);
-    print("debug_print__onGetExchangeRateEvent-result=${result}");
     result.fold(
       (error) => emit(GetExchangeRateErrorState(errorMessage: error.message)),
       (rate) {
@@ -115,6 +98,4 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
       },
     );
   }
-
-  // _onGetExchangeRateEvent
 }

@@ -226,7 +226,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         FancyContainerTwo(
           height: 40,
           width: double.infinity,
@@ -235,7 +235,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           hasBorder: true,
           child: Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: TextField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
@@ -376,11 +376,11 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 isDepth = false;
                 setState(() {});
               },
+              backgroundColor: isDepth ? null : getFigmaColor("383838"),
               child: FancyText(
                 "Original",
                 size: 12,
               ),
-              backgroundColor: isDepth ? null : getFigmaColor("383838"),
             ),
             FancyContainerTwo(
               action: () {
@@ -569,9 +569,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                     if (selectedText != "Perp_2") {
                       selectedText = "Perp_2";
                     }
-                    //  else {
-                    //   selectedText = null;
-                    // }
 
                     setState(() {});
                   },

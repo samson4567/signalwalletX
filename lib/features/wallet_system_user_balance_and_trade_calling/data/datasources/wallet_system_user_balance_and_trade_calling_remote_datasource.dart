@@ -2,6 +2,7 @@ import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/admin_pending_withdrawal_request_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/deposit_address_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/internal_transfer_Model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_Model.dart';
@@ -9,6 +10,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_withdrawal_request_response_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/wallet_account_balance_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/admin_pending_withdrawal_request_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
@@ -40,6 +42,8 @@ abstract class WalletSystemUserBalanceAndTradeCallingRemoteDatasource {
       required String withdrawPasswordConfirmation});
   Future<String> getpnl();
   Future<String> processWithdrawal({required WithdrawEntity withdrawEntity});
+
+  Future<BtcDataChartEntity> fetchBtcDataChart({required String symbol});
 }
 
 class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
@@ -245,5 +249,17 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
     } catch (e) {
       throw Exception("Error processing withdrawal: $e");
     }
+  }
+
+  @override
+  Future<BtcDataChartEntity> fetchBtcDataChart({required String symbol}) async {
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.btcData,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+    print(response.data);
+    final result = BtcDataChartModel.fromJson(response.data);
+    return result;
   }
 }

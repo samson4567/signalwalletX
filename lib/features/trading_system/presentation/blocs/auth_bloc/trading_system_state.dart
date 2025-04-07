@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/live_market_price_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 
 sealed class TradingSystemState extends Equatable {
   const TradingSystemState();
@@ -16,34 +14,9 @@ final class TradingSystemInitial extends TradingSystemState {
   const TradingSystemInitial();
 }
 
-///// FetchLiveMarketPrices
-final class FetchLiveMarketPricesLoadingState extends TradingSystemState {
-  const FetchLiveMarketPricesLoadingState();
-}
-
-final class FetchLiveMarketPricesSuccessState extends TradingSystemState {
-  final List<LiveMarketPriceEntity> listOfLiveMarketPriceEntity;
-
-  const FetchLiveMarketPricesSuccessState(
-      {required this.listOfLiveMarketPriceEntity});
-
-  @override
-  List<Object> get props => [listOfLiveMarketPriceEntity];
-}
-
-final class FetchLiveMarketPricesErrorState extends TradingSystemState {
-  final String errorMessage;
-
-  const FetchLiveMarketPricesErrorState({required this.errorMessage});
-
-  @override
-  List<Object> get props => [errorMessage];
-}
-///// FetchLiveMarketPrices ended .....
-
 // FetchOrderBook
 
-///// FetchOrderBook
+/// FetchOrderBook
 final class FetchOrderBookLoadingState extends TradingSystemState {
   const FetchOrderBookLoadingState();
 }
@@ -185,8 +158,3 @@ final class GetExchangeRateErrorState extends TradingSystemState {
   @override
   List<Object> get props => [errorMessage];
 }
-///// GetExchangeRate ended .....
-
-// GetExchangeRate
-
-

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
+import 'dart:developer';
 
 class HeaderInterceptor extends Interceptor {
   HeaderInterceptor({
@@ -28,13 +29,13 @@ class HeaderInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // TODO: implement onResponse
+    log("RESPONSE ${response.data}");
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    // TODO: implement onError
+    log("ERROR ${err.message}");
     super.onError(err, handler);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -80,4 +81,36 @@ final class UpdatePasswordEvent extends AuthEvent {
   @override
   List<Object> get props =>
       [currentPassword, newPassword, newPasswordConfirmation];
+}
+
+class GoogleAuthEvent extends AuthEvent {
+  final GoogleSignInAccount googleUser;
+
+  const GoogleAuthEvent(
+      {required this.googleUser,
+      required String token,
+      required String googleToken});
+}
+
+// ✅ Forget Password Event
+final class ForgetPasswordEvent extends AuthEvent {
+  final String email;
+
+  const ForgetPasswordEvent({required this.email});
+
+  @override
+  List<Object> get props => [email];
+}
+
+/// Event to fetch recent transactions for a specific user
+final class FetchRecentTransactions extends AuthEvent {
+  final String userId;
+
+  const FetchRecentTransactions({required this.userId});
+
+  @override
+  List<Object> get props => [userId];
+
+  @override
+  String toString() => 'FetchRecentTransactions(userId: $userId)';
 }

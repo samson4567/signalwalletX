@@ -7,6 +7,8 @@ class InternalTransferModel extends InternalTransferEntity {
     super.fromAccount,
     super.currency,
     super.amount,
+    required super.fromWallet,
+    required super.toWallet,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,11 +26,13 @@ class InternalTransferModel extends InternalTransferEntity {
       amount: jsonMap["amount"],
       fromAccount: jsonMap["from_account"],
       toAccount: jsonMap["to_account"],
+      fromWallet: '',
+      toWallet: '',
     );
   }
 
   factory InternalTransferModel.empty(Map jsonMap) {
-    return InternalTransferModel();
+    return const InternalTransferModel(fromWallet: '', toWallet: '');
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 sealed class AuthState extends Equatable {
   const AuthState();
@@ -168,6 +169,76 @@ final class UpdatePasswordErrorState extends AuthState {
   final String errorMessage;
 
   const UpdatePasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+class GoogleAuthLoadingState extends AuthState {
+  const GoogleAuthLoadingState();
+}
+
+class GoogleAuthSuccessState extends AuthState {
+  final String message;
+
+  const GoogleAuthSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class GoogleAuthErrorState extends AuthState {
+  final String errorMessage;
+
+  const GoogleAuthErrorState(String message, {required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// ✅ Forget Password States
+final class ForgetPasswordLoadingState extends AuthState {
+  const ForgetPasswordLoadingState();
+}
+
+final class ForgetPasswordSuccessState extends AuthState {
+  final String message;
+
+  const ForgetPasswordSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class ForgetPasswordErrorState extends AuthState {
+  final String errorMessage;
+
+  const ForgetPasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+final class RecentTransactionLoadingState extends AuthState {
+  const RecentTransactionLoadingState();
+
+  @override
+  List<Object> get props => []; // Add empty props array
+}
+
+final class RecentTransactionSuccessState extends AuthState {
+  final List<RecentTransactionEntity> transactions;
+
+  const RecentTransactionSuccessState({required this.transactions});
+
+  @override
+  List<Object> get props => [transactions];
+}
+
+final class RecentTransactionErrorState extends AuthState {
+  final String errorMessage;
+
+  const RecentTransactionErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];

@@ -140,3 +140,13 @@ final class WithdrawalEvent
   @override
   List<Object> get props => [withdrawEntity];
 }
+
+final class BtcDataChartEvent
+    extends WalletSystemUserBalanceAndTradeCallingEvent {
+  final String symbol;
+
+  const BtcDataChartEvent({required this.symbol});
+
+  @override
+  List<Object> get props => [symbol];
+}
