@@ -15,6 +15,7 @@ dependencies:
 
   # For iOS-style icons
   cupertino_icons: ^1.0.8
+  web_socket_channel:
   
   # For navigation in Flutter
   go_router: ^14.8.0

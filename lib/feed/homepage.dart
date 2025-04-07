@@ -26,7 +26,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
-import 'package:signalwavex/testScreen/line_chart.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -743,7 +743,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   String extractPercentageValue(String rawValue) {
-    
     String result = rawValue;
     if (result.startsWith(RegExp("^[^a-zA-Z0-9]"))) {
       result = result.substring(1);
@@ -751,7 +750,6 @@ class _HomepageState extends State<Homepage> {
     if (result.endsWith("%")) {
       result = result.substring(0, result.length - 1);
     }
-    
 
     return result;
   }

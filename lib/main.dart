@@ -13,6 +13,7 @@ import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/router/router.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,8 +63,8 @@ class _MyAppState extends State<MyApp> {
             create: (_) =>
                 getItInstance<TradingSystemBloc>()), // Inject TradingSystemBloc
         BlocProvider(
-            create: (_) =>
-                getItInstance<UserBloc>()), // Inject TradingSystemBloc
+            create: (_) => getItInstance<UserBloc>()), // Inject UserBloc
+        BlocProvider(create: (_) => WebSocketBloc()), // Inject WebSocketBloc
       ],
       child: ScreenUtilInit(
         designSize: const Size(440, 956),

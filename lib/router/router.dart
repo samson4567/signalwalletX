@@ -11,7 +11,7 @@ import 'package:signalwavex/onboarding/login_screen.dart';
 import 'package:signalwavex/onboarding/varify_account.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/settings.dart';
-import 'package:signalwavex/testScreen/test_screen.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/test_screen.dart';
 import 'package:signalwavex/tradesection/convert.dart';
 import 'package:signalwavex/tradesection/deposit.dart';
 import 'package:signalwavex/tradesection/trade.dart';
@@ -20,8 +20,8 @@ import '../onboarding/splash_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: MyAppRouteConstant.splashScreen,
-    // initialLocation: MyAppRouteConstant.testScreen,
+    // initialLocation: MyAppRouteConstant.splashScreen,
+    initialLocation: MyAppRouteConstant.testScreen,
 
     routes: [
       GoRoute(
@@ -29,6 +29,7 @@ class AppRouter {
         path: MyAppRouteConstant.splashScreen,
         builder: (context, state) => const SplashScreen(),
       ),
+      // TestScreen
       GoRoute(
         name: MyAppRouteConstant.testScreen,
         path: MyAppRouteConstant.testScreen,

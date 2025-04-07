@@ -9,7 +9,7 @@ import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/radio_button.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
-import 'package:signalwavex/testScreen/candle_stick_chart.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/candle_stick_chart.dart';
 import 'package:uuid/uuid.dart';
 
 class FeaturesCurrentOrder extends StatefulWidget {
