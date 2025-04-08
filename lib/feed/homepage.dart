@@ -7,19 +7,20 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/custom_image_viewer.dart';
 import 'package:signalwavex/component/date_time_display.dart';
 import 'package:signalwavex/component/drawer_component.dart';
-import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
-import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
-import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_event.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
+import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -36,7 +37,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
-  BtcDataChartEntity? chartLoading;
+  // BtcDataChartEntity? chartLoading;
   @override
   void initState() {
     getAndSetInitialData(context);
@@ -58,13 +59,20 @@ class _HomepageState extends State<Homepage> {
     // );
     context
         .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-        .add(const BtcDataChartEvent(symbol: 'BTC'));
+        .add(const FetchUserTransactionsEvent());
+
+    context.read<CoinBloc>().add(const GetBTCDetailEvent());
+    context.read<CoinBloc>().add(const GetTopCoinEvent());
+
     super.initState();
   }
 
   Timer? liveDataFecthRepeater;
 
   Map askBids = {};
+  CoinModel? btcCoinModel;
+  List<CoinModel>? listOfCoinModel;
+  List<OrderModel>? listOfOrderEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -75,34 +83,63 @@ class _HomepageState extends State<Homepage> {
       backgroundColor: Colors.black,
       key: _scaffoldKey,
       drawer: drawerComponent(context),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(screenWidth, _scaffoldKey),
-            Expanded(
-              // Ensure scrolling works properly
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                    horizontal: padding, vertical: padding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: screenWidth * 0.04),
-                    _buildFancyContainer(context),
-                    SizedBox(height: screenWidth * 0.04),
-                    _buildFancyChartContainer(context),
-                    SizedBox(height: screenWidth * 0.04),
-                    _buildFancyRecentTransaction(context),
-                    SizedBox(height: screenWidth * 0.04),
-                    _buildFancyRecentTopcoin(context),
-                  ],
+      body: BlocConsumer<CoinBloc, CoinState>(listener: (context, state) {
+        // GetBTCDetail reactions
+        if (state is GetBTCDetailSuccessState) {
+          btcCoinModel = state.coinModel;
+          setState(() {});
+        } else if (state is GetBTCDetailErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        // GetBTCDetail reactions ended.....
+
+        // GetTopCoin reactions
+        if (state is GetTopCoinSuccessState) {
+          listOfCoinModel = state.listOfCoinModel;
+        } else if (state is GetTopCoinErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        // GetTopCoin reactions ended.....
+      }, builder: (context, state) {
+        return SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(screenWidth, _scaffoldKey),
+              Expanded(
+                // Ensure scrolling works properly
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: padding, vertical: padding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: screenWidth * 0.04),
+                      _buildFancyContainer(context),
+                      SizedBox(height: screenWidth * 0.04),
+                      _buildFancyChartContainer(context),
+                      SizedBox(height: screenWidth * 0.04),
+                      _buildFancyRecentTransaction(context),
+                      SizedBox(height: screenWidth * 0.04),
+                      _buildFancyRecentTopcoin(context, state),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -204,7 +241,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildFancyChartContainer(BuildContext context) {
-    if (chartLoading != null) {
+    if (btcCoinModel != null) {
       return Container(
         decoration: BoxDecoration(
           color: const Color(0xFF101112),
@@ -220,18 +257,6 @@ class _HomepageState extends State<Homepage> {
         child: BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
                 WalletSystemUserBalanceAndTradeCallingState>(
             listener: (context, state) {
-          if (state is BtcDataChartSuccessState) {
-            chartLoading = state.btcDataChart;
-            setState(() {});
-          } else if (state is BtcDataChartErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-
           // if (state is ) {
           //   selectedCoin = state.listOfCoinEntity.firstOrNull;
           //   context
@@ -261,7 +286,7 @@ class _HomepageState extends State<Homepage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               FancyText(
-                                "${chartLoading!.name!} USDT (${chartLoading!.symbol!} - USDT)",
+                                "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
 
                                 // style: TextStyle(fontSize: 14, color: Colors.white),
                                 size: 14, textColor: Colors.white,
@@ -269,7 +294,7 @@ class _HomepageState extends State<Homepage> {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                chartLoading?.percentIncrease.toString() ?? '',
+                                btcCoinModel?.percentIncrease.toString() ?? '',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors
@@ -309,7 +334,7 @@ class _HomepageState extends State<Homepage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "\$${chartLoading?.price.toString() ?? ''} ",
+                      "\$${btcCoinModel?.price.toString() ?? ''} ",
                       style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -333,7 +358,7 @@ class _HomepageState extends State<Homepage> {
                               : LineChart(
                                   chartDetails: {
                                     "symbol":
-                                        "${chartLoading!.symbol!.toUpperCase()}USDT",
+                                        "${btcCoinModel!.symbol!.toUpperCase()}USDT",
                                     "period": period,
                                     "askAndBids": askBids
                                   },
@@ -389,107 +414,148 @@ class _HomepageState extends State<Homepage> {
       },
     ];
 
-    return FancyContainer(
-      color: const Color(0xFF101112),
-      width: 400,
-      height: 435,
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: ColorConstants.lineborder,
-        width: 2,
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Recent Transaction',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+    return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
+            WalletSystemUserBalanceAndTradeCallingState>(
+        listener: (context, state) {
+      // FetchUserTransactions reactions
+      if (state is FetchUserTransactionsSuccessState) {
+        listOfOrderEntity = state.listOfOrderEntity
+            .map(
+              (e) => OrderModel.fromEntity(e),
+            )
+            .toList();
+        setState(() {});
+      } else if (state is FetchUserTransactionsErrorState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.errorMessage),
+            backgroundColor: Colors.green,
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Today',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
+        );
+      }
+      // FetchUserTransactions reactions ended.....
+    }, builder: (context, state) {
+      return FancyContainer(
+        color: const Color(0xFF101112),
+        width: 400,
+        height: 435,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: ColorConstants.lineborder,
+          width: 2,
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Recent Transaction',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: transactions.length,
-              itemBuilder: (context, index) {
-                final transaction = transactions[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        transaction['icon']!,
-                        width: 48,
-                        height: 48,
+            const SizedBox(height: 8),
+            const Text(
+              'Today',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16),
+            (state is FetchUserTransactionsLoadingState)
+                ? const Center(
+                    child: SizedBox(
+                      // bjksbdjk,d
+                      height: 50,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: CircularProgressIndicator.adaptive(),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              transaction['name']!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: listOfOrderEntity!.length,
+                      itemBuilder: (context, index) {
+                        final transaction = listOfOrderEntity![index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                // transaction.
+                                'assets/icons/doge.png',
+                                // ['icon']!,
+                                width: 48,
+                                height: 48,
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'Buy',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      transaction.symbol!,
+                                      // ['name']!,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      transaction.side?.toLowerCase() ?? "-",
+                                      // 'Buy',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            transaction['amount']!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: ColorConstants.numyelcolor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    transaction.quantity ?? "-",
+                                    // transaction['amount']!,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: ColorConstants.numyelcolor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    getTrasactionDateFormat(
+                                        transaction.orderTime),
+                                    // transaction.orderTime ?? "-",
+                                    // ['time']!,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            transaction['time']!,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildFancyRecentTopcoin(BuildContext context) {
+  Widget _buildFancyRecentTopcoin(BuildContext context, CoinState state) {
     final List<Map<String, String>> coins = [
       {
         'icon': 'assets/icons/xrp.png',
@@ -572,71 +638,83 @@ class _HomepageState extends State<Homepage> {
             ],
           ),
           const SizedBox(height: 8),
-          Expanded(
-            child: ListView.separated(
-              itemCount: coins.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Color(0xFF313131),
-                thickness: 1,
-                height: 16,
-              ),
-              itemBuilder: (context, index) {
-                final coin = coins[index];
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.star_border,
-                      color: Colors.yellow,
-                      size: 24,
+          (state is GetTopCoinLoadingState)
+              ? const Center(
+                  child: SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                )
+              : Expanded(
+                  child: ListView.separated(
+                    itemCount: coins.length,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: Color(0xFF313131),
+                      thickness: 1,
+                      height: 16,
                     ),
-                    const SizedBox(width: 12),
-                    CustomImageView(
-                      imagePath: coin['icon']!,
-                      width: 32,
-                      height: 32,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
+                    itemBuilder: (context, index) {
+                      final coin = listOfCoinModel![index];
+                      return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            coin['name']!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          const Icon(
+                            Icons.star_border,
+                            color: Colors.yellow,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          CustomImageView(
+                            imagePath: coin.imagePath,
+                            // ['icon']!,
+                            width: 32,
+                            height: 32,
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  coin.name!,
+                                  // coin['name']!,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                coin.price ?? "-",
+                                // ['price']!,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                coin.percentIncrease ?? "-",
+                                // coin['percentage']!,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          coin['price']!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          coin['percentage']!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );

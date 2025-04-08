@@ -3,6 +3,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_withdrawal_request_response_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
@@ -399,3 +400,31 @@ final class BtcDataChartErrorState
   @override
   List<Object> get props => [errorMessage];
 }
+
+// FetchUserTransactions
+final class FetchUserTransactionsLoadingState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  const FetchUserTransactionsLoadingState();
+}
+
+class FetchUserTransactionsSuccessState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final List<OrderEntity> listOfOrderEntity;
+
+  const FetchUserTransactionsSuccessState({required this.listOfOrderEntity});
+}
+
+final class FetchUserTransactionsErrorState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final String errorMessage;
+
+  const FetchUserTransactionsErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+
+
+
+// FetchUserTransactions

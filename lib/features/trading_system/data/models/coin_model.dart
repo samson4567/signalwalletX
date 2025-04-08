@@ -5,6 +5,9 @@ class CoinModel extends CoinEntity {
     super.chains,
     super.symbol,
     super.name,
+    super.imagePath,
+    super.percentIncrease,
+    super.price,
   });
 
   Map<String, dynamic> toJson() {
@@ -12,7 +15,16 @@ class CoinModel extends CoinEntity {
       "chains": chains,
       "symbol": symbol,
       "name": name,
+      "imagePath": imagePath,
+      "percentIncrease": percentIncrease,
+      "price": price,
     };
+
+    // {
+    //   "chains": chains,
+    //   "symbol": symbol,
+    //   "name": name,
+    // };
   }
 
   factory CoinModel.fromJson(Map jsonMap) {
@@ -20,6 +32,9 @@ class CoinModel extends CoinEntity {
       chains: [...((jsonMap["chains"] as List?) ?? [])],
       symbol: jsonMap["symbol"],
       name: jsonMap["name"],
+      imagePath: jsonMap['imagePath'],
+      percentIncrease: jsonMap['percentIncrease'],
+      price: jsonMap['price'],
     );
   }
 
@@ -27,21 +42,14 @@ class CoinModel extends CoinEntity {
     return CoinModel();
   }
 
-// fromEntity
-
-  factory CoinModel.createFromLogin(Map jsonMap) {
-    return CoinModel(
-      chains: jsonMap["chains"],
-      symbol: jsonMap["symbol"],
-      name: jsonMap["name"],
-    );
-  }
-
   factory CoinModel.fromEntity(CoinEntity coinEntity) {
     return CoinModel(
       chains: coinEntity.chains,
       name: coinEntity.name,
       symbol: coinEntity.symbol,
+      imagePath: coinEntity.imagePath,
+      percentIncrease: coinEntity.percentIncrease,
+      price: coinEntity.price,
     );
   }
 

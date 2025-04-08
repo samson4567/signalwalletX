@@ -4,6 +4,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_response_entity.dart';
@@ -45,4 +46,5 @@ abstract class WalletSystemUserBalanceAndTradeCallingRepository {
   Future<Either<Failure, BtcDataChartEntity>> fetchBtcDataChart({
     required String symbol,
   });
+  Future<Either<Failure, List<OrderEntity>>> fetchUserTransactions();
 }

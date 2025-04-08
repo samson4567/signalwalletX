@@ -7,6 +7,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_response_entity.dart';
@@ -228,6 +229,19 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
     } catch (e) {
       return left(
           mapExceptionToFailure(e)); // Handle any errors and map to Failure
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<OrderEntity>>> fetchUserTransactions() async {
+    try {
+      final result =
+          await walletSystemUserBalanceAndTradeCallingRemoteDatasource
+              .fetchUserTransactions();
+
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
     }
   }
 }

@@ -150,3 +150,13 @@ final class BtcDataChartEvent
   @override
   List<Object> get props => [symbol];
 }
+
+// FetchUserTransactions
+
+final class FetchUserTransactionsEvent
+    extends WalletSystemUserBalanceAndTradeCallingEvent {
+  const FetchUserTransactionsEvent();
+
+  @override
+  List<Object> get props => [];
+}

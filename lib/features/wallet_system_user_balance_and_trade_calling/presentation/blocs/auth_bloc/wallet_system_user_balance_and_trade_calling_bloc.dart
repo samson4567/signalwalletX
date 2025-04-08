@@ -36,8 +36,9 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     on<GetpnlEvent>(_onGetpnlEvent);
     on<WithdrawalEvent>(_onWithdrawalEvent);
     on<BtcDataChartEvent>(_onBtcDataChartEvent);
+    on<FetchUserTransactionsEvent>(_onFetchUserTransactionsEvent);
 
-    //
+    //FetchUserTransactions
   }
 
   Future<void> _onFetchAllAccountBalanceEvent(FetchAllAccountBalanceEvent event,
@@ -236,6 +237,24 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
       (error) => emit(BtcDataChartErrorState(errorMessage: error.message)),
       (btcDataChart) =>
           emit(BtcDataChartSuccessState(btcDataChart: btcDataChart)),
+    );
+  }
+
+  Future<void> _onFetchUserTransactionsEvent(
+    FetchUserTransactionsEvent event,
+    Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
+  ) async {
+    emit(const FetchUserTransactionsLoadingState());
+
+    // Assuming you have a repository method to fetch BTC chart data
+    final result = await walletSystemUserBalanceAndTradeCallingRepository
+        .fetchUserTransactions();
+
+    result.fold(
+      (error) =>
+          emit(FetchUserTransactionsErrorState(errorMessage: error.message)),
+      (listOfOrderEntity) => emit(FetchUserTransactionsSuccessState(
+          listOfOrderEntity: listOfOrderEntity)),
     );
   }
 }

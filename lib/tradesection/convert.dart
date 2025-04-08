@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/custom_image_viewer.dart';
 import 'package:signalwavex/component/snackbars.dart';
 import 'package:signalwavex/features/trading_system/data/models/conversion_model.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -23,17 +24,17 @@ class _ConvertState extends State<Convert> {
 
   // Mock coin data
   final List<CoinEntity> coinList = [
-    CoinEntity(
+    const CoinEntity(
         symbol: 'BTC', name: 'Bitcoin', imagePath: 'assets/icons/bitcoin.png'),
-    CoinEntity(
+    const CoinEntity(
         symbol: 'ETH', name: 'Ethereum', imagePath: 'assets/icons/sol.png'),
-    CoinEntity(
+    const CoinEntity(
         symbol: 'TON', name: 'Toncoin', imagePath: 'assets/icons/ton.png'),
-    CoinEntity(
+    const CoinEntity(
         symbol: 'XRP', name: 'Ripple', imagePath: 'assets/icons/xrp.png'),
-    CoinEntity(
+    const CoinEntity(
         symbol: 'BCH', name: 'Bitcoin Cash', imagePath: 'assets/icons/bch.png'),
-    CoinEntity(
+    const CoinEntity(
         symbol: 'LTC', name: 'Litecoin', imagePath: 'assets/icons/lit.png'),
   ];
 
@@ -91,8 +92,8 @@ class _ConvertState extends State<Convert> {
 
                         context.read<TradingSystemBloc>().add(
                               GetExchangeRateEvent(
-                                selectedFromCoin!.symbol,
-                                selectedToCoin!.symbol,
+                                selectedFromCoin!.symbol!,
+                                selectedToCoin!.symbol!,
                               ),
                             );
                       }
@@ -119,8 +120,8 @@ class _ConvertState extends State<Convert> {
                           fromAmountController.text.isNotEmpty) {
                         context.read<TradingSystemBloc>().add(
                               GetExchangeRateEvent(
-                                selectedFromCoin!.symbol,
-                                selectedToCoin!.symbol,
+                                selectedFromCoin!.symbol!,
+                                selectedToCoin!.symbol!,
                               ),
                             );
                       }
@@ -170,18 +171,18 @@ class _ConvertState extends State<Convert> {
                                   TextStyle(color: Colors.grey, fontSize: 14),
                             )
                           : (state is GetExchangeRateErrorState)
-                              ? Text(
+                              ? const Text(
                                   'Exchange rate: not found',
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 14),
                                 )
                               : Text(
                                   'Exchange rate: 1 ${selectedFromCoin?.symbol} = ${exchangeRate} ${selectedToCoin?.symbol}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.grey, fontSize: 14),
                                 );
                     } else {
-                      return SizedBox();
+                      return const SizedBox();
                     }
                   }),
                   const SizedBox(height: 16),
@@ -224,7 +225,7 @@ class _ConvertState extends State<Convert> {
                 child: (isTo)
                     ? Text(
                         controller.text,
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       )
                     : TextField(
                         controller: controller,
@@ -258,7 +259,7 @@ class _ConvertState extends State<Convert> {
                           height: 24,
                         ),
                         const SizedBox(width: 8),
-                        Text(coin.name),
+                        Text(coin.name!),
                       ],
                     ),
                   );
@@ -393,14 +394,15 @@ class _ConvertState extends State<Convert> {
   }
 }
 
-class CoinEntity {
-  final String symbol;
-  final String name;
-  final String imagePath;
 
-  CoinEntity({
-    required this.symbol,
-    required this.name,
-    required this.imagePath,
-  });
-}
+// class CoinEntity {
+//   final String symbol;
+//   final String name;
+//   final String imagePath;
+
+//   CoinEntity({
+//     required this.symbol,
+//     required this.name,
+//     required this.imagePath,
+//   });
+// }

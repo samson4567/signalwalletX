@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
@@ -151,4 +152,20 @@ dynamic handleJsonResponse(http.Response response) {
   } catch (e) {}
 
   return jsonResponse;
+}
+
+getTrasactionDateFormat(String? dateTimeString) {
+  String formattedTime = "-";
+
+  if (dateTimeString != null) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+
+    // Create a DateFormat object for the desired output format
+    DateFormat outputFormat = DateFormat("hh.mm a");
+
+    // Format the DateTime object
+    formattedTime = outputFormat.format(dateTime);
+  }
+
+  return formattedTime;
 }

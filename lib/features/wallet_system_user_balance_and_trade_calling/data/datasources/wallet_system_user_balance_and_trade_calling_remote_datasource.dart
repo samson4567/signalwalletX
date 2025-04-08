@@ -5,6 +5,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/deposit_address_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/internal_transfer_Model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_Model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_withdrawal_request_request_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_withdrawal_request_response_model.dart';
@@ -13,6 +14,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_withdrawal_request_response_entity.dart';
@@ -44,6 +46,7 @@ abstract class WalletSystemUserBalanceAndTradeCallingRemoteDatasource {
   Future<String> processWithdrawal({required WithdrawEntity withdrawEntity});
 
   Future<BtcDataChartEntity> fetchBtcDataChart({required String symbol});
+  Future<List<OrderEntity>> fetchUserTransactions();
 }
 
 class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
@@ -260,6 +263,23 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
     );
     print(response.data);
     final result = BtcDataChartModel.fromJson(response.data);
+    return result;
+  }
+
+  @override
+  Future<List<OrderEntity>> fetchUserTransactions() async {
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.fetchAllTrades,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+    List rawList = (response.data as Map)["trades"];
+    List<OrderEntity> result = rawList
+        .map(
+          (e) => OrderModel.fromJson(e),
+        )
+        .toList();
+
     return result;
   }
 }

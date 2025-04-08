@@ -3,12 +3,19 @@ import 'package:equatable/equatable.dart';
 class CoinEntity extends Equatable {
   final String? symbol;
   final String? name;
+  final String? percentIncrease;
+
   final List<String>? chains;
+  final String? imagePath;
+  final String? price;
 
   const CoinEntity({
-    required this.chains,
+    this.percentIncrease,
+    this.price,
+    this.chains,
     required this.symbol,
     required this.name,
+    required this.imagePath,
   });
 
   @override
@@ -16,6 +23,7 @@ class CoinEntity extends Equatable {
         symbol,
         chains,
         name,
+        imagePath,
       ];
 }
 
