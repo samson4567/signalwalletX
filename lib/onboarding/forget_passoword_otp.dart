@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
-
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 class VerifyForgetPasswordOtp extends StatefulWidget {
@@ -54,23 +52,30 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
       return;
     }
 
-    setState(() {
-      isVerifying = true;
-    });
-
-    context.read<AuthBloc>().add(
-          VerifyNewSignUpEmailEvent(email: widget.email, otp: enteredCode),
-        );
+    // Trigger the OTP verification event in BLoC
+    BlocProvider.of<AuthBloc>(context)
+        .add(OtpVerificationEvent(otp: enteredCode));
   }
 
   void _resendOtp() {
     if (resendTimer > 0) return;
 
+    // Trigger the OTP resend event in BLoC
+    BlocProvider.of<AuthBloc>(context).add(ResendOtpEvent(email: widget.email));
     setState(() {
       isResending = true;
     });
 
-    context.read<AuthBloc>().add(ResendOtpEvent(email: widget.email));
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        isResending = false;
+        resendTimer = 60;
+        _startResendTimer();
+      });
+
+      _showDialog(
+          'success', 'OTP Resent', 'A new OTP has been sent to your email.');
+    });
   }
 
   void _showDialog(String type, String title, String message) {
@@ -106,7 +111,11 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
               ),
               const SizedBox(height: 16),
               _dialogButton(type == 'success' ? 'Login' : 'Try Again', () {
-                context.push(MyAppRouteConstant.setNewpassoword);
+                if (type == 'success') {
+                  context.push(MyAppRouteConstant.setNewpassoword);
+                } else {
+                  Navigator.pop(context);
+                }
               }),
             ],
           ),
@@ -148,133 +157,104 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
       ),
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is VerifyNewSignUpEmailSuccessState) {
-              setState(() => isVerifying = false);
-              _showDialog('success', 'You are all set',
-                  'Your account has been verified successfully.');
-            } else if (state is VerifyNewSignUpEmailErrorState) {
-              setState(() => isVerifying = false);
-              _showDialog(
-                  'error', 'Invalid OTP', 'The OTP you entered is incorrect.');
-            } else if (state is ResendOtpSuccessState) {
-              setState(() {
-                isResending = false;
-                resendTimer = 60; // Reset timer
-                _startResendTimer();
-              });
-              _showDialog('success', 'OTP Resent',
-                  'A new OTP has been sent to your email.');
-            } else if (state is ResendOtpErrorState) {
-              setState(() => isResending = false);
-              _showDialog('error', 'Resend Failed',
-                  'Unable to resend OTP. Please try again.');
-            }
-          },
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/sign.png',
-                width: 200,
-                height: 129,
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/sign.png',
+              width: 200,
+              height: 129,
+            ),
+            Container(
+              width: 404,
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0D0D0D),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF242424), width: 1),
               ),
-              Container(
-                width: 404,
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0D0D0D),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF242424), width: 1),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Enter your email code',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'We have sent a code to your email',
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(6, (index) {
-                        return SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: TextField(
-                            controller: _controllers[index],
-                            maxLength: 1,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              counterText: '',
-                              filled: true,
-                              fillColor: const Color(0xFF333333),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide:
-                                    const BorderSide(color: Colors.transparent),
-                              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Enter your email code',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'We have sent a code to your email',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(6, (index) {
+                      return SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: TextField(
+                          controller: _controllers[index],
+                          maxLength: 1,
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            counterText: '',
+                            filled: true,
+                            fillColor: const Color(0xFF333333),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide:
+                                  const BorderSide(color: Colors.transparent),
                             ),
-                            style: const TextStyle(
-                                fontSize: 18, color: Colors.white),
                           ),
-                        );
-                      }),
-                    ),
-                    const SizedBox(height: 24),
-                    GestureDetector(
-                      onTap: isVerifying ? null : _verifyCode,
-                      child: Container(
-                        height: 48,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: ColorConstants.numyelcolor,
-                          borderRadius: BorderRadius.circular(10),
+                          style: const TextStyle(
+                              fontSize: 18, color: Colors.white),
                         ),
-                        child: isVerifying
-                            ? const CircularProgressIndicator(
-                                color: Colors.white)
-                            : const Text('Verify',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 24),
+                  GestureDetector(
+                    onTap: isVerifying ? null : _verifyCode,
+                    child: Container(
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: ColorConstants.numyelcolor,
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      child: isVerifying
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text('Verify',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
                     ),
-                    const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: _resendOtp,
-                      child: Container(
-                        height: 48,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(resendTimer > 30
-                            ? 'Resend OTP in $resendTimer sec'
-                            : 'Resend OTP'),
+                  ),
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: _resendOtp,
+                    child: Container(
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      child: Text(resendTimer > 30
+                          ? 'Resend OTP in $resendTimer sec'
+                          : 'Resend OTP'),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-
-//VerifyForgetPasswordOtp

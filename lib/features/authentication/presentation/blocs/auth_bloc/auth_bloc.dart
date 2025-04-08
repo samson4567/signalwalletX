@@ -22,6 +22,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleAuthEvent>(_onGoogleAuthEvent);
     on<ForgetPasswordEvent>(_onForgetPasswordEvent);
     on<FetchRecentTransactions>(_onRecentTransactionEvent);
+    on<OtpVerificationEvent>(_onOtpVerificationEvent);
+    on<SetNewPasswordEvent>(_onSetNewPasswordEvent);
   }
 
   Future<void> _onNewUserSignUpEvent(
@@ -168,19 +170,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         userId: event.userId,
       );
 
-      // Handle the result of the repository call
       result.fold(
         (error) {
-          // In case of failure, emit the error state
           emit(RecentTransactionErrorState(errorMessage: error.message));
         },
         (transactions) {
-          // In case of success, check if the transaction list is empty
           if (transactions.isEmpty) {
-            // If the list is empty, emit success with an empty list
             emit(const RecentTransactionSuccessState(transactions: []));
           } else {
-            // If the list is not empty, emit success with the transaction data
             emit(RecentTransactionSuccessState(transactions: transactions));
           }
         },
@@ -192,5 +189,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             e is Exception ? e.toString() : 'An unknown error occurred',
       ));
     }
+  }
+
+  Future<void> _onOtpVerificationEvent(
+    OtpVerificationEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const OtpVerificationLoadingState());
+
+    final result = await authenticationRepository.verifyOtp(
+      otp: event.otp,
+    );
+
+    result.fold(
+      (error) => emit(OtpVerificationErrorState(errorMessage: error.message)),
+      (message) => emit(OtpVerificationSuccessState(message: message)),
+    );
+  }
+
+  Future<void> _onSetNewPasswordEvent(
+    SetNewPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const SetNewPasswordLoadingState());
+
+    final result = await authenticationRepository.setNewPassword(
+      email: event.email,
+      passoword: event.password,
+      confirmPassword: event,
+    );
+
+    result.fold(
+      (error) => emit(SetNewPasswordErrorState(errorMessage: error.message)),
+      (message) => emit(SetNewPasswordSuccessState(message: message)),
+    );
   }
 }

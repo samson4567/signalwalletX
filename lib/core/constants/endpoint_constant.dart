@@ -30,6 +30,7 @@ class EndpointConstant {
   static const String fetchMarketLiveCoinPrice = "/market/market-coins";
   static const String recentTransaction = "/trade/history";
   static const String btcData = "/market/btc/chart";
-
   static const String topCoin = "market/top-coins";
+  static const String verifyOTP = "auth/verify-otp";
+  static const String resetPassword = "auth/reset-password";
 }

@@ -24,4 +24,7 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, List<RecentTransactionEntity>>> getRecentTransactions({
     required String userId,
   });
+  Future<Either<Failure, String>> verifyOtp({required String otp});
+  Future<Either<Failure, String>> setNewPassword(
+      {required email, required passoword, required confirmPassword});
 }
