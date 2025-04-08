@@ -1,3 +1,4 @@
+import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 
 class CoinModel extends CoinEntity {
@@ -19,21 +20,32 @@ class CoinModel extends CoinEntity {
       "percent_increase": percentIncrease,
       "price": price,
     };
+  }
 
-    // {
-    //   "chains": chains,
-    //   "symbol": symbol,
-    //   "name": name,
-    // };
+  Map<String, dynamic> toPriceChangePercentJson() {
+    return {
+      "chains": chains,
+      "symbol": symbol,
+      "name": name,
+      "imagePath": imagePath,
+      "price_change_percent": percentIncrease,
+      "price": price,
+    };
   }
 
   factory CoinModel.fromJson(Map jsonMap) {
+    String? percent =
+        ((jsonMap['price_change_percent'] ?? jsonMap['percent_increase']) ==
+                null)
+            ? null
+            : ((jsonMap['price_change_percent'] ?? jsonMap['percent_increase']))
+                .toString();
     return CoinModel(
       chains: [...((jsonMap["chains"] as List?) ?? [])],
       symbol: jsonMap["symbol"],
       name: jsonMap["name"],
       imagePath: jsonMap['imagePath'],
-      percentIncrease: jsonMap['percent_increase'].toString(),
+      percentIncrease: percent,
       price: jsonMap['price'].toString(),
     );
   }

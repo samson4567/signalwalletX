@@ -56,6 +56,8 @@ class _LineChartState extends State<LineChart> {
     return askBid;
   }
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -112,9 +114,15 @@ class _LineChartState extends State<LineChart> {
     setState(() {});
   }
 
+  String? formerPeriod;
   @override
   Widget build(BuildContext context) {
-    getData('1day');
+    if (formerPeriod != widget.chartDetails?["period"]) {
+      print(formerPeriod != widget.chartDetails?["period"]);
+      getData('1day');
+      formerPeriod = widget.chartDetails?["period"];
+    }
+
     chartColors.lineFillColor = ColorConstants.fancyGreen;
     chartColors.kLineColor = ColorConstants.fancyGreen;
 
@@ -131,31 +139,35 @@ class _LineChartState extends State<LineChart> {
           color: Colors.black,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: KChartWidget(
-              datas,
-              chartStyle,
-              chartColors,
-              isLine: true,
-              // isLine: isLine,
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : KChartWidget(
+                    datas,
+                    chartStyle,
+                    chartColors,
+                    isLine: true,
+                    // isLine: isLine,
 
-              onSecondaryTap: () {
-                print('Secondary Tap');
-              },
-              isTrendLine: _isTrendLine,
-              mainState: _mainState,
-              volHidden: true,
-              secondaryState: _secondaryState,
-              fixedLength: 2,
-              timeFormat: TimeFormat.YEAR_MONTH_DAY,
-              translations: kChartTranslations,
-              showNowPrice: _showNowPrice,
-              //`isChinese` is Deprecated, Use `translations` instead.
-              // isChinese: isChinese,
-              hideGrid: true,
-              isTapShowInfoDialog: false,
-              verticalTextAlignment: _verticalTextAlignment,
-              maDayList: [1, 100, 1000],
-            ),
+                    onSecondaryTap: () {
+                      print('Secondary Tap');
+                    },
+                    isTrendLine: _isTrendLine,
+                    mainState: _mainState,
+                    volHidden: true,
+                    secondaryState: _secondaryState,
+                    fixedLength: 2,
+                    timeFormat: TimeFormat.YEAR_MONTH_DAY,
+                    translations: kChartTranslations,
+                    showNowPrice: _showNowPrice,
+                    //`isChinese` is Deprecated, Use `translations` instead.
+                    // isChinese: isChinese,
+                    hideGrid: true,
+                    isTapShowInfoDialog: false,
+                    verticalTextAlignment: _verticalTextAlignment,
+                    maDayList: [1, 100, 1000],
+                  ),
           ),
         ),
         if (showLoading)
@@ -248,6 +260,8 @@ class _LineChartState extends State<LineChart> {
   }
 
   void getData(String period) {
+    isLoading = true;
+    setState(() {});
     /*
      * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
      */
@@ -260,6 +274,8 @@ class _LineChartState extends State<LineChart> {
       setState(() {});
       print('### datas error $_');
     });
+    isLoading = false;
+    setState(() {});
   }
 
   //获取火币数据，需要翻墙

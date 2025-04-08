@@ -8,6 +8,8 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/custom_image_viewer.dart';
 import 'package:signalwavex/component/date_time_display.dart';
 import 'package:signalwavex/component/drawer_component.dart';
+import 'package:signalwavex/component/empty_widget.dart';
+// import 'package:signalwavex/component/empty_widget';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
@@ -20,8 +22,7 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_stat
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
+
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -70,6 +71,7 @@ class _HomepageState extends State<Homepage> {
 
     context.read<CoinBloc>().add(const GetBTCDetailEvent());
     context.read<CoinBloc>().add(const GetTopCoinEvent());
+    context.read<CoinBloc>().add(const GetMarketCoinsEvent());
   }
 
   Timer? liveDataFecthRepeater;
@@ -247,140 +249,146 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildFancyChartContainer(BuildContext context) {
-    if (btcCoinModel != null) {
-      return Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF101112),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.grey,
-            width: 2,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF101112),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.grey,
+          width: 2,
         ),
-        width: 400,
-        height: 435,
-        padding: const EdgeInsets.all(16),
-        child: BlocConsumer<CoinBloc, CoinState>(listener: (context, state) {
-          // if (state is ) {
-          //   selectedCoin = state.listOfCoinEntity.firstOrNull;
-          //   context
-          //       .read<TradingSystemBloc>()
-          //       .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
-          // }
-        }, builder: (context, state) {
-          return (state is GetBTCDetailLoadingState)
-              ? const Center(
-                  child: SizedBox(
-                    // bjksbdjk,d
-                    height: 50,
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                  ),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+      ),
+      width: 400,
+      height: 435,
+      padding: const EdgeInsets.all(16),
+      child: (btcCoinModel == null)
+          ? const Center(
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            )
+          : BlocConsumer<CoinBloc, CoinState>(listener: (context, state) {
+              // if (state is ) {
+              //   selectedCoin = state.listOfCoinEntity.firstOrNull;
+              //   context
+              //       .read<TradingSystemBloc>()
+              //       .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
+              // }
+            }, builder: (context, state) {
+              return (state is GetBTCDetailLoadingState)
+                  ? const Center(
+                      child: SizedBox(
+                        // bjksbdjk,d
+                        height: 50,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                      ),
+                    )
+                  : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FancyText(
-                                // "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
-                                "Bitcoin USDT (BTC - USDT)",
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FancyText(
+                                    // "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
+                                    "Bitcoin USDT (BTC - USDT)",
 
-                                // style: TextStyle(fontSize: 14, color: Colors.white),
-                                size: 14, textColor: Colors.white,
-                                // overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                btcCoinModel?.percentIncrease.toString() ?? '',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors
-                                      .green, // Replace with your color constant
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            width: 125,
-                            height: 37.5,
-                            decoration: BoxDecoration(
-                              color: const Color.fromRGBO(255, 255, 255, 0.1),
-                              border: Border.all(
-                                  color: Colors
-                                      .grey), // Replace with your color constant
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: buildPeriodSelect(),
-                            )
-                            // const Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Text(
-                            //       "24 Hours",
-                            //       style: TextStyle(
-                            //           fontSize: 16, color: Colors.white),
-                            //     ),
-                            //     Icon(
-                            //       Icons.arrow_drop_down_sharp,
-                            //       color: Colors.white,
-                            //     ),
-                            //   ],
-                            // ),
-
-                            ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "\$${btcCoinModel?.price.toString() ?? ''} ",
-                      style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    const SizedBox(height: 8),
-                    Builder(builder: (context) {
-                      return Expanded(
-                          child: (state is FetchOrderBookLoadingState)
-                              ? const Center(
-                                  child: SizedBox(
-                                    // bjksbdjk,d
-                                    height: 50,
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    ),
+                                    // style: TextStyle(fontSize: 14, color: Colors.white),
+                                    size: 14, textColor: Colors.white,
+                                    // overflow: TextOverflow.ellipsis,
                                   ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    btcCoinModel?.percentIncrease.toString() ??
+                                        '',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors
+                                          .green, // Replace with your color constant
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                width: 125,
+                                height: 37.5,
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromRGBO(255, 255, 255, 0.1),
+                                  border: Border.all(
+                                      color: Colors
+                                          .grey), // Replace with your color constant
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: buildPeriodSelect(),
                                 )
-                              : LineChart(
-                                  chartDetails: chartDetails ??
-                                      {
-                                        "symbol": "BTCUSDT",
-                                        "period": period,
-                                        "askAndBids": askBids
-                                      },
-                                ));
-                    }),
-                  ],
-                );
-        }),
-      );
-    } else {
-      return const CircularProgressIndicator.adaptive();
-    }
+                                // const Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Text(
+                                //       "24 Hours",
+                                //       style: TextStyle(
+                                //           fontSize: 16, color: Colors.white),
+                                //     ),
+                                //     Icon(
+                                //       Icons.arrow_drop_down_sharp,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ],
+                                // ),
+
+                                ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "\$${btcCoinModel?.price.toString() ?? ''} ",
+                          style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        const SizedBox(height: 8),
+                        Builder(builder: (context) {
+                          return Expanded(
+                              child: (state is FetchOrderBookLoadingState)
+                                  ? const Center(
+                                      child: SizedBox(
+                                        // bjksbdjk,d
+                                        height: 50,
+                                        child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: CircularProgressIndicator
+                                              .adaptive(),
+                                        ),
+                                      ),
+                                    )
+                                  : LineChart(
+                                      chartDetails: chartDetails ??
+                                          {
+                                            "symbol": "BTCUSDT",
+                                            "period": period,
+                                            "askAndBids": askBids
+                                          },
+                                    ));
+                        }),
+                      ],
+                    );
+            }),
+    );
   }
 
   Map? chartDetails = {};
@@ -391,42 +399,43 @@ class _HomepageState extends State<Homepage> {
         child: DropdownButton2(
       dropdownStyleData: const DropdownStyleData(width: 200),
       items: [
-        DropdownMenuItem(
-          value: "1minute",
-          onTap: () {
-            period = "1minute";
-            chartDetails = {
-              "symbol": "BTCUSDT",
-              "period": period,
-              "askAndBids": askBids
-            };
+        // DropdownMenuItem(
+        //   value: "1minute",
+        //   onTap: () {
+        //     period = "1minute";
+        //     chartDetails = {
+        //       "symbol": "BTCUSDT",
+        //       "period": period,
+        //       "askAndBids": askBids
+        //     };
 
-            setState(() {});
-          },
-          child: FancyText(
-            "1 minute",
-            weight: FontWeight.w400,
-            size: 12,
-          ),
-        ),
-        DropdownMenuItem(
-          value: "1hour",
-          onTap: () {
-            period = "1hour";
-            chartDetails = {
-              "symbol": "BTCUSDT",
-              "period": period,
-              "askAndBids": askBids
-            };
+        //     setState(() {});
+        //   },
+        //   child: FancyText(
+        //     "1 minute",
+        //     weight: FontWeight.w400,
+        //     size: 12,
+        //   ),
+        // ),
+        // DropdownMenuItem(
+        //   value: "1hour",
+        //   onTap: () {
+        //     period = "1hour";
+        //     chartDetails = {
+        //       "symbol": "BTCUSDT",
+        //       "period": period,
+        //       "askAndBids": askBids
+        //     };
 
-            setState(() {});
-          },
-          child: FancyText(
-            "1 hour",
-            weight: FontWeight.w400,
-            size: 12,
-          ),
-        ),
+        //     setState(() {});
+        //   },
+        //   child: FancyText(
+        //     "1 hour",
+        //     weight: FontWeight.w400,
+        //     size: 12,
+        //   ),
+        // ),
+
         DropdownMenuItem(
           value: "1day",
           onTap: () {
@@ -573,77 +582,83 @@ class _HomepageState extends State<Homepage> {
                     ),
                   )
                 : Expanded(
-                    child: ListView.builder(
-                      itemCount: listOfOrderEntity!.length,
-                      itemBuilder: (context, index) {
-                        final transaction = listOfOrderEntity![index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                // transaction.
-                                'assets/icons/doge.png',
-                                // ['icon']!,
-                                width: 48,
-                                height: 48,
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
+                    child: (listOfOrderEntity!.isEmpty)
+                        ? buildEmptyWidget("No Transactions yet")
+                        : ListView.builder(
+                            itemCount: listOfOrderEntity!.length,
+                            itemBuilder: (context, index) {
+                              final transaction = listOfOrderEntity![index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      transaction.symbol!,
-                                      // ['name']!,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
+                                    Image.asset(
+                                      // transaction.
+                                      'assets/icons/doge.png',
+                                      // ['icon']!,
+                                      width: 48,
+                                      height: 48,
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            transaction.symbol!,
+                                            // ['name']!,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            transaction.side?.toLowerCase() ??
+                                                "-",
+                                            // 'Buy',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      transaction.side?.toLowerCase() ?? "-",
-                                      // 'Buy',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          transaction.quantity ?? "-",
+                                          // transaction['amount']!,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: ColorConstants.numyelcolor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          getTrasactionDateFormat(
+                                              transaction.orderTime),
+                                          // transaction.orderTime ?? "-",
+                                          // ['time']!,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    transaction.quantity ?? "-",
-                                    // transaction['amount']!,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: ColorConstants.numyelcolor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    getTrasactionDateFormat(
-                                        transaction.orderTime),
-                                    // transaction.orderTime ?? "-",
-                                    // ['time']!,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
           ],
         ),
@@ -752,6 +767,7 @@ class _HomepageState extends State<Homepage> {
                     ),
                     itemBuilder: (context, index) {
                       final coin = listOfCoinModel![index];
+                      CoinModel;
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -762,10 +778,12 @@ class _HomepageState extends State<Homepage> {
                           ),
                           const SizedBox(width: 12),
                           CustomImageView(
-                            imagePath: coin.imagePath,
-                            // ['icon']!,
+                            imagePath: getCoinImageFromAsset(coin),
                             width: 32,
                             height: 32,
+                            errorWidget: Image.asset(
+                              'assets/icons/doge.png',
+                            ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
@@ -785,7 +803,7 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 coin.price ?? "-",
@@ -836,9 +854,9 @@ class _HomepageState extends State<Homepage> {
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {
         if (state is FetchAllAccountBalanceErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage)),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(content: Text(state.errorMessage)),
+          // );
         }
       },
       builder: (context, state) {

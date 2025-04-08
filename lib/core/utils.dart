@@ -17,7 +17,7 @@ getAndSetInitialData(BuildContext context) {
   context
       .read<WalletSystemUserBalanceAndTradeCallingBloc>()
       .add(const GetpnlEvent());
-  getUserCoinBalances(context);
+  // getUserCoinBalances(context);
   getCoins(context);
 }
 
@@ -171,3 +171,60 @@ getTrasactionDateFormat(String? dateTimeString) {
 }
 
 getSymbolFromName() {}
+
+getCoinImageFromAsset(CoinEntity coinEntity) {
+  final List<Map<String, String>> coins = [
+    {
+      'icon': 'assets/icons/xrp.png',
+      'name': 'Bitcoin',
+      'price': '\$96,345.6',
+      'percentage': '0.83%',
+    },
+    {
+      'icon': 'assets/icons/xrp.png',
+      'name': 'Ethereum',
+      'price': '\$6,345.2',
+      'percentage': '1.12%',
+    },
+    {
+      'icon': 'assets/icons/doge.png',
+      'name': 'DOGE',
+      'price': '\$0342.24',
+      'percentage': '2.67%',
+    },
+    {
+      'icon': 'assets/icons/sol.png',
+      'name': 'SOL',
+      'price': '\$0342.24',
+      'percentage': '2.67%',
+    },
+    {
+      'icon': 'assets/icons/bch.png',
+      'name': 'BCH',
+      'price': '\$0342.24',
+      'percentage': '2.67%',
+    },
+    {
+      'icon': 'assets/icons/lit.png',
+      'name': 'LIT',
+      'price': '\$0342.24',
+      'percentage': '2.67%',
+    },
+    {
+      'icon': 'assets/icons/bitcoin.png',
+      'name': 'BITCOIN',
+      'price': '\$0342.24',
+      'percentage': '2.67%',
+    },
+  ];
+  String? result;
+  coins.forEach(
+    (element) {
+      if (element['name']?.toLowerCase() == coinEntity.name?.toLowerCase() &&
+          coinEntity.name != null) {
+        result = element["icon"];
+      }
+    },
+  );
+  return result;
+}

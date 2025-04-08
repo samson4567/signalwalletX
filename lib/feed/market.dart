@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/component/custom_image_viewer.dart';
+import 'package:signalwavex/core/utils.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_event.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
+import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 
 class Market extends StatefulWidget {
   const Market({super.key});
@@ -8,50 +15,93 @@ class Market extends StatefulWidget {
 }
 
 class _MarketState extends State<Market> {
+  List<CoinModel>? listOfCoinModel;
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() {
+    context.read<CoinBloc>().add(const GetMarketCoinsEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child:
-                            const Icon(Icons.arrow_back, color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    "Market Trading",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.bold,
+      body: BlocConsumer<CoinBloc, CoinState>(listener: (context, state) {
+        // GetBTCDetail reactions
+        if (state is GetMarketCoinsSuccessState) {
+          listOfCoinModel = state.listOfCoinModel;
+          setState(() {});
+        } else if (state is GetBTCDetailErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        // GetBTCDetail reactions ended.....
+
+        // GetTopCoin reactions
+        if (state is GetTopCoinSuccessState) {
+          listOfCoinModel = state.listOfCoinModel;
+        } else if (state is GetTopCoinErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        // GetTopCoin reactions ended.....
+      }, builder: (context, state) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child:
+                              const Icon(Icons.arrow_back, color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              _buildSearchBar(),
-              const SizedBox(height: 30),
-              Expanded(child: _buildFancyContractMarket(context)),
-            ],
+                    const Text(
+                      "Market Trading",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                _buildSearchBar(),
+                const SizedBox(height: 30),
+                Expanded(
+                  child: _buildFancyContractMarket(context, state),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -83,7 +133,7 @@ class _MarketState extends State<Market> {
     );
   }
 
-  Widget _buildFancyContractMarket(BuildContext context) {
+  Widget _buildFancyContractMarket(BuildContext context, CoinState state) {
     final List<Map<String, String>> coins = [
       {
         'icon': 'assets/icons/xrp.png',
@@ -188,56 +238,72 @@ class _MarketState extends State<Market> {
           const SizedBox(height: 8),
 
           // List of Coins
-          Expanded(
-            child: ListView.separated(
-              itemCount: coins.length,
-              separatorBuilder: (context, index) => const Divider(
-                  color: Color(0xFF313131), thickness: 1, height: 16),
-              itemBuilder: (context, index) {
-                final coin = coins[index];
-                return Row(
-                  children: [
-                    const Icon(
-                      Icons.star_border,
-                      color: const Color(0xFF313131),
-                      size: 18,
+          (state is GetMarketCoinsLoadingState || listOfCoinModel == null)
+              ? const Center(
+                  child: SizedBox(
+                    // bjksbdjk,d
+                    height: 50,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: CircularProgressIndicator.adaptive(),
                     ),
-                    const SizedBox(width: 12),
-                    Image.asset(coin['icon']!, width: 32, height: 32),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        coin['name']!,
-                        style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          coin['price']!,
-                          style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          coin['percentage']!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: const Color(0xFF3BCC70),
+                  ),
+                )
+              : Expanded(
+                  child: ListView.separated(
+                    itemCount: listOfCoinModel!.length,
+                    separatorBuilder: (context, index) => const Divider(
+                        color: Color(0xFF313131), thickness: 1, height: 16),
+                    itemBuilder: (context, index) {
+                      final coin = listOfCoinModel![index];
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.star_border,
+                            color: const Color(0xFF313131),
+                            size: 18,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+                          const SizedBox(width: 12),
+                          CustomImageView(
+                            imagePath: getCoinImageFromAsset(coin),
+                            // coin['icon']!,
+                            width: 32,
+                            height: 32,
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              coin.name!,
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                coin.price!,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                coin.percentIncrease!,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: const Color(0xFF3BCC70),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );

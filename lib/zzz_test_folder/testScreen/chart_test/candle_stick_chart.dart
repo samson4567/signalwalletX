@@ -220,6 +220,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
     );
   }
 
+  String? formerPeriod;
   void getData(String period) {
     /*
      * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
