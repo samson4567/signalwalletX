@@ -243,3 +243,57 @@ final class RecentTransactionErrorState extends AuthState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+// OTP Loading State
+class OtpVerificationLoadingState extends AuthState {
+  const OtpVerificationLoadingState();
+}
+
+// OTP Success State
+class OtpVerificationSuccessState extends AuthState {
+  final String message;
+
+  const OtpVerificationSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+// OTP Error State
+class OtpVerificationErrorState extends AuthState {
+  final String errorMessage;
+
+  const OtpVerificationErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+sealed class SetNewPasswordState extends Equatable {
+  const SetNewPasswordState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SetNewPasswordLoadingState extends AuthState {
+  const SetNewPasswordLoadingState();
+}
+
+class SetNewPasswordSuccessState extends AuthState {
+  final String message;
+
+  const SetNewPasswordSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class SetNewPasswordErrorState extends AuthState {
+  final String errorMessage;
+
+  const SetNewPasswordErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}

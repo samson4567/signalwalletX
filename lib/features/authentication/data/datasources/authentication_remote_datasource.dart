@@ -22,6 +22,11 @@ abstract class AuthenticationRemoteDatasource {
   Future<String> forgetPassword({required String email});
   Future<List<RecentTransactionEntity>> getRecentTransactions(
       {required String userId});
+  Future<String> verifyOtp({required String otp});
+  Future<String> setNewPassword(
+      {required String email,
+      required String password,
+      required String confirmPassword});
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -174,5 +179,22 @@ class AuthenticationRemoteDatasourceImpl
 
     final List<dynamic> data = response.data;
     return data.map((json) => RecentTransactionModel.fromJson(json)).toList();
+  }
+
+  @override
+  Future<String> verifyOtp({required String otp}) async {
+    final response =
+        await networkClient.post(endpoint: EndpointConstant.verifyOTP);
+    return response.message;
+  }
+
+  @override
+  Future<String> setNewPassword(
+      {required String email,
+      required String password,
+      required String confirmPassword}) async {
+    final response = await networkClient.post(
+        endpoint: EndpointConstant.getAdminPendingWithdrawalRequest);
+    return response.message;
   }
 }

@@ -33,6 +33,8 @@ class EndpointConstant {
 
   static const String topCoin = "/market/top-coins";
   static const String marketCoin = "/market/market-coins";
+  static const String verifyOTP = "auth/verify-otp";
+  static const String resetPassword = "auth/reset-password";
 
   //
 }

@@ -62,7 +62,8 @@ class _SetNewPassowordState extends State<SetNewPassoword> {
                       _buildTitle(screenHeight),
                       _buildSubtitle(screenHeight),
                       _buildEmailField(screenHeight),
-                      _buildPasswordField(screenHeight),
+                      _buildPassowordField(screenHeight),
+                      _buildConfirmPasswordField(screenHeight),
                       _buildLoginButton(screenHeight),
                     ],
                   ),
@@ -104,7 +105,7 @@ class _SetNewPassowordState extends State<SetNewPassoword> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Passoword',
+        label: 'Email',
         hintText: 'Enter your email',
         fillColor: Colors.black,
         labelColor: Colors.white,
@@ -122,13 +123,36 @@ class _SetNewPassowordState extends State<SetNewPassoword> {
     );
   }
 
-  Widget _buildPasswordField(double screenHeight) {
+  Widget _buildPassowordField(double screenHeight) {
+    return Padding(
+      padding: EdgeInsets.only(top: screenHeight * 0.03),
+      child: TextFormFieldWithCustomStyles(
+        controller: emailController,
+        label: 'Email',
+        hintText: 'Enter your email',
+        fillColor: Colors.black,
+        labelColor: Colors.white,
+        hintColor: Colors.white.withOpacity(0.6),
+        textColor: Colors.white,
+        keyboardType: TextInputType.emailAddress,
+        suffixImagePath: 'assets/icons/mail.png',
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter your email';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _buildConfirmPasswordField(double screenHeight) {
     return Padding(
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: passwordController,
-        label: 'Confirm Passpword',
-        hintText: 'Confirm Passoword',
+        label: ' Passpword',
+        hintText: ' Passoword',
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),

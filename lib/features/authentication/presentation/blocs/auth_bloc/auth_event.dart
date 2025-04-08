@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:signalwavex/features/authentication/data/models/set_new_password.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -113,4 +114,28 @@ final class FetchRecentTransactions extends AuthEvent {
 
   @override
   String toString() => 'FetchRecentTransactions(userId: $userId)';
+}
+
+class OtpVerificationEvent extends AuthEvent {
+  final String otp;
+
+  const OtpVerificationEvent({required this.otp});
+
+  @override
+  List<Object> get props => [otp];
+}
+
+class SetNewPasswordEvent extends AuthEvent {
+  final String email;
+  final String password;
+  final String confirmPassword;
+
+  const SetNewPasswordEvent(
+    this.email,
+    this.password,
+    this.confirmPassword,
+  );
+
+  @override
+  List<Object> get props => [email, password, confirmPassword];
 }

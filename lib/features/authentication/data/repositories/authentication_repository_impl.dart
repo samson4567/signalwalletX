@@ -151,4 +151,26 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> verifyOtp({required String otp}) async {
+    try {
+      final result = await authenticationRemoteDatasource.verifyOtp(otp: otp);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> setNewPassword(
+      {required email, required passoword, required confirmPassword}) async {
+    try {
+      final result = await authenticationRemoteDatasource.setNewPassword(
+          email: email, password: passoword, confirmPassword: confirmPassword);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }
