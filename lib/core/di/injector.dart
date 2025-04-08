@@ -12,6 +12,11 @@ import 'package:signalwavex/features/authentication/data/datasources/authenticat
 import 'package:signalwavex/features/authentication/data/repositories/authentication_repository_impl.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/coin/data/datasources/coin_local_datasource.dart';
+import 'package:signalwavex/features/coin/data/datasources/coin_remote_datasource.dart';
+import 'package:signalwavex/features/coin/data/repositories/coin_repository_impl.dart';
+import 'package:signalwavex/features/coin/domain/repositories/coin_repository.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_local_datasource.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_remote_datasource.dart';
 import 'package:signalwavex/features/trading_system/data/repositories/trading_system_repository_impl.dart';
@@ -161,4 +166,26 @@ Future<void> init() async {
         appBloc: getItInstance<AppBloc>()),
   );
   // UserBloc Ended......
+// CoinBloc ......
+  getItInstance.registerLazySingleton<CoinRemoteDatasource>(() =>
+      CoinRemoteDatasourceImpl(
+          networkClient: getItInstance<SignalWalletNetworkClient>(),
+          appPreferenceService: getItInstance<AppPreferenceService>()));
+
+  getItInstance.registerLazySingleton<CoinLocalDatasource>(() =>
+      CoinLocalDatasourceImpl(
+          appPreferenceService: getItInstance<AppPreferenceService>()));
+
+  getItInstance.registerLazySingleton<CoinRepository>(() => CoinRepositoryImpl(
+      coinLocalDatasource: getItInstance<CoinLocalDatasource>(),
+      coinRemoteDatasource: getItInstance<CoinRemoteDatasource>()));
+
+  getItInstance.registerLazySingleton<CoinBloc>(
+    () => CoinBloc(
+        coinRepository: getItInstance<CoinRepository>(),
+        appBloc: getItInstance<AppBloc>()),
+  );
+  // CoinBloc Ended......
+
+  // CoinBloc
 }

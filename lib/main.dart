@@ -9,6 +9,7 @@ import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/di/injector.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
@@ -65,6 +66,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
             create: (_) => getItInstance<UserBloc>()), // Inject UserBloc
         BlocProvider(create: (_) => WebSocketBloc()), // Inject WebSocketBloc
+        BlocProvider(
+            create: (_) => getItInstance<CoinBloc>()), // Inject CoinBloc
       ],
       child: ScreenUtilInit(
         designSize: const Size(440, 956),

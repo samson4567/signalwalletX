@@ -8,8 +8,8 @@ abstract class CoinLocalDatasource {
   Future<void> clearCachedUserData();
 }
 
-class UserLocalDatasourceImpl implements CoinLocalDatasource {
-  UserLocalDatasourceImpl({required this.appPreferenceService});
+class CoinLocalDatasourceImpl implements CoinLocalDatasource {
+  CoinLocalDatasourceImpl({required this.appPreferenceService});
   final AppPreferenceService appPreferenceService;
 
   @override
