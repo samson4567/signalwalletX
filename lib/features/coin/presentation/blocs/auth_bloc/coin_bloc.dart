@@ -13,17 +13,24 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
       : super(const coinInitial()) {
     on<GetBTCDetailEvent>(_onGetBTCDetailEvent);
     on<GetTopCoinEvent>(_onGetTopCoinEvent);
+    on<GetMarketCoinsEvent>(_onGetMarketCoinsEvent);
 
-    // GetTopCoin
+    // GetMarketCoins
   }
 
   Future<void> _onGetBTCDetailEvent(
       GetBTCDetailEvent event, Emitter<CoinState> emit) async {
+    print("debug_print_CoinBloc-_onGetBTCDetailEvent-started");
     emit(const GetBTCDetailLoadingState());
     final result = await coinRepository.getBTCDetails();
+    print("debug_print_CoinBloc-_onGetBTCDetailEvent-result_is_${result}");
     result.fold(
-      (error) => emit(GetBTCDetailErrorState(errorMessage: error.message)),
+      (error) {
+        print("debug_print_CoinBloc-_onGetBTCDetailEvent-error_is_${error}");
+        emit(GetBTCDetailErrorState(errorMessage: error.message));
+      },
       (coinEntity) {
+        print("debug_print_CoinBloc-_onGetBTCDetailEvent-is_success");
         emit(GetBTCDetailSuccessState(
             coinModel: CoinModel.fromEntity(coinEntity)));
       },
@@ -47,5 +54,26 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
     );
   }
 
-  // _onGetTopCoinEvent
+  Future<void> _onGetMarketCoinsEvent(
+      GetMarketCoinsEvent event, Emitter<CoinState> emit) async {
+    print("debug_print_CoinBloc-_onGetMarketCoinsEvent-started");
+    emit(const GetMarketCoinsLoadingState());
+    final result = await coinRepository.getMarketCoins();
+    result.fold(
+      (error) => emit(GetMarketCoinsErrorState(errorMessage: error.message)),
+      (listOfCoinModel) {
+        emit(
+          GetMarketCoinsSuccessState(
+            listOfCoinModel: listOfCoinModel
+                .map(
+                  (e) => CoinModel.fromEntity(e),
+                )
+                .toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  // _onGetMarketCoinsEvent
 }

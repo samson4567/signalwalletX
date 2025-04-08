@@ -244,17 +244,27 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     FetchUserTransactionsEvent event,
     Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
   ) async {
+    print(
+        "debug_print_WalletSystemUserBalanceAndTradeCallingBloc-_onFetchUserTransactionsEvent-started");
     emit(const FetchUserTransactionsLoadingState());
 
     // Assuming you have a repository method to fetch BTC chart data
     final result = await walletSystemUserBalanceAndTradeCallingRepository
         .fetchUserTransactions();
-
+    print(
+        "debug_print_WalletSystemUserBalanceAndTradeCallingBloc-_onFetchUserTransactionsEvent-result_is_$result");
     result.fold(
-      (error) =>
-          emit(FetchUserTransactionsErrorState(errorMessage: error.message)),
-      (listOfOrderEntity) => emit(FetchUserTransactionsSuccessState(
-          listOfOrderEntity: listOfOrderEntity)),
+      (error) {
+        print(
+            "debug_print_WalletSystemUserBalanceAndTradeCallingBloc-_onFetchUserTransactionsEvent-error_is_$error");
+        emit(FetchUserTransactionsErrorState(errorMessage: error.message));
+      },
+      (listOfOrderEntity) {
+        print(
+            "debug_print_WalletSystemUserBalanceAndTradeCallingBloc-_onFetchUserTransactionsEvent-Success");
+        emit(FetchUserTransactionsSuccessState(
+            listOfOrderEntity: listOfOrderEntity));
+      },
     );
   }
 }

@@ -6,4 +6,5 @@ import 'package:signalwavex/features/user/domain/entities/user_entity.dart';
 abstract class CoinRepository {
   Future<Either<Failure, CoinEntity>> getBTCDetails();
   Future<Either<Failure, List<CoinEntity>>> getTopCoins();
+  Future<Either<Failure, List<CoinEntity>>> getMarketCoins();
 }

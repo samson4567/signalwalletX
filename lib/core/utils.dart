@@ -169,3 +169,5 @@ getTrasactionDateFormat(String? dateTimeString) {
 
   return formattedTime;
 }
+
+getSymbolFromName() {}

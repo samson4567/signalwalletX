@@ -269,11 +269,11 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   @override
   Future<List<OrderEntity>> fetchUserTransactions() async {
     final response = await networkClient.get(
-      endpoint: EndpointConstant.fetchAllTrades,
+      endpoint: EndpointConstant.fetchCompletedTrade,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    List rawList = (response.data as Map)["trades"];
+    List rawList = (response.data as Map)["history"];
     List<OrderEntity> result = rawList
         .map(
           (e) => OrderModel.fromJson(e),

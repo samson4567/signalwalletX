@@ -21,3 +21,11 @@ final class GetTopCoinEvent extends CoinEvent {
   @override
   List<Object> get props => [];
 }
+
+// GetMarketCoins
+final class GetMarketCoinsEvent extends CoinEvent {
+  const GetMarketCoinsEvent();
+
+  @override
+  List<Object> get props => [];
+}

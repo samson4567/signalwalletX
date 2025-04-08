@@ -16,7 +16,7 @@ class CoinModel extends CoinEntity {
       "symbol": symbol,
       "name": name,
       "imagePath": imagePath,
-      "percentIncrease": percentIncrease,
+      "percent_increase": percentIncrease,
       "price": price,
     };
 
@@ -33,8 +33,8 @@ class CoinModel extends CoinEntity {
       symbol: jsonMap["symbol"],
       name: jsonMap["name"],
       imagePath: jsonMap['imagePath'],
-      percentIncrease: jsonMap['percentIncrease'],
-      price: jsonMap['price'],
+      percentIncrease: jsonMap['percent_increase'].toString(),
+      price: jsonMap['price'].toString(),
     );
   }
 

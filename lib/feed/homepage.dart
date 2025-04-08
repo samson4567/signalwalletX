@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -57,14 +58,18 @@ class _HomepageState extends State<Homepage> {
     //         .add(const FetchLiveMarketPricesEvent());
     //   },
     // );
+    getData();
+
+    super.initState();
+  }
+
+  getData() {
     context
         .read<WalletSystemUserBalanceAndTradeCallingBloc>()
         .add(const FetchUserTransactionsEvent());
 
     context.read<CoinBloc>().add(const GetBTCDetailEvent());
     context.read<CoinBloc>().add(const GetTopCoinEvent());
-
-    super.initState();
   }
 
   Timer? liveDataFecthRepeater;
@@ -159,6 +164,7 @@ class _HomepageState extends State<Homepage> {
                     onTap: () {
                       // context.read<TradingSystemBloc>().add(
                       //     FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
+                      getData();
                     },
                     child: Image.asset(
                       'assets/icons/flower.png',
@@ -254,9 +260,7 @@ class _HomepageState extends State<Homepage> {
         width: 400,
         height: 435,
         padding: const EdgeInsets.all(16),
-        child: BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
-                WalletSystemUserBalanceAndTradeCallingState>(
-            listener: (context, state) {
+        child: BlocConsumer<CoinBloc, CoinState>(listener: (context, state) {
           // if (state is ) {
           //   selectedCoin = state.listOfCoinEntity.firstOrNull;
           //   context
@@ -264,7 +268,7 @@ class _HomepageState extends State<Homepage> {
           //       .add(FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
           // }
         }, builder: (context, state) {
-          return (state is GetCoinListLoadingState)
+          return (state is GetBTCDetailLoadingState)
               ? const Center(
                   child: SizedBox(
                     // bjksbdjk,d
@@ -286,7 +290,8 @@ class _HomepageState extends State<Homepage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               FancyText(
-                                "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
+                                // "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
+                                "Bitcoin USDT (BTC - USDT)",
 
                                 // style: TextStyle(fontSize: 14, color: Colors.white),
                                 size: 14, textColor: Colors.white,
@@ -306,30 +311,35 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         Container(
-                          width: 125,
-                          height: 37.5,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(255, 255, 255, 0.1),
-                            border: Border.all(
-                                color: Colors
-                                    .grey), // Replace with your color constant
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "24 Hours",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
-                              Icon(
-                                Icons.arrow_drop_down_sharp,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
+                            width: 125,
+                            height: 37.5,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(255, 255, 255, 0.1),
+                              border: Border.all(
+                                  color: Colors
+                                      .grey), // Replace with your color constant
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: buildPeriodSelect(),
+                            )
+                            // const Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(
+                            //       "24 Hours",
+                            //       style: TextStyle(
+                            //           fontSize: 16, color: Colors.white),
+                            //     ),
+                            //     Icon(
+                            //       Icons.arrow_drop_down_sharp,
+                            //       color: Colors.white,
+                            //     ),
+                            //   ],
+                            // ),
+
+                            ),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -356,12 +366,12 @@ class _HomepageState extends State<Homepage> {
                                   ),
                                 )
                               : LineChart(
-                                  chartDetails: {
-                                    "symbol":
-                                        "${btcCoinModel!.symbol!.toUpperCase()}USDT",
-                                    "period": period,
-                                    "askAndBids": askBids
-                                  },
+                                  chartDetails: chartDetails ??
+                                      {
+                                        "symbol": "BTCUSDT",
+                                        "period": period,
+                                        "askAndBids": askBids
+                                      },
                                 ));
                     }),
                   ],
@@ -373,7 +383,91 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
+  Map? chartDetails = {};
   String period = "1day";
+
+  Widget buildPeriodSelect() {
+    return DropdownButtonHideUnderline(
+        child: DropdownButton2(
+      dropdownStyleData: const DropdownStyleData(width: 200),
+      items: [
+        DropdownMenuItem(
+          value: "1minute",
+          onTap: () {
+            period = "1minute";
+            chartDetails = {
+              "symbol": "BTCUSDT",
+              "period": period,
+              "askAndBids": askBids
+            };
+
+            setState(() {});
+          },
+          child: FancyText(
+            "1 minute",
+            weight: FontWeight.w400,
+            size: 12,
+          ),
+        ),
+        DropdownMenuItem(
+          value: "1hour",
+          onTap: () {
+            period = "1hour";
+            chartDetails = {
+              "symbol": "BTCUSDT",
+              "period": period,
+              "askAndBids": askBids
+            };
+
+            setState(() {});
+          },
+          child: FancyText(
+            "1 hour",
+            weight: FontWeight.w400,
+            size: 12,
+          ),
+        ),
+        DropdownMenuItem(
+          value: "1day",
+          onTap: () {
+            period = "1day";
+            chartDetails = {
+              "symbol": "BTCUSDT",
+              "period": period,
+              "askAndBids": askBids
+            };
+
+            setState(() {});
+          },
+          child: FancyText(
+            "24 hours",
+            weight: FontWeight.w400,
+            size: 12,
+          ),
+        ),
+        DropdownMenuItem(
+          value: "1year",
+          onTap: () {
+            period = "1year";
+            chartDetails = {
+              "symbol": "BTCUSDT",
+              "period": period,
+              "askAndBids": askBids
+            };
+
+            setState(() {});
+          },
+          child: FancyText(
+            "1 year",
+            weight: FontWeight.w400,
+            size: 12,
+          ),
+        ),
+      ],
+      value: period,
+      onChanged: (value) {},
+    ));
+  }
 
   Widget _buildFancyRecentTransaction(BuildContext context) {
     final List<Map<String, String>> transactions = [
@@ -418,6 +512,7 @@ class _HomepageState extends State<Homepage> {
             WalletSystemUserBalanceAndTradeCallingState>(
         listener: (context, state) {
       // FetchUserTransactions reactions
+
       if (state is FetchUserTransactionsSuccessState) {
         listOfOrderEntity = state.listOfOrderEntity
             .map(
@@ -465,7 +560,8 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             const SizedBox(height: 16),
-            (state is FetchUserTransactionsLoadingState)
+            (state is FetchUserTransactionsLoadingState ||
+                    listOfOrderEntity == null)
                 ? const Center(
                     child: SizedBox(
                       // bjksbdjk,d
@@ -614,7 +710,7 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Top performing coins', style: TextStyles.normaltext.copyWith()),
+          Text('Top performing coins', style: TextStyles.normaltext),
           const SizedBox(height: 8),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -638,7 +734,7 @@ class _HomepageState extends State<Homepage> {
             ],
           ),
           const SizedBox(height: 8),
-          (state is GetTopCoinLoadingState)
+          (state is GetTopCoinLoadingState || listOfCoinModel == null)
               ? const Center(
                   child: SizedBox(
                     height: 40,
@@ -648,7 +744,7 @@ class _HomepageState extends State<Homepage> {
                 )
               : Expanded(
                   child: ListView.separated(
-                    itemCount: coins.length,
+                    itemCount: listOfCoinModel!.length,
                     separatorBuilder: (context, index) => const Divider(
                       color: Color(0xFF313131),
                       thickness: 1,

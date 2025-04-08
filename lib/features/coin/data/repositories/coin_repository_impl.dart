@@ -17,11 +17,13 @@ class CoinRepositoryImpl implements CoinRepository {
 
   @override
   Future<Either<Failure, CoinEntity>> getBTCDetails() async {
+    print("debug_print_CoinRepositoryImpl-getBTCDetails-started");
     try {
       final result = await coinRemoteDatasource.getBTCDetail();
-
+      print("debug_print_CoinRepositoryImpl-getBTCDetails-result_is_$result ");
       return right(result);
     } catch (e) {
+      print("debug_print_CoinRepositoryImpl-getBTCDetails-error_is_$e ");
       return left(mapExceptionToFailure(e));
     }
   }
@@ -30,6 +32,17 @@ class CoinRepositoryImpl implements CoinRepository {
   Future<Either<Failure, List<CoinEntity>>> getTopCoins() async {
     try {
       final result = await coinRemoteDatasource.getTopCoins();
+
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CoinEntity>>> getMarketCoins() async {
+    try {
+      final result = await coinRemoteDatasource.getMarketCoins();
 
       return right(result);
     } catch (e) {

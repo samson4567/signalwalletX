@@ -9,11 +9,11 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 
 class LineChart extends StatefulWidget {
-  const LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
+  LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
 
   final String? title;
   // final Map? askAndBids;
-  final Map? chartDetails;
+  Map? chartDetails;
 
   @override
   _LineChartState createState() => _LineChartState();
@@ -40,8 +40,8 @@ class _LineChartState extends State<LineChart> {
   Map tick = {};
 
   Map formatAskBid(Map askBid) {
-    Map bids = askBid["bids"];
-    Map asks = askBid["asks"];
+    Map bids = askBid["bids"] ?? {};
+    Map asks = askBid["asks"] ?? {};
     List newBids = [];
     List newAsks = [];
 
@@ -114,6 +114,7 @@ class _LineChartState extends State<LineChart> {
 
   @override
   Widget build(BuildContext context) {
+    getData('1day');
     chartColors.lineFillColor = ColorConstants.fancyGreen;
     chartColors.kLineColor = ColorConstants.fancyGreen;
 

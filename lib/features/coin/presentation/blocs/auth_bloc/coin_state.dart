@@ -61,6 +61,30 @@ final class GetTopCoinErrorState extends CoinState {
 }
 ///// GetTopCoin ended .....
 
+///// GetMarketCoins
+final class GetMarketCoinsLoadingState extends CoinState {
+  const GetMarketCoinsLoadingState();
+}
+
+final class GetMarketCoinsSuccessState extends CoinState {
+  final List<CoinModel> listOfCoinModel;
+
+  const GetMarketCoinsSuccessState({required this.listOfCoinModel});
+
+  @override
+  List<Object> get props => [listOfCoinModel];
+}
+
+final class GetMarketCoinsErrorState extends CoinState {
+  final String errorMessage;
+
+  const GetMarketCoinsErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// GetMarketCoins ended .....
 
 
-// GetTopCoin
+
+// GetMarketCoins
