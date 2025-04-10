@@ -10,6 +10,9 @@ class ProfileSection extends StatefulWidget {
 
 class _ProfileSectionState extends State<ProfileSection> {
   final TextEditingController _fullName = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController =
+      TextEditingController(); // Added phone controller
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -34,7 +37,7 @@ class _ProfileSectionState extends State<ProfileSection> {
           const Column(
             children: [
               Text(
-                "Avter",
+                "Avatar",
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.white,
@@ -59,7 +62,7 @@ class _ProfileSectionState extends State<ProfileSection> {
             width: 400,
             controller: _fullName,
             label: 'Full name',
-            hintText: 'Enter your email',
+            hintText: 'Enter your full name',
             fillColor: Colors.black,
             labelColor: Colors.white,
             hintColor: Colors.white.withOpacity(0.6),
@@ -82,7 +85,7 @@ class _ProfileSectionState extends State<ProfileSection> {
             hintStyle: const TextStyle(fontSize: 10),
             height: 34,
             width: 400,
-            controller: _fullName,
+            controller: _emailController,
             label: 'Email',
             hintText: 'Enter your email',
             fillColor: Colors.black,
@@ -94,6 +97,33 @@ class _ProfileSectionState extends State<ProfileSection> {
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
               }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            "Phone Number",
+            style: TextStyle(color: Colors.white, fontSize: 10),
+          ),
+          const SizedBox(height: 8),
+          TextFormFieldWithCustomStyles(
+            hintStyle: const TextStyle(fontSize: 10),
+            height: 34,
+            width: 400,
+            controller: _phoneController,
+            label: 'Phone Number',
+            hintText: 'Enter your phone number',
+            fillColor: Colors.black,
+            labelColor: Colors.white,
+            hintColor: Colors.white.withOpacity(0.6),
+            textColor: Colors.white,
+            prefixImagePath:
+                'assets/icons/bitcoin.png', // You can replace with the phone icon
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your phone number';
+              }
+              // Optionally, add phone number validation
               return null;
             },
           ),

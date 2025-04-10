@@ -24,6 +24,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<FetchRecentTransactions>(_onRecentTransactionEvent);
     on<OtpVerificationEvent>(_onOtpVerificationEvent);
     on<SetNewPasswordEvent>(_onSetNewPasswordEvent);
+    // on<FetchAllLanguagesEvent>(_onFetechAllLanguages);
+    // on<SetLanguageEvent>(_onSetLanguage);
   }
 
   Future<void> _onNewUserSignUpEvent(
@@ -224,4 +226,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (message) => emit(SetNewPasswordSuccessState(message: message)),
     );
   }
+// Future<void> _onFetechAllLanguages(
+//   FetchAllLanguagesEvent event,
+//   Emitter<AuthState> emit,
+// ) async {
+//   emit(FetchAllLanguagesLoadingState());
+
+//   final result = await authenticationRepository.fetchLanguages(
+//     name: event.name,
+//     code: event.code,
+//   );
+
+//   result.fold(
+//     (error) => emit(FetchAllLanguagesErrorState(errorMessage: error.message)),
+//     (response) {
+
+//       emit(FetchAllLanguagesSuccessState(
+//         message: response.
+//         languages: response.languages,
+//       ));
+//     },
+//   );
+// }
+
+// Future<void> _onSetLanguage(
+//   SetLanguageEvent event,
+//   Emitter<AuthState> emit,
+// ) async {
+//   emit(const SetNewPasswordLoadingState());
+
+//   final result = await authenticationRepository.setLanguages(
+//     languageName: event.languageName,
+//     languageCode: event.languageCode,
+//   );
+
+//   result.fold(
+//     (error) => emit(SetLanguageErrorState(errorMessage: error.message)),
+//     (message) => emit(SetLanguageSuccessState(message: message)),
+//   );
+// }
 }

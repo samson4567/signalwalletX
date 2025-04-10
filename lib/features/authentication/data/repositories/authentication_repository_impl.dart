@@ -174,4 +174,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, LanguagesEntity>> fetchLanguages(
+      {required name, required code}) async {
+    try {
+      final result = await authenticationRemoteDatasource.fetchLanguages(
+          code: code, name: name);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }

@@ -139,3 +139,27 @@ class SetNewPasswordEvent extends AuthEvent {
   @override
   List<Object> get props => [email, password, confirmPassword];
 }
+
+class FetchAllLanguagesEvent extends AuthEvent {
+  final String code;
+  final String name;
+
+  const FetchAllLanguagesEvent(this.code, this.name);
+
+  @override
+  List<Object> get props => [name, code];
+}
+
+
+// class SetLanguageEvent extends AuthEvent {
+//   final String languageCode;
+//   final String languageName;
+
+//   const SetLanguageEvent({
+//     required this.languageCode,
+//     required this.languageName,
+//   });
+
+//   @override
+//   List<Object> get props => [languageCode, languageName];
+// }

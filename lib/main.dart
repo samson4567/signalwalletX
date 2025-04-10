@@ -13,6 +13,7 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
+import 'package:signalwavex/feed/l10.dart';
 import 'package:signalwavex/router/router.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 
@@ -77,6 +78,8 @@ class _MyAppState extends State<MyApp> {
               primary: ColorConstants.fancyGreen,
             ),
           ),
+          supportedLocales: L10n.all,
+          // localizationsDelegates: Apploca,\
           themeMode: ThemeMode.dark,
           debugShowCheckedModeBanner: false,
           routerConfig: AppRouter.router,

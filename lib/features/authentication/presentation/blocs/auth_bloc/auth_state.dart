@@ -299,25 +299,56 @@ class SetNewPasswordErrorState extends AuthState {
   List<Object> get props => [errorMessage];
 }
 
-// Language States
-final class FetchLanguagesLoadingState extends AuthState {
-  const FetchLanguagesLoadingState();
-}
+//
 
-final class FetchLanguagesSuccessState extends AuthState {
-  final List<LanguagesEntity> languages;
-
-  const FetchLanguagesSuccessState({required this.languages});
+sealed class FetchAllLanguagesState extends AuthState {
+  const FetchAllLanguagesState();
 
   @override
-  List<Object> get props => [languages];
+  List<Object> get props => [];
 }
 
-final class FetchLanguagesErrorState extends AuthState {
+class FetchAllLanguagesLoadingState extends FetchAllLanguagesState {}
+
+class FetchAllLanguagesSuccessState extends FetchAllLanguagesState {
+  final String message;
+  final List<LanguagesEntity> languages;
+
+  const FetchAllLanguagesSuccessState({
+    required this.message,
+    required this.languages,
+  });
+
+  @override
+  List<Object> get props => [message, languages];
+}
+
+class FetchAllLanguagesErrorState extends FetchAllLanguagesState {
   final String errorMessage;
 
-  const FetchLanguagesErrorState({required this.errorMessage});
+  const FetchAllLanguagesErrorState({
+    required this.errorMessage,
+  });
 
   @override
   List<Object> get props => [errorMessage];
 }
+
+
+// class SetLanguageSuccessState extends AuthState {
+//   final String message;
+
+//   const SetLanguageSuccessState(this.message, {required String message});
+
+//   @override
+//   List<Object> get props => [message];
+// }
+
+// class SetLanguageErrorState extends AuthState {
+//   final String errorMessage;
+
+//   const SetLanguageErrorState(this.errorMessage, {required String errorMessage});
+
+//   @override
+//   List<Object> get props => [errorMessage];
+

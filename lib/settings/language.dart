@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:signalwavex/component/textform_filled.dart';
 
-class LanguageSection extends StatelessWidget {
+class LanguageSection extends StatefulWidget {
   const LanguageSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController =
-        TextEditingController();
+  State<LanguageSection> createState() => _LanguageSectionState();
+}
 
+class _LanguageSectionState extends State<LanguageSection> {
+  String? selectedLanguageCode;
+  final Map<String, String> languages = {
+    'en': 'English',
+    'es': 'Spanish',
+    'fr': 'French',
+    'de': 'German',
+    'ja': 'Japanese',
+    'ru': 'Russian',
+    'ar': 'Arabic',
+    'pt': 'Portuguese',
+    'hi': 'Hindi',
+    'yo': 'Yoruba',
+    'ig': 'Igbo',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default language (optional)
+    selectedLanguageCode = 'en';
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -26,7 +48,7 @@ class LanguageSection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           const Text(
-            "choose your language",
+            "Choose your language",
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -34,21 +56,58 @@ class LanguageSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          TextFormFieldWithCustomStyles(
-            height: 34,
-            width: 386,
-            fillColor: Colors.black,
-            controller: newPasswordController,
-            label: "English",
-            hintText: "Enter new password",
-            obscureText: true,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: DropdownButtonFormField<String>(
+              value: selectedLanguageCode,
+              dropdownColor: Colors.black,
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: 'inter',
+                fontSize: 16,
+              ),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+              hint: const Text(
+                "Select language",
+                style: TextStyle(color: Colors.white70),
+              ),
+              items: languages.entries.map((entry) {
+                return DropdownMenuItem<String>(
+                  value: entry.key,
+                  child: Text(entry.value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedLanguageCode = value;
+                });
+              },
+            ),
           ),
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () {
-                // Handle save action
+                if (selectedLanguageCode != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Selected language: ${languages[selectedLanguageCode]!}",
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please select a language")),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow,

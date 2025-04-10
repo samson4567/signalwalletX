@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
@@ -28,6 +29,7 @@ abstract class AuthenticationRemoteDatasource {
       {required String email,
       required String password,
       required String confirmPassword});
+  Future<LanguagesEntity> fetchLanguages({required code, required name});
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -204,5 +206,14 @@ class AuthenticationRemoteDatasourceImpl
       },
     );
     return response.message;
+  }
+
+  @override
+  Future<LanguagesEntity> fetchLanguages({required code, required name}) async {
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.userLanguages,
+    );
+    response.data;
+    throw ();
   }
 }
