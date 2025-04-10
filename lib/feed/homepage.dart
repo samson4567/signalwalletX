@@ -850,13 +850,14 @@ class _HomepageState extends State<Homepage> {
     final walletBloc =
         BlocProvider.of<WalletSystemUserBalanceAndTradeCallingBloc>(context);
 
+    // Track the visibility state of the balance
+    bool isBalanceVisible = true;
+
     return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {
         if (state is FetchAllAccountBalanceErrorState) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(content: Text(state.errorMessage)),
-          // );
+          // Handle the error state
         }
       },
       builder: (context, state) {
@@ -880,7 +881,7 @@ class _HomepageState extends State<Homepage> {
                     Text(
                       'Total Assets',
                       style: TextStyles.title.copyWith(
-                        fontSize: screenWidth * 0.045, // 4.5% of screen width
+                        fontSize: screenWidth * 0.045,
                         color: const Color.fromRGBO(255, 255, 255, 0.7),
                         fontWeight: FontWeight.bold,
                       ),
@@ -888,20 +889,25 @@ class _HomepageState extends State<Homepage> {
                     SizedBox(width: screenWidth * 0.02),
                     IconButton(
                       icon: Icon(
-                        Icons.remove_red_eye_outlined,
+                        isBalanceVisible
+                            ? Icons.remove_red_eye_outlined
+                            : Icons.remove_red_eye,
                         color: Colors.white,
                         size: screenWidth * 0.06,
                       ),
                       onPressed: () {
-                        // Refresh balances when the eye icon is pressed
+                        isBalanceVisible = !isBalanceVisible;
+
                         walletBloc.add(const FetchAllAccountBalanceEvent());
                       },
                     ),
                   ],
                 ),
                 Text(
-                  // Always show the most recent balance or a fallback value
-                  '\$${totalBalance.toStringAsFixed(2)}', // Shows 0.00 if balance is 0
+                  // Show balance only if visible, otherwise show a placeholder (like '*****')
+                  isBalanceVisible
+                      ? '\$${totalBalance.toStringAsFixed(2)}' // Shows 0.00 if balance is 0
+                      : '*****', // Placeholder text for hidden balance
                   style: TextStyles.smallText.copyWith(
                     fontSize: screenWidth * 0.08,
                     color: Colors.white,

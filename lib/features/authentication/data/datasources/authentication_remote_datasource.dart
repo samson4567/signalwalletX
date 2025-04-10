@@ -5,6 +5,7 @@ import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/data/models/recent_transaction_model.dart';
+import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 abstract class AuthenticationRemoteDatasource {
@@ -183,18 +184,25 @@ class AuthenticationRemoteDatasourceImpl
 
   @override
   Future<String> verifyOtp({required String otp}) async {
-    final response =
-        await networkClient.post(endpoint: EndpointConstant.verifyOTP);
+    final response = await networkClient
+        .post(endpoint: EndpointConstant.verifyOTP, data: {'otp': otp});
     return response.message;
   }
 
   @override
-  Future<String> setNewPassword(
-      {required String email,
-      required String password,
-      required String confirmPassword}) async {
+  Future<String> setNewPassword({
+    required String email,
+    required String password,
+    required String confirmPassword,
+  }) async {
     final response = await networkClient.post(
-        endpoint: EndpointConstant.getAdminPendingWithdrawalRequest);
+      endpoint: EndpointConstant.resetPassword,
+      data: {
+        'email': email,
+        'password': password,
+        'password_confirmation': confirmPassword,
+      },
+    );
     return response.message;
   }
 }

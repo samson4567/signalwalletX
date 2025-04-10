@@ -216,7 +216,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await authenticationRepository.setNewPassword(
       email: event.email,
       passoword: event.password,
-      confirmPassword: event,
+      confirmPassword: event.confirmPassword,
     );
 
     result.fold(

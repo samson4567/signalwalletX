@@ -4,6 +4,7 @@ import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/language.dart';
 import 'package:signalwavex/settings/password.dart';
 import 'package:signalwavex/settings/profile.dart';
+import 'package:signalwavex/settings/transaction.dart';
 import 'package:signalwavex/settings/verification.dart';
 
 class Settings extends StatefulWidget {
@@ -76,14 +77,5 @@ class _SettingsState extends State<Settings>
         ],
       ),
     );
-  }
-}
-
-class TransactionHistorySection extends StatelessWidget {
-  const TransactionHistorySection({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Text("Transaction History",
-        style: TextStyle(color: Colors.white));
   }
 }

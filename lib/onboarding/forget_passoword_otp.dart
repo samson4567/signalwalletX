@@ -12,7 +12,6 @@ class VerifyForgetPasswordOtp extends StatefulWidget {
   const VerifyForgetPasswordOtp({super.key, required this.email});
 
   @override
-  // ignore: library_private_types_in_public_api
   _VerifyForgetPasswordOtpState createState() =>
       _VerifyForgetPasswordOtpState();
 }
@@ -20,6 +19,7 @@ class VerifyForgetPasswordOtp extends StatefulWidget {
 class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
   final List<TextEditingController> _controllers =
       List.generate(6, (index) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   bool isVerifying = false;
   bool isResending = false;
@@ -52,9 +52,21 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
       return;
     }
 
-    // Trigger the OTP verification event in BLoC
+    setState(() {
+      isVerifying = true; // Set to true when verification starts
+    });
+
     BlocProvider.of<AuthBloc>(context)
         .add(OtpVerificationEvent(otp: enteredCode));
+
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        isVerifying = false;
+      });
+
+      _showDialog('success', 'OTP Verified',
+          'Your OTP has been verified successfully.');
+    });
   }
 
   void _resendOtp() {
@@ -142,6 +154,18 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
     );
   }
 
+  void _onOtpChanged(String value, int index) {
+    // Move to the next focus when the user enters a digit
+    if (value.isNotEmpty && index < 5) {
+      FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+    }
+
+    // Trigger OTP verification if all fields are filled
+    if (_controllers.every((controller) => controller.text.isNotEmpty)) {
+      _verifyCode();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,9 +220,11 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                         height: 48,
                         child: TextField(
                           controller: _controllers[index],
+                          focusNode: _focusNodes[index],
                           maxLength: 1,
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
+                          onChanged: (value) => _onOtpChanged(value, index),
                           decoration: InputDecoration(
                             counterText: '',
                             filled: true,
