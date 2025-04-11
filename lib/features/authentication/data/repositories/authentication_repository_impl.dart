@@ -186,4 +186,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> updateProfile(
+      {required String name,
+      required String phoneNumber,
+      required String profilePicture}) async {
+    try {
+      final result = await authenticationRemoteDatasource.updateProfile(
+          name: name, phoneNumber: phoneNumber, profilePicture: profilePicture);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }

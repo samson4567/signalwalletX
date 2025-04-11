@@ -150,6 +150,22 @@ class FetchAllLanguagesEvent extends AuthEvent {
   List<Object> get props => [name, code];
 }
 
+class ProfileUpdateEvent extends AuthEvent {
+  final String name;
+  final String phoneNumber;
+  final String profilePicture;
+
+  const ProfileUpdateEvent({
+    required this.name,
+    required this.phoneNumber,
+    required this.profilePicture,
+  });
+
+  @override
+  List<Object> get props => [name, phoneNumber, profilePicture];
+}
+
+
 
 // class SetLanguageEvent extends AuthEvent {
 //   final String languageCode;

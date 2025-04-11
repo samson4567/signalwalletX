@@ -30,6 +30,8 @@ abstract class AuthenticationRemoteDatasource {
       required String password,
       required String confirmPassword});
   Future<LanguagesEntity> fetchLanguages({required code, required name});
+  Future<String> updateProfile(
+      {required name, required phoneNumber, required profilePicture});
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -215,5 +217,14 @@ class AuthenticationRemoteDatasourceImpl
     );
     response.data;
     throw ();
+  }
+
+  @override
+  Future<String> updateProfile(
+      {required name, required phoneNumber, required profilePicture}) async {
+    final response = await networkClient.post(
+      endpoint: EndpointConstant.userProfile,
+    );
+    return response.data;
   }
 }

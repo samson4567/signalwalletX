@@ -28,8 +28,13 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, String>> verifyOtp({required String otp});
   Future<Either<Failure, String>> setNewPassword(
       {required email, required passoword, required confirmPassword});
+
   Future<Either<Failure, LanguagesEntity>> fetchLanguages(
       {required name, required code});
+  Future<Either<Failure, String>> updateProfile(
+      {required String name,
+      required String phoneNumber,
+      required String profilePicture});
 
   //   Future<Either<Failure, String>> setLanguages(
   // {required languageName, required languageCode});

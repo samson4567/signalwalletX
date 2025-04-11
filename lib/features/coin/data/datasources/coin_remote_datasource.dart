@@ -21,39 +21,33 @@ class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
 
   @override
   Future<CoinEntity> getBTCDetail() async {
-    print("debug_print_CoinRepositoryImpl-getBTCDetails-started");
     final response = await networkClient.get(
       endpoint: EndpointConstant.btcData,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    print("debug_print_CoinRepositoryImpl-getBTCDetails-response_is_$response");
-    print(
-        "debug_print_CoinRepositoryImpl-getBTCDetails-response_raw_data_is_${response.data}");
 
     CoinEntity result = CoinModel.fromJson((response.data as Map));
-    print("debug_print_CoinRepositoryImpl-getBTCDetails-result_is_$result");
+
     return result;
   }
 
   @override
   Future<List<CoinEntity>> getTopCoins() async {
-    print("debug_print_CoinRepositoryImpl-getTopCoins-started");
     final response = await networkClient.get(
       endpoint: EndpointConstant.topCoin,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    print("debug_print_CoinRepositoryImpl-getTopCoins-response_is_$response");
 
     List rawList = (response.data as Map)["coins"];
-    print("debug_print_CoinRepositoryImpl-getTopCoins-rawList_is_$rawList");
+
     List<CoinEntity> result = rawList
         .map(
           (e) => CoinModel.fromJson(e),
         )
         .toList();
-    print("debug_print_CoinRepositoryImpl-getTopCoins-result_is_$result");
+
     return result;
   }
 

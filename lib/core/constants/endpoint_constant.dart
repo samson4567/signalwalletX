@@ -36,6 +36,7 @@ class EndpointConstant {
   static const String verifyOTP = "/auth/verify-otp";
   static const String resetPassword = "/auth/reset-password";
   static const String userLanguages = "/user/languages";
+  static const String userProfile = "/auth/profile/update";
 
   //
 }

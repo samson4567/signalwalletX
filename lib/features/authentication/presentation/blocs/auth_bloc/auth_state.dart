@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/profile_update_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 sealed class AuthState extends Equatable {
@@ -329,6 +330,33 @@ class FetchAllLanguagesErrorState extends FetchAllLanguagesState {
   const FetchAllLanguagesErrorState({
     required this.errorMessage,
   });
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// Profile Update States
+final class ProfileUpdateLoadingState extends AuthState {
+  const ProfileUpdateLoadingState();
+}
+
+final class ProfileUpdateSuccessState extends AuthState {
+  final String message;
+
+  const ProfileUpdateSuccessState({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
+final class ProfileUpdateErrorState extends AuthState {
+  final String errorMessage;
+
+  const ProfileUpdateErrorState({required this.errorMessage});
 
   @override
   List<Object> get props => [errorMessage];

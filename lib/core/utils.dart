@@ -24,11 +24,11 @@ getAndSetInitialData(BuildContext context) {
 getUserCoinBalances(BuildContext context) {
   context
       .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-      .add(FetchAllAccountBalanceEvent());
+      .add(const FetchAllAccountBalanceEvent());
 }
 
 getCoins(BuildContext context) {
-  context.read<TradingSystemBloc>().add(GetCoinListEvent());
+  context.read<TradingSystemBloc>().add(const GetCoinListEvent());
 }
 
 WalletAccountEntity? getCoinWaletDetails(
@@ -176,43 +176,49 @@ getCoinImageFromAsset(CoinEntity coinEntity) {
   final List<Map<String, String>> coins = [
     {
       'icon': 'assets/icons/xrp.png',
-      'name': 'Bitcoin',
+      'name': 'Ripple',
       'price': '\$96,345.6',
       'percentage': '0.83%',
     },
     {
-      'icon': 'assets/icons/xrp.png',
+      'icon': 'assets/icons/ethereum.png',
       'name': 'Ethereum',
       'price': '\$6,345.2',
       'percentage': '1.12%',
     },
     {
       'icon': 'assets/icons/doge.png',
-      'name': 'DOGE',
+      'name': 'Dogecoin',
       'price': '\$0342.24',
       'percentage': '2.67%',
     },
     {
       'icon': 'assets/icons/sol.png',
-      'name': 'SOL',
+      'name': 'Solana',
       'price': '\$0342.24',
       'percentage': '2.67%',
     },
     {
-      'icon': 'assets/icons/bch.png',
-      'name': 'BCH',
+      'icon': 'assets/icons/tele.png',
+      'name': 'Toncoin',
       'price': '\$0342.24',
       'percentage': '2.67%',
     },
     {
-      'icon': 'assets/icons/lit.png',
-      'name': 'LIT',
+      'icon': 'assets/icons/lit3.png',
+      'name': 'Litecoin',
       'price': '\$0342.24',
       'percentage': '2.67%',
     },
     {
       'icon': 'assets/icons/bitcoin.png',
       'name': 'BITCOIN',
+      'price': '\$0342.24',
+      'percentage': '2.67%',
+    },
+    {
+      'icon': 'assets/icons/bch.png',
+      'name': 'Bitcoin Cash',
       'price': '\$0342.24',
       'percentage': '2.67%',
     },
