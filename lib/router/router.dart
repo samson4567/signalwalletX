@@ -73,7 +73,7 @@ class AppRouter {
       GoRoute(
           name: MyAppRouteConstant.setNewpassoword,
           path: MyAppRouteConstant.setNewpassoword,
-          builder: (context, state) => const SetNewPassoword()),
+          builder: (context, state) => const SetNewPassword()),
       GoRoute(
         name: MyAppRouteConstant.feedPage,
         path: MyAppRouteConstant.feedPage,

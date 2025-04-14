@@ -74,110 +74,6 @@ class _AssetsState extends State<Assets> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: Colors.black, // Set the drawer background color to black
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Image.asset('assets/images/sign.png'),
-            ListTile(
-              leading: const Icon(Icons.tag,
-                  color: Colors.white, size: 18), // # icon
-              title: const Text('Home', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.home);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('Market', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.market);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title: const Text('Perpetual',
-                  style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.perpetual);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('Assets', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.assets);
-              },
-            ),
-            const SizedBox(
-              height: 220,
-            ),
-            const Text(
-              'Help Center',
-              style: TextStyle(color: Color(0xFF313131)),
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('settings', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.assets);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.tag, color: Colors.white, size: 18),
-              title:
-                  const Text('support', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pop(context);
-                context.go(MyAppRouteConstant.assets);
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage('assets/images/profile.png'),
-                ),
-                const Column(
-                  children: [
-                    Text(
-                      'sam@mail.con',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'sam@mail.con',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Image.asset(
-                    'assets/images/signout.png',
-                    width: 24,
-                    height: 24,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildFancyContainer(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -213,21 +109,19 @@ class _AssetsState extends State<Assets> {
     final walletBloc =
         BlocProvider.of<WalletSystemUserBalanceAndTradeCallingBloc>(context);
 
+    // Track the visibility state of the balance
+    bool isBalanceVisible = true;
+
     return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {
         if (state is FetchAllAccountBalanceErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage)),
-          );
+          // Handle the error state
         }
       },
       builder: (context, state) {
-        if (state is FetchAllAccountBalanceLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         double totalBalance = 0;
+
         if (state is FetchAllAccountBalanceSuccessState) {
           totalBalance = state.listOfWalletsBalances.fold(0, (sum, wallet) {
             final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
@@ -254,22 +148,25 @@ class _AssetsState extends State<Assets> {
                     SizedBox(width: screenWidth * 0.02),
                     IconButton(
                       icon: Icon(
-                        Icons.remove_red_eye_outlined,
+                        isBalanceVisible
+                            ? Icons.remove_red_eye_outlined
+                            : Icons
+                                .remove_red_eye, // Change icon based on visibility state
                         color: Colors.white,
                         size: screenWidth * 0.06,
                       ),
                       onPressed: () {
-                        // Refresh balances when the eye icon is pressed
+                        isBalanceVisible = !isBalanceVisible;
+
                         walletBloc.add(const FetchAllAccountBalanceEvent());
                       },
                     ),
                   ],
                 ),
                 Text(
-                  // Display real balance or placeholder
-                  state is FetchAllAccountBalanceSuccessState
-                      ? '\$${totalBalance.toStringAsFixed(2)}'
-                      : 'Loading...',
+                  isBalanceVisible
+                      ? '\$${totalBalance.toStringAsFixed(2)}' // Shows 0.00 if balance is 0
+                      : '*****',
                   style: TextStyles.smallText.copyWith(
                     fontSize: screenWidth * 0.08,
                     color: Colors.white,
@@ -420,47 +317,69 @@ class _AssetsState extends State<Assets> {
         Text(
           'Account',
           style: TextStyles.title.copyWith(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Inter'),
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Inter',
+          ),
         ),
         const SizedBox(height: 10),
-        _buildAccountContainer('Exchange', '0.000'),
+        _buildAccountContainer('Exchange', '\$0.000'),
         const SizedBox(height: 10),
         _buildAccountContainer('Trade', '\$3,200'),
         const SizedBox(height: 10),
-        _buildAccountContainer('Exchange', '0.000'),
+        _buildAccountContainer('Perpetual', '\$0.000'),
       ],
     );
   }
 
   Widget _buildAccountContainer(String title, String value) {
-    return FancyContainer(
-      width: 400,
-      height: 103,
-      borderRadius: BorderRadius.circular(10),
-      border: Border.all(color: ColorConstants.primaryGrayColor, width: 2),
-      color: const Color(0xFF101112),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyles.bodyText.copyWith(fontSize: 17),
+    return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
+        WalletSystemUserBalanceAndTradeCallingState>(
+      listener: (context, state) {
+        if (state is FetchAllAccountBalanceErrorState) {}
+      },
+      builder: (context, state) {
+        double totalBalance = 0;
+
+        if (state is FetchAllAccountBalanceSuccessState) {
+          totalBalance = state.listOfWalletsBalances.fold(0, (sum, wallet) {
+            final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+            return sum + balance;
+          });
+        }
+        String displayedValue = value; // Default value
+        if (title == 'Trade') {
+          displayedValue = '\$${totalBalance.toStringAsFixed(2)}';
+        }
+        return FancyContainer(
+          width: 400,
+          height: 103,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: ColorConstants.primaryGrayColor, width: 2),
+          color: const Color(0xFF101112),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyles.bodyText.copyWith(fontSize: 17),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                displayedValue,
+                style: TextStyles.smallText.copyWith(
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Inter',
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            value,
-            style: TextStyles.smallText.copyWith(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'inter'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

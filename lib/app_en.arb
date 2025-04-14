@@ -1,0 +1,49 @@
+{
+    "@@locale": "en",
+  
+    "product": "Product",
+    "@product": {
+      "description": "A product in the catalog"
+    },
+  
+    "welcome": "Welcome",
+    "@welcome": {
+      "description": "A welcome message for the user"
+    },
+  
+    "logout": "Logout",
+    "@logout": {
+      "description": "Label for the logout button"
+    },
+  
+    "login": "Login",
+    "@login": {
+      "description": "Label for the login button"
+    },
+  
+    "email": "Email",
+    "@email": {
+      "description": "Label for the email field"
+    },
+  
+    "password": "Password",
+    "@password": {
+      "description": "Label for the password field"
+    },
+  
+    "submit": "Submit",
+    "@submit": {
+      "description": "Label for a generic submit button"
+    },
+  
+    "cancel": "Cancel",
+    "@cancel": {
+      "description": "Label for cancel button"
+    },
+  
+    "settings": "Settings",
+    "@settings": {
+      "description": "Label for settings screen"
+    }
+  }
+  

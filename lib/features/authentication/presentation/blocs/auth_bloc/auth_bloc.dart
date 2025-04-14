@@ -24,6 +24,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<FetchRecentTransactions>(_onRecentTransactionEvent);
     on<OtpVerificationEvent>(_onOtpVerificationEvent);
     on<SetNewPasswordEvent>(_onSetNewPasswordEvent);
+    on<ProfileUpdateEvent>(_onProfileUpdateEvent);
+    // on<FetchAllLanguagesEvent>(_onFetechAllLanguages);
+    // on<SetLanguageEvent>(_onSetLanguage);
   }
 
   Future<void> _onNewUserSignUpEvent(
@@ -216,7 +219,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await authenticationRepository.setNewPassword(
       email: event.email,
       passoword: event.password,
-      confirmPassword: event,
+      confirmPassword: event.confirmPassword,
     );
 
     result.fold(
@@ -224,4 +227,69 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (message) => emit(SetNewPasswordSuccessState(message: message)),
     );
   }
+
+  Future<void> _onProfileUpdateEvent(
+      ProfileUpdateEvent event, Emitter<AuthState> emit) async {
+    emit(const ProfileUpdateLoadingState());
+
+    try {
+      final result = await authenticationRepository.updateProfile(
+        name: event.name,
+        phoneNumber: event.phoneNumber,
+        profilePicture: event.profilePicture,
+      );
+
+      result.fold(
+        (error) => emit(ProfileUpdateErrorState(errorMessage: error.message)),
+        (message) => emit(ProfileUpdateSuccessState(
+          message: message,
+        )),
+      );
+    } catch (e) {
+      emit(ProfileUpdateErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
 }
+// Future<void> _onFetechAllLanguages(
+//   FetchAllLanguagesEvent event,
+//   Emitter<AuthState> emit,
+// ) async {
+//   emit(FetchAllLanguagesLoadingState());
+
+//   final result = await authenticationRepository.fetchLanguages(
+//     name: event.name,
+//     code: event.code,
+//   );
+
+//   result.fold(
+//     (error) => emit(FetchAllLanguagesErrorState(errorMessage: error.message)),
+//     (response) {
+
+//       emit(FetchAllLanguagesSuccessState(
+//         message: response.
+//         languages: response.languages,
+//       ));
+//     },
+//   );
+// }
+
+// Future<void> _onSetLanguage(
+//   SetLanguageEvent event,
+//   Emitter<AuthState> emit,
+// ) async {
+//   emit(const SetNewPasswordLoadingState());
+
+//   final result = await authenticationRepository.setLanguages(
+//     languageName: event.languageName,
+//     languageCode: event.languageCode,
+//   );
+
+//   result.fold(
+//     (error) => emit(SetLanguageErrorState(errorMessage: error.message)),
+//     (message) => emit(SetLanguageSuccessState(message: message)),
+//   );
+// }
+

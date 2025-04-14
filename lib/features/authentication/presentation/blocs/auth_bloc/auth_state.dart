@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/profile_update_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 sealed class AuthState extends Equatable {
@@ -297,3 +299,84 @@ class SetNewPasswordErrorState extends AuthState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+//
+
+sealed class FetchAllLanguagesState extends AuthState {
+  const FetchAllLanguagesState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FetchAllLanguagesLoadingState extends FetchAllLanguagesState {}
+
+class FetchAllLanguagesSuccessState extends FetchAllLanguagesState {
+  final String message;
+  final List<LanguagesEntity> languages;
+
+  const FetchAllLanguagesSuccessState({
+    required this.message,
+    required this.languages,
+  });
+
+  @override
+  List<Object> get props => [message, languages];
+}
+
+class FetchAllLanguagesErrorState extends FetchAllLanguagesState {
+  final String errorMessage;
+
+  const FetchAllLanguagesErrorState({
+    required this.errorMessage,
+  });
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// Profile Update States
+final class ProfileUpdateLoadingState extends AuthState {
+  const ProfileUpdateLoadingState();
+}
+
+final class ProfileUpdateSuccessState extends AuthState {
+  final String message;
+
+  const ProfileUpdateSuccessState({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
+final class ProfileUpdateErrorState extends AuthState {
+  final String errorMessage;
+
+  const ProfileUpdateErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+
+// class SetLanguageSuccessState extends AuthState {
+//   final String message;
+
+//   const SetLanguageSuccessState(this.message, {required String message});
+
+//   @override
+//   List<Object> get props => [message];
+// }
+
+// class SetLanguageErrorState extends AuthState {
+//   final String errorMessage;
+
+//   const SetLanguageErrorState(this.errorMessage, {required String errorMessage});
+
+//   @override
+//   List<Object> get props => [errorMessage];
+
