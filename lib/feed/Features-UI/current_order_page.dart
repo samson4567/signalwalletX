@@ -1,6 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:signalwavex/component/empty_widget.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/feed/Features-UI/components/confirm_order_dialog.dart';
 import 'package:signalwavex/feed/Features-UI/components/order_followed_dialog.dart';
 import 'package:signalwavex/component/back_button.dart';
@@ -37,6 +46,72 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     {"k": "Action", "v": "Cancel", "c": getFigmaColor("CA3F64")},
   ];
 
+  List convertTradeEntityToMap(TradeModel tradeModel) {
+    return [
+      {
+        "k": "Product",
+        "v": "${tradeModel.tradingPair}",
+        "c": getFigmaColor("F0B90B")
+      },
+      {"k": "Status", "v": "${tradeModel.status}", "c": Colors.white},
+      {
+        "k": "Direction",
+        "v": "${tradeModel.orderDirection}",
+        "c": getFigmaColor("C6E229")
+      },
+      {
+        "k": "Time Period",
+        "v": "${tradeModel.purchaseDuration}",
+        "c": Colors.white
+      },
+      {"k": "Open Price", "v": "--", "c": Colors.white},
+      {"k": "Amount", "v": "--", "--": Colors.white},
+      {
+        "k": "Open Position Time",
+        "v": "${tradeModel.orderTime}",
+        "c": Colors.white
+      },
+      {"k": "Turnover", "v": "30", "c": Colors.white},
+      {"k": "Rate of Return", "v": "87.20%", "c": Colors.white},
+      {"k": "Action", "v": "Cancel", "c": getFigmaColor("CA3F64")},
+    ];
+  }
+
+  List<TradeModel> currentOrderEntities = [];
+  List<OrderModel> historOrderEntities = [];
+
+  List convertOrderEntityToMap(OrderModel orderModel) {
+    // orderModel.;
+    return [
+      {
+        "k": "Product",
+        "v": "${orderModel.tradingPair}",
+        "c": getFigmaColor("F0B90B")
+      },
+      {"k": "Status", "v": "${orderModel.status}", "c": Colors.white},
+      {
+        "k": "Direction",
+        "v": "${orderModel.side}",
+        "c": getFigmaColor("C6E229")
+      },
+      {
+        "k": "Time Period",
+        "v": "${orderModel.purchaseDuration}",
+        "c": Colors.white
+      },
+      {"k": "Open Price", "v": "--", "c": Colors.white},
+      {"k": "Amount", "v": "--", "--": Colors.white},
+      {
+        "k": "Open Position Time",
+        "v": "${orderModel.orderTime}",
+        "c": Colors.white
+      },
+      {"k": "Turnover", "v": "30", "c": Colors.white},
+      {"k": "Rate of Return", "v": "87.20%", "c": Colors.white},
+      {"k": "Action", "v": "Cancel", "c": getFigmaColor("CA3F64")},
+    ];
+  }
+
   List<Map> historOrderMap = [
     {"k": "Product", "v": "BTC/USDT (5mins)", "c": getFigmaColor("F0B90B")},
     {"k": "Status", "v": "Pending", "c": Colors.white},
@@ -57,6 +132,20 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     {"k": "Release Time", "v": "2025/02/9 08:29:17", "c": Colors.white},
     {"k": "Order Amount", "v": "1.53", "c": Colors.white},
   ];
+
+  @override
+  void initState() {
+    context
+        .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+        .add(FetchUserTransactionsEvent());
+
+    context
+        .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+        .add(ListTradesAUserIsFollowingEvent());
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,97 +166,133 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               icon: const Icon(Icons.menu))
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: externalPadding,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildFirstRow(),
-                _buildSecondRow(),
-                _buildThirdROw(),
-                const SizedBox(height: 20),
-                _buildBigChartWidget(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .8,
-                  child: DefaultTabController(
-                      length: 4,
-                      child: Column(
-                        children: [
-                          const TabBar(
-                            tabs: [
-                              Tab(text: "Current Order (1)"),
-                              Tab(text: "Historical Order"),
-                              Tab(text: "Invited me"),
-                              Tab(text: "Follow-plan"),
-                            ],
-                          ),
-                          Expanded(
-                            child: TabBarView(children: [
-                              _buildCurrentOrderTabview(),
-                              SingleChildScrollView(
-                                child: Column(
-                                  children: List.filled(
-                                      3,
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 28.0),
-                                        child: SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                .7,
-                                            child: _buildHistoryOrderTabview()),
-                                      )),
+      body: BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
+              WalletSystemUserBalanceAndTradeCallingState>(
+          listener: (context, state) {
+        if (state is ListTradesAUserIsFollowingSuccessState) {
+          state.listOfTradeEntities.forEach((element) {
+            currentOrderEntities.add(TradeModel.fromEntity(element));
+          });
+        }
+        if (state is ListTradesAUserIsFollowingErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+        if (state is FetchUserTransactionsSuccessState) {
+          state.listOfOrderEntity.forEach((element) {
+            historOrderEntities.add(OrderModel.fromEntity(element));
+          });
+        }
+        if (state is FetchUserTransactionsErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      }, builder: (context, state) {
+        return Center(
+          child: Padding(
+            padding: externalPadding,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildFirstRow(),
+                  _buildSecondRow(),
+                  _buildThirdROw(),
+                  const SizedBox(height: 20),
+                  _buildBigChartWidget(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .8,
+                    child: DefaultTabController(
+                        length: 4,
+                        child: Column(
+                          children: [
+                            const TabBar(
+                              tabs: [
+                                Tab(text: "Current Order (1)"),
+                                Tab(text: "Historical Order"),
+                                Tab(text: "Invited me"),
+                                Tab(text: "Follow-plan"),
+                              ],
+                            ),
+                            Expanded(
+                              child: TabBarView(children: [
+                                _buildCurrentOrderTabview(),
+                                SingleChildScrollView(
+                                  child: Column(
+                                    children: List.generate(
+                                      historOrderEntities.length,
+                                      (index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 28.0),
+                                          child: SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  .7,
+                                              child: _buildHistoryOrderTabview(
+                                                  historOrderEntities[index])),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              // Container(
-                              //   child: Text(Uuid().v4()),
-                              // ),
-                              _buildInviteMeTabview(),
-                              Container(
-                                child: Text(Uuid().v4()),
-                              ),
-                            ]),
-                          )
-                        ],
-                      )),
-                )
-              ],
+                                // Container(
+                                //   child: Text(Uuid().v4()),
+                                // ),
+                                _buildInviteMeTabview(),
+                                Container(
+                                  child: Text(Uuid().v4()),
+                                ),
+                              ]),
+                            )
+                          ],
+                        )),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
-  Column _buildCurrentOrderTabview() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: currentOrderMap
-          .map(
-            (e) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FancyText(
-                  e["k"],
-                  textColor: Colors.grey,
-                ),
-                FancyText(
-                  e["v"] ?? "--",
-                  textColor: e['c'],
-                )
-              ],
-            ),
-          )
-          .toList(),
-    );
+  Widget _buildCurrentOrderTabview() {
+    if (currentOrderEntities.isNotEmpty) {
+      List latestOrderDetail =
+          convertTradeEntityToMap(currentOrderEntities.first);
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: latestOrderDetail.map((e) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FancyText(
+                    e["k"],
+                    textColor: Colors.grey,
+                  ),
+                  FancyText(
+                    e["v"] ?? "--",
+                    textColor: e['c'],
+                  )
+                ],
+              );
+            }).toList() ??
+            [],
+      );
+    } else {
+      return buildEmptyWidget("No Current Order Yet");
+    }
   }
 
-  Column _buildHistoryOrderTabview() {
+  Column _buildHistoryOrderTabview(OrderModel orderModel) {
+    List thaList = convertOrderEntityToMap(orderModel);
+    // historOrderEntities.map((e) => ).toList();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: historOrderMap
+      children: thaList
           .map(
             (e) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

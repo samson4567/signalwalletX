@@ -63,6 +63,17 @@ class TradeModel extends TradeEntity {
         followCondition: jsonMap["follow_condition"],
         status: jsonMap["status"]);
   }
+  factory TradeModel.fromEntity(TradeEntity tradeEntity) {
+    return TradeModel(
+        id: tradeEntity.id,
+        title: tradeEntity.title,
+        tradingPair: tradeEntity.tradingPair,
+        orderDirection: tradeEntity.orderDirection,
+        purchaseDuration: tradeEntity.purchaseDuration,
+        orderTime: tradeEntity.orderTime,
+        followCondition: tradeEntity.followCondition,
+        status: tradeEntity.status);
+  }
 
   factory TradeModel.empty(Map jsonMap) {
     return TradeModel();

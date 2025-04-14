@@ -9,6 +9,7 @@ import 'package:signalwavex/features/trading_system/data/models/coin_model.dart'
 
 class Market extends StatefulWidget {
   const Market({super.key});
+  
 
   @override
   State<Market> createState() => _MarketState();

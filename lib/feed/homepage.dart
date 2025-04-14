@@ -43,6 +43,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getAndSetInitialData(context);
+    // yeah
 
     // if (selectedCoin != null) {
     //   context
