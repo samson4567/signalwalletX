@@ -421,7 +421,7 @@ class _LineChartState extends State<LineChart> {
           .toString();
     }
     url =
-        "/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
+        "http://api-testnet.bybit.com/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
 
     print("debug_print_linechart-getChatDataFromInternet-url_is=$url");
     late String result;
@@ -456,9 +456,12 @@ class _LineChartState extends State<LineChart> {
     print("debug_print_linechart-solveChatData-list_is=$list");
     print("fromSingleFetch_is=$fromSingleFetch");
     datas = list
-        .map((item) => ((fromSingleFetch)
-            ? KLineEntity.fromJson(item as Map<String, dynamic>)
-            : getKLineEntityFromMap(item as Map<String, dynamic>)))
+        .map((item) =>
+            // ((fromSingleFetch)
+            //     ? KLineEntity.fromJson(item as Map<String, dynamic>)
+            //     :
+            getKLineEntityFromMap(item as Map<String, dynamic>))
+        //  )
         // KLineEntity.fromJson(item as Map<String, dynamic>))
         .toList()
         .reversed
