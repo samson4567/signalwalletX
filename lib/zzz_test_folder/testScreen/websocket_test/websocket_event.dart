@@ -40,3 +40,13 @@ class WebSocketErrorEvent extends WebSocketEvent {
   @override
   List<Object> get props => [error];
 }
+
+class SubscribeToCryptoEvent extends WebSocketEvent {
+  final String? symbol;
+  final String? interval;
+
+  const SubscribeToCryptoEvent({this.symbol, this.interval});
+
+  // @override
+  // List<Object> get props => [symbol ?? "", interval ?? ""];
+}

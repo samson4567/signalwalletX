@@ -15,6 +15,20 @@ class WebSocketConnectedState extends WebSocketState {}
 
 class WebSocketDisconnectedState extends WebSocketState {}
 
+class SubscribeToCryptoLoadingState extends WebSocketState {}
+
+class SubscribeToCryptoSuccessState extends WebSocketState {
+  final String topic;
+  final String data;
+
+  SubscribeToCryptoSuccessState({
+    required this.topic,
+    required this.data,
+  });
+}
+
+class SubscribeToCryptoErrorState extends WebSocketState {}
+
 class WebSocketErrorState extends WebSocketState {
   final String error;
   const WebSocketErrorState(this.error);

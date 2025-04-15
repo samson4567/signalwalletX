@@ -187,5 +187,5 @@ Future<void> init() async {
   );
   // CoinBloc Ended......
 
-  // CoinBloc
+  // WebSocketBloc
 }

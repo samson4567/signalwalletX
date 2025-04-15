@@ -1,12 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
 class LineChart extends StatefulWidget {
   LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
@@ -21,6 +27,8 @@ class LineChart extends StatefulWidget {
 
 class _LineChartState extends State<LineChart> {
   List<KLineEntity>? datas;
+  List<KLineEntity>? stableDatas;
+
   bool showLoading = true;
   MainState _mainState = MainState.NONE;
   bool _volHidden = true;
@@ -60,8 +68,13 @@ class _LineChartState extends State<LineChart> {
 
   @override
   void initState() {
+    context
+        .read<WebSocketBloc>()
+        .add(WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
     super.initState();
-    getData('1day');
+    getDataOld();
+    getData();
+
     if (widget.chartDetails?["askAndBids"] == null) {
       rootBundle.loadString('assets/depth.json').then((result) {
         final parseJson = json.decode(result);
@@ -115,69 +128,101 @@ class _LineChartState extends State<LineChart> {
   }
 
   String? formerPeriod;
+  String? formerSymbol;
+
   @override
   Widget build(BuildContext context) {
-    if (formerPeriod != widget.chartDetails?["period"]) {
-      print(formerPeriod != widget.chartDetails?["period"]);
-      getData('1day');
+    if (formerPeriod != widget.chartDetails?["period"] ||
+        formerSymbol != widget.chartDetails?["symbol"]) {
+      // print(formerPeriod != widget.chartDetails?["period"]);
+      getData();
       formerPeriod = widget.chartDetails?["period"];
+      formerSymbol = widget.chartDetails?["symbol"];
     }
 
     chartColors.lineFillColor = ColorConstants.fancyGreen;
     chartColors.kLineColor = ColorConstants.fancyGreen;
 
     // chartColors.lineFillInsideColor = ColorConstants.fancyGreen;
-
-    return Container(
-      child: Stack(children: <Widget>[
-        FancyContainer(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.white.withOpacity(.1)),
-          height: 450,
-          // width: 450,
-          width: double.infinity,
-          color: Colors.black,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: isLoading
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : KChartWidget(
-                    datas,
-                    chartStyle,
-                    chartColors,
-                    isLine: true,
-                    // isLine: isLine,
-
-                    onSecondaryTap: () {
-                      print('Secondary Tap');
-                    },
-                    isTrendLine: _isTrendLine,
-                    mainState: _mainState,
-                    volHidden: true,
-                    secondaryState: _secondaryState,
-                    fixedLength: 2,
-                    timeFormat: TimeFormat.YEAR_MONTH_DAY,
-                    translations: kChartTranslations,
-                    showNowPrice: _showNowPrice,
-                    //`isChinese` is Deprecated, Use `translations` instead.
-                    // isChinese: isChinese,
-                    hideGrid: true,
-                    isTapShowInfoDialog: false,
-                    verticalTextAlignment: _verticalTextAlignment,
-                    maDayList: [1, 100, 1000],
-                  ),
+// solveChatData
+    return BlocConsumer<WebSocketBloc, WebSocketState>(
+        listener: (context, state) {
+      if (state is SubscribeToCryptoSuccessState) {
+        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
+        solveChatData(state.data);
+        print(
+            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
+      } else if (state is WebSocketDataState) {
+        solveChatData(state.data);
+        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
+        print(
+            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
+      } else if (state is WebSocketErrorState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.error),
+            backgroundColor: Colors.red,
           ),
-        ),
-        if (showLoading)
-          Container(
-              width: double.infinity,
-              height: 450,
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator()),
-      ]),
-    );
+        );
+      }
+    }, builder: (context, state) {
+      print("debug_print_linechart-building");
+      print("debug_print_linechart-building${state}");
+
+      return Container(
+        child: Stack(children: <Widget>[
+          FancyContainer(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white.withOpacity(.1)),
+            height: 450,
+            // width: 450,
+            width: double.infinity,
+            color: Colors.black,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:
+                  //  isLoading
+                  //     ? const Center(
+                  //         child: CircularProgressIndicator.adaptive(),
+                  //       )
+                  //     :
+                  KChartWidget(
+                stableDatas,
+                chartStyle,
+                chartColors,
+                isLine: false,
+                // isLine: isLine,
+
+                onSecondaryTap: () {
+                  print('Secondary Tap');
+                },
+                isTrendLine: _isTrendLine,
+                mainState: _mainState,
+                volHidden: true,
+                secondaryState: _secondaryState,
+                fixedLength: 2,
+                timeFormat: TimeFormat.YEAR_MONTH_DAY,
+                translations: kChartTranslations,
+                showNowPrice: _showNowPrice,
+                //`isChinese` is Deprecated, Use `translations` instead.
+                // isChinese: isChinese,
+                hideGrid: true,
+                isTapShowInfoDialog: false,
+                verticalTextAlignment: _verticalTextAlignment,
+                maDayList: [1, 100, 1000],
+              ),
+            ),
+          ),
+
+          // if (showLoading)
+          //   Container(
+          //       width: double.infinity,
+          //       height: 450,
+          //       alignment: Alignment.center,
+          //       child: const CircularProgressIndicator()),
+        ]),
+      );
+    });
   }
 
   Widget buildButtons() {
@@ -259,32 +304,129 @@ class _LineChartState extends State<LineChart> {
     );
   }
 
-  void getData(String period) {
+  void getData() {
     isLoading = true;
     setState(() {});
+
+    context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
+          interval: widget.chartDetails?["period"] ?? "5",
+          symbol: widget.chartDetails?["symbol"] ?? "BTC",
+        ));
+    // /*
+    //  * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
+    //  */
+    // final Future<String> future = getChatDataFromInternet(period);
+    // //final Future<String> future = getChatDataFromJson();
+    // future.then((String result) {
+    //   solveChatData(result);
+    // }).catchError((_) {
+    //   showLoading = false;
+    //   setState(() {});
+    //   print('### datas error $_');
+    // });
+    isLoading = false;
+    setState(() {});
+  }
+
+  void getDataOld() {
+    print("debug_print_linechart-getDataOld-start");
+    isLoading = true;
+    setState(() {});
+
     /*
      * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
      */
-    final Future<String> future = getChatDataFromInternet(period);
+    final Future<String> future = getChatDataFromInternet();
     //final Future<String> future = getChatDataFromJson();
     future.then((String result) {
-      solveChatData(result);
+      print("debug_print_linechart-getDataOld-getChatDataFromInternet-done");
+      solveChatData(result, fromSingleFetch: true);
+      print(
+          "debug_print_linechart-getDataOld-solveChatData-done${stableDatas?.length}");
     }).catchError((_) {
+      print("debug_print_linechart-getDataOld-error_is_${_}");
+
       showLoading = false;
       setState(() {});
       print('### datas error $_');
     });
     isLoading = false;
     setState(() {});
+    print("debug_print_linechart-getDataOld-success");
   }
 
   //获取火币数据，需要翻墙
-  Future<String> getChatDataFromInternet(String? period) async {
+  Future<String> getChatDataFromInternet() async {
+    String usablePeriod = '1day';
+    if (widget.chartDetails?["period"] == "1") {
+      usablePeriod = "1min";
+    }
+    if (widget.chartDetails?["period"] == "3") {
+      usablePeriod = "3min";
+    }
+    if (widget.chartDetails?["period"] == "5") {
+      usablePeriod = "5min";
+    }
+    if (widget.chartDetails?["period"] == "D") {
+      usablePeriod = "1day";
+    }
+    if (widget.chartDetails?["period"] == "M") {
+      usablePeriod = "1mon";
+    }
+    if (widget.chartDetails?["period"] == "Y") {
+      usablePeriod = "1year";
+    }
     var url =
-        'https://api.huobi.br.com/market/history/kline?period=${widget.chartDetails?["period"] ?? '1day'}&size=300&symbol=${(widget.chartDetails?["symbol"] as String?)?.toLowerCase() ?? "BTCUSDT".toLowerCase()}';
+        'https://api.huobi.br.com/market/history/kline?period=$usablePeriod&size=300&symbol=${(widget.chartDetails?["symbol"] as String?)?.toLowerCase() ?? "BTCUSDT".toLowerCase()}';
+    'https://api.huobi.br.com/market/history/kline?period=1day&size=300&symbol=btcusdt';
+
+    String startDateStamp = DateTime.now()
+        .subtract(Duration(days: 1))
+        .millisecondsSinceEpoch
+        .toString();
+    if (widget.chartDetails?["period"] == "1") {
+      startDateStamp = DateTime.now()
+          .subtract(Duration(minutes: 1 * 3))
+          .millisecondsSinceEpoch
+          .toString();
+    }
+    if (widget.chartDetails?["period"] == "3") {
+      startDateStamp = DateTime.now()
+          .subtract(Duration(minutes: 1 * 3))
+          .millisecondsSinceEpoch
+          .toString();
+    }
+    if (widget.chartDetails?["period"] == "5") {
+      startDateStamp = DateTime.now()
+          .subtract(Duration(minutes: 5 * 3))
+          .millisecondsSinceEpoch
+          .toString();
+    }
+    if (widget.chartDetails?["period"] == "D") {
+      startDateStamp = DateTime.now()
+          .subtract(Duration(days: 1 * 3))
+          .millisecondsSinceEpoch
+          .toString();
+    }
+    if (widget.chartDetails?["period"] == "M") {
+      startDateStamp = DateTime.now()
+          .subtract(Duration(days: 30 * 2))
+          .millisecondsSinceEpoch
+          .toString();
+    }
+    if (widget.chartDetails?["period"] == "Y") {
+      startDateStamp = DateTime.now()
+          .subtract(Duration(days: 365 * 2))
+          .millisecondsSinceEpoch
+          .toString();
+    }
+    url =
+        "/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
+
     print("debug_print_linechart-getChatDataFromInternet-url_is=$url");
     late String result;
     final response = await http.get(Uri.parse(url));
+    print("debug_print_linechart-getChatDataFromInternet-http.get_done");
     if (response.statusCode == 200) {
       result = response.body;
     } else {
@@ -298,17 +440,136 @@ class _LineChartState extends State<LineChart> {
     return rootBundle.loadString('chatData.json');
   }
 
-  void solveChatData(String result) {
+  void solveChatData(String result, {bool fromSingleFetch = false}) {
+    print("debug_print_linechart-solveChatData-start");
+    print(
+        "debug_print_linechart-solveChatData-start_with_input_fromSingleFetch_${fromSingleFetch}");
+
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
+    print("debug_print_linechart-solveChatData-parseJson_is=$parseJson");
+    if (!fromSingleFetch) {
+      if (!parseJson["topic"].toString().startsWith("kline.")) {
+        return;
+      }
+    }
     final list = parseJson['data'] as List<dynamic>;
+    print("debug_print_linechart-solveChatData-list_is=$list");
+    print("fromSingleFetch_is=$fromSingleFetch");
     datas = list
-        .map((item) => KLineEntity.fromJson(item as Map<String, dynamic>))
+        .map((item) => ((fromSingleFetch)
+            ? KLineEntity.fromJson(item as Map<String, dynamic>)
+            : getKLineEntityFromMap(item as Map<String, dynamic>)))
+        // KLineEntity.fromJson(item as Map<String, dynamic>))
         .toList()
         .reversed
         .toList()
         .cast<KLineEntity>();
+    try {
+      if (fromSingleFetch) {
+        print("sdjkasjdabajb-fromSingleFetch-yes");
+        stableDatas = datas;
+        print("sdjkasjdabajb-afterdata-${stableDatas}");
+      } else {
+        stableDatas ??= [];
+        if (nextDataIsNew) {
+          stableDatas!.add(datas!.first);
+          nextDataIsNew = false;
+        } else {
+          stableDatas!.last = datas!.first;
+        }
+        if ((list.first as Map)["confirm"]) {
+          nextDataIsNew = true;
+        }
+      }
+    } catch (e) {}
+
+    print("debug_print_linechart-solveChatData-datas_is=$datas");
+
     DataUtil.calculate(datas!);
     showLoading = false;
     setState(() {});
+  }
+
+  bool nextDataIsNew = false;
+  @override
+  void dispose() {
+    context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
+    super.dispose();
+  }
+
+  KLineEntity getKLineEntityFromMap(Map item) {
+    return KLineEntity.fromJson(KLineCorrectorEntity.fromJson(item).toMap());
+  }
+}
+
+class KLineCorrectorEntity {
+  final double open;
+  final double high;
+  final double low;
+  final double close;
+  final double amount;
+  final double vol;
+  final int? time;
+
+  final double ratio;
+  final double change;
+
+  KLineCorrectorEntity({
+    required this.open,
+    required this.high,
+    required this.low,
+    required this.close,
+    required this.amount,
+    required this.vol,
+    required this.time,
+    required this.ratio,
+    required this.change,
+  });
+
+  factory KLineCorrectorEntity.fromJson(Map json) {
+    final double openLet = double.tryParse(json['open'] ?? "")?.toDouble() ?? 0;
+    final double highLet = double.tryParse(json['high'] ?? "")?.toDouble() ?? 0;
+    final double lowLet = double.tryParse(json['low'] ?? "")?.toDouble() ?? 0;
+    final double closeLet =
+        double.tryParse(json['close'] ?? "")?.toDouble() ?? 0;
+    final double volLet =
+        double.tryParse(json['volume'] ?? "")?.toDouble() ?? 0;
+    final double amountLet =
+        double.tryParse(json['turnover'] ?? "")?.toDouble() ?? 0;
+    int? tempTime = double.tryParse(json['time'] ?? "")?.toInt();
+    //兼容火币数据
+    if (tempTime == null) {
+      tempTime = json['timestamp']?.toInt() ?? 0;
+      tempTime = tempTime! * 1000;
+    }
+
+    final int? timeLet = tempTime;
+    final double ratioLet =
+        double.tryParse(json['ratio'] ?? "")?.toDouble() ?? 0;
+    final double changeLet =
+        double.tryParse(json['change'] ?? "")?.toDouble() ?? 0;
+    return KLineCorrectorEntity(
+      open: openLet,
+      high: highLet,
+      low: lowLet,
+      close: closeLet,
+      amount: amountLet,
+      vol: volLet,
+      time: timeLet,
+      ratio: ratioLet,
+      change: changeLet,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "open": open,
+      "high": high,
+      "low": low,
+      "close": close,
+      "amount": amount,
+      "vol": vol,
+      "time": time,
+    };
   }
 }

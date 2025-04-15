@@ -358,7 +358,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   Map? chartDetails = {};
-  String period = "1day";
+  String period = "5";
 
   Widget buildPeriodSelect() {
     return DropdownButtonHideUnderline(
@@ -366,9 +366,27 @@ class _HomepageState extends State<Homepage> {
       dropdownStyleData: const DropdownStyleData(width: 200),
       items: [
         DropdownMenuItem(
-          value: "1day",
+          value: "5",
           onTap: () {
-            period = "1day";
+            period = "5";
+            chartDetails = {
+              "symbol": "BTCUSDT",
+              "period": period,
+              "askAndBids": askBids
+            };
+
+            setState(() {});
+          },
+          child: FancyText(
+            "5 min",
+            weight: FontWeight.w400,
+            size: 12,
+          ),
+        ),
+        DropdownMenuItem(
+          value: "D",
+          onTap: () {
+            period = "D";
             chartDetails = {
               "symbol": "BTCUSDT",
               "period": period,
@@ -384,9 +402,9 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         DropdownMenuItem(
-          value: "1year",
+          value: "M",
           onTap: () {
-            period = "1year";
+            period = "M";
             chartDetails = {
               "symbol": "BTCUSDT",
               "period": period,
@@ -396,7 +414,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "1 year",
+            "1 Month",
             weight: FontWeight.w400,
             size: 12,
           ),

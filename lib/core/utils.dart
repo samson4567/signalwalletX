@@ -234,3 +234,22 @@ getCoinImageFromAsset(CoinEntity coinEntity) {
   );
   return result;
 }
+
+Map<String, dynamic>? calculatePriceChange(Map<String, dynamic> data) {
+  if (data == null || data.isEmpty) {
+    return null;
+  }
+
+  double open = data['open'];
+  double close = data['close'];
+
+  double change = close - open;
+  double percentageChange = (change / open) * 100;
+
+  return {
+    'percentageChange': percentageChange,
+    'valueChange': change,
+    'currentPrice': close,
+  };
+  ;
+}

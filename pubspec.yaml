@@ -32,6 +32,8 @@ dependencies:
   http:
   k_chart:
   uuid:
+  syncfusion_flutter_charts:
+    path: ./local_package/syncfusion_flutter_charts
   
   
   # for the crypto
