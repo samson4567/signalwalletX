@@ -35,7 +35,7 @@ class _SplineDefaultState extends SampleViewState {
       ChartData(2011, 13),
       ChartData(2012, 34),
       ChartData(2013, 27),
-      ChartData(2014, 40)
+      ChartData(2014, 40),
     ];
     return Scaffold(
         body: BlocConsumer<WebSocketBloc, WebSocketState>(
@@ -55,6 +55,8 @@ class _SplineDefaultState extends SampleViewState {
       ])));
     }));
   }
+
+  // fre
 }
 
 class ChartData {

@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signalwavex/component/empty_widget.dart';
+import 'package:signalwavex/core/app_variables.dart';
+import 'package:signalwavex/core/utils.dart';
+import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
@@ -19,6 +24,10 @@ import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/radio_button.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/candle_stick_chart.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/canlde_chart_ling_pulled.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 import 'package:uuid/uuid.dart';
 
 class FeaturesCurrentOrder extends StatefulWidget {
@@ -30,7 +39,7 @@ class FeaturesCurrentOrder extends StatefulWidget {
 
 class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   EdgeInsets externalPadding = const EdgeInsets.symmetric(horizontal: 20);
-  String selectedText = "Perp";
+  String? selectedText;
   bool isDepth = false;
 
   List<Map> currentOrderMap = [
@@ -425,21 +434,21 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       height: 400,
       width: double.infinity,
       child: DefaultTabController(
-          length: 2,
+          length: 1,
           child: Column(
             children: [
               const TabBar(
-                  tabAlignment: TabAlignment.start,
+                  tabAlignment: TabAlignment.center,
                   isScrollable: true,
                   tabs: [
                     Tab(
                       text: 'Chart',
                       // icon: Icon(Icons.home)
                     ),
-                    Tab(
-                      text: 'Overview',
-                      // icon: Icon(Icons.settings)
-                    ),
+                    // Tab(
+                    //   text: 'Overview',
+                    //   // icon: Icon(Icons.settings)
+                    // ),
                     // Tab(text: 'Tab 3', icon: Icon(Icons.person)),
                   ]),
               FancyContainerTwo(
@@ -453,7 +462,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                     children: [
                       Row(
                         children: [
-                          ...["60s", "5min"]
+                          ...["1min", "5min"]
                               .map(
                                 (e) => _buildTimeSelectButton(e),
                               )
@@ -476,15 +485,26 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               Expanded(
                 // height: 100,
                 child: TabBarView(children: [
-                  CandleStickChart(),
+                  // CandleStickChart(),
+                  CanldeChartLongPulled(
+                    chartDetails: chartDetails ??
+                        {
+                          "symbol": "BTCUSDT",
+                          "period": period,
+                          "askAndBids": {}
+                        },
+                  )
                   // Center(child: Text('Content of Tab 1')),
-                  const Center(child: Text('Content of Tab 2')),
+                  // const Center(child: Text('Content of Tab 2')),
                 ]),
               ),
             ],
           )),
     );
   }
+
+  Map? chartDetails = {};
+  String period = "1";
 
   FancyContainerTwo _buildIsDepthOrOriginalWidget() {
     return FancyContainerTwo(
@@ -526,11 +546,24 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     );
   }
 
-  String selectedTimeText = "15 min";
+  String selectedTimeText = "5min";
   FancyContainerTwo _buildTimeSelectButton(String text) {
     return FancyContainerTwo(
       action: () {
         selectedTimeText = text;
+
+        period = selectedTimeText[0];
+        chartDetails = {
+          "symbol": "BTCUSDT",
+          "period": period,
+          "askAndBids": {}
+        };
+        context.read<WebSocketBloc>().add(
+              SubscribeToCryptoEvent(
+                  interval: period.toUpperCase(),
+                  symbol: selectedCoinModel?.symbol ?? "BTC"),
+            );
+
         setState(() {});
       },
       width: 60,
@@ -617,6 +650,8 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     );
   }
 
+  CoinModel? selectedCoinModel;
+
   Row _buildFirstRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -638,7 +673,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             ),
             const SizedBox(width: 10),
             Text(
-              "BTCUSDT",
+              (selectedCoinModel?.symbol != null)
+                  ? "${selectedCoinModel!.symbol}USDT"
+                  : "select a coin",
               style: TextStyle(
                 color: getFigmaColor("EAECEF"),
                 fontSize: 24.w,
@@ -671,62 +708,116 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               ),
               //  IconButton(
               //     onPressed: () {}, icon: ),
-              items: [
-                DropdownMenuItem(
-                  value: "Perp",
+              items: listOfCoinEntityG.map((e) {
+                return DropdownMenuItem(
+                  value: "${e.symbol}USDT",
                   onTap: () {
-                    if (selectedText != "Perp") {
-                      selectedText = "Perp";
-                    }
-                    // else {
-                    // selectedText = null;
-                    // }
-
+                    selectedCoinModel = CoinModel.fromEntity(e);
+                    selectedText = "${selectedCoinModel!.symbol}USDT";
+                    chartDetails = {
+                      "symbol": "$selectedText",
+                      "period": period,
+                      "askAndBids": {}
+                    };
+                    context.read<WebSocketBloc>().add(
+                          SubscribeToCryptoEvent(
+                              interval: period.toUpperCase(),
+                              symbol: selectedCoinModel!.symbol),
+                        );
+                    // selectedCoinModel?.symbol;
                     setState(() {});
                   },
-                  child: const Text(
-                    "Perp",
+                  child: Text(
+                    "${e.symbol}USDT",
+                    style: TextStyle(
+                      color: getFigmaColor("EAECEF"),
+                      fontSize: 24.w,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                DropdownMenuItem(
-                  value: "Perp_2",
-                  onTap: () {
-                    if (selectedText != "Perp_2") {
-                      selectedText = "Perp_2";
-                    }
+                );
+              }).toList()
+              //  [
+              //   DropdownMenuItem(
+              //     value: "Perp",
+              //     onTap: () {
+              //       if (selectedText != "Perp") {
+              //         selectedText = "Perp";
+              //       }
+              //       // else {
+              //       // selectedText = null;
+              //       // }
 
-                    setState(() {});
-                  },
-                  child: const Text(
-                    "Perp_2",
-                  ),
-                )
-              ],
+              //       setState(() {});
+              //     },
+              //     child: const Text(
+              //       "Perp",
+              //     ),
+              //   ),
+              //   DropdownMenuItem(
+              //     value: "Perp_2",
+              //     onTap: () {
+              //       if (selectedText != "Perp_2") {
+              //         selectedText = "Perp_2";
+              //       }
+
+              //       setState(() {});
+              //     },
+              //     child: const Text(
+              //       "Perp_2",
+              //     ),
+              //   )
+              // ],
+              ,
               value: selectedText,
               onChanged: (value) {},
             ))
           ],
         ),
-        Row(
-          children: [
-            FancyText(
-              "96191.9",
-              textColor: ColorConstants.fancyGreen,
-              size: 16.w,
-            ),
-            // ("96191.9"),
-            const SizedBox(width: 4),
-            FancyText(
-              "+0.12%",
-              textColor: ColorConstants.fancyGreen,
-              size: 16.w,
-            ),
-            // Text("+0.12%"),
-          ],
-        )
+        BlocConsumer<WebSocketBloc, WebSocketState>(listener: (context, state) {
+          if (state is WebSocketDataState) {
+            final decodedData = jsonDecode(state.data);
+            if ((decodedData["topic"] as String?)?.startsWith("kline.") ??
+                false) {
+              cad = calculatePriceChange(decodedData["data"][0]) ?? {};
+            }
+            try {} catch (e) {}
+          }
+          if (state is WebSocketConnectedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("connected"),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+          // state;
+        }, builder: (context, state) {
+          return Row(
+            children: [
+              FancyText(
+                "${cad?["currentPrice"] ?? ""}",
+                textColor: ColorConstants.fancyGreen,
+                size: 16.w,
+              ),
+              // ("96191.9"),
+              const SizedBox(width: 4),
+              // "${(cad?["percentageChange"] ?? "")} (${cad?["valueChange"] ?? ""}) "
+              FancyText(
+                (cad?["percentageChange"] != null)
+                    ? "${cad?["percentageChange"] ?? ""}%"
+                    : "",
+                textColor: ColorConstants.fancyGreen,
+                size: 16.w,
+              ),
+              // Text("+0.12%"),
+            ],
+          );
+        })
       ],
     );
   }
 
+  Map cad = {};
   String selectedMinute = "5min";
 }

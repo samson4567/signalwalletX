@@ -240,16 +240,15 @@ Map<String, dynamic>? calculatePriceChange(Map<String, dynamic> data) {
     return null;
   }
 
-  double open = data['open'];
-  double close = data['close'];
+  double open = double.parse(data['open']);
+  double close = double.parse(data['close']);
 
   double change = close - open;
   double percentageChange = (change / open) * 100;
 
   return {
-    'percentageChange': percentageChange,
-    'valueChange': change,
+    'percentageChange': percentageChange.toStringAsFixed(4),
+    'valueChange': change.abs().toStringAsFixed(4),
     'currentPrice': close,
   };
-  ;
 }

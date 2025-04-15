@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
@@ -26,6 +28,23 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
 
   @override
+  void initState() {
+    passwordController.text = "samlucy111";
+    emailController.text = "samadeyemi1888@gmail.com";
+
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((t) {
+      _login();
+    });
+  }
+
+  _retryLogin() {
+    Future.delayed(1.seconds, () {
+      _login();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -47,6 +66,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: Colors.red,
                 ),
               );
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("retring in a sec"),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              _retryLogin();
             }
           },
           child: Column(
@@ -208,16 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 50.0,
               borderRadius: BorderRadius.circular(10.0),
               color: Colors.yellow,
-              onTap: () {
-                if (_formKey.currentState!.validate()) {
-                  context.read<AuthBloc>().add(
-                        LoginEvent(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        ),
-                      );
-                }
-              },
+              onTap: _login,
               child: Center(
                 child: state is LoginLoadingState
                     ? const CircularProgressIndicator(color: Colors.black)
@@ -236,6 +253,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  _login() {
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+            LoginEvent(
+              email: emailController.text,
+              password: passwordController.text,
+            ),
+          );
+    }
+  }
   // Log In button
 
   Widget _buildDividerWithOr(double screenHeight) {

@@ -1,31 +1,35 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
+import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
-class LineChart extends StatefulWidget {
-  LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
+class LineChartLongPulled extends StatefulWidget {
+  LineChartLongPulled({Key? key, this.title, this.chartDetails})
+      : super(key: key);
 
   final String? title;
   // final Map? askAndBids;
   Map? chartDetails;
 
   @override
-  _LineChartState createState() => _LineChartState();
+  _LineChartLongPulledState createState() => _LineChartLongPulledState();
 }
 
-class _LineChartState extends State<LineChart> {
+class _LineChartLongPulledState extends State<LineChartLongPulled> {
   List<KLineEntity>? datas;
   List<KLineEntity>? stableDatas;
 
@@ -68,11 +72,7 @@ class _LineChartState extends State<LineChart> {
 
   @override
   void initState() {
-    context
-        .read<WebSocketBloc>()
-        .add(WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
     super.initState();
-    getDataOld();
     getData();
 
     if (widget.chartDetails?["askAndBids"] == null) {
@@ -145,84 +145,66 @@ class _LineChartState extends State<LineChart> {
 
     // chartColors.lineFillInsideColor = ColorConstants.fancyGreen;
 // solveChatData
-    return BlocConsumer<WebSocketBloc, WebSocketState>(
-        listener: (context, state) {
-      if (state is SubscribeToCryptoSuccessState) {
-        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
-        solveChatData(state.data);
-        print(
-            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
-      } else if (state is WebSocketDataState) {
-        solveChatData(state.data);
-        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
-        print(
-            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
-      } else if (state is WebSocketErrorState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.error),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }, builder: (context, state) {
-      print("debug_print_linechart-building");
-      print("debug_print_linechart-building${state}");
+    return StreamBuilder(
+        stream: Stream.periodic(
+          3.seconds,
+          (computationCount) {
+            getData();
+          },
+        ),
+        builder: (context, snapshot) {
+          return Container(
+            child: Stack(children: <Widget>[
+              FancyContainer(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withOpacity(.1)),
+                height: 450,
+                // width: 450,
+                width: double.infinity,
+                color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+                      //  isLoading
+                      //     ? const Center(
+                      //         child: CircularProgressIndicator.adaptive(),
+                      //       )
+                      //     :
+                      KChartWidget(
+                    datas,
+                    chartStyle,
+                    chartColors,
+                    isLine: true,
+                    // isLine: isLine,
 
-      return Container(
-        child: Stack(children: <Widget>[
-          FancyContainer(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white.withOpacity(.1)),
-            height: 450,
-            // width: 450,
-            width: double.infinity,
-            color: Colors.black,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  //  isLoading
-                  //     ? const Center(
-                  //         child: CircularProgressIndicator.adaptive(),
-                  //       )
-                  //     :
-                  KChartWidget(
-                stableDatas,
-                chartStyle,
-                chartColors,
-                isLine: false,
-                // isLine: isLine,
-
-                onSecondaryTap: () {
-                  print('Secondary Tap');
-                },
-                isTrendLine: _isTrendLine,
-                mainState: _mainState,
-                volHidden: true,
-                secondaryState: _secondaryState,
-                fixedLength: 2,
-                timeFormat: TimeFormat.YEAR_MONTH_DAY,
-                translations: kChartTranslations,
-                showNowPrice: _showNowPrice,
-                //`isChinese` is Deprecated, Use `translations` instead.
-                // isChinese: isChinese,
-                hideGrid: true,
-                isTapShowInfoDialog: false,
-                verticalTextAlignment: _verticalTextAlignment,
-                maDayList: [1, 100, 1000],
+                    onSecondaryTap: () {},
+                    isTrendLine: _isTrendLine,
+                    mainState: _mainState,
+                    volHidden: true,
+                    secondaryState: _secondaryState,
+                    fixedLength: 2,
+                    timeFormat: TimeFormat.YEAR_MONTH_DAY,
+                    translations: kChartTranslations,
+                    showNowPrice: _showNowPrice,
+                    //`isChinese` is Deprecated, Use `translations` instead.
+                    // isChinese: isChinese,
+                    hideGrid: true,
+                    isTapShowInfoDialog: false,
+                    verticalTextAlignment: _verticalTextAlignment,
+                    maDayList: [1, 100, 1000],
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          // if (showLoading)
-          //   Container(
-          //       width: double.infinity,
-          //       height: 450,
-          //       alignment: Alignment.center,
-          //       child: const CircularProgressIndicator()),
-        ]),
-      );
-    });
+              // if (showLoading)
+              //   Container(
+              //       width: double.infinity,
+              //       height: 450,
+              //       alignment: Alignment.center,
+              //       child: const CircularProgressIndicator()),
+            ]),
+          );
+        });
   }
 
   Widget buildButtons() {
@@ -308,53 +290,19 @@ class _LineChartState extends State<LineChart> {
     isLoading = true;
     setState(() {});
 
-    context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
-          interval: widget.chartDetails?["period"] ?? "5",
-          symbol: widget.chartDetails?["symbol"] ?? "BTC",
-        ));
-    // /*
-    //  * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
-    //  */
-    // final Future<String> future = getChatDataFromInternet(period);
-    // //final Future<String> future = getChatDataFromJson();
-    // future.then((String result) {
-    //   solveChatData(result);
-    // }).catchError((_) {
-    //   showLoading = false;
-    //   setState(() {});
-    //   print('### datas error $_');
-    // });
-    isLoading = false;
-    setState(() {});
-  }
-
-  void getDataOld() {
-    print("debug_print_linechart-getDataOld-start");
-    isLoading = true;
-    setState(() {});
-
     /*
      * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
      */
     final Future<String> future = getChatDataFromInternet();
     //final Future<String> future = getChatDataFromJson();
     future.then((String result) {
-      print(
-          "debug_print_linechart-getDataOld-getChatDataFromInternet-done${result}");
-
-      solveChatData(arrangeDataForDisplay(result), fromSingleFetch: true);
-      print(
-          "debug_print_linechart-getDataOld-solveChatData-done${stableDatas?.length}");
+      solveChatData(result, fromSingleFetch: true);
     }).catchError((_) {
-      print("debug_print_linechart-getDataOld-error_is_${_}");
-
       showLoading = false;
       setState(() {});
-      print('### datas error $_');
     });
     isLoading = false;
     setState(() {});
-    print("debug_print_linechart-getDataOld-success");
   }
 
   String arrangeDataForDisplay(String data) {
@@ -413,59 +361,56 @@ class _LineChartState extends State<LineChart> {
         'https://api.huobi.br.com/market/history/kline?period=$usablePeriod&size=300&symbol=${(widget.chartDetails?["symbol"] as String?)?.toLowerCase() ?? "BTCUSDT".toLowerCase()}';
     'https://api.huobi.br.com/market/history/kline?period=1day&size=300&symbol=btcusdt';
 
-    String startDateStamp = DateTime.now()
-        .subtract(Duration(days: 1))
-        .millisecondsSinceEpoch
-        .toString();
-    if (widget.chartDetails?["period"] == "1") {
-      startDateStamp = DateTime.now()
-          .subtract(Duration(minutes: 1 * 3))
-          .millisecondsSinceEpoch
-          .toString();
-    }
-    if (widget.chartDetails?["period"] == "3") {
-      startDateStamp = DateTime.now()
-          .subtract(Duration(minutes: 1 * 3))
-          .millisecondsSinceEpoch
-          .toString();
-    }
-    if (widget.chartDetails?["period"] == "5") {
-      startDateStamp = DateTime.now()
-          .subtract(Duration(minutes: 5 * 3))
-          .millisecondsSinceEpoch
-          .toString();
-    }
-    if (widget.chartDetails?["period"] == "D") {
-      startDateStamp = DateTime.now()
-          .subtract(Duration(days: 1 * 3))
-          .millisecondsSinceEpoch
-          .toString();
-    }
-    if (widget.chartDetails?["period"] == "M") {
-      startDateStamp = DateTime.now()
-          .subtract(Duration(days: 30 * 2))
-          .millisecondsSinceEpoch
-          .toString();
-    }
-    if (widget.chartDetails?["period"] == "Y") {
-      startDateStamp = DateTime.now()
-          .subtract(Duration(days: 365 * 2))
-          .millisecondsSinceEpoch
-          .toString();
-    }
-    url =
-        // "http://api-testnet.bybit.com/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
-        "http://api-testnet.bybit.com/v5/market/kline?symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=${widget.chartDetails?["period"] ?? "60"}&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
+    // String startDateStamp = DateTime.now()
+    //     .subtract(Duration(days: 1))
+    //     .millisecondsSinceEpoch
+    //     .toString();
+    // if (widget.chartDetails?["period"] == "1") {
+    //   startDateStamp = DateTime.now()
+    //       .subtract(Duration(minutes: 1 * 3))
+    //       .millisecondsSinceEpoch
+    //       .toString();
+    // }
+    // if (widget.chartDetails?["period"] == "3") {
+    //   startDateStamp = DateTime.now()
+    //       .subtract(Duration(minutes: 1 * 3))
+    //       .millisecondsSinceEpoch
+    //       .toString();
+    // }
+    // if (widget.chartDetails?["period"] == "5") {
+    //   startDateStamp = DateTime.now()
+    //       .subtract(Duration(minutes: 5 * 3))
+    //       .millisecondsSinceEpoch
+    //       .toString();
+    // }
+    // if (widget.chartDetails?["period"] == "D") {
+    //   startDateStamp = DateTime.now()
+    //       .subtract(Duration(days: 1 * 3))
+    //       .millisecondsSinceEpoch
+    //       .toString();
+    // }
+    // if (widget.chartDetails?["period"] == "M") {
+    //   startDateStamp = DateTime.now()
+    //       .subtract(Duration(days: 30 * 2))
+    //       .millisecondsSinceEpoch
+    //       .toString();
+    // }
+    // if (widget.chartDetails?["period"] == "Y") {
+    //   startDateStamp = DateTime.now()
+    //       .subtract(Duration(days: 365 * 2))
+    //       .millisecondsSinceEpoch
+    //       .toString();
+    // }
+    // url =
+    //     // "http://api-testnet.bybit.com/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
+    //     "http://api-testnet.bybit.com/v5/market/kline?symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=${widget.chartDetails?["period"] ?? "60"}&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
 
-    print("debug_print_linechart-getChatDataFromInternet-url_is=$url");
     late String result;
     final response = await http.get(Uri.parse(url));
-    print("debug_print_linechart-getChatDataFromInternet-http.get_done");
+
     if (response.statusCode == 200) {
       result = response.body;
-    } else {
-      print('Failed getting IP address');
-    }
+    } else {}
     return result;
   }
 
@@ -487,41 +432,19 @@ class _LineChartState extends State<LineChart> {
       }
     }
     final list = parseJson['data'] as List<dynamic>;
-    print("debug_print_linechart-solveChatData-list_is=$list");
-    print("fromSingleFetch_is=$fromSingleFetch");
+
     datas = list
         .map((item) =>
             // ((fromSingleFetch)
             //     ? KLineEntity.fromJson(item as Map<String, dynamic>)
             //     :
-            getKLineEntityFromMap(item as Map<String, dynamic>))
-        //  )
-        // KLineEntity.fromJson(item as Map<String, dynamic>))
+            // getKLineEntityFromMap(item as Map<String, dynamic>))
+            //  )
+            KLineEntity.fromJson(item as Map<String, dynamic>))
         .toList()
         .reversed
         .toList()
         .cast<KLineEntity>();
-    try {
-      if (fromSingleFetch) {
-        print("sdjkasjdabajb-fromSingleFetch-yes");
-        stableDatas = datas;
-        print("sdjkasjdabajb-afterdata-${stableDatas}");
-      } else {
-        stableDatas ??= [];
-        if (stableDatas!.last.open != datas!.first.open) {
-          stableDatas!.add(datas!.first);
-          nextDataIsNew = false;
-        } else {
-          stableDatas!.last.close = datas!.first.close;
-          stableDatas!.last.vol = datas!.first.vol;
-        }
-        if ((list.first as Map)["confirm"]) {
-          nextDataIsNew = true;
-        }
-      }
-    } catch (e) {}
-
-    print("debug_print_linechart-solveChatData-datas_is=$datas");
 
     DataUtil.calculate(datas!);
     showLoading = false;

@@ -11,6 +11,7 @@ import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart_long_pulled.dart';
 
 // SignUpScreen widget for the sign-up page
 class CreateAccount extends StatefulWidget {
@@ -27,6 +28,11 @@ class _CreateAccountState extends State<CreateAccount> {
       TextEditingController();
   bool _obscurePassword = true;
   bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

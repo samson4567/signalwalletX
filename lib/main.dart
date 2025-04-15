@@ -40,12 +40,13 @@ class _MyAppState extends State<MyApp> {
     internetConnection.hasInternetAccess.then(
       (value) {
         print("debug_print_internetConnection.hasInternetAccess${value}");
-        hasInternet = value;
+        hasInternet = true;
       },
     );
     streamSubscription = internetConnection.onStatusChange.listen(
       (internetStatus) {
-        hasInternet = (internetStatus == InternetStatus.connected);
+        hasInternet = true;
+        // (internetStatus == InternetStatus.connected);
       },
     );
     super.initState();

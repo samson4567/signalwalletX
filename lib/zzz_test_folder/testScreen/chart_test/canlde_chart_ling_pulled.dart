@@ -14,18 +14,19 @@ import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
-class LineChart extends StatefulWidget {
-  LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
+class CanldeChartLongPulled extends StatefulWidget {
+  CanldeChartLongPulled({Key? key, this.title, this.chartDetails})
+      : super(key: key);
 
   final String? title;
   // final Map? askAndBids;
   Map? chartDetails;
 
   @override
-  _LineChartState createState() => _LineChartState();
+  _CanldeChartLongPulledState createState() => _CanldeChartLongPulledState();
 }
 
-class _LineChartState extends State<LineChart> {
+class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
   List<KLineEntity>? datas;
   List<KLineEntity>? stableDatas;
 

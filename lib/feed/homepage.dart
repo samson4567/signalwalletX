@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,10 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart_long_pulled.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
+import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -43,7 +48,8 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getAndSetInitialData(context);
-    // yeah
+    context.read<WebSocketBloc>().add(
+        const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
 
     getData();
 
@@ -80,6 +86,11 @@ class _HomepageState extends State<Homepage> {
         // GetBTCDetail reactions
         if (state is GetBTCDetailSuccessState) {
           btcCoinModel = state.coinModel;
+          context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
+                interval: period,
+                symbol: "BTC",
+              ));
+
           setState(() {});
         } else if (state is GetBTCDetailErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -234,6 +245,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  Map<String, dynamic> cad = {};
   Widget _buildFancyChartContainer(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -269,102 +281,153 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                       )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FancyText(
-                                      // "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
-                                      "Bitcoin USDT (BTC - USDT)",
+                    : BlocConsumer<WebSocketBloc, WebSocketState>(
+                        listener: (context, state) {
+                        if (state is WebSocketDataState) {
+                          final decodedData = jsonDecode(state.data);
+                          if ((decodedData["topic"] as String?)
+                                  ?.startsWith("kline.") ??
+                              false) {
+                            cad =
+                                calculatePriceChange(decodedData["data"][0]) ??
+                                    {};
+                          }
+                          try {} catch (e) {}
+                        }
+                        if (state is WebSocketConnectedState) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("connected"),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                        // state;
+                      }, builder: (context, state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      FancyText(
+                                        // "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
+                                        "Bitcoin USDT (BTC - USDT)",
 
-                                      // style: TextStyle(fontSize: 14, color: Colors.white),
-                                      size: 14, textColor: Colors.white,
-                                      // overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      btcCoinModel?.percentIncrease
-                                              .toString() ??
-                                          '',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors
-                                            .green, // Replace with your color constant
+                                        // style: TextStyle(fontSize: 14, color: Colors.white),
+                                        size: 14, textColor: Colors.white,
+                                        // overflow: TextOverflow.ellipsis,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  width: 125,
-                                  height: 37.5,
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(
-                                        255, 255, 255, 0.1),
-                                    border: Border.all(
-                                        color: Colors
-                                            .grey), // Replace with your color constant
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: buildPeriodSelect(),
-                                  )),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "\$${btcCoinModel?.price.toString() ?? ''} ",
-                            style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          const SizedBox(height: 8),
-                          Builder(builder: (context) {
-                            return Expanded(
-                                child: (state is FetchOrderBookLoadingState)
-                                    ? const Center(
-                                        child: SizedBox(
-                                          // bjksbdjk,d
-                                          height: 50,
-                                          child: AspectRatio(
-                                            aspectRatio: 1,
-                                            child: CircularProgressIndicator
-                                                .adaptive(),
-                                          ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        "${(cad?["percentageChange"] ?? "")} (${cad?["valueChange"] ?? ""}) ",
+                                        // btcCoinModel?.percentIncrease
+                                        //         .toString() ??
+                                        //     '',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: ((double.tryParse(
+                                                          cad["percentageChange"] ??
+                                                              "") as double?)
+                                                      ?.isNegative ??
+                                                  false)
+                                              ? Colors.red
+                                              : Colors
+                                                  .green, // Replace with your color constant
                                         ),
-                                      )
-                                    : LineChart(
-                                        chartDetails: chartDetails ??
-                                            {
-                                              "symbol": "BTCUSDT",
-                                              "period": period,
-                                              "askAndBids": askBids
-                                            },
-                                      ));
-                          }),
-                        ],
-                      );
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                    width: 125,
+                                    height: 37.5,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(
+                                          255, 255, 255, 0.1),
+                                      border: Border.all(
+                                          color: Colors
+                                              .grey), // Replace with your color constant
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: buildPeriodSelect(),
+                                    )),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "${cad?["currentPrice"]}",
+                              style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const SizedBox(height: 8),
+                            Builder(builder: (context) {
+                              return Expanded(
+                                  child: (state is FetchOrderBookLoadingState)
+                                      ? const Center(
+                                          child: SizedBox(
+                                            // bjksbdjk,d
+                                            height: 50,
+                                            child: AspectRatio(
+                                              aspectRatio: 1,
+                                              child: CircularProgressIndicator
+                                                  .adaptive(),
+                                            ),
+                                          ),
+                                        )
+                                      : LineChartLongPulled(
+                                          chartDetails: chartDetails ??
+                                              {
+                                                "symbol": "BTCUSDT",
+                                                "period": period,
+                                                "askAndBids": askBids
+                                              },
+                                        ));
+                            }),
+                          ],
+                        );
+                      });
               }),
     );
   }
 
   Map? chartDetails = {};
-  String period = "5";
+  String period = "1";
 
   Widget buildPeriodSelect() {
     return DropdownButtonHideUnderline(
         child: DropdownButton2(
       dropdownStyleData: const DropdownStyleData(width: 200),
       items: [
+        // 1
+        DropdownMenuItem(
+          value: "1",
+          onTap: () {
+            period = "1";
+            chartDetails = {
+              "symbol": "BTCUSDT",
+              "period": period,
+              "askAndBids": askBids
+            };
+
+            setState(() {});
+          },
+          child: FancyText(
+            "1 min",
+            weight: FontWeight.w400,
+            size: 12,
+          ),
+        ),
         DropdownMenuItem(
           value: "5",
           onTap: () {
@@ -567,7 +630,7 @@ class _HomepageState extends State<Homepage> {
                                             transaction.side?.toLowerCase() ??
                                                 "-",
                                             // 'Buy',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.white,
                                             ),
