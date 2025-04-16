@@ -28,13 +28,13 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
               Image.asset("assets/images/red_alert_icon.png"),
               SizedBox(height: 20),
               FancyText(
-                "Confirm to follow order".toCurrentLanguage(),
+                toCurrentLanguageFunction("Confirm to follow order"),
                 weight: FontWeight.w600,
                 size: 24,
               ),
               SizedBox(height: 20),
               FancyText(
-                "${"Order amount".toCurrentLanguage()} (109.23)",
+                "${toCurrentLanguageFunction("Order amount")} (109.23)",
                 weight: FontWeight.w600,
                 textColor: Colors.white.withOpacity(.70),
                 size: 18,
@@ -52,7 +52,7 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                       height: 45.h,
                       hasBorder: true,
                       borderColor: Colors.grey,
-                      child: Text("Cancel".toCurrentLanguage()),
+                      child: Text(toCurrentLanguageFunction("Cancel")),
                     ),
                   ),
                   SizedBox(width: 20),
@@ -68,7 +68,7 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                             context.pop();
                           } catch (e) {}
                         },
-                        "Confirm".toCurrentLanguage(),
+                        toCurrentLanguageFunction("Confirm"),
                         textColor: Colors.black,
                       ),
                     ),

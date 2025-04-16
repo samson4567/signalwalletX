@@ -179,7 +179,7 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${"Good Morning".toCurrentLanguage()}, ${user?.email}',
+                        '${toCurrentLanguageFunction("Good Morning")}, ${user?.email}',
                         style: TextStyles.smallText.copyWith(
                           fontSize: screenWidth * 0.022,
                           color: Colors.white.withOpacity(0.7),
@@ -300,7 +300,8 @@ class _HomepageState extends State<Homepage> {
                         if (state is WebSocketConnectedState) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("connected".toCurrentLanguage()),
+                              content:
+                                  Text(toCurrentLanguageFunction("connected")),
                               backgroundColor: Colors.green,
                             ),
                           );
@@ -426,7 +427,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "1 min".toCurrentLanguage(),
+            toCurrentLanguageFunction("1 min"),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -444,7 +445,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "5 min".toCurrentLanguage(),
+            toCurrentLanguageFunction("5 min"),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -462,7 +463,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "24 hours".toCurrentLanguage(),
+            toCurrentLanguageFunction("24 hours"),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -480,7 +481,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "1 Month".toCurrentLanguage(),
+            toCurrentLanguageFunction("1 Month"),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -566,7 +567,7 @@ class _HomepageState extends State<Homepage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Recent Transaction'.toCurrentLanguage(),
+              toCurrentLanguageFunction('Recent Transaction'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -575,7 +576,7 @@ class _HomepageState extends State<Homepage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Today'.toCurrentLanguage(),
+              toCurrentLanguageFunction('Today'),
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
@@ -597,7 +598,8 @@ class _HomepageState extends State<Homepage> {
                 : Expanded(
                     child: (listOfOrderEntity!.isEmpty)
                         ? buildEmptyWidget(
-                            "No Transactions yet".toCurrentLanguage())
+                            toCurrentLanguageFunction("No Transactions yet"),
+                          )
                         : ListView.builder(
                             itemCount: listOfOrderEntity!.length,
                             itemBuilder: (context, index) {
@@ -741,11 +743,11 @@ class _HomepageState extends State<Homepage> {
         children: [
           Text('Top performing coins', style: TextStyles.normaltext),
           const SizedBox(height: 8),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Name',
+                toCurrentLanguageFunction('Name'),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -753,7 +755,7 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
               Text(
-                'Price',
+                toCurrentLanguageFunction('Price'),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -893,7 +895,7 @@ class _HomepageState extends State<Homepage> {
                 Row(
                   children: [
                     Text(
-                      'Total Assets',
+                      toCurrentLanguageFunction('Total Assets'),
                       style: TextStyles.title.copyWith(
                         fontSize: screenWidth * 0.045,
                         color: const Color.fromRGBO(255, 255, 255, 0.7),
@@ -940,7 +942,7 @@ class _HomepageState extends State<Homepage> {
     return Row(
       children: [
         Text(
-          'Today\'s PnL:',
+          toCurrentLanguageFunction('Today\'s PnL:'),
           style: TextStyles.subtitle.copyWith(
             fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
             color: const Color.fromRGBO(255, 255, 255, 0.7),
@@ -969,28 +971,28 @@ class _HomepageState extends State<Homepage> {
     final List<Map<String, dynamic>> iconsData = [
       {
         'imagePath': 'assets/icons/double.png',
-        'label': 'Trade',
+        'label': toCurrentLanguageFunction('Trade'),
         'action': () {
           context.push(MyAppRouteConstant.features);
         }
       },
       {
         'imagePath': 'assets/icons/Refresh.png',
-        'label': 'Convert',
+        'label': toCurrentLanguageFunction('Convert'),
         'action': () {
           context.push(MyAppRouteConstant.convert);
         }
       },
       {
         'imagePath': 'assets/icons/arrowdown.png',
-        'label': 'Deposit',
+        'label': toCurrentLanguageFunction('Deposit'),
         'action': () {
           context.push(MyAppRouteConstant.deposit);
         }
       },
       {
         'imagePath': 'assets/icons/dang.png',
-        'label': 'Transfer',
+        'label': toCurrentLanguageFunction('Transfer'),
         'action': () {
           context.push(MyAppRouteConstant.transfer);
         }

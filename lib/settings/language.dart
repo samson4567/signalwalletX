@@ -39,7 +39,7 @@ class _LanguageSectionState extends State<LanguageSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Language".toCurrentLanguage(),
+            toCurrentLanguageFunction("Language"),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -49,7 +49,7 @@ class _LanguageSectionState extends State<LanguageSection> {
           ),
           const SizedBox(height: 20),
           Text(
-            "Choose your language".toCurrentLanguage(),
+            toCurrentLanguageFunction("Choose your language"),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -75,7 +75,7 @@ class _LanguageSectionState extends State<LanguageSection> {
                 border: InputBorder.none,
               ),
               hint: Text(
-                "Select language".toCurrentLanguage(),
+                toCurrentLanguageFunction("Select language"),
                 style: TextStyle(color: Colors.white70),
               ),
               items: languages.entries.map((entry) {
@@ -101,15 +101,15 @@ class _LanguageSectionState extends State<LanguageSection> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        "${"Selected language".toCurrentLanguage()}: ${currentLanguage!}",
+                        "${toCurrentLanguageFunction("Selected language")}: ${currentLanguage!}",
                       ),
                     ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            "Please select a language".toCurrentLanguage())),
+                        content: Text(toCurrentLanguageFunction(
+                            "Please select a language"))),
                   );
                 }
               },
@@ -122,7 +122,7 @@ class _LanguageSectionState extends State<LanguageSection> {
                 ),
               ),
               child: Text(
-                "Save Changes".toCurrentLanguage(),
+                toCurrentLanguageFunction("Save Changes"),
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.black,

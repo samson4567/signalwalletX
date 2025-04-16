@@ -15,7 +15,7 @@ class TransactionHistorySection extends StatelessWidget {
           children: [
             // Header
             Text(
-              'Transaction History'.toCurrentLanguage(),
+              toCurrentLanguageFunction('Transaction History'),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -29,7 +29,7 @@ class TransactionHistorySection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Account Role'.toCurrentLanguage(),
+                  toCurrentLanguageFunction('Account Role'),
                   style: TextStyle(color: Colors.grey),
                 ),
                 Row(
@@ -37,7 +37,7 @@ class TransactionHistorySection extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 38),
                       child: Text(
-                        'Account Type'.toCurrentLanguage(),
+                        toCurrentLanguageFunction('Account Type'),
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -60,7 +60,7 @@ class TransactionHistorySection extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          'Real Account'.toCurrentLanguage(),
+                          toCurrentLanguageFunction('Real Account'),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -75,7 +75,7 @@ class TransactionHistorySection extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'All account'.toCurrentLanguage(),
+                        toCurrentLanguageFunction('All account'),
                         style: TextStyle(color: Colors.white),
                       ),
                       Icon(Icons.arrow_drop_down, color: Colors.white),
@@ -89,7 +89,7 @@ class TransactionHistorySection extends StatelessWidget {
 
             // Date label
             Text(
-              'Date'.toCurrentLanguage(),
+              toCurrentLanguageFunction('Date'),
               style: TextStyle(color: Colors.grey),
             ),
 
@@ -114,13 +114,13 @@ class TransactionHistorySection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Account role'.toCurrentLanguage(),
+                Text(toCurrentLanguageFunction('Account role'),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
-                Text('Account type'.toCurrentLanguage(),
+                Text(toCurrentLanguageFunction('Account type'),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
-                Text('Currency type'.toCurrentLanguage(),
+                Text(toCurrentLanguageFunction('Currency type'),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
-                Text('Charge fees'.toCurrentLanguage(),
+                Text(toCurrentLanguageFunction('Charge fees'),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
               ],
             ),
@@ -137,9 +137,9 @@ class TransactionHistorySection extends StatelessWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('demo'.toCurrentLanguage(),
+                      Text(toCurrentLanguageFunction('demo'),
                           style: TextStyle(color: Colors.white)),
-                      Text('trade'.toCurrentLanguage(),
+                      Text(toCurrentLanguageFunction('trade'),
                           style: TextStyle(color: Colors.white)),
                       Text('usdt', style: TextStyle(color: Colors.white)),
                       Text('-30.00', style: TextStyle(color: Colors.red)),

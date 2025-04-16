@@ -18,7 +18,7 @@ class VerificationSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Password".toCurrentLanguage(),
+            toCurrentLanguageFunction("Password"),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -28,7 +28,7 @@ class VerificationSection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            "New passoword".toCurrentLanguage(),
+            toCurrentLanguageFunction("New passoword"),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -41,13 +41,13 @@ class VerificationSection extends StatelessWidget {
             width: 386,
             fillColor: Colors.black,
             controller: newPasswordController,
-            label: "New Password".toCurrentLanguage(),
-            hintText: "Enter new password".toCurrentLanguage(),
+            label: toCurrentLanguageFunction("New Password"),
+            hintText: toCurrentLanguageFunction("Enter new password"),
             obscureText: true,
           ),
           const SizedBox(height: 20),
           Text(
-            "Comfirm passoword".toCurrentLanguage(),
+            toCurrentLanguageFunction("Comfirm passoword"),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -61,7 +61,7 @@ class VerificationSection extends StatelessWidget {
             width: 386,
             controller: confirmPasswordController,
             label: "XXXXXX",
-            hintText: "Re-enter new password".toCurrentLanguage(),
+            hintText: toCurrentLanguageFunction("Re-enter new password"),
             obscureText: true,
           ),
           const SizedBox(height: 30),
@@ -80,7 +80,7 @@ class VerificationSection extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "Save Changes".toCurrentLanguage(),
+                toCurrentLanguageFunction("Save Changes"),
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.black,

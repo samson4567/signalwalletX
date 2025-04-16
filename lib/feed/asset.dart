@@ -12,7 +12,6 @@ import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_s
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
-import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
 import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
 
@@ -140,7 +139,7 @@ class _AssetsState extends State<Assets> {
                 Row(
                   children: [
                     Text(
-                      'Total Assets'.toCurrentLanguage(),
+                      toCurrentLanguageFunction('Total Assets'),
                       style: TextStyles.title.copyWith(
                         fontSize: screenWidth * 0.045, // 4.5% of screen width
                         color: const Color.fromRGBO(255, 255, 255, 0.7),
@@ -187,7 +186,7 @@ class _AssetsState extends State<Assets> {
     return Row(
       children: [
         Text(
-          'Today\'s PnL:'.toCurrentLanguage(),
+          toCurrentLanguageFunction('Today\'s PnL:'),
           style: TextStyles.subtitle.copyWith(
             fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
             color: const Color.fromRGBO(255, 255, 255, 0.7),
@@ -317,7 +316,7 @@ class _AssetsState extends State<Assets> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Account'.toCurrentLanguage(),
+          toCurrentLanguageFunction('Account'),
           style: TextStyles.title.copyWith(
             fontSize: 20,
             color: Colors.white,
@@ -326,11 +325,13 @@ class _AssetsState extends State<Assets> {
           ),
         ),
         const SizedBox(height: 10),
-        _buildAccountContainer('Exchange'.toCurrentLanguage(), '\$0.000'),
+        _buildAccountContainer(
+            toCurrentLanguageFunction('Exchange'), '\$0.000'),
         const SizedBox(height: 10),
-        _buildAccountContainer('Trade'.toCurrentLanguage(), '\$3,200'),
+        _buildAccountContainer(toCurrentLanguageFunction('Trade'), '\$3,200'),
         const SizedBox(height: 10),
-        _buildAccountContainer('Perpetual'.toCurrentLanguage(), '\$0.000'),
+        _buildAccountContainer(
+            toCurrentLanguageFunction('Perpetual'), '\$0.000'),
       ],
     );
   }
@@ -351,7 +352,7 @@ class _AssetsState extends State<Assets> {
           });
         }
         String displayedValue = value; // Default value
-        if (title == 'Trade'.toCurrentLanguage()) {
+        if (title == toCurrentLanguageFunction('Trade')) {
           displayedValue = '\$${totalBalance.toStringAsFixed(2)}';
         }
         return FancyContainer(

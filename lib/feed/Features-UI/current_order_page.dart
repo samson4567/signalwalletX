@@ -336,7 +336,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FancyText(
-                    "Initiate a follow-up order".toCurrentLanguage(),
+                    toCurrentLanguageFunction("Initiate a follow-up order"),
                     // size: 10,
                   ),
                 ),
@@ -352,7 +352,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FancyText(
-                    "Initiate a follow-up order".toCurrentLanguage(),
+                    toCurrentLanguageFunction("Initiate a follow-up order"),
                     // size: 10,
                   ),
                 ),
@@ -369,12 +369,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           hasBorder: true,
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: TextField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     border: InputBorder.none,
-                    hintText: "Enter Order Code",
+                    hintText: toCurrentLanguageFunction("Enter Order Code"),
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -394,7 +394,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 backgroundColor: getFigmaColor("38393D"),
                 hasBorder: true,
                 child: FancyText(
-                  "Confirm".toCurrentLanguage(),
+                  toCurrentLanguageFunction("Confirm"),
                   textColor: getFigmaColor("707070"),
                 ),
               ),
@@ -437,12 +437,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           length: 1,
           child: Column(
             children: [
-              const TabBar(
+              TabBar(
                   tabAlignment: TabAlignment.center,
                   isScrollable: true,
                   tabs: [
                     Tab(
-                      text: 'Chart',
+                      text: toCurrentLanguageFunction('Chart'),
                       // icon: Icon(Icons.home)
                     ),
                     // Tab(
@@ -523,7 +523,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               },
               backgroundColor: isDepth ? null : getFigmaColor("383838"),
               child: FancyText(
-                "Original".toCurrentLanguage(),
+                toCurrentLanguageFunction("Original"),
                 size: 12,
               ),
             ),
@@ -536,7 +536,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               width: 60,
               backgroundColor: !isDepth ? null : getFigmaColor("383838"),
               child: FancyText(
-                "Depth".toCurrentLanguage(),
+                toCurrentLanguageFunction("Depth"),
                 size: 12,
               ),
             )
@@ -585,7 +585,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         Column(
           children: [
             FancyText(
-              "Order Deadline".toCurrentLanguage(),
+              toCurrentLanguageFunction("Order Deadline"),
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
@@ -598,7 +598,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         Column(
           children: [
             FancyText(
-              "Countdown".toCurrentLanguage(),
+              toCurrentLanguageFunction("Countdown"),
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
@@ -611,7 +611,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         Column(
           children: [
             FancyText(
-              "Time Period".toCurrentLanguage(),
+              toCurrentLanguageFunction("Time Period"),
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
@@ -675,7 +675,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             Text(
               (selectedCoinModel?.symbol != null)
                   ? "${selectedCoinModel!.symbol}USDT"
-                  : "select a coin".toCurrentLanguage(),
+                  : toCurrentLanguageFunction("select a coin"),
               style: TextStyle(
                 color: getFigmaColor("EAECEF"),
                 fontSize: 24.w,
@@ -690,7 +690,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
                 child: Text(
-                  "${selectedText}".toCurrentLanguage(),
+                  toCurrentLanguageFunction("${selectedText}"),
                   style: TextStyle(
                     color: getFigmaColor("EAECEF"),
                     fontSize: 14.w,
@@ -786,7 +786,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           if (state is WebSocketConnectedState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("connected".toCurrentLanguage()),
+                content: Text(toCurrentLanguageFunction("connected")),
                 backgroundColor: Colors.green,
               ),
             );

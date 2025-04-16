@@ -103,7 +103,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget _buildTitle(double screenHeight) {
     return Center(
       child: Text(
-        'Create your account'.toCurrentLanguage(),
+        toCurrentLanguageFunction('Create your account'),
         textAlign: TextAlign.center,
         style: TextStyles.title.copyWith(color: Colors.white),
       ),
@@ -113,7 +113,8 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget _buildSubtitle(double screenHeight) {
     return Center(
       child: Text(
-        'Fill the fields below to create your account'.toCurrentLanguage(),
+        toCurrentLanguageFunction(
+            'Fill the fields below to create your account'),
         textAlign: TextAlign.center,
         style: TextStyles.subtitle
             .copyWith(color: ColorConstants.primarydeepColor),
@@ -126,8 +127,8 @@ class _CreateAccountState extends State<CreateAccount> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email'.toCurrentLanguage(),
-        hintText: 'Enter your email'.toCurrentLanguage(),
+        label: toCurrentLanguageFunction('Email'),
+        hintText: toCurrentLanguageFunction('Enter your email'),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -136,7 +137,7 @@ class _CreateAccountState extends State<CreateAccount> {
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your email'.toCurrentLanguage();
+            return toCurrentLanguageFunction('Please enter your email');
           }
           return null;
         },
@@ -149,8 +150,8 @@ class _CreateAccountState extends State<CreateAccount> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: passwordController,
-        label: 'Password'.toCurrentLanguage(),
-        hintText: 'Enter your password'.toCurrentLanguage(),
+        label: toCurrentLanguageFunction('Password'),
+        hintText: toCurrentLanguageFunction('Enter your password'),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -164,7 +165,7 @@ class _CreateAccountState extends State<CreateAccount> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your password'.toCurrentLanguage();
+            return toCurrentLanguageFunction('Please enter your password');
           }
           return null;
         },
@@ -177,8 +178,8 @@ class _CreateAccountState extends State<CreateAccount> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: confirmPasswordController,
-        label: 'Confirm Password'.toCurrentLanguage(),
-        hintText: 'Enter your password'.toCurrentLanguage(),
+        label: toCurrentLanguageFunction('Confirm Password'),
+        hintText: toCurrentLanguageFunction('Enter your password'),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -192,7 +193,7 @@ class _CreateAccountState extends State<CreateAccount> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your password';
+            return toCurrentLanguageFunction('Please enter your password');
           }
           return null;
         },
@@ -219,7 +220,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 },
               ),
               Text(
-                'Remember me for 30 days',
+                toCurrentLanguageFunction('Remember me for 30 days'),
                 style: TextStyles.bodyText.copyWith(color: Colors.white),
               ),
             ],
@@ -229,7 +230,7 @@ class _CreateAccountState extends State<CreateAccount> {
               context.push(MyAppRouteConstant.forgetPassowrd);
             },
             child: Text(
-              'Forgot password?',
+              toCurrentLanguageFunction('Forgot password?'),
               style: TextStyles.bodyText.copyWith(color: Colors.blue),
             ),
           ),
@@ -267,7 +268,7 @@ class _CreateAccountState extends State<CreateAccount> {
             }
             return Center(
               child: Text(
-                'Create Account',
+                toCurrentLanguageFunction('Create Account'),
                 style: TextStyles.normaltext
                     .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
               ),
@@ -287,7 +288,7 @@ class _CreateAccountState extends State<CreateAccount> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              'or',
+              toCurrentLanguageFunction('or'),
               style: TextStyle(color: Colors.white.withOpacity(0.6)),
             ),
           ),
@@ -370,16 +371,16 @@ class _CreateAccountState extends State<CreateAccount> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Already have an account?',
+          Text(
+            toCurrentLanguageFunction('Already have an account?'),
             style: TextStyle(color: Colors.white),
           ),
           TextButton(
             onPressed: () {
               context.push(MyAppRouteConstant.login);
             },
-            child: const Text(
-              'Login',
+            child: Text(
+              toCurrentLanguageFunction('Login'),
               style: TextStyle(color: Colors.blue),
             ),
           ),

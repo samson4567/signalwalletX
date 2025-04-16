@@ -28,7 +28,7 @@ class _PasswordSectionState extends State<PasswordSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Password".toCurrentLanguage(),
+            toCurrentLanguageFunction("Password"),
             style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -37,39 +37,39 @@ class _PasswordSectionState extends State<PasswordSection> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildLabel("Current Password".toCurrentLanguage()),
+          _buildLabel(toCurrentLanguageFunction("Current Password")),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             height: 34,
             width: 386,
             fillColor: Colors.black,
             controller: currentPasswordController,
-            label: "Current Password".toCurrentLanguage(),
-            hintText: "Enter current password".toCurrentLanguage(),
+            label: toCurrentLanguageFunction("Current Password"),
+            hintText: toCurrentLanguageFunction("Enter current password"),
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          _buildLabel("New Password".toCurrentLanguage()),
+          _buildLabel(toCurrentLanguageFunction("New Password")),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             height: 34,
             width: 386,
             fillColor: Colors.black,
             controller: newPasswordController,
-            label: "New Password".toCurrentLanguage(),
-            hintText: "Enter new password".toCurrentLanguage(),
+            label: toCurrentLanguageFunction("New Password"),
+            hintText: toCurrentLanguageFunction("Enter new password"),
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          _buildLabel("Confirm Password".toCurrentLanguage()),
+          _buildLabel(toCurrentLanguageFunction("Confirm Password")),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             fillColor: Colors.black,
             height: 34,
             width: 386,
             controller: confirmPasswordController,
-            label: "Confirm Password".toCurrentLanguage(),
-            hintText: "Re-enter new password".toCurrentLanguage(),
+            label: toCurrentLanguageFunction("Confirm Password"),
+            hintText: toCurrentLanguageFunction("Re-enter new password"),
             obscureText: true,
           ),
           const SizedBox(height: 30),
@@ -80,16 +80,16 @@ class _PasswordSectionState extends State<PasswordSection> {
                 if (state is UpdatePasswordSuccessState) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                          "password updated successfully".toCurrentLanguage()),
+                      content: Text(toCurrentLanguageFunction(
+                          "password updated successfully")),
                       backgroundColor: Colors.green,
                     ),
                   );
                 } else if (state is UpdatePasswordErrorState) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content:
-                          Text("password update Failed".toCurrentLanguage()),
+                      content: Text(
+                          toCurrentLanguageFunction("password update Failed")),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -116,8 +116,8 @@ class _PasswordSectionState extends State<PasswordSection> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              "Passwords do not match".toCurrentLanguage()),
+                          content: Text(toCurrentLanguageFunction(
+                              "Passwords do not match")),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -141,7 +141,7 @@ class _PasswordSectionState extends State<PasswordSection> {
                           ),
                         )
                       : Text(
-                          "Save Changes".toCurrentLanguage(),
+                          toCurrentLanguageFunction("Save Changes"),
                           style: const TextStyle(
                             fontFamily: 'inter',
                             color: Colors.black,

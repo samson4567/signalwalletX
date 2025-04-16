@@ -27,14 +27,14 @@ class _OrderFollowedDialogState extends State<OrderFollowedDialog> {
               Image.asset("assets/images/green_Success_icon.png"),
               const SizedBox(height: 20),
               FancyText(
-                "Order Followed".toCurrentLanguage(),
+                toCurrentLanguageFunction("Order Followed"),
                 weight: FontWeight.w600,
                 size: 24,
               ),
               const SizedBox(height: 20),
               FancyText(
-                "The trade order has been successfully followed."
-                    .toCurrentLanguage(),
+                toCurrentLanguageFunction(
+                    "The trade order has been successfully followed."),
                 weight: FontWeight.w600,
                 textColor: Colors.white.withOpacity(.70),
                 size: 18,
@@ -54,7 +54,7 @@ class _OrderFollowedDialogState extends State<OrderFollowedDialog> {
                       backgroundColor: ColorConstants.fancyGreen,
                       // borderColor: Colors.grey,
                       child: FancyText(
-                        "Okay".toCurrentLanguage(),
+                        toCurrentLanguageFunction("Okay"),
                         textColor: Colors.black,
                       ),
                     ),

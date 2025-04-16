@@ -52,7 +52,8 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
               context.push(
                 MyAppRouteConstant.forgetPassowrdOTP,
                 extra: {
-                  'email'.toCurrentLanguage(): emailController.text.trim()
+                  toCurrentLanguageFunction('email'):
+                      emailController.text.trim()
                 },
               );
             }
@@ -110,7 +111,7 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
       padding: EdgeInsets.only(top: screenHeight * 0.02),
       child: Center(
         child: Text(
-          'Forget Your Password'.toCurrentLanguage(),
+          toCurrentLanguageFunction('Forget Your Password'),
           textAlign: TextAlign.center,
           style: TextStyles.title.copyWith(color: Colors.white),
         ),
@@ -121,9 +122,8 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
   Widget _buildSubtitle(double screenHeight) {
     return Center(
       child: Text(
-        'An OTP will be sent to your mail to reset your password'
-            .toCurrentLanguage()
-            .toCurrentLanguage(),
+        toCurrentLanguageFunction(
+            'An OTP will be sent to your mail to reset your password'),
         textAlign: TextAlign.center,
         style: TextStyles.subtitle.copyWith(
           color: ColorConstants.primarydeepColor,
@@ -138,8 +138,8 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email'.toCurrentLanguage(),
-        hintText: 'Enter your email'.toCurrentLanguage(),
+        label: toCurrentLanguageFunction('Email'),
+        hintText: toCurrentLanguageFunction('Enter your email'),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -148,7 +148,7 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your email'.toCurrentLanguage();
+            return toCurrentLanguageFunction('Please enter your email');
           }
           return null;
         },
@@ -179,7 +179,7 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
                     color: Colors.black,
                   )
                 : Text(
-                    'Submit'.toCurrentLanguage(),
+                    toCurrentLanguageFunction('Submit'),
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

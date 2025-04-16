@@ -52,9 +52,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
     if (enteredCode.length < 6) {
       _showDialog(
           'error',
-          'Invalid OTP'.toCurrentLanguage(),
-          'The OTP you entered is incorrect - kindly try again.'
-              .toCurrentLanguage());
+          toCurrentLanguageFunction('Invalid OTP'),
+          toCurrentLanguageFunction(
+              'The OTP you entered is incorrect - kindly try again.'));
       return;
     }
 
@@ -111,8 +111,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
               const SizedBox(height: 16),
               _dialogButton(
                   type == 'success'
-                      ? 'Login'.toCurrentLanguage()
-                      : 'Try Again'.toCurrentLanguage(), () {
+                      ? toCurrentLanguageFunction('Login')
+                      : toCurrentLanguageFunction('Try Again'), () {
                 context.push(MyAppRouteConstant.home);
               }),
             ],
@@ -160,29 +160,36 @@ class _VerifyEmailState extends State<VerifyEmail> {
             if (state is VerifyNewSignUpEmailSuccessState) {
               setState(() => isVerifying = false);
               _showDialog(
-                  'success',
-                  'You are all set'.toCurrentLanguage(),
-                  'Your account has been verified successfully.'
-                      .toCurrentLanguage());
+                'success',
+                toCurrentLanguageFunction('You are all set'),
+                toCurrentLanguageFunction(
+                    'Your account has been verified successfully.'),
+              );
             } else if (state is VerifyNewSignUpEmailErrorState) {
               setState(() => isVerifying = false);
-              _showDialog('error', 'Invalid OTP'.toCurrentLanguage(),
-                  'The OTP you entered is incorrect.'.toCurrentLanguage());
+              _showDialog(
+                  'error',
+                  toCurrentLanguageFunction('Invalid OTP'),
+                  toCurrentLanguageFunction(
+                      'The OTP you entered is incorrect.'));
             } else if (state is ResendOtpSuccessState) {
               setState(() {
                 isResending = false;
                 resendTimer = 60; // Reset timer
                 _startResendTimer();
               });
-              _showDialog('success', 'OTP Resent'.toCurrentLanguage(),
-                  'A new OTP has been sent to your email.'.toCurrentLanguage());
+              _showDialog(
+                  'success',
+                  toCurrentLanguageFunction('OTP Resent'),
+                  toCurrentLanguageFunction(
+                      'A new OTP has been sent to your email.'));
             } else if (state is ResendOtpErrorState) {
               setState(() => isResending = false);
               _showDialog(
                   'error',
-                  'Resend Failed'.toCurrentLanguage(),
-                  'Unable to resend OTP. Please try again.'
-                      .toCurrentLanguage());
+                  toCurrentLanguageFunction('Resend Failed'),
+                  toCurrentLanguageFunction(
+                      'Unable to resend OTP. Please try again.'));
             }
           },
           child: Column(
@@ -204,7 +211,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Enter your email code'.toCurrentLanguage(),
+                      toCurrentLanguageFunction('Enter your email code'),
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -212,7 +219,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'We have sent a code to your email'.toCurrentLanguage(),
+                      toCurrentLanguageFunction(
+                          'We have sent a code to your email'),
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     const SizedBox(height: 16),
@@ -256,7 +264,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         child: isVerifying
                             ? const CircularProgressIndicator(
                                 color: Colors.white)
-                            : Text('Verify'.toCurrentLanguage(),
+                            : Text(toCurrentLanguageFunction('Verify'),
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black,
@@ -274,8 +282,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(resendTimer > 30
-                            ? '${"Resend OTP in".toCurrentLanguage()} $resendTimer ${"seconds".toCurrentLanguage()}'
-                            : 'Resend OTP'.toCurrentLanguage()),
+                            ? '${toCurrentLanguageFunction("Resend OTP in")} $resendTimer ${toCurrentLanguageFunction("seconds")}'
+                            : toCurrentLanguageFunction('Resend OTP')),
                       ),
                     ),
                   ],

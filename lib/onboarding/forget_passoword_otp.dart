@@ -50,9 +50,9 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
     if (enteredCode.length < 6) {
       _showDialog(
         'error',
-        'Invalid OTP'.toCurrentLanguage(),
-        'The OTP you entered is incorrect - kindly try again.'
-            .toCurrentLanguage(),
+        toCurrentLanguageFunction('Invalid OTP'),
+        toCurrentLanguageFunction(
+            'The OTP you entered is incorrect - kindly try again.'),
       );
       return;
     }
@@ -71,8 +71,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
 
       _showDialog(
         'success',
-        'OTP Verified'.toCurrentLanguage(),
-        'Your OTP has been verified successfully.'.toCurrentLanguage(),
+        toCurrentLanguageFunction('OTP Verified'),
+        toCurrentLanguageFunction('Your OTP has been verified successfully.'),
       );
     });
   }
@@ -93,8 +93,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
         _startResendTimer();
       });
 
-      _showDialog('success', 'OTP Resent'.toCurrentLanguage(),
-          'A new OTP has been sent to your email.'.toCurrentLanguage());
+      _showDialog('success', toCurrentLanguageFunction('OTP Resent'),
+          toCurrentLanguageFunction('A new OTP has been sent to your email.'));
     });
   }
 
@@ -132,8 +132,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
               const SizedBox(height: 16),
               _dialogButton(
                   type == 'success'
-                      ? 'Login'.toCurrentLanguage()
-                      : 'Try Again'.toCurrentLanguage(), () {
+                      ? toCurrentLanguageFunction('Login')
+                      : toCurrentLanguageFunction('Try Again'), () {
                 if (type == 'success') {
                   context.push(MyAppRouteConstant.setNewpassoword);
                 } else {
@@ -211,7 +211,7 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Enter your email code'.toCurrentLanguage(),
+                    toCurrentLanguageFunction('Enter your email code'),
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -219,7 +219,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'We have sent a code to your email'.toCurrentLanguage(),
+                    toCurrentLanguageFunction(
+                        'We have sent a code to your email'),
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
@@ -282,8 +283,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(resendTimer > 30
-                          ? '${"Resend OTP in".toCurrentLanguage()} $resendTimer ${"seconds".toCurrentLanguage()}'
-                          : 'Resend OTP'.toCurrentLanguage()),
+                          ? '${toCurrentLanguageFunction("Resend OTP in")} $resendTimer ${toCurrentLanguageFunction("seconds")}'
+                          : toCurrentLanguageFunction('Resend OTP')),
                     ),
                   ),
                 ],

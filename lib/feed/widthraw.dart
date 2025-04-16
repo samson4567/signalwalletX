@@ -6,7 +6,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
-import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
+
 import 'package:signalwavex/languages.dart';
 
 class Withdraw extends StatefulWidget {
@@ -107,18 +107,18 @@ class _WithdrawState extends State<Withdraw> {
                     Column(
                       children: [
                         Text(
-                          'Withdrawal'.toCurrentLanguage(),
-                          style: TextStyle(
+                          toCurrentLanguageFunction('Withdrawal'),
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             fontFamily: 'Inter',
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          'Cash out your assets'.toCurrentLanguage(),
-                          style: TextStyle(
+                          toCurrentLanguageFunction('Cash out your assets'),
+                          style: const TextStyle(
                             fontSize: 12,
                             fontFamily: 'inter',
                             color: Colors.grey,
@@ -128,8 +128,8 @@ class _WithdrawState extends State<Withdraw> {
                     ),
                     const SizedBox(height: 20),
                     _buildSelectionContainer(
-                      label: 'Please select the currency to withdraw'
-                          .toCurrentLanguage(),
+                      label: toCurrentLanguageFunction(
+                          'Please select the currency to withdraw'),
                       selectedItem: selectedCoin,
                       imagePath: coinList.firstWhere((coin) =>
                           coin['label'] == selectedCoin)['imagePath']!,
@@ -144,7 +144,7 @@ class _WithdrawState extends State<Withdraw> {
                     _buildInfoContainer(),
                     const SizedBox(height: 16),
                     _buildSelectionContainer(
-                      label: 'Select Chain'.toCurrentLanguage(),
+                      label: toCurrentLanguageFunction('Select Chain'),
                       selectedItem: selectedChain,
                       itemList: chainList,
                       onChanged: (value) {
@@ -156,12 +156,12 @@ class _WithdrawState extends State<Withdraw> {
                     ),
                     const SizedBox(height: 16),
                     _buildConversionContainer(
-                      'Quantity'.toCurrentLanguage(),
+                      toCurrentLanguageFunction('Quantity'),
                       toAmountController,
                     ),
                     const SizedBox(height: 16),
                     _buildHeadFeeContainer(
-                      'Handling Fee'.toCurrentLanguage(),
+                      toCurrentLanguageFunction('Handling Fee'),
                       toAmountController,
                     ),
                     const SizedBox(height: 16),
@@ -176,8 +176,8 @@ class _WithdrawState extends State<Withdraw> {
                         onTap: _handleWithdraw,
                         child: Center(
                           child: Text(
-                            'Withdrawal'.toCurrentLanguage(),
-                            style: TextStyle(
+                            toCurrentLanguageFunction('Withdrawal'),
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -375,18 +375,19 @@ class _WithdrawState extends State<Withdraw> {
     String imagePath;
 
     if (type == 'success') {
-      title = 'Transaction Successful'.toCurrentLanguage();
-      message =
-          'Your crypto has been successfully transferred.'.toCurrentLanguage();
-      imagePath = 'assets/icons/succeful.png'.toCurrentLanguage();
+      title = toCurrentLanguageFunction('Transaction Successful');
+      message = toCurrentLanguageFunction(
+          'Your crypto has been successfully transferred.');
+      imagePath = 'assets/icons/succeful.png';
     } else if (type == 'insufficient') {
-      title = 'Insufficient Funds'.toCurrentLanguage();
-      message = 'You don\'t have enough BTC to complete this transaction.'
-          .toCurrentLanguage();
+      title = toCurrentLanguageFunction('Insufficient Funds');
+      message = toCurrentLanguageFunction(
+          'You dont have enough BTC to complete this transaction.');
       imagePath = 'assets/icons/wrong.png';
     } else {
-      title = 'Invalid Address'.toCurrentLanguage();
-      message = 'Please enter a valid withdrawal address.'.toCurrentLanguage();
+      title = toCurrentLanguageFunction('Invalid Address');
+      message =
+          toCurrentLanguageFunction('Please enter a valid withdrawal address.');
       imagePath = 'assets/icons/wrong.png';
     }
 
@@ -429,8 +430,8 @@ class _WithdrawState extends State<Withdraw> {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  'Close'.toCurrentLanguage(),
-                  style: TextStyle(
+                  toCurrentLanguageFunction('Close'),
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),

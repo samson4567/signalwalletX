@@ -81,7 +81,7 @@ class _MarketState extends State<Market> {
                       ],
                     ),
                     Text(
-                      "Market Trading".toCurrentLanguage(),
+                      toCurrentLanguageFunction("Market Trading"),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -125,7 +125,7 @@ class _MarketState extends State<Market> {
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search  by currency pair'.toCurrentLanguage(),
+          hintText: toCurrentLanguageFunction('Search  by currency pair'),
           hintStyle: TextStyle(color: const Color(0xFF8F8F8F), fontSize: 10),
           border: InputBorder.none,
           prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -209,7 +209,7 @@ class _MarketState extends State<Market> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Contract Markets'.toCurrentLanguage(),
+          Text(toCurrentLanguageFunction('Contract Markets'),
               style: TextStyle(
                   fontSize: 16, color: Colors.white, fontFamily: 'inter')),
           const SizedBox(height: 30),
@@ -218,14 +218,14 @@ class _MarketState extends State<Market> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Name'.toCurrentLanguage(),
+                toCurrentLanguageFunction('Name'),
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
               ),
               Text(
-                'Price'.toCurrentLanguage(),
+                toCurrentLanguageFunction('Price'),
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

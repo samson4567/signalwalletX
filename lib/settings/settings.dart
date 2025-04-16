@@ -42,7 +42,7 @@ class _SettingsState extends State<Settings>
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => context.push(MyAppRouteConstant.home)),
         title: Text(
-          "Settings".toCurrentLanguage(),
+          toCurrentLanguageFunction("Settings"),
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -56,11 +56,11 @@ class _SettingsState extends State<Settings>
             unselectedLabelColor: Colors.white,
             indicatorColor: Colors.yellow,
             tabs: [
-              Tab(text: "Profile".toCurrentLanguage()),
-              Tab(text: "Transaction History".toCurrentLanguage()),
-              Tab(text: "Password".toCurrentLanguage()),
-              Tab(text: "Verification".toCurrentLanguage()),
-              Tab(text: "Language".toCurrentLanguage()),
+              Tab(text: toCurrentLanguageFunction("Profile")),
+              Tab(text: toCurrentLanguageFunction("Transaction History")),
+              Tab(text: toCurrentLanguageFunction("Password")),
+              Tab(text: toCurrentLanguageFunction("Verification")),
+              Tab(text: toCurrentLanguageFunction("Language")),
             ],
           ),
           Expanded(

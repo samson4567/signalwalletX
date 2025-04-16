@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           listener: (context, state) {
             if (state is LoginSuccessState) {
               context.push(MyAppRouteConstant.feedPage,
-                  extra: {'email'.toCurrentLanguage(): state.email});
+                  extra: {'email': state.email});
             } else if (state is LoginErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -125,8 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.05),
       child: Center(
         child: Text(
-          'Log Into your account'.toCurrentLanguage(),
-          // toCurrentLanguageFunction("Log Into your account"),
+          // 'Log Into your account'.toCurrentLanguages(),
+          toCurrentLanguageFunction("Log Into your account"),
           textAlign: TextAlign.center,
           style: TextStyles.title.copyWith(color: Colors.white),
         ),
@@ -137,7 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSubtitle(double screenHeight) {
     return Center(
       child: Text(
-        'Enter your credentials to access your account'.toCurrentLanguage(),
+        toCurrentLanguageFunction(
+            'Enter your credentials to access your account'),
         textAlign: TextAlign.center,
         style: TextStyles.subtitle
             .copyWith(color: ColorConstants.primarydeepColor),
@@ -150,8 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email'.toCurrentLanguage(),
-        hintText: 'Enter your email'.toCurrentLanguage(),
+        label: toCurrentLanguageFunction('Email'),
+        hintText: toCurrentLanguageFunction('Enter your email'),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -160,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your email'.toCurrentLanguage();
+            return toCurrentLanguageFunction('Please enter your email');
           }
           return null;
         },
@@ -173,8 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: passwordController,
-        label: 'Password'.toCurrentLanguage(),
-        hintText: 'Enter your password'.toCurrentLanguage(),
+        label: toCurrentLanguageFunction('Password'),
+        hintText: toCurrentLanguageFunction('Enter your password'),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -188,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your password'.toCurrentLanguage();
+            return toCurrentLanguageFunction('Please enter your password');
           }
           return null;
         },
@@ -209,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
         Text(
-          'Remember me for 30 days'.toCurrentLanguage(),
+          toCurrentLanguageFunction('Remember me for 30 days'),
           style: TextStyles.bodyText.copyWith(color: Colors.white),
         ),
         const Spacer(),
@@ -218,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context.push(MyAppRouteConstant.forgetPassowrd);
           },
           child: Text(
-            'Forgot password?'.toCurrentLanguage(),
+            toCurrentLanguageFunction('Forgot password?'),
             style: TextStyles.bodyText.copyWith(color: Colors.blue),
           ),
         ),
@@ -242,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: state is LoginLoadingState
                     ? const CircularProgressIndicator(color: Colors.black)
                     : Text(
-                        'Log into Account'.toCurrentLanguage(),
+                        toCurrentLanguageFunction('Log into Account'),
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -286,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              'or'.toCurrentLanguage(),
+              toCurrentLanguageFunction('or'),
               style: TextStyle(color: Colors.white.withOpacity(0.6)),
             ),
           ),
@@ -322,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(width: 10.0),
               Text(
-                'Continue with Google'.toCurrentLanguage(),
+                toCurrentLanguageFunction('Continue with Google'),
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -339,7 +340,7 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Are you new here?'.toCurrentLanguage(),
+            toCurrentLanguageFunction('Are you new here?'),
             style: TextStyle(color: Colors.white),
           ),
           TextButton(
@@ -349,7 +350,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: GestureDetector(
               onTap: () => context.push(MyAppRouteConstant.createAccount),
               child: Text(
-                'Create account'.toCurrentLanguage(),
+                toCurrentLanguageFunction('Create account'),
                 style: TextStyle(color: Colors.blue),
               ),
             ),

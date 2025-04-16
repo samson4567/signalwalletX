@@ -26,7 +26,7 @@ class _ProfileSectionState extends State<ProfileSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "My Profile".toCurrentLanguage(),
+            toCurrentLanguageFunction("My Profile"),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -40,7 +40,7 @@ class _ProfileSectionState extends State<ProfileSection> {
           Column(
             children: [
               Text(
-                "Avatar".toCurrentLanguage(),
+                toCurrentLanguageFunction("Avatar"),
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.white,
@@ -55,7 +55,7 @@ class _ProfileSectionState extends State<ProfileSection> {
           ),
           const SizedBox(height: 20),
           Text(
-            "Full Name".toCurrentLanguage(),
+            toCurrentLanguageFunction("Full Name"),
             style: TextStyle(color: Colors.white, fontSize: 10),
           ),
           const SizedBox(height: 8),
@@ -64,8 +64,8 @@ class _ProfileSectionState extends State<ProfileSection> {
             height: 34,
             width: 400,
             controller: _fullName,
-            label: 'Full name'.toCurrentLanguage(),
-            hintText: 'Enter your full name'.toCurrentLanguage(),
+            label: toCurrentLanguageFunction('Full name'),
+            hintText: toCurrentLanguageFunction('Enter your full name'),
             fillColor: Colors.black,
             labelColor: Colors.white,
             hintColor: Colors.white.withOpacity(0.6),
@@ -73,14 +73,14 @@ class _ProfileSectionState extends State<ProfileSection> {
             prefixImagePath: 'assets/icons/cu.png',
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your fullName'.toCurrentLanguage();
+                return toCurrentLanguageFunction('Please enter your fullName');
               }
               return null;
             },
           ),
           const SizedBox(height: 20),
           Text(
-            "Phone Number".toCurrentLanguage(),
+            toCurrentLanguageFunction("Phone Number"),
             style: TextStyle(color: Colors.white, fontSize: 10),
           ),
           const SizedBox(height: 8),
@@ -89,8 +89,8 @@ class _ProfileSectionState extends State<ProfileSection> {
             height: 34,
             width: 400,
             controller: _phoneController,
-            label: 'Phone Number'.toCurrentLanguage(),
-            hintText: 'Enter your phone number'.toCurrentLanguage(),
+            label: toCurrentLanguageFunction('Phone Number'),
+            hintText: toCurrentLanguageFunction('Enter your phone number'),
             fillColor: Colors.black,
             labelColor: Colors.white,
             hintColor: Colors.white.withOpacity(0.6),
@@ -99,7 +99,8 @@ class _ProfileSectionState extends State<ProfileSection> {
                 'assets/icons/bitcoin.png', // You can replace with the phone icon
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your phone number'.toCurrentLanguage();
+                return toCurrentLanguageFunction(
+                    'Please enter your phone number');
               }
               // Optionally, add phone number validation
               return null;
@@ -144,7 +145,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                   ),
                   child: Center(
                     child: Text(
-                      "Save Changes".toCurrentLanguage(),
+                      toCurrentLanguageFunction("Save Changes"),
                       style: TextStyle(
                         fontFamily: 'inter',
                         color: Colors.black,

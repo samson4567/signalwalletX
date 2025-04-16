@@ -240,7 +240,7 @@ Map languageDetails3 = {
     "Hindi": "स्थानांतरण (Sthaanaantaran)",
     "Yoruba": "Gbe lọ",
     "Igbo": "Nyefee",
-    "Hausa": "Canja wuri".toCurrentLanguage()
+    "Hausa": "Canja wuri"
   },
   "No Transactions yet".toLowerCase(): {
     "Spanish": "Aún no hay transacciones",
@@ -2231,7 +2231,9 @@ extension StringLanguageConverter on String {
     //     ? this
     //     : (languageDetails[this.toLowerCase()]?[currentLanguage] as String?) ??
     //         this;
-    return toCurrentLanguageFunction(result);
+
+    // return toCurrentLanguageFunction(result);
+    return result;
   }
 }
 
