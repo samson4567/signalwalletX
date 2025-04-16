@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signalwavex/languages.dart';
 
 class TransactionHistorySection extends StatelessWidget {
   const TransactionHistorySection({super.key});
@@ -13,8 +14,8 @@ class TransactionHistorySection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            const Text(
-              'Transaction History',
+            Text(
+              'Transaction History'.toCurrentLanguage(),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -24,11 +25,11 @@ class TransactionHistorySection extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Account Role and Account Type row
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Account Role',
+                  'Account Role'.toCurrentLanguage(),
                   style: TextStyle(color: Colors.grey),
                 ),
                 Row(
@@ -36,7 +37,7 @@ class TransactionHistorySection extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 38),
                       child: Text(
-                        'AccountType',
+                        'Account Type'.toCurrentLanguage(),
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -56,10 +57,10 @@ class TransactionHistorySection extends StatelessWidget {
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Text(
-                          'Real Account',
+                          'Real Account'.toCurrentLanguage(),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -71,10 +72,10 @@ class TransactionHistorySection extends StatelessWidget {
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
                       Text(
-                        'All account',
+                        'All account'.toCurrentLanguage(),
                         style: TextStyle(color: Colors.white),
                       ),
                       Icon(Icons.arrow_drop_down, color: Colors.white),
@@ -87,8 +88,8 @@ class TransactionHistorySection extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Date label
-            const Text(
-              'Date',
+            Text(
+              'Date'.toCurrentLanguage(),
               style: TextStyle(color: Colors.grey),
             ),
 
@@ -110,16 +111,16 @@ class TransactionHistorySection extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Table headers
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Account role',
+                Text('Account role'.toCurrentLanguage(),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
-                Text('Account type',
+                Text('Account type'.toCurrentLanguage(),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
-                Text('Currency type',
+                Text('Currency type'.toCurrentLanguage(),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
-                Text('Charge fees',
+                Text('Charge fees'.toCurrentLanguage(),
                     style: TextStyle(color: Colors.grey, fontSize: 10)),
               ],
             ),
@@ -133,11 +134,13 @@ class TransactionHistorySection extends StatelessWidget {
                 separatorBuilder: (context, index) =>
                     const Divider(color: Colors.grey, height: 24),
                 itemBuilder: (context, index) {
-                  return const Row(
+                  return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('demo', style: TextStyle(color: Colors.white)),
-                      Text('trade', style: TextStyle(color: Colors.white)),
+                      Text('demo'.toCurrentLanguage(),
+                          style: TextStyle(color: Colors.white)),
+                      Text('trade'.toCurrentLanguage(),
+                          style: TextStyle(color: Colors.white)),
                       Text('usdt', style: TextStyle(color: Colors.white)),
                       Text('-30.00', style: TextStyle(color: Colors.red)),
                     ],

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
+import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 class VerifyForgetPasswordOtp extends StatefulWidget {
@@ -47,8 +48,12 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
         _controllers.map((controller) => controller.text).join();
 
     if (enteredCode.length < 6) {
-      _showDialog('error', 'Invalid OTP',
-          'The OTP you entered is incorrect - kindly try again.');
+      _showDialog(
+        'error',
+        'Invalid OTP'.toCurrentLanguage(),
+        'The OTP you entered is incorrect - kindly try again.'
+            .toCurrentLanguage(),
+      );
       return;
     }
 
@@ -64,8 +69,11 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
         isVerifying = false;
       });
 
-      _showDialog('success', 'OTP Verified',
-          'Your OTP has been verified successfully.');
+      _showDialog(
+        'success',
+        'OTP Verified'.toCurrentLanguage(),
+        'Your OTP has been verified successfully.'.toCurrentLanguage(),
+      );
     });
   }
 
@@ -85,8 +93,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
         _startResendTimer();
       });
 
-      _showDialog(
-          'success', 'OTP Resent', 'A new OTP has been sent to your email.');
+      _showDialog('success', 'OTP Resent'.toCurrentLanguage(),
+          'A new OTP has been sent to your email.'.toCurrentLanguage());
     });
   }
 
@@ -122,7 +130,10 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              _dialogButton(type == 'success' ? 'Login' : 'Try Again', () {
+              _dialogButton(
+                  type == 'success'
+                      ? 'Login'.toCurrentLanguage()
+                      : 'Try Again'.toCurrentLanguage(), () {
                 if (type == 'success') {
                   context.push(MyAppRouteConstant.setNewpassoword);
                 } else {
@@ -199,16 +210,16 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Enter your email code',
+                  Text(
+                    'Enter your email code'.toCurrentLanguage(),
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'We have sent a code to your email',
+                  Text(
+                    'We have sent a code to your email'.toCurrentLanguage(),
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
@@ -271,8 +282,8 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(resendTimer > 30
-                          ? 'Resend OTP in $resendTimer sec'
-                          : 'Resend OTP'),
+                          ? '${"Resend OTP in".toCurrentLanguage()} $resendTimer ${"seconds".toCurrentLanguage()}'
+                          : 'Resend OTP'.toCurrentLanguage()),
                     ),
                   ),
                 ],

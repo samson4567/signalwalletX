@@ -6,10 +6,11 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_event.dart';
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/feed/homepage.dart';
+import 'package:signalwavex/languages.dart';
 
 class Market extends StatefulWidget {
   const Market({super.key});
-  
 
   @override
   State<Market> createState() => _MarketState();
@@ -79,8 +80,8 @@ class _MarketState extends State<Market> {
                         ),
                       ],
                     ),
-                    const Text(
-                      "Market Trading",
+                    Text(
+                      "Market Trading".toCurrentLanguage(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -122,9 +123,9 @@ class _MarketState extends State<Market> {
           ),
         ],
       ),
-      child: const TextField(
+      child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search  by currency pair',
+          hintText: 'Search  by currency pair'.toCurrentLanguage(),
           hintStyle: TextStyle(color: const Color(0xFF8F8F8F), fontSize: 10),
           border: InputBorder.none,
           prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -208,23 +209,23 @@ class _MarketState extends State<Market> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Contract Markets',
+          Text('Contract Markets'.toCurrentLanguage(),
               style: TextStyle(
                   fontSize: 16, color: Colors.white, fontFamily: 'inter')),
           const SizedBox(height: 30),
 
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Name',
+                'Name'.toCurrentLanguage(),
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
               ),
               Text(
-                'Price',
+                'Price'.toCurrentLanguage(),
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

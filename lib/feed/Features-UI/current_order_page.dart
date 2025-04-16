@@ -10,8 +10,7 @@ import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
+
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -22,8 +21,10 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/radio_button.dart';
+import 'package:signalwavex/feed/homepage.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/candle_stick_chart.dart';
+import 'package:signalwavex/languages.dart';
+
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/canlde_chart_ling_pulled.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
@@ -275,21 +276,20 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: latestOrderDetail.map((e) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FancyText(
-                    e["k"],
-                    textColor: Colors.grey,
-                  ),
-                  FancyText(
-                    e["v"] ?? "--",
-                    textColor: e['c'],
-                  )
-                ],
-              );
-            }).toList() ??
-            [],
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FancyText(
+                e["k"],
+                textColor: Colors.grey,
+              ),
+              FancyText(
+                e["v"] ?? "--",
+                textColor: e['c'],
+              )
+            ],
+          );
+        }).toList(),
       );
     } else {
       return buildEmptyWidget("No Current Order Yet");
@@ -336,7 +336,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FancyText(
-                    "Initiate a follow-up order",
+                    "Initiate a follow-up order".toCurrentLanguage(),
                     // size: 10,
                   ),
                 ),
@@ -352,7 +352,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FancyText(
-                    "Initiate a follow-up order",
+                    "Initiate a follow-up order".toCurrentLanguage(),
                     // size: 10,
                   ),
                 ),
@@ -394,7 +394,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 backgroundColor: getFigmaColor("38393D"),
                 hasBorder: true,
                 child: FancyText(
-                  "Confirm",
+                  "Confirm".toCurrentLanguage(),
                   textColor: getFigmaColor("707070"),
                 ),
               ),
@@ -523,7 +523,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               },
               backgroundColor: isDepth ? null : getFigmaColor("383838"),
               child: FancyText(
-                "Original",
+                "Original".toCurrentLanguage(),
                 size: 12,
               ),
             ),
@@ -536,7 +536,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               width: 60,
               backgroundColor: !isDepth ? null : getFigmaColor("383838"),
               child: FancyText(
-                "Depth",
+                "Depth".toCurrentLanguage(),
                 size: 12,
               ),
             )
@@ -569,12 +569,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       width: 60,
       height: 30,
       radius: 5,
+      backgroundColor:
+          selectedTimeText == text ? Colors.grey.withAlpha(20) : null,
       child: FancyText(
         text,
         textColor: selectedTimeText == text ? null : Colors.grey.withAlpha(100),
       ),
-      backgroundColor:
-          selectedTimeText == text ? Colors.grey.withAlpha(20) : null,
     );
   }
 
@@ -585,7 +585,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         Column(
           children: [
             FancyText(
-              "Order Deadline",
+              "Order Deadline".toCurrentLanguage(),
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
@@ -598,7 +598,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         Column(
           children: [
             FancyText(
-              "Countdown",
+              "Countdown".toCurrentLanguage(),
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
@@ -611,7 +611,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         Column(
           children: [
             FancyText(
-              "Time Period",
+              "Time Period".toCurrentLanguage(),
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
@@ -675,7 +675,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             Text(
               (selectedCoinModel?.symbol != null)
                   ? "${selectedCoinModel!.symbol}USDT"
-                  : "select a coin",
+                  : "select a coin".toCurrentLanguage(),
               style: TextStyle(
                 color: getFigmaColor("EAECEF"),
                 fontSize: 24.w,
@@ -690,7 +690,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
                 child: Text(
-                  "${selectedText}",
+                  "${selectedText}".toCurrentLanguage(),
                   style: TextStyle(
                     color: getFigmaColor("EAECEF"),
                     fontSize: 14.w,
@@ -785,8 +785,8 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           }
           if (state is WebSocketConnectedState) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("connected"),
+              SnackBar(
+                content: Text("connected".toCurrentLanguage()),
                 backgroundColor: Colors.green,
               ),
             );
@@ -796,7 +796,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           return Row(
             children: [
               FancyText(
-                "${cad?["currentPrice"] ?? ""}",
+                "${cad["currentPrice"] ?? ""}",
                 textColor: ColorConstants.fancyGreen,
                 size: 16.w,
               ),
@@ -804,8 +804,8 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               const SizedBox(width: 4),
               // "${(cad?["percentageChange"] ?? "")} (${cad?["valueChange"] ?? ""}) "
               FancyText(
-                (cad?["percentageChange"] != null)
-                    ? "${cad?["percentageChange"] ?? ""}%"
+                (cad["percentageChange"] != null)
+                    ? "${cad["percentageChange"] ?? ""}%"
                     : "",
                 textColor: ColorConstants.fancyGreen,
                 size: 16.w,

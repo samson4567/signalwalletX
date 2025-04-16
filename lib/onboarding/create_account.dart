@@ -10,8 +10,8 @@ import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart_long_pulled.dart';
 
 // SignUpScreen widget for the sign-up page
 class CreateAccount extends StatefulWidget {
@@ -103,7 +103,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget _buildTitle(double screenHeight) {
     return Center(
       child: Text(
-        'Create your account',
+        'Create your account'.toCurrentLanguage(),
         textAlign: TextAlign.center,
         style: TextStyles.title.copyWith(color: Colors.white),
       ),
@@ -113,7 +113,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget _buildSubtitle(double screenHeight) {
     return Center(
       child: Text(
-        'Fill the fields below to create your account',
+        'Fill the fields below to create your account'.toCurrentLanguage(),
         textAlign: TextAlign.center,
         style: TextStyles.subtitle
             .copyWith(color: ColorConstants.primarydeepColor),
@@ -126,8 +126,8 @@ class _CreateAccountState extends State<CreateAccount> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email',
-        hintText: 'Enter your email',
+        label: 'Email'.toCurrentLanguage(),
+        hintText: 'Enter your email'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -136,7 +136,7 @@ class _CreateAccountState extends State<CreateAccount> {
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your email';
+            return 'Please enter your email'.toCurrentLanguage();
           }
           return null;
         },
@@ -149,8 +149,8 @@ class _CreateAccountState extends State<CreateAccount> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: passwordController,
-        label: 'Password',
-        hintText: 'Enter your password',
+        label: 'Password'.toCurrentLanguage(),
+        hintText: 'Enter your password'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -164,7 +164,7 @@ class _CreateAccountState extends State<CreateAccount> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your password';
+            return 'Please enter your password'.toCurrentLanguage();
           }
           return null;
         },
@@ -177,8 +177,8 @@ class _CreateAccountState extends State<CreateAccount> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: confirmPasswordController,
-        label: 'Confirm Password',
-        hintText: 'Enter your password',
+        label: 'Confirm Password'.toCurrentLanguage(),
+        hintText: 'Enter your password'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),

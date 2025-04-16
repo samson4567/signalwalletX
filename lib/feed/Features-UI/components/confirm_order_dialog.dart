@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
+import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
+import 'package:signalwavex/languages.dart';
 
 class ConfirmOrderDialog extends StatefulWidget {
   const ConfirmOrderDialog({super.key});
@@ -26,13 +28,13 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
               Image.asset("assets/images/red_alert_icon.png"),
               SizedBox(height: 20),
               FancyText(
-                "Confirm to follow order",
+                "Confirm to follow order".toCurrentLanguage(),
                 weight: FontWeight.w600,
                 size: 24,
               ),
               SizedBox(height: 20),
               FancyText(
-                "Order amount (109.23)",
+                "${"Order amount".toCurrentLanguage()} (109.23)",
                 weight: FontWeight.w600,
                 textColor: Colors.white.withOpacity(.70),
                 size: 18,
@@ -50,7 +52,7 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                       height: 45.h,
                       hasBorder: true,
                       borderColor: Colors.grey,
-                      child: Text("Cancel"),
+                      child: Text("Cancel".toCurrentLanguage()),
                     ),
                   ),
                   SizedBox(width: 20),
@@ -66,7 +68,7 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                             context.pop();
                           } catch (e) {}
                         },
-                        "Confirm",
+                        "Confirm".toCurrentLanguage(),
                         textColor: Colors.black,
                       ),
                     ),

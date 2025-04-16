@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:signalwavex/languages.dart';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +30,6 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart_long_pulled.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
@@ -164,6 +165,8 @@ class _HomepageState extends State<Homepage> {
                       // context.read<TradingSystemBloc>().add(
                       //     FetchOrderBookEvent("${selectedCoin!.symbol}USDT"));
                       getData();
+
+                      // languageDetails
                     },
                     child: Image.asset(
                       'assets/icons/flower.png',
@@ -176,7 +179,7 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Good Morning, ${user?.email}',
+                        '${"Good Morning".toCurrentLanguage()}, ${user?.email}',
                         style: TextStyles.smallText.copyWith(
                           fontSize: screenWidth * 0.022,
                           color: Colors.white.withOpacity(0.7),
@@ -296,8 +299,8 @@ class _HomepageState extends State<Homepage> {
                         }
                         if (state is WebSocketConnectedState) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("connected"),
+                            SnackBar(
+                              content: Text("connected".toCurrentLanguage()),
                               backgroundColor: Colors.green,
                             ),
                           );
@@ -423,7 +426,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "1 min",
+            "1 min".toCurrentLanguage(),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -441,7 +444,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "5 min",
+            "5 min".toCurrentLanguage(),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -459,7 +462,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "24 hours",
+            "24 hours".toCurrentLanguage(),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -477,7 +480,7 @@ class _HomepageState extends State<Homepage> {
             setState(() {});
           },
           child: FancyText(
-            "1 Month",
+            "1 Month".toCurrentLanguage(),
             weight: FontWeight.w400,
             size: 12,
           ),
@@ -562,8 +565,8 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Recent Transaction',
+            Text(
+              'Recent Transaction'.toCurrentLanguage(),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -571,8 +574,8 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Today',
+            Text(
+              'Today'.toCurrentLanguage(),
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
@@ -593,7 +596,8 @@ class _HomepageState extends State<Homepage> {
                   )
                 : Expanded(
                     child: (listOfOrderEntity!.isEmpty)
-                        ? buildEmptyWidget("No Transactions yet")
+                        ? buildEmptyWidget(
+                            "No Transactions yet".toCurrentLanguage())
                         : ListView.builder(
                             itemCount: listOfOrderEntity!.length,
                             itemBuilder: (context, index) {

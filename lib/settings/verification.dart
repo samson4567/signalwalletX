@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:signalwavex/component/textform_filled.dart';
+import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
+import 'package:signalwavex/languages.dart';
 
 class VerificationSection extends StatelessWidget {
   const VerificationSection({super.key});
@@ -15,8 +17,8 @@ class VerificationSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Password",
+          Text(
+            "Password".toCurrentLanguage(),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -25,8 +27,8 @@ class VerificationSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            "New passoword",
+          Text(
+            "New passoword".toCurrentLanguage(),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -39,13 +41,13 @@ class VerificationSection extends StatelessWidget {
             width: 386,
             fillColor: Colors.black,
             controller: newPasswordController,
-            label: "New Password",
-            hintText: "Enter new password",
+            label: "New Password".toCurrentLanguage(),
+            hintText: "Enter new password".toCurrentLanguage(),
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          const Text(
-            "Comfirm passoword",
+          Text(
+            "Comfirm passoword".toCurrentLanguage(),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -59,7 +61,7 @@ class VerificationSection extends StatelessWidget {
             width: 386,
             controller: confirmPasswordController,
             label: "XXXXXX",
-            hintText: "Re-enter new password",
+            hintText: "Re-enter new password".toCurrentLanguage(),
             obscureText: true,
           ),
           const SizedBox(height: 30),
@@ -77,8 +79,8 @@ class VerificationSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text(
-                "Save Changes",
+              child: Text(
+                "Save Changes".toCurrentLanguage(),
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.black,

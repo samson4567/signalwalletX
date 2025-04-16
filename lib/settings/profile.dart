@@ -4,6 +4,7 @@ import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/languages.dart';
 
 class ProfileSection extends StatefulWidget {
   const ProfileSection({super.key});
@@ -24,8 +25,8 @@ class _ProfileSectionState extends State<ProfileSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "My Profile",
+          Text(
+            "My Profile".toCurrentLanguage(),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -36,10 +37,10 @@ class _ProfileSectionState extends State<ProfileSection> {
           const SizedBox(
             height: 20,
           ),
-          const Column(
+          Column(
             children: [
               Text(
-                "Avatar",
+                "Avatar".toCurrentLanguage(),
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.white,
@@ -53,8 +54,8 @@ class _ProfileSectionState extends State<ProfileSection> {
             ],
           ),
           const SizedBox(height: 20),
-          const Text(
-            "Full Name",
+          Text(
+            "Full Name".toCurrentLanguage(),
             style: TextStyle(color: Colors.white, fontSize: 10),
           ),
           const SizedBox(height: 8),
@@ -63,8 +64,8 @@ class _ProfileSectionState extends State<ProfileSection> {
             height: 34,
             width: 400,
             controller: _fullName,
-            label: 'Full name',
-            hintText: 'Enter your full name',
+            label: 'Full name'.toCurrentLanguage(),
+            hintText: 'Enter your full name'.toCurrentLanguage(),
             fillColor: Colors.black,
             labelColor: Colors.white,
             hintColor: Colors.white.withOpacity(0.6),
@@ -72,14 +73,14 @@ class _ProfileSectionState extends State<ProfileSection> {
             prefixImagePath: 'assets/icons/cu.png',
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your fullName';
+                return 'Please enter your fullName'.toCurrentLanguage();
               }
               return null;
             },
           ),
           const SizedBox(height: 20),
-          const Text(
-            "Phone Number",
+          Text(
+            "Phone Number".toCurrentLanguage(),
             style: TextStyle(color: Colors.white, fontSize: 10),
           ),
           const SizedBox(height: 8),
@@ -88,8 +89,8 @@ class _ProfileSectionState extends State<ProfileSection> {
             height: 34,
             width: 400,
             controller: _phoneController,
-            label: 'Phone Number',
-            hintText: 'Enter your phone number',
+            label: 'Phone Number'.toCurrentLanguage(),
+            hintText: 'Enter your phone number'.toCurrentLanguage(),
             fillColor: Colors.black,
             labelColor: Colors.white,
             hintColor: Colors.white.withOpacity(0.6),
@@ -98,7 +99,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                 'assets/icons/bitcoin.png', // You can replace with the phone icon
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your phone number';
+                return 'Please enter your phone number'.toCurrentLanguage();
               }
               // Optionally, add phone number validation
               return null;
@@ -141,9 +142,9 @@ class _ProfileSectionState extends State<ProfileSection> {
                     color: Colors.yellow,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      "Save Changes",
+                      "Save Changes".toCurrentLanguage(),
                       style: TextStyle(
                         fontFamily: 'inter',
                         color: Colors.black,

@@ -19,7 +19,6 @@ class _FeedPageState extends State<FeedPage> {
     const Homepage(),
     const Market(),
     const FeaturesCurrentOrder(),
-    const PerpetualScreen(),
     const Assets()
   ];
   @override

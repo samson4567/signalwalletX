@@ -8,6 +8,7 @@ import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 class SetNewPassword extends StatefulWidget {
@@ -57,7 +58,10 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              _dialogButton(type == 'success' ? 'Continue' : 'Try Again', () {
+              _dialogButton(
+                  type == 'success'
+                      ? 'Continue'.toCurrentLanguage()
+                      : 'Try Again'.toCurrentLanguage(), () {
                 if (type == 'success') {
                   context.push(MyAppRouteConstant.login);
                 } else {
@@ -103,9 +107,12 @@ class _SetNewPasswordState extends State<SetNewPassword> {
           listener: (context, state) {
             if (state is SetNewPasswordSuccessState) {
               _showDialog(
-                  'success', 'Password Reset Successful', state.message);
+                  'success',
+                  'Password Reset Successful'.toCurrentLanguage(),
+                  state.message);
             } else if (state is SetNewPasswordErrorState) {
-              _showDialog('error', 'Password Reset Failed', state.errorMessage);
+              _showDialog('error', 'Password Reset Failed'.toCurrentLanguage(),
+                  state.errorMessage);
             }
           },
           builder: (context, state) {
@@ -158,7 +165,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
       padding: EdgeInsets.only(top: screenHeight * 0.01),
       child: Center(
         child: Text(
-          'Set new Password',
+          'Set new Password'.toCurrentLanguage(),
           style: TextStyles.title.copyWith(color: Colors.white),
         ),
       ),
@@ -168,7 +175,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
   Widget _buildSubtitle() {
     return Center(
       child: Text(
-        'Fill the below to set new password',
+        'Fill the below to set new password'.toCurrentLanguage(),
         textAlign: TextAlign.center,
         style: TextStyles.subtitle
             .copyWith(color: ColorConstants.primarydeepColor),
@@ -181,8 +188,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email',
-        hintText: 'Enter your email',
+        label: 'Email'.toCurrentLanguage(),
+        hintText: 'Enter your email'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -190,7 +197,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
         keyboardType: TextInputType.emailAddress,
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
-          if (value == null || value.isEmpty) return 'Please enter your email';
+          if (value == null || value.isEmpty)
+            return 'Please enter your email'.toCurrentLanguage();
           return null;
         },
       ),
@@ -202,8 +210,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: passwordController,
-        label: 'Password',
-        hintText: 'Enter your password',
+        label: 'Password'.toCurrentLanguage(),
+        hintText: 'Enter your password'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -215,7 +223,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
         },
         validator: (value) {
           if (value == null || value.isEmpty)
-            return 'Please enter your password';
+            return 'Please enter your password'.toCurrentLanguage();
           return null;
         },
       ),
@@ -227,8 +235,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: confirmPasswordController,
-        label: 'Confirm Password',
-        hintText: 'Confirm your password',
+        label: 'Confirm Password'.toCurrentLanguage(),
+        hintText: 'Confirm password'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -240,8 +248,9 @@ class _SetNewPasswordState extends State<SetNewPassword> {
         },
         validator: (value) {
           if (value == null || value.isEmpty)
-            return 'Please confirm your password';
-          if (value != passwordController.text) return 'Passwords do not match';
+            return 'Please confirm password'.toCurrentLanguage();
+          if (value != passwordController.text)
+            return 'Passwords do not match'.toCurrentLanguage();
           return null;
         },
       ),
@@ -271,8 +280,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
           child: Center(
             child: state is SetNewPasswordLoadingState
                 ? const CircularProgressIndicator(color: Colors.black)
-                : const Text(
-                    'Reset Password',
+                : Text(
+                    'Reset Password'.toCurrentLanguage(),
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),

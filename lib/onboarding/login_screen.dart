@@ -11,6 +11,7 @@ import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc
 
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -34,18 +35,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((t) {
-      _login();
+      _login(true);
     });
   }
 
   _retryLogin() {
     Future.delayed(1.seconds, () {
-      _login();
+      _login(true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    currentLanguage = "Yoruba";
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final containerHeight = 630 / screenHeight;
@@ -58,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           listener: (context, state) {
             if (state is LoginSuccessState) {
               context.push(MyAppRouteConstant.feedPage,
-                  extra: {'email': state.email});
+                  extra: {'email'.toCurrentLanguage(): state.email});
             } else if (state is LoginErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -123,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.05),
       child: Center(
         child: Text(
-          'Log Into your account',
+          'Log Into your account'.toCurrentLanguage(),
+          // toCurrentLanguageFunction("Log Into your account"),
           textAlign: TextAlign.center,
           style: TextStyles.title.copyWith(color: Colors.white),
         ),
@@ -134,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSubtitle(double screenHeight) {
     return Center(
       child: Text(
-        'Enter your credentials to access your account',
+        'Enter your credentials to access your account'.toCurrentLanguage(),
         textAlign: TextAlign.center,
         style: TextStyles.subtitle
             .copyWith(color: ColorConstants.primarydeepColor),
@@ -147,8 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email',
-        hintText: 'Enter your email',
+        label: 'Email'.toCurrentLanguage(),
+        hintText: 'Enter your email'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -157,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your email';
+            return 'Please enter your email'.toCurrentLanguage();
           }
           return null;
         },
@@ -170,8 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: passwordController,
-        label: 'Password',
-        hintText: 'Enter your password',
+        label: 'Password'.toCurrentLanguage(),
+        hintText: 'Enter your password'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -185,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your password';
+            return 'Please enter your password'.toCurrentLanguage();
           }
           return null;
         },
@@ -206,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
         Text(
-          'Remember me for 30 days',
+          'Remember me for 30 days'.toCurrentLanguage(),
           style: TextStyles.bodyText.copyWith(color: Colors.white),
         ),
         const Spacer(),
@@ -215,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context.push(MyAppRouteConstant.forgetPassowrd);
           },
           child: Text(
-            'Forgot password?',
+            'Forgot password?'.toCurrentLanguage(),
             style: TextStyles.bodyText.copyWith(color: Colors.blue),
           ),
         ),
@@ -238,8 +241,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Center(
                 child: state is LoginLoadingState
                     ? const CircularProgressIndicator(color: Colors.black)
-                    : const Text(
-                        'Log into Account',
+                    : Text(
+                        'Log into Account'.toCurrentLanguage(),
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -253,7 +256,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _login() {
+  _login([bool isAutoLogin = false]) {
+    if (isAutoLogin) {
+      context.read<AuthBloc>().add(
+            LoginEvent(
+              email: emailController.text,
+              password: passwordController.text,
+            ),
+          );
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
             LoginEvent(
@@ -274,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              'or',
+              'or'.toCurrentLanguage(),
               style: TextStyle(color: Colors.white.withOpacity(0.6)),
             ),
           ),
@@ -309,8 +321,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24.0,
               ),
               const SizedBox(width: 10.0),
-              const Text(
-                'Continue with Google',
+              Text(
+                'Continue with Google'.toCurrentLanguage(),
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -326,8 +338,8 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Are you new here?',
+          Text(
+            'Are you new here?'.toCurrentLanguage(),
             style: TextStyle(color: Colors.white),
           ),
           TextButton(
@@ -336,8 +348,8 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: GestureDetector(
               onTap: () => context.push(MyAppRouteConstant.createAccount),
-              child: const Text(
-                'Create account',
+              child: Text(
+                'Create account'.toCurrentLanguage(),
                 style: TextStyle(color: Colors.blue),
               ),
             ),

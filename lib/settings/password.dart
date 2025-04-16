@@ -4,6 +4,7 @@ import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/languages.dart';
 
 class PasswordSection extends StatefulWidget {
   const PasswordSection({super.key});
@@ -26,9 +27,9 @@ class _PasswordSectionState extends State<PasswordSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Password",
-            style: TextStyle(
+          Text(
+            "Password".toCurrentLanguage(),
+            style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
               fontSize: 22,
@@ -36,39 +37,39 @@ class _PasswordSectionState extends State<PasswordSection> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildLabel("Current Password"),
+          _buildLabel("Current Password".toCurrentLanguage()),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             height: 34,
             width: 386,
             fillColor: Colors.black,
             controller: currentPasswordController,
-            label: "Current Password",
-            hintText: "Enter current password",
+            label: "Current Password".toCurrentLanguage(),
+            hintText: "Enter current password".toCurrentLanguage(),
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          _buildLabel("New Password"),
+          _buildLabel("New Password".toCurrentLanguage()),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             height: 34,
             width: 386,
             fillColor: Colors.black,
             controller: newPasswordController,
-            label: "New Password",
-            hintText: "Enter new password",
+            label: "New Password".toCurrentLanguage(),
+            hintText: "Enter new password".toCurrentLanguage(),
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          _buildLabel("Confirm Password"),
+          _buildLabel("Confirm Password".toCurrentLanguage()),
           const SizedBox(height: 10),
           TextFormFieldWithCustomStyles(
             fillColor: Colors.black,
             height: 34,
             width: 386,
             controller: confirmPasswordController,
-            label: "Confirm Password",
-            hintText: "Re-enter new password",
+            label: "Confirm Password".toCurrentLanguage(),
+            hintText: "Re-enter new password".toCurrentLanguage(),
             obscureText: true,
           ),
           const SizedBox(height: 30),
@@ -78,8 +79,9 @@ class _PasswordSectionState extends State<PasswordSection> {
               listener: (BuildContext context, AuthState state) {
                 if (state is UpdatePasswordSuccessState) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("password updated successfully"),
+                    SnackBar(
+                      content: Text(
+                          "password updated successfully".toCurrentLanguage()),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -87,7 +89,7 @@ class _PasswordSectionState extends State<PasswordSection> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content:
-                          Text("password update Failed ${state.errorMessage}"),
+                          Text("password update Failed".toCurrentLanguage()),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -113,8 +115,9 @@ class _PasswordSectionState extends State<PasswordSection> {
                           );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Passwords do not match"),
+                        SnackBar(
+                          content: Text(
+                              "Passwords do not match".toCurrentLanguage()),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -137,9 +140,9 @@ class _PasswordSectionState extends State<PasswordSection> {
                                 backgroundColor: Colors.black),
                           ),
                         )
-                      : const Text(
-                          "Save Changes",
-                          style: TextStyle(
+                      : Text(
+                          "Save Changes".toCurrentLanguage(),
+                          style: const TextStyle(
                             fontFamily: 'inter',
                             color: Colors.black,
                             fontSize: 16,

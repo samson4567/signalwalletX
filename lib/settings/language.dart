@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signalwavex/languages.dart';
 
 class LanguageSection extends StatefulWidget {
   const LanguageSection({super.key});
@@ -8,7 +9,7 @@ class LanguageSection extends StatefulWidget {
 }
 
 class _LanguageSectionState extends State<LanguageSection> {
-  String? selectedLanguageCode;
+  // String? selectedLanguageCode;
   final Map<String, String> languages = {
     'en': 'English',
     'es': 'Spanish',
@@ -27,7 +28,7 @@ class _LanguageSectionState extends State<LanguageSection> {
   void initState() {
     super.initState();
     // Set default language (optional)
-    selectedLanguageCode = 'en';
+    // selectedLanguageCode = 'en';
   }
 
   @override
@@ -37,8 +38,8 @@ class _LanguageSectionState extends State<LanguageSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Language",
+          Text(
+            "Language".toCurrentLanguage(),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -47,8 +48,8 @@ class _LanguageSectionState extends State<LanguageSection> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            "Choose your language",
+          Text(
+            "Choose your language".toCurrentLanguage(),
             style: TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
@@ -63,7 +64,7 @@ class _LanguageSectionState extends State<LanguageSection> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: DropdownButtonFormField<String>(
-              value: selectedLanguageCode,
+              value: currentLanguage,
               dropdownColor: Colors.black,
               style: const TextStyle(
                 color: Colors.white,
@@ -73,19 +74,20 @@ class _LanguageSectionState extends State<LanguageSection> {
               decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
-              hint: const Text(
-                "Select language",
+              hint: Text(
+                "Select language".toCurrentLanguage(),
                 style: TextStyle(color: Colors.white70),
               ),
               items: languages.entries.map((entry) {
                 return DropdownMenuItem<String>(
-                  value: entry.key,
+                  value: entry.value,
                   child: Text(entry.value),
                 );
               }).toList(),
               onChanged: (value) {
+                currentLanguage = value ?? currentLanguage;
                 setState(() {
-                  selectedLanguageCode = value;
+                  // selectedLanguageCode = value;
                 });
               },
             ),
@@ -95,17 +97,19 @@ class _LanguageSectionState extends State<LanguageSection> {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () {
-                if (selectedLanguageCode != null) {
+                if (currentLanguage != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        "Selected language: ${languages[selectedLanguageCode]!}",
+                        "${"Selected language".toCurrentLanguage()}: ${currentLanguage!}",
                       ),
                     ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Please select a language")),
+                    SnackBar(
+                        content: Text(
+                            "Please select a language".toCurrentLanguage())),
                   );
                 }
               },
@@ -117,8 +121,8 @@ class _LanguageSectionState extends State<LanguageSection> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text(
-                "Save Changes",
+              child: Text(
+                "Save Changes".toCurrentLanguage(),
                 style: TextStyle(
                   fontFamily: 'inter',
                   color: Colors.black,
