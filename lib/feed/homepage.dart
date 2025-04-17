@@ -328,8 +328,10 @@ class _HomepageState extends State<Homepage> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        "${(cad?["percentageChange"] ?? "")} (${cad?["valueChange"] ?? ""}) ",
-                                        // btcCoinModel?.percentIncrease
+                                        (cad.isEmpty)
+                                            ? "Loading.."
+                                            : "${(cad?["percentageChange"] ?? "")} (${cad?["valueChange"] ?? ""}) ",
+                                        // btcCoinModel?.percentIncrease "Loading.."
                                         //         .toString() ??
                                         //     '',
                                         style: TextStyle(
@@ -367,7 +369,7 @@ class _HomepageState extends State<Homepage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "${cad?["currentPrice"]}",
+                              "${cad?["currentPrice"] ?? "Loading.."}",
                               style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,

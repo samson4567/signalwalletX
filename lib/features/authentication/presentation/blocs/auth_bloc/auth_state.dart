@@ -362,6 +362,35 @@ final class ProfileUpdateErrorState extends AuthState {
   List<Object> get props => [errorMessage];
 }
 
+// GoogleLogin
+final class GoogleLoginLoadingState extends AuthState {
+  const GoogleLoginLoadingState();
+}
+
+final class GoogleLoginSuccessState extends AuthState {
+  final String message;
+  final String email;
+
+  const GoogleLoginSuccessState({
+    required this.message,
+    required this.email,
+  });
+
+  @override
+  List<Object> get props => [message, email];
+}
+
+final class GoogleLoginErrorState extends AuthState {
+  final String errorMessage;
+
+  const GoogleLoginErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+
+
 
 // class SetLanguageSuccessState extends AuthState {
 //   final String message;
@@ -379,4 +408,6 @@ final class ProfileUpdateErrorState extends AuthState {
 
 //   @override
 //   List<Object> get props => [errorMessage];
+
+
 

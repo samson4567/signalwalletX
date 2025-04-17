@@ -98,7 +98,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, String>> googleSignIn() async {
+  Future<Either<Failure, Map>> googleSignIn() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -113,7 +113,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       final String? accessToken = googleAuth.accessToken;
 
       if (idToken != null && accessToken != null) {
-        return Right(idToken); // or you could use accessToken
+        // return Right(idToken); // or you could use accessToken
+
+        try {
+          final result = await authenticationRemoteDatasource
+              .uploadGoogleSignInToken(token: idToken);
+          ;
+          await authenticationLocalDatasource.saveAuthToken(result["token"]);
+          return right(result);
+        } catch (e) {
+          return left(mapExceptionToFailure(e));
+        }
       } else {
         return const Left(ServerFailure(
           message: 'Failed to retrieve Google tokens',

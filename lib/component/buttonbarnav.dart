@@ -23,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     },
     {'icon': 'assets/icons/line.png', 'label': 'Market'},
     {'icon': 'assets/icons/chat.png', 'label': 'Features'},
-    {'icon': 'assets/icons/graphup.png', 'label': 'Perpetual'},
+    // {'icon': 'assets/icons/graphup.png', 'label': 'Perpetual'},
     {'icon': 'assets/icons/money.png', 'label': 'Assets'},
   ];
   @override

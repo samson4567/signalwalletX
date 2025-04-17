@@ -26,9 +26,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SetNewPasswordEvent>(_onSetNewPasswordEvent);
     on<ProfileUpdateEvent>(_onProfileUpdateEvent);
     // on<FetchAllLanguagesEvent>(_onFetechAllLanguages);
-    // on<SetLanguageEvent>(_onSetLanguage);
+    on<GoogleLoginEvent>(_onGoogleLoginEvent);
   }
 
+// GoogleLogin
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
     emit(const NewUserSignUpLoadingState());
@@ -252,6 +253,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ));
     }
   }
+
+  Future<void> _onGoogleLoginEvent(
+      GoogleLoginEvent event, Emitter<AuthState> emit) async {
+    emit(const GoogleLoginLoadingState());
+
+    try {
+      final result = await authenticationRepository.googleSignIn();
+
+      result.fold(
+        (error) => emit(GoogleLoginErrorState(errorMessage: error.message)),
+        (details) => emit(GoogleLoginSuccessState(
+          message: details["message"] ?? "",
+          email: details["user"]["email"] ?? "",
+        )),
+      );
+    } catch (e) {
+      emit(GoogleLoginErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+  // _onGoogleLoginEvent
 }
 // Future<void> _onFetechAllLanguages(
 //   FetchAllLanguagesEvent event,

@@ -165,6 +165,14 @@ class ProfileUpdateEvent extends AuthEvent {
   List<Object> get props => [name, phoneNumber, profilePicture];
 }
 
+// GoogleLogin
+final class GoogleLoginEvent extends AuthEvent {
+  const GoogleLoginEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 
 
 // class SetLanguageEvent extends AuthEvent {
@@ -179,3 +187,5 @@ class ProfileUpdateEvent extends AuthEvent {
 //   @override
 //   List<Object> get props => [languageCode, languageName];
 // }
+
+

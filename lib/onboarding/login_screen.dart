@@ -68,14 +68,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: Colors.red,
                 ),
               );
+            }
+            if (state is GoogleLoginSuccessState) {
+              context.push(MyAppRouteConstant.feedPage,
+                  extra: {'email'.toCurrentLanguage(): state.email});
+            } else if (state is GoogleLoginErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("retring in a sec"),
+                SnackBar(
+                  content: Text(state.errorMessage),
                   backgroundColor: Colors.red,
                 ),
               );
-              _retryLogin();
             }
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   const SnackBar(
+            //     content: Text("retring in a sec"),
+            //     backgroundColor: Colors.red,
+            //   ),
+            // );
+            // _retryLogin();
           },
           child: Column(
             children: [
@@ -310,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           onPressed: () {
-            // Handle Google sign-in action
+            context.read<AuthBloc>().add(GoogleLoginEvent());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -20,7 +20,7 @@ abstract class AuthenticationRepository {
     required String newPasswordConfirmation,
   });
 
-  Future<Either<Failure, String>> googleSignIn();
+  Future<Either<Failure, Map>> googleSignIn();
   Future<Either<Failure, String>> forgetPassword({required String email});
   Future<Either<Failure, List<RecentTransactionEntity>>> getRecentTransactions({
     required String userId,

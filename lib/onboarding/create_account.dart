@@ -56,6 +56,17 @@ class _CreateAccountState extends State<CreateAccount> {
                 SnackBar(content: Text(state.errorMessage)),
               );
             }
+            if (state is GoogleLoginSuccessState) {
+              context.push(MyAppRouteConstant.verifyEmail,
+                  extra: {'email': emailController.text});
+            } else if (state is GoogleLoginErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
           },
           child: Column(
             children: [
@@ -312,37 +323,40 @@ class _CreateAccountState extends State<CreateAccount> {
             ),
           ),
           onPressed: () async {
-            final GoogleSignIn googleSignIn = GoogleSignIn();
-
-            try {
-              // Start Google Sign-In flow
-              final GoogleSignInAccount? googleUser =
-                  await googleSignIn.signIn();
-              if (googleUser == null) {
-                return; // User canceled sign-in
-              }
-
-              final GoogleSignInAuthentication googleAuth =
-                  await googleUser.authentication;
-              final String googleToken = googleAuth.idToken ?? '';
-
-              // If token is retrieved, trigger the GoogleAuthEvent in the AuthBloc
-              if (googleToken.isNotEmpty) {
-                context.read<AuthBloc>().add(GoogleAuthEvent(
-                    googleUser: googleUser,
-                    googleToken: googleToken,
-                    token: ''));
-              }
-
-              // Navigate to the home screen after a successful Google sign-in
-              context.push(MyAppRouteConstant.home);
-            } catch (error) {
-              // Handle any errors during the Google Sign-In process
-              print("Google Sign-In error: $error");
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Google Sign-In failed: $error")));
-            }
+            context.read<AuthBloc>().add(const GoogleLoginEvent());
           },
+
+          // final GoogleSignIn googleSignIn = GoogleSignIn();
+
+          // try {
+          //   // Start Google Sign-In flow
+          //   final GoogleSignInAccount? googleUser =
+          //       await googleSignIn.signIn();
+          //   if (googleUser == null) {
+          //     return; // User canceled sign-in
+          //   }
+
+          //   final GoogleSignInAuthentication googleAuth =
+          //       await googleUser.authentication;
+          //   final String googleToken = googleAuth.idToken ?? '';
+
+          //   // If token is retrieved, trigger the GoogleAuthEvent in the AuthBloc
+          //   if (googleToken.isNotEmpty) {
+          //     context.read<AuthBloc>().add(GoogleAuthEvent(
+          //         googleUser: googleUser,
+          //         googleToken: googleToken,
+          //         token: ''));
+          //   }
+
+          //   // Navigate to the home screen after a successful Google sign-in
+          //   context.push(MyAppRouteConstant.home);
+          // } catch (error) {
+          //   // Handle any errors during the Google Sign-In process
+          //   print("Google Sign-In error: $error");
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //       SnackBar(content: Text("Google Sign-In failed: $error")));
+          // }
+
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -370,16 +384,16 @@ class _CreateAccountState extends State<CreateAccount> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Already have an account?',
+          Text(
+            'Already have an account?'.toCurrentLanguage(),
             style: TextStyle(color: Colors.white),
           ),
           TextButton(
             onPressed: () {
               context.push(MyAppRouteConstant.login);
             },
-            child: const Text(
-              'Login',
+            child: Text(
+              'Login'.toCurrentLanguage(),
               style: TextStyle(color: Colors.blue),
             ),
           ),

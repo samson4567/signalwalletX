@@ -30,6 +30,8 @@ abstract class AuthenticationRemoteDatasource {
       required String password,
       required String confirmPassword});
   Future<LanguagesEntity> fetchLanguages({required code, required name});
+  Future<Map> uploadGoogleSignInToken({required String token});
+
   Future<String> updateProfile(
       {required name, required phoneNumber, required profilePicture});
 }
@@ -227,4 +229,13 @@ class AuthenticationRemoteDatasourceImpl
     );
     return response.data;
   }
+
+  @override
+  Future<Map> uploadGoogleSignInToken({required String token}) async {
+    final response = await networkClient.post(
+      endpoint: EndpointConstant.uploadGoogleToken,
+    );
+    return response.data;
+  }
 }
+// uploadGoogleToken

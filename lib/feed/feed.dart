@@ -4,7 +4,6 @@ import 'package:signalwavex/component/buttonbarnav.dart';
 import 'package:signalwavex/feed/asset.dart';
 import 'package:signalwavex/feed/homepage.dart';
 import 'package:signalwavex/feed/market.dart';
-import 'package:signalwavex/feed/ppertual.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
