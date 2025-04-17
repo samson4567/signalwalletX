@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    currentLanguage = "Yoruba";
+    // currentLanguage = "Yoruba";
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final containerHeight = 630 / screenHeight;

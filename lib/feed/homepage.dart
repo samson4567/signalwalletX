@@ -319,12 +319,9 @@ class _HomepageState extends State<Homepage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       FancyText(
-                                        // "${btcCoinModel!.name!} USDT (${btcCoinModel!.symbol!} - USDT)",
                                         "Bitcoin USDT (BTC - USDT)",
-
-                                        // style: TextStyle(fontSize: 14, color: Colors.white),
-                                        size: 14, textColor: Colors.white,
-                                        // overflow: TextOverflow.ellipsis,
+                                        size: 14,
+                                        textColor: Colors.white,
                                       ),
                                       const SizedBox(height: 5),
                                       Text(

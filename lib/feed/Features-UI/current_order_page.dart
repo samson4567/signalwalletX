@@ -10,7 +10,6 @@ import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
-
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -21,10 +20,9 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/radio_button.dart';
-import 'package:signalwavex/feed/homepage.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 import 'package:signalwavex/languages.dart';
-
+import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/candle_stick_chart.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/canlde_chart_ling_pulled.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
@@ -486,14 +484,14 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 // height: 100,
                 child: TabBarView(children: [
                   // CandleStickChart(),
-                  CanldeChartLongPulled(
-                    chartDetails: chartDetails ??
-                        {
-                          "symbol": "BTCUSDT",
-                          "period": period,
-                          "askAndBids": {}
-                        },
-                  )
+                  CandleStickChart(
+                      // chartDetails: chartDetails ??
+                      //     {
+                      //       "symbol": "BTCUSDT",
+                      //       "period": period,
+                      //       "askAndBids": {}
+                      //     },
+                      )
                   // Center(child: Text('Content of Tab 1')),
                   // const Center(child: Text('Content of Tab 2')),
                 ]),
@@ -672,39 +670,27 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               ),
             ),
             const SizedBox(width: 10),
-            Text(
-              (selectedCoinModel?.symbol != null)
-                  ? "${selectedCoinModel!.symbol}USDT"
-                  : "select a coin".toCurrentLanguage(),
-              style: TextStyle(
-                color: getFigmaColor("EAECEF"),
-                fontSize: 24.w,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(width: 10 / 2),
-            FancyContainerTwo(
-              backgroundColor: Colors.grey,
-              radius: 2,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
-                child: Text(
-                  "${selectedText}".toCurrentLanguage(),
-                  style: TextStyle(
-                    color: getFigmaColor("EAECEF"),
-                    fontSize: 14.w,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
             DropdownButtonHideUnderline(
                 child: DropdownButton2(
               dropdownStyleData: const DropdownStyleData(width: 200),
-              customButton: Icon(
-                Icons.arrow_drop_down_rounded,
-                color: getFigmaColor("848E9C"),
+              customButton: Row(
+                children: [
+                  Text(
+                    (selectedCoinModel?.symbol != null)
+                        ? "${selectedCoinModel!.symbol}USDT"
+                        : "select a coin".toCurrentLanguage(),
+                    style: TextStyle(
+                      color: getFigmaColor("EAECEF"),
+                      fontSize: 24.w,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 10 / 2),
+                  Icon(
+                    Icons.arrow_drop_down_rounded,
+                    color: getFigmaColor("848E9C"),
+                  ),
+                ],
               ),
               //  IconButton(
               //     onPressed: () {}, icon: ),
@@ -736,39 +722,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                     ),
                   ),
                 );
-              }).toList()
-              //  [
-              //   DropdownMenuItem(
-              //     value: "Perp",
-              //     onTap: () {
-              //       if (selectedText != "Perp") {
-              //         selectedText = "Perp";
-              //       }
-              //       // else {
-              //       // selectedText = null;
-              //       // }
-
-              //       setState(() {});
-              //     },
-              //     child: const Text(
-              //       "Perp",
-              //     ),
-              //   ),
-              //   DropdownMenuItem(
-              //     value: "Perp_2",
-              //     onTap: () {
-              //       if (selectedText != "Perp_2") {
-              //         selectedText = "Perp_2";
-              //       }
-
-              //       setState(() {});
-              //     },
-              //     child: const Text(
-              //       "Perp_2",
-              //     ),
-              //   )
-              // ],
-              ,
+              }).toList(),
               value: selectedText,
               onChanged: (value) {},
             ))
