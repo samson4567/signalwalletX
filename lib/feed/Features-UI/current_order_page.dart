@@ -23,7 +23,7 @@ import 'package:signalwavex/component/radio_button.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/candle_stick_chart.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/canlde_chart_ling_pulled.dart';
+
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
@@ -732,9 +732,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           if (state is WebSocketDataState) {
             final decodedData = jsonDecode(state.data);
             if ((decodedData["topic"] as String?)?.startsWith("kline.") ??
-                false) {
-              cad = calculatePriceChange(decodedData["data"][0]) ?? {};
-            }
+                false) {}
             try {} catch (e) {}
           }
           if (state is WebSocketConnectedState) {

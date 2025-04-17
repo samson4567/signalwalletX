@@ -2213,8 +2213,8 @@ List listOflanguageDetailsGrand = [
   languageDetails10,
   languageDetails11,
 ];
-String currentLanguage = "Igbo";
-// "English";
+String currentLanguage = "English";
+//  "Igbo";
 
 extension StringLanguageConverter on String {
   String toCurrentLanguage() {

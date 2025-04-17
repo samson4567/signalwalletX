@@ -30,20 +30,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    passwordController.text = "samlucy111";
-    emailController.text = "samadeyemi1888@gmail.com";
+    // passwordController.text = "samlucy111";
+    // emailController.text = "samadeyemi1888@gmail.com";
 
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((t) {
-      _login(true);
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((t) {
+    //   _login(true);
+    // });
   }
 
-  _retryLogin() {
-    Future.delayed(1.seconds, () {
-      _login(true);
-    });
-  }
+  // _retryLogin() {
+  //   Future.delayed(1.seconds, () {
+  //     _login(true);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

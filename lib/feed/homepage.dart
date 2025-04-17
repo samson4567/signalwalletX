@@ -295,8 +295,18 @@ class _HomepageState extends State<Homepage> {
                                 calculatePriceChange(decodedData["data"][0]) ??
                                     {};
                           }
-                          try {} catch (e) {}
                         }
+                        if (state is WebSocketErrorState) {
+                          print(
+                              "debug_print_WebSocketConnectedState-error_is_${state.error}");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${state.error}"),
+                              backgroundColor: Colors.blue,
+                            ),
+                          );
+                        }
+
                         if (state is WebSocketConnectedState) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
