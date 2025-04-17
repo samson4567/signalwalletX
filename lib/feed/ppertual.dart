@@ -639,7 +639,9 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             MaterialPageRoute(
               builder: (context) => Scaffold(
                 body: Center(
-                  child: CandleStickChart(),
+                  child: CandleStickChart(
+                    coinSymbol: selectedCryptoCurrency,
+                  ),
                 ),
               ),
             ),

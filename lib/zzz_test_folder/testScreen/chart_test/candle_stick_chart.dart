@@ -10,10 +10,12 @@ import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/flow_amination_screen.dart';
 
 class CandleStickChart extends StatefulWidget {
-  CandleStickChart({Key? key, this.title, this.coinSymbol}) : super(key: key);
+  CandleStickChart({Key? key, this.title, this.coinSymbol, this.period})
+      : super(key: key);
 
   final String? title;
   final String? coinSymbol;
+  final String? period;
 
   @override
   _CandleStickChartState createState() => _CandleStickChartState();
@@ -252,6 +254,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
     await future.then((String result) {
       solveChatData(result);
     }).catchError((_) {
+      print("debug_print-candlestickChart-getData-error_has_occured-$_");
       showLoading = false;
       setState(() {});
       print('### datas error $_');
@@ -281,6 +284,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
   solveChatData(String result) {
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
     final list = parseJson['data'] as List<dynamic>;
+    print("debug_print-candlestickChart-solveChatData-data_is_fetched");
     datas = list
         .map((item) => KLineEntity.fromJson(item as Map<String, dynamic>))
         .toList()
