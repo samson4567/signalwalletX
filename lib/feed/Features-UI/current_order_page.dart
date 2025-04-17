@@ -485,13 +485,14 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 child: TabBarView(children: [
                   // CandleStickChart(),
                   CandleStickChart(
-                      // chartDetails: chartDetails ??
-                      //     {
-                      //       "symbol": "BTCUSDT",
-                      //       "period": period,
-                      //       "askAndBids": {}
-                      //     },
-                      )
+                    coinSymbol: selectedCoinModel?.symbol,
+                    // chartDetails: chartDetails ??
+                    //     {
+                    //       "symbol": "BTCUSDT",
+                    //       "period": period,
+                    //       "askAndBids": {}
+                    //     },
+                  )
                   // Center(child: Text('Content of Tab 1')),
                   // const Center(child: Text('Content of Tab 2')),
                 ]),

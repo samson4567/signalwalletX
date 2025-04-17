@@ -2,15 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart' as http;
 import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
+import 'package:signalwavex/component/flow_amination_screen.dart';
 
 class CandleStickChart extends StatefulWidget {
-  CandleStickChart({Key? key, this.title}) : super(key: key);
+  CandleStickChart({Key? key, this.title, this.coinSymbol}) : super(key: key);
 
   final String? title;
+  final String? coinSymbol;
 
   @override
   _CandleStickChartState createState() => _CandleStickChartState();
@@ -37,8 +40,10 @@ class _CandleStickChartState extends State<CandleStickChart> {
 
   @override
   void initState() {
+    toReget = true;
     super.initState();
-    getData('1day');
+    // getData('1day');
+    dataRegeter();
     rootBundle.loadString('assets/depth.json').then((result) {
       final parseJson = json.decode(result);
       final tick = parseJson['tick'] as Map<String, dynamic>;
@@ -76,6 +81,23 @@ class _CandleStickChartState extends State<CandleStickChart> {
       _asks!.add(item);
     });
     setState(() {});
+  }
+
+  bool toReget = false;
+  dataRegeter() async {
+    await getData(null).then((value) {
+      if (toReget) {
+        Future.delayed(
+          2.seconds,
+          () {
+            dataRegeter();
+            try {
+              setState(() {});
+            } catch (e) {}
+          },
+        );
+      }
+    });
   }
 
   @override
@@ -221,13 +243,13 @@ class _CandleStickChartState extends State<CandleStickChart> {
   }
 
   String? formerPeriod;
-  void getData(String period) {
+  Future getData(String? period) async {
     /*
      * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
      */
     final Future<String> future = getChatDataFromInternet(period);
     //final Future<String> future = getChatDataFromJson();
-    future.then((String result) {
+    await future.then((String result) {
       solveChatData(result);
     }).catchError((_) {
       showLoading = false;
@@ -239,7 +261,8 @@ class _CandleStickChartState extends State<CandleStickChart> {
   //获取火币数据，需要翻墙
   Future<String> getChatDataFromInternet(String? period) async {
     var url =
-        'https://api.huobi.br.com/market/history/kline?period=${period ?? '1day'}&size=300&symbol=btcusdt';
+        'https://api.huobi.br.com/market/history/kline?period=${period ?? '1min'}&size=300&symbol=${widget.coinSymbol?.toLowerCase() ?? "btc"}usdt';
+    // https: //api.huobi.br.com/market/history/kline?period=1min&size=300&symbol=btcusdt'
     late String result;
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
@@ -255,7 +278,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
     return rootBundle.loadString('chatData.json');
   }
 
-  void solveChatData(String result) {
+  solveChatData(String result) {
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
     final list = parseJson['data'] as List<dynamic>;
     datas = list
@@ -267,5 +290,11 @@ class _CandleStickChartState extends State<CandleStickChart> {
     DataUtil.calculate(datas!);
     showLoading = false;
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    toReget = false;
+    super.dispose();
   }
 }
