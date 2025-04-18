@@ -33,7 +33,7 @@ abstract class WalletSystemUserBalanceAndTradeCallingRemoteDatasource {
       getAdminPendingWithdrawalRequest();
   Future<String> doInternalTransfer(
       {required InternalTransferEntity internalTransferEntity});
-  Future<String> followTradeCall({required String tradeCallID});
+  Future<OrderEntity> followTradeCall({required String tradeCallID});
   Future<List<TradeEntity>> listTradesAUserIsFollowing();
   Future<TradeEntity> createTradeCallBySuperAdmin(
       {required TradeEntity tradeEntity});
@@ -148,13 +148,16 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   }
 
   @override
-  Future<String> followTradeCall({required String tradeCallID}) async {
+  Future<OrderEntity> followTradeCall({required String tradeCallID}) async {
     final response = await networkClient.post(
         endpoint: EndpointConstant.followTradeCall,
         isAuthHeaderRequired: true,
-        data: {"trade_call_id": tradeCallID});
+        returnRawData: true,
+        data: {"tid": tradeCallID});
 
-    return response.message;
+    final result =
+        OrderModel.fromJson(response.data["trade_call"] as Map? ?? {});
+    return result;
   }
 
   @override

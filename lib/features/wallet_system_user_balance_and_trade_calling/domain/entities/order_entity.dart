@@ -22,6 +22,8 @@ class OrderEntity extends Equatable {
   final String? pnl;
   final String? createdAt;
   final String? updatedAt;
+  final String? timePeriod;
+  final String? tradePeriod;
 
   // final String? orderDirection;
   // final double? purchaseDuration;
@@ -31,6 +33,8 @@ class OrderEntity extends Equatable {
   // final String? adminID;
   const OrderEntity({
     required this.createdAt,
+    required this.timePeriod,
+    required this.tradePeriod,
     required this.updatedAt,
     required this.tid,
     required this.createdByAdmin,

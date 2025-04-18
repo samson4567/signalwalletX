@@ -1,15 +1,19 @@
 import 'dart:convert';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signalwavex/component/empty_widget.dart';
+import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -20,6 +24,7 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/radio_button.dart';
+import 'package:signalwavex/feed/homepage.dart';
 import 'package:signalwavex/helpers/helper_functions/helper_functions.dart';
 import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/candle_stick_chart.dart';
@@ -85,7 +90,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     ];
   }
 
-  List<TradeModel> currentOrderEntities = [];
+  List<TradeModel> currentTradeEntities = [];
+  List<OrderModel> currentOrderEntities = [];
+
   List<OrderModel> historOrderEntities = [];
 
   List convertOrderEntityToMap(OrderModel orderModel) {
@@ -179,7 +186,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           listener: (context, state) {
         if (state is ListTradesAUserIsFollowingSuccessState) {
           state.listOfTradeEntities.forEach((element) {
-            currentOrderEntities.add(TradeModel.fromEntity(element));
+            currentTradeEntities.add(TradeModel.fromEntity(element));
           });
         }
         if (state is ListTradesAUserIsFollowingErrorState) {
@@ -268,9 +275,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   }
 
   Widget _buildCurrentOrderTabview() {
-    if (currentOrderEntities.isNotEmpty) {
+    if (currentTradeEntities.isNotEmpty) {
       List latestOrderDetail =
-          convertTradeEntityToMap(currentOrderEntities.first);
+          convertTradeEntityToMap(currentTradeEntities.first);
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: latestOrderDetail.map((e) {
@@ -367,24 +374,45 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           hasBorder: true,
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: TextField(
+                  controller: inviteCodeTextEditingController,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     border: InputBorder.none,
                     hintText: "Enter Order Code",
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
+                  onChanged: (value) {
+                    // if (value.length == "TID20250409BPFFGM".length) {
+
+                    // }
+                  },
                 ),
               ),
               FancyContainerTwo(
                 height: 40,
                 width: 100,
-                action: () {
-                  showDialog(
+                action: () async {
+                  if (inviteCodeTextEditingController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("enter a trade code"),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                  OrderEntity? result = await showDialog<OrderEntity>(
                     context: context,
-                    builder: (context) => ConfirmOrderDialog(),
+                    builder: (context) => ConfirmOrderDialog(
+                      tid: inviteCodeTextEditingController.text,
+                    ),
                   );
+                  if (result != null) {
+                    currentOrderEntities.add(OrderModel.fromEntity(result));
+                    currentTradeEntities
+                        .add(TradeModel.fromOrderEntity(result));
+                  }
                 },
                 borderColor: Colors.white.withAlpha(10),
                 borderRadius: BorderRadius.horizontal(
@@ -425,6 +453,8 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     );
   }
 
+  TextEditingController inviteCodeTextEditingController =
+      TextEditingController();
   FancyContainerTwo _buildBigChartWidget() {
     return FancyContainerTwo(
       backgroundColor: getFigmaColor("151517"),
@@ -601,10 +631,22 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
-            FancyText(
-              "223s",
-              textColor: getFigmaColor("F0C163"),
-            ),
+            StreamBuilder<int>(
+                stream: Stream.periodic(
+                  1.seconds,
+                  (computationCount) {
+                    return parseTimeExpression(selectedMinute).inSeconds -
+                        computationCount %
+                            parseTimeExpression(selectedMinute).inSeconds;
+                  },
+                ),
+                builder: (context, snapshot) {
+                  return FancyText(
+                    // "223s",
+                    "${snapshot.data}",
+                    textColor: getFigmaColor("F0C163"),
+                  );
+                }),
           ],
         ),
         Column(
@@ -614,10 +656,20 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               textColor: Colors.grey,
             ),
             const SizedBox(height: 10),
-            FancyText(
-              "12:50 - 12.55",
-              // textColor: Colors.grey,
-            ),
+            FancyText(() {
+              DateTime? dateTime1 = DateTime.tryParse(
+                  currentOrderEntities.firstOrNull?.orderTime ?? "");
+              if (dateTime1 == null) return "--";
+
+              DateTime? dateTime2 = dateTime1.add(parseTimeExpression(
+                  currentOrderEntities.firstOrNull?.timePeriod ?? "0min"));
+              if (dateTime2 == null) return "--";
+
+              return "${dateTime1.hour}:${dateTime1.minute} - ${dateTime2.hour}:${dateTime2.minute}";
+            }.call()
+                // "12:50 - 12.55",
+                // textColor: Colors.grey,
+                ),
           ],
         ),
       ],
@@ -773,4 +825,5 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
 
   Map cad = {};
   String selectedMinute = "5min";
+  int remainingMinuteInSeconds = 0;
 }

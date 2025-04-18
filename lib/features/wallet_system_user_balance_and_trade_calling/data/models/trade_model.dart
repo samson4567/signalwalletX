@@ -1,3 +1,4 @@
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 
 // TradeEntity
@@ -73,6 +74,17 @@ class TradeModel extends TradeEntity {
         orderTime: tradeEntity.orderTime,
         followCondition: tradeEntity.followCondition,
         status: tradeEntity.status);
+  }
+  factory TradeModel.fromOrderEntity(OrderEntity orderEntity) {
+    return TradeModel(
+        id: orderEntity.id,
+        title: orderEntity.title,
+        tradingPair: orderEntity.tradingPair,
+        purchaseDuration:
+            double.tryParse(orderEntity.purchaseDuration.toString()),
+        orderTime: orderEntity.orderTime,
+        followCondition: orderEntity.followCondition,
+        status: orderEntity.status);
   }
 
   factory TradeModel.empty(Map jsonMap) {

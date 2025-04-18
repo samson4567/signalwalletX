@@ -1074,3 +1074,28 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
+
+Duration parseTimeExpression(String timeExpression) {
+  final regex = RegExp(r'^(\d+)([mh])$');
+  final match = regex.firstMatch(timeExpression);
+
+  if (match == null) {
+    throw FormatException('Invalid time expression: $timeExpression. '
+        'Expected format is <number><m|h>');
+  }
+
+  final value = int.parse(match.group(1)!);
+  final unit = match.group(2)!;
+
+  switch (unit) {
+    case 'm':
+    case 'min':
+      return Duration(minutes: value);
+    case 'h':
+    case 'hr':
+      return Duration(hours: value);
+    default:
+      // This should not happen due to the regex
+      throw StateError('Unexpected time unit: $unit');
+  }
+}

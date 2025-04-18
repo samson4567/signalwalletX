@@ -116,7 +116,7 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
   }
 
   @override
-  Future<Either<Failure, String>> followTradeCall(
+  Future<Either<Failure, OrderEntity>> followTradeCall(
       {required String tradeCallID}) async {
     try {
       final result =

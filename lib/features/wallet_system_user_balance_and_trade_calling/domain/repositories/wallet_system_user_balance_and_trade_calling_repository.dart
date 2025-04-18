@@ -28,7 +28,7 @@ abstract class WalletSystemUserBalanceAndTradeCallingRepository {
 
   Future<Either<Failure, String>> doInternalTransfer(
       {required InternalTransferEntity internalTransferEntity});
-  Future<Either<Failure, String>> followTradeCall(
+  Future<Either<Failure, OrderEntity>> followTradeCall(
       {required String tradeCallID});
 
   Future<Either<Failure, List<TradeEntity>>> listTradesAUserIsFollowing();

@@ -23,6 +23,8 @@ class OrderModel extends OrderEntity {
     super.followCondition,
     super.status,
     super.userID,
+    super.timePeriod,
+    super.tradePeriod,
   });
 
   Map<String, dynamic> toJson() {
@@ -45,6 +47,8 @@ class OrderModel extends OrderEntity {
       "pnl": pnl,
       "created_at": createdAt,
       "updated_at": updatedAt,
+      "time_period": timePeriod,
+      "trade_period": tradePeriod,
     };
   }
 
