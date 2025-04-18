@@ -9,9 +9,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
-import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
 import 'package:signalwavex/languages.dart';
-import 'package:signalwavex/settings/profile.dart';
 
 class ConfirmOrderDialog extends StatefulWidget {
   const ConfirmOrderDialog({super.key, required this.tid});
@@ -53,20 +51,20 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset("assets/images/red_alert_icon.png"),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 FancyText(
                   "Confirm to follow order".toCurrentLanguage(),
                   weight: FontWeight.w600,
                   size: 24,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 FancyText(
                   "${"Order amount".toCurrentLanguage()} (109.23)",
                   weight: FontWeight.w600,
                   textColor: Colors.white.withOpacity(.70),
                   size: 18,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
