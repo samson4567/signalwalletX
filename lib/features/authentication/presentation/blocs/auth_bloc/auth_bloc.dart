@@ -27,9 +27,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ProfileUpdateEvent>(_onProfileUpdateEvent);
     // on<FetchAllLanguagesEvent>(_onFetechAllLanguages);
     on<GoogleLoginEvent>(_onGoogleLoginEvent);
+    on<LoadPreloginDetailsEvent>(_onLoadPreloginDetailsEvent);
+    on<SavePreloginDetailsEvent>(_onSavePreloginDetailsEvent);
   }
 
-// GoogleLogin
+// SavePreloginDetails
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
     emit(const NewUserSignUpLoadingState());
@@ -276,7 +278,49 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  // _onGoogleLoginEvent
+  Future<void> _onLoadPreloginDetailsEvent(
+      LoadPreloginDetailsEvent event, Emitter<AuthState> emit) async {
+    emit(const LoadPreloginDetailsLoadingState());
+
+    try {
+      final result = await authenticationRepository.loadPreloginDetail();
+
+      result.fold(
+        (error) =>
+            emit(LoadPreloginDetailsErrorState(errorMessage: error.message)),
+        (preloginDetail) => emit(
+            LoadPreloginDetailsSuccessState(preloginDetail: preloginDetail)),
+      );
+    } catch (e) {
+      emit(LoadPreloginDetailsErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+  Future<void> _onSavePreloginDetailsEvent(
+      SavePreloginDetailsEvent event, Emitter<AuthState> emit) async {
+    emit(const SavePreloginDetailsLoadingState());
+
+    try {
+      final result = await authenticationRepository.loadPreloginDetail();
+
+      result.fold(
+        (error) =>
+            emit(SavePreloginDetailsErrorState(errorMessage: error.message)),
+        (preloginDetail) => emit(
+            SavePreloginDetailsSuccessState(message: "login details saved")),
+      );
+    } catch (e) {
+      emit(SavePreloginDetailsErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+  // _onSavePreloginDetailsEvent
 }
 // Future<void> _onFetechAllLanguages(
 //   FetchAllLanguagesEvent event,

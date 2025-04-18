@@ -173,6 +173,22 @@ final class GoogleLoginEvent extends AuthEvent {
   List<Object> get props => [];
 }
 
+// LoadPreloginDetails
+final class LoadPreloginDetailsEvent extends AuthEvent {
+  const LoadPreloginDetailsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+// SavePreloginDetails
+final class SavePreloginDetailsEvent extends AuthEvent {
+  const SavePreloginDetailsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 
 
 // class SetLanguageEvent extends AuthEvent {

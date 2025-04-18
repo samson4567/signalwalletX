@@ -7,6 +7,7 @@ import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/data/models/recent_transaction_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
 abstract class AuthenticationRemoteDatasource {
@@ -226,6 +227,7 @@ class AuthenticationRemoteDatasourceImpl
       {required name, required phoneNumber, required profilePicture}) async {
     final response = await networkClient.post(
       endpoint: EndpointConstant.userProfile,
+      isAuthHeaderRequired: true,
     );
     return response.data;
   }
@@ -233,8 +235,11 @@ class AuthenticationRemoteDatasourceImpl
   @override
   Future<Map> uploadGoogleSignInToken({required String token}) async {
     final response = await networkClient.post(
-      endpoint: EndpointConstant.uploadGoogleToken,
-    );
+        endpoint: EndpointConstant.uploadGoogleToken,
+        returnRawData: true,
+        data: {
+          "token": token,
+        });
     return response.data;
   }
 }

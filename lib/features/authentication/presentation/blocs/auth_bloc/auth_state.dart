@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/profile_update_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 
@@ -389,6 +390,63 @@ final class GoogleLoginErrorState extends AuthState {
   List<Object> get props => [errorMessage];
 }
 
+// SavePreloginDetails
+final class SavePreloginDetailsLoadingState extends AuthState {
+  const SavePreloginDetailsLoadingState();
+}
+
+final class SavePreloginDetailsSuccessState extends AuthState {
+  final String message;
+
+  const SavePreloginDetailsSuccessState({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
+final class SavePreloginDetailsErrorState extends AuthState {
+  final String errorMessage;
+
+  const SavePreloginDetailsErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// LoadPreloginDetails
+final class LoadPreloginDetailsLoadingState extends AuthState {
+  const LoadPreloginDetailsLoadingState();
+}
+
+final class LoadPreloginDetailsSuccessState extends AuthState {
+  final PreloginDetailEntity preloginDetail;
+
+  const LoadPreloginDetailsSuccessState({
+    required this.preloginDetail,
+  });
+
+  @override
+  List<Object> get props => [
+        preloginDetail,
+      ];
+}
+
+final class LoadPreloginDetailsErrorState extends AuthState {
+  final String errorMessage;
+
+  const LoadPreloginDetailsErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+
+
+// LoadPreloginDetails
 
 
 

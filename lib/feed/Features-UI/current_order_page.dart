@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/empty_widget.dart';
 import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/core/app_variables.dart';
@@ -161,6 +161,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,14 +174,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         actions: [
           IconButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => OrderFollowedDialog(),
-                );
+                _scaffoldKey.currentState?.openDrawer();
               },
               icon: const Icon(Icons.menu))
         ],
       ),
+      drawer: drawerComponent(context),
       body: BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
               WalletSystemUserBalanceAndTradeCallingState>(
           listener: (context, state) {

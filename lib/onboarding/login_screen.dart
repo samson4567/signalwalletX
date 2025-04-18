@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is LoginSuccessState) {
+              // context.read<AuthBloc>().add(const SavePreloginDetailsEvent());
               context.push(MyAppRouteConstant.feedPage,
                   extra: {'email'.toCurrentLanguage(): state.email});
             } else if (state is LoginErrorState) {
@@ -75,7 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
             } else if (state is GoogleLoginErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.errorMessage),
+                  content:
+                      Text("GoogleLoginErrorState-\n" + state.errorMessage),
                   backgroundColor: Colors.red,
                 ),
               );

@@ -38,7 +38,7 @@ class EndpointConstant {
   static const String userLanguages = "/user/languages";
   static const String userProfile = "/auth/profile/update";
 
-  static const String uploadGoogleToken = "auth/google";
+  static const String uploadGoogleToken = "/auth/google";
   static const String fetchTrades = "/user/latest-trade";
 
   // /user/latest-trade

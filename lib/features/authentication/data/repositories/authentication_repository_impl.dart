@@ -6,6 +6,7 @@ import 'package:signalwavex/features/authentication/data/datasources/authenticat
 import 'package:signalwavex/features/authentication/data/datasources/authentication_remote_datasource.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
@@ -111,14 +112,15 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           await googleUser.authentication;
       final String? idToken = googleAuth.idToken;
       final String? accessToken = googleAuth.accessToken;
-
-      if (idToken != null && accessToken != null) {
+      print(
+          "debug_print-AuthenticationRepositoryImpl-googleSignIn-${googleUser}");
+      if (accessToken != null) {
         // return Right(idToken); // or you could use accessToken
 
         try {
           final result = await authenticationRemoteDatasource
-              .uploadGoogleSignInToken(token: idToken);
-          ;
+              .uploadGoogleSignInToken(token: accessToken);
+
           await authenticationLocalDatasource.saveAuthToken(result["token"]);
           return right(result);
         } catch (e) {
@@ -205,6 +207,29 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       final result = await authenticationRemoteDatasource.updateProfile(
           name: name, phoneNumber: phoneNumber, profilePicture: profilePicture);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PreloginDetailEntity>> loadPreloginDetail() async {
+    try {
+      final result = await authenticationLocalDatasource.loadPreloginDetail();
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> savePreloginDetail(
+      {required PreloginDetailEntity preloginDetailEntity}) async {
+    try {
+      final result = await authenticationLocalDatasource.savePreloginDetail(
+        preloginDetailEntity: preloginDetailEntity,
+      );
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));

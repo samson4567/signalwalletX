@@ -1076,26 +1076,36 @@ class _HomepageState extends State<Homepage> {
 }
 
 Duration parseTimeExpression(String timeExpression) {
-  final regex = RegExp(r'^(\d+)([mh])$');
-  final match = regex.firstMatch(timeExpression);
+  print("debug_print-parseTimeExpression-started");
+  print("debug_print-parseTimeExpression-input_is_${timeExpression}");
 
-  if (match == null) {
-    throw FormatException('Invalid time expression: $timeExpression. '
-        'Expected format is <number><m|h>');
+  Duration result = Duration.zero;
+  if (timeExpression.toLowerCase().contains("hr")) {
+    String numberInStringFormat =
+        timeExpression.toLowerCase().split("hr").first;
+    int registeredValue = int.parse(numberInStringFormat.trim());
+    result = Duration(hours: registeredValue);
+  }
+  if (timeExpression.toLowerCase().contains("h")) {
+    String numberInStringFormat = timeExpression.toLowerCase().split("h").first;
+    int registeredValue = int.parse(numberInStringFormat.trim());
+    result = Duration(hours: registeredValue);
+  }
+  if (timeExpression.toLowerCase().contains("min")) {
+    String numberInStringFormat =
+        timeExpression.toLowerCase().split("min").first;
+    int registeredValue = int.parse(numberInStringFormat.trim());
+    result = Duration(minutes: registeredValue);
+  }
+  if (timeExpression.toLowerCase().contains("m")) {
+    String numberInStringFormat = timeExpression.toLowerCase().split("m").first;
+    int registeredValue = int.parse(numberInStringFormat.trim());
+    result = Duration(minutes: registeredValue);
   }
 
-  final value = int.parse(match.group(1)!);
-  final unit = match.group(2)!;
-
-  switch (unit) {
-    case 'm':
-    case 'min':
-      return Duration(minutes: value);
-    case 'h':
-    case 'hr':
-      return Duration(hours: value);
-    default:
-      // This should not happen due to the regex
-      throw StateError('Unexpected time unit: $unit');
-  }
+  print("debug_print-parseTimeExpression-result_is_${result}");
+  return result;
 }
+
+
+// 6B:70:FC:2C:92:84:25:1C:D7:C4:2C:33:70:7A:DB:79:E3:00:43:17
