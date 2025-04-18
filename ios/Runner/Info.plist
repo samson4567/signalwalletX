@@ -47,3 +47,11 @@
 	<true/>
 </dict>
 </plist>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This permission is needed to upload medias through this app</string>
+
+	<key>NSCameraUsageDescription</key>
+	<string>This permission is needed to upload medias from your camera through this app</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This permission is needed for the proper functioning of the video streaming functionality of this app</string>
+

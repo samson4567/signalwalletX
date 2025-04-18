@@ -1,9 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:signalwavex/component/textform_filled.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/languages.dart';
 
 class ProfileSection extends StatefulWidget {
@@ -15,55 +13,83 @@ class ProfileSection extends StatefulWidget {
 
 class _ProfileSectionState extends State<ProfileSection> {
   final TextEditingController _fullName = TextEditingController();
-  final TextEditingController _phoneController =
-      TextEditingController(); // Added phone controller
+  final TextEditingController _phoneController = TextEditingController();
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _onSave() {
+    if (_fullName.text.isEmpty || _phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please fill all fields")),
+      );
+      return;
+    }
+
+    // You can print or directly use these values for an API call
+    print("Full Name: ${_fullName.text}");
+    print("Phone: ${_phoneController.text}");
+    print("Image path: ${_selectedImage?.path ?? "No image selected"}");
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Changes saved successfully")),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "My Profile".toCurrentLanguage(),
-            style: TextStyle(
-              fontFamily: 'inter',
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Column(
-            children: [
-              Text(
-                "Avatar".toCurrentLanguage(),
-                style: TextStyle(
-                  fontFamily: 'inter',
-                  color: Colors.white,
-                  fontSize: 13,
+          Text("My Profile".toCurrentLanguage(),
+              style: const TextStyle(
+                fontFamily: 'inter',
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              )),
+          const SizedBox(height: 20),
+
+          // Avatar
+          Center(
+            child: GestureDetector(
+              onTap: _pickImage,
+              child: CircleAvatar(
+                radius: 40,
+                backgroundImage: _selectedImage != null
+                    ? FileImage(_selectedImage!)
+                    : const AssetImage('assets/images/profile.png')
+                        as ImageProvider,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Icon(Icons.camera_alt, color: Colors.white70),
                 ),
               ),
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage('assets/images/profile.png'),
-              ),
-            ],
+            ),
           ),
+
           const SizedBox(height: 20),
-          Text(
-            "Full Name".toCurrentLanguage(),
-            style: TextStyle(color: Colors.white, fontSize: 10),
-          ),
+
+          // Full Name
+          Text("Full Name".toCurrentLanguage(),
+              style: const TextStyle(color: Colors.white, fontSize: 10)),
           const SizedBox(height: 8),
           TextFormFieldWithCustomStyles(
+            controller: _fullName,
             hintStyle: const TextStyle(fontSize: 10),
             height: 34,
             width: 400,
-            controller: _fullName,
             label: 'Full name'.toCurrentLanguage(),
             hintText: 'Enter your full name'.toCurrentLanguage(),
             fillColor: Colors.black,
@@ -71,85 +97,49 @@ class _ProfileSectionState extends State<ProfileSection> {
             hintColor: Colors.white.withOpacity(0.6),
             textColor: Colors.white,
             prefixImagePath: 'assets/icons/cu.png',
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your fullName'.toCurrentLanguage();
-              }
-              return null;
-            },
           ),
+
           const SizedBox(height: 20),
-          Text(
-            "Phone Number".toCurrentLanguage(),
-            style: TextStyle(color: Colors.white, fontSize: 10),
-          ),
+
+          // Phone Number
+          Text("Phone Number".toCurrentLanguage(),
+              style: const TextStyle(color: Colors.white, fontSize: 10)),
           const SizedBox(height: 8),
           TextFormFieldWithCustomStyles(
+            controller: _phoneController,
             hintStyle: const TextStyle(fontSize: 10),
             height: 34,
             width: 400,
-            controller: _phoneController,
             label: 'Phone Number'.toCurrentLanguage(),
             hintText: 'Enter your phone number'.toCurrentLanguage(),
             fillColor: Colors.black,
             labelColor: Colors.white,
             hintColor: Colors.white.withOpacity(0.6),
             textColor: Colors.white,
-            prefixImagePath:
-                'assets/icons/bitcoin.png', // You can replace with the phone icon
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your phone number'.toCurrentLanguage();
-              }
-              // Optionally, add phone number validation
-              return null;
-            },
+            prefixImagePath: 'assets/icons/bitcoin.png',
           ),
+
           const SizedBox(height: 30),
-          BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if (state is ProfileUpdateLoadingState) {
-                // Show loading indicator if necessary
-              } else if (state is ProfileUpdateSuccessState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
-              } else if (state is ProfileUpdateErrorState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.errorMessage)),
-                );
-              }
-            },
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  if (_fullName.text.isNotEmpty &&
-                      _phoneController.text.isNotEmpty) {
-                    // Dispatch the ProfileUpdateEvent
-                    context.read<AuthBloc>().add(ProfileUpdateEvent(
-                          name: _fullName.text,
-                          phoneNumber: _phoneController.text,
-                          profilePicture:
-                              'profile_picture_url', // Replace with actual profile picture URL if needed
-                        ));
-                  }
-                },
-                child: Container(
-                  height: 40,
-                  width: 123,
-                  decoration: BoxDecoration(
-                    color: Colors.yellow,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Save Changes".toCurrentLanguage(),
-                      style: TextStyle(
-                        fontFamily: 'inter',
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
+
+          // Save Button
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: _onSave,
+              child: Container(
+                height: 40,
+                width: 123,
+                decoration: BoxDecoration(
+                  color: Colors.yellow,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    "Save Changes".toCurrentLanguage(),
+                    style: const TextStyle(
+                      fontFamily: 'inter',
+                      color: Colors.black,
+                      fontSize: 16,
                     ),
                   ),
                 ),

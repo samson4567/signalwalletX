@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:signalwavex/features/authentication/data/models/set_new_password.dart';
@@ -159,6 +161,7 @@ class ProfileUpdateEvent extends AuthEvent {
     required this.name,
     required this.phoneNumber,
     required this.profilePicture,
+    required File imageFile,
   });
 
   @override
