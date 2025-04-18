@@ -195,12 +195,13 @@ final class FollowTradeCallLoadingState
 
 final class FollowTradeCallSuccessState
     extends WalletSystemUserBalanceAndTradeCallingState {
-  final String message;
+  // this should be there
+  final OrderEntity orderEntity;
 
-  const FollowTradeCallSuccessState({required this.message});
+  const FollowTradeCallSuccessState({required this.orderEntity});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [orderEntity];
 }
 
 final class FollowTradeCallErrorState
