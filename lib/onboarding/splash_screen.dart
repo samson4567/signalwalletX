@@ -35,8 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       } else if (state is LoadPreloginDetailsSuccessState) {
         (state.preloginDetail.toBeLoggedIn ?? false)
-            ? context.go(MyAppRouteConstant.login)
-            : context.go(MyAppRouteConstant.home);
+            ? context.go(MyAppRouteConstant.home)
+            : context.go(MyAppRouteConstant.login);
       }
     }, builder: (context, state) {
       return Scaffold(
