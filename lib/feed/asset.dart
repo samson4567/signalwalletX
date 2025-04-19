@@ -329,7 +329,7 @@ class _AssetsState extends State<Assets> {
         const SizedBox(height: 10),
         _buildAccountContainer('Trade'.toCurrentLanguage(), '\$3,200'),
         const SizedBox(height: 10),
-        _buildAccountContainer('Perpetual'.toCurrentLanguage(), '\$0.000'),
+        // _buildAccountContainer('Perpetual'.toCurrentLanguage(), '\$0.000'),
       ],
     );
   }

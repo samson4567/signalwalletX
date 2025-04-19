@@ -126,6 +126,7 @@ final class UserUpdateErrorState extends AppState {
 }
 
 // StorePNL
+// ignore: must_be_immutable
 final class StorePNLLoadingState extends AppState {
   StorePNLLoadingState({
     super.user,
@@ -194,6 +195,7 @@ final class StorePNLErrorState extends AppState {
 }
 
 // StoreUserBalances
+// ignore: must_be_immutable
 final class StoreUserBalancesLoadingState extends AppState {
   StoreUserBalancesLoadingState({
     super.user,
@@ -262,6 +264,7 @@ final class StoreUserBalancesErrorState extends AppState {
 // StoreUserBalances ended ....
 
 // StoreCoins
+// ignore: must_be_immutable
 final class StoreCoinsLoadingState extends AppState {
   StoreCoinsLoadingState({
     super.user,

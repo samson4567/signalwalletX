@@ -576,7 +576,7 @@ class _HomepageState extends State<Homepage> {
           children: [
             Text(
               'Recent Transaction'.toCurrentLanguage(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -585,7 +585,7 @@ class _HomepageState extends State<Homepage> {
             const SizedBox(height: 8),
             Text(
               'Today'.toCurrentLanguage(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
               ),
@@ -1076,9 +1076,6 @@ class _HomepageState extends State<Homepage> {
 }
 
 Duration parseTimeExpression(String timeExpression) {
-  print("debug_print-parseTimeExpression-started");
-  print("debug_print-parseTimeExpression-input_is_${timeExpression}");
-
   Duration result = Duration.zero;
   if (timeExpression.toLowerCase().contains("hr")) {
     String numberInStringFormat =

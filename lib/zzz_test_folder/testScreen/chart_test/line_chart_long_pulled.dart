@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,21 +10,19 @@ import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
-import 'package:signalwavex/component/flow_amination_screen.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
+// ignore: must_be_immutable
 class LineChartLongPulled extends StatefulWidget {
-  LineChartLongPulled({Key? key, this.title, this.chartDetails})
-      : super(key: key);
+  LineChartLongPulled({super.key, this.title, this.chartDetails});
 
   final String? title;
   // final Map? askAndBids;
   Map? chartDetails;
 
   @override
+  // ignore: library_private_types_in_public_api
   _LineChartLongPulledState createState() => _LineChartLongPulledState();
 }
 
@@ -143,8 +140,6 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
     chartColors.lineFillColor = ColorConstants.fancyGreen;
     chartColors.kLineColor = ColorConstants.fancyGreen;
 
-    // chartColors.lineFillInsideColor = ColorConstants.fancyGreen;
-// solveChatData
     return StreamBuilder(
         stream: Stream.periodic(
           3.seconds,

@@ -45,8 +45,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     StorePNLSuccessState storePNLSuccessState =
         StorePNLSuccessState.fromAppState(state.fromMap(formerDetail));
-    print(
-        "debug_print__onStorePNLEvent-storePNLSuccessState${state.fromMap(formerDetail)}");
+
     emit(state.fromMap(formerDetail));
   }
 

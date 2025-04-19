@@ -5,7 +5,7 @@ class EndpointConstant {
   static const String login = '/auth/login';
   static const String logout = '/auth/logout';
   static const String updatePassword = '/auth/password/update';
-  static const String fetchAllBalances = '/wallet/balance';
+  static const String fetchAllBalances = '/auth/me';
   static const String retriveDepositAddress = '/wallet/deposit';
   static const String tradeWithdrawRequest = '/wallet/withdraw-request';
   static const String adminSetCharges = '/admin/set-withdrawal-fee';

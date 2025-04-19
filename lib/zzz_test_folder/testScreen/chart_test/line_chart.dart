@@ -312,24 +312,12 @@ class _LineChartState extends State<LineChart> {
           interval: widget.chartDetails?["period"] ?? "5",
           symbol: widget.chartDetails?["symbol"] ?? "BTC",
         ));
-    // /*
-    //  * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
-    //  */
-    // final Future<String> future = getChatDataFromInternet(period);
-    // //final Future<String> future = getChatDataFromJson();
-    // future.then((String result) {
-    //   solveChatData(result);
-    // }).catchError((_) {
-    //   showLoading = false;
-    //   setState(() {});
-    //   print('### datas error $_');
-    // });
+
     isLoading = false;
     setState(() {});
   }
 
   void getDataOld() {
-    print("debug_print_linechart-getDataOld-start");
     isLoading = true;
     setState(() {});
 
@@ -339,22 +327,13 @@ class _LineChartState extends State<LineChart> {
     final Future<String> future = getChatDataFromInternet();
     //final Future<String> future = getChatDataFromJson();
     future.then((String result) {
-      print(
-          "debug_print_linechart-getDataOld-getChatDataFromInternet-done${result}");
-
       solveChatData(arrangeDataForDisplay(result), fromSingleFetch: true);
-      print(
-          "debug_print_linechart-getDataOld-solveChatData-done${stableDatas?.length}");
     }).catchError((_) {
-      print("debug_print_linechart-getDataOld-error_is_${_}");
-
       showLoading = false;
       setState(() {});
-      print('### datas error $_');
     });
     isLoading = false;
     setState(() {});
-    print("debug_print_linechart-getDataOld-success");
   }
 
   String arrangeDataForDisplay(String data) {
@@ -457,10 +436,9 @@ class _LineChartState extends State<LineChart> {
         // "http://api-testnet.bybit.com/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
         "http://api-testnet.bybit.com/v5/market/kline?symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=${widget.chartDetails?["period"] ?? "60"}&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
 
-    print("debug_print_linechart-getChatDataFromInternet-url_is=$url");
     late String result;
     final response = await http.get(Uri.parse(url));
-    print("debug_print_linechart-getChatDataFromInternet-http.get_done");
+
     if (response.statusCode == 200) {
       result = response.body;
     } else {
@@ -475,20 +453,15 @@ class _LineChartState extends State<LineChart> {
   }
 
   void solveChatData(String result, {bool fromSingleFetch = false}) {
-    print("debug_print_linechart-solveChatData-start");
-    print(
-        "debug_print_linechart-solveChatData-start_with_input_fromSingleFetch_${fromSingleFetch}");
-
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
-    print("debug_print_linechart-solveChatData-parseJson_is=$parseJson");
+
     if (!fromSingleFetch) {
       if (!parseJson["topic"].toString().startsWith("kline.")) {
         return;
       }
     }
     final list = parseJson['data'] as List<dynamic>;
-    print("debug_print_linechart-solveChatData-list_is=$list");
-    print("fromSingleFetch_is=$fromSingleFetch");
+
     datas = list
         .map((item) =>
             // ((fromSingleFetch)
@@ -503,9 +476,7 @@ class _LineChartState extends State<LineChart> {
         .cast<KLineEntity>();
     try {
       if (fromSingleFetch) {
-        print("sdjkasjdabajb-fromSingleFetch-yes");
         stableDatas = datas;
-        print("sdjkasjdabajb-afterdata-${stableDatas}");
       } else {
         stableDatas ??= [];
         if (stableDatas!.last.open != datas!.first.open) {
@@ -520,8 +491,6 @@ class _LineChartState extends State<LineChart> {
         }
       }
     } catch (e) {}
-
-    print("debug_print_linechart-solveChatData-datas_is=$datas");
 
     DataUtil.calculate(datas!);
     showLoading = false;

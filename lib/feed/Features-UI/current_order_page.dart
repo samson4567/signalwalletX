@@ -16,7 +16,6 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/feed/Features-UI/components/confirm_order_dialog.dart';
-import 'package:signalwavex/feed/Features-UI/components/order_followed_dialog.dart';
 import 'package:signalwavex/component/back_button.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
@@ -150,11 +149,11 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   void initState() {
     context
         .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-        .add(FetchUserTransactionsEvent());
+        .add(const FetchUserTransactionsEvent());
 
     context
         .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-        .add(ListTradesAUserIsFollowingEvent());
+        .add(const ListTradesAUserIsFollowingEvent());
 
     super.initState();
   }
@@ -374,7 +373,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               Expanded(
                 child: TextField(
                   controller: inviteCodeTextEditingController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     border: InputBorder.none,
                     hintText: "Enter Order Code",
@@ -393,7 +392,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                 action: () async {
                   if (inviteCodeTextEditingController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text("enter a trade code"),
                         backgroundColor: Colors.green,
                       ),
@@ -455,7 +454,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   FancyContainerTwo _buildBigChartWidget() {
     return FancyContainerTwo(
       backgroundColor: getFigmaColor("151517"),
-      // Colors.grey.withAlpha(20),
       height: 400,
       width: double.infinity,
       child: DefaultTabController(
@@ -470,11 +468,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                       text: 'Chart',
                       // icon: Icon(Icons.home)
                     ),
-                    // Tab(
-                    //   text: 'Overview',
-                    //   // icon: Icon(Icons.settings)
-                    // ),
-                    // Tab(text: 'Tab 3', icon: Icon(Icons.person)),
                   ]),
               FancyContainerTwo(
                 height: 50,
@@ -728,7 +721,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   Text(
                     (selectedCoinModel?.symbol != null)
                         ? "${selectedCoinModel!.symbol}USDT"
-                        : "select a coin".toCurrentLanguage(),
+                        : "BTCUSDT".toCurrentLanguage(),
                     style: TextStyle(
                       color: getFigmaColor("EAECEF"),
                       fontSize: 24.w,

@@ -50,16 +50,11 @@ class AuthenticationRemoteDatasourceImpl
   @override
   Future<String> newUserSignUp(
       {required NewUserRequestModel newUserRequest}) async {
-    print("debug_print_AuthenticationRemoteDatasourceImpl-newUserSignUp-start");
     final response = await networkClient.post(
       endpoint: EndpointConstant.signUp,
       data: newUserRequest.toJson(),
     );
-    print(
-        "debug_print_AuthenticationRemoteDatasourceImpl-newUserSignUp-response_is_${[
-      response.data,
-      response.message,
-    ]}");
+
     return response.message;
   }
 

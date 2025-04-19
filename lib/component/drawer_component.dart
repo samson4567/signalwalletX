@@ -24,7 +24,7 @@ Drawer drawerComponent(BuildContext context) {
         }
       },
       child: Container(
-        color: Colors.black, // Set the drawer background color to black
+        color: Colors.black,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -33,8 +33,8 @@ Drawer drawerComponent(BuildContext context) {
                 context, Icons.home, 'Home', MyAppRouteConstant.home),
             _buildListTile(
                 context, Icons.store, 'Market', MyAppRouteConstant.market),
-            _buildListTile(context, Icons.sync_alt, 'Perpetual',
-                MyAppRouteConstant.perpetual),
+            // _buildListTile(context, Icons.sync_alt, 'Perpetual',
+            //     MyAppRouteConstant.perpetual),
             _buildListTile(context, Icons.account_balance_wallet, 'Assets',
                 MyAppRouteConstant.assets),
             const SizedBox(height: 220),
@@ -60,9 +60,7 @@ Drawer drawerComponent(BuildContext context) {
                 }
 
                 return InkWell(
-                  onTap: () {
-                    print("Profile tapped");
-                  },
+                  onTap: () {},
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 12.0),
@@ -80,12 +78,12 @@ Drawer drawerComponent(BuildContext context) {
                             Text(
                               state.user?.email ?? 'No email',
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 13),
+                                  color: Colors.white, fontSize: 10),
                             ),
                             Text(
                               '${state.user?.id ?? 'No ID'}',
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 13),
+                                  color: Colors.white, fontSize: 10),
                             ),
                           ],
                         ),
@@ -97,8 +95,8 @@ Drawer drawerComponent(BuildContext context) {
                           },
                           child: Image.asset(
                             'assets/images/signout.png',
-                            width: 24,
-                            height: 24,
+                            width: 15,
+                            height: 15,
                           ),
                         ),
                       ],

@@ -22,11 +22,11 @@ Widget buildBackArrow(
                 context.pop();
                 supplimentFunctionAfter?.call();
               },
-          child: Center(
+          child: const Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(
+                Icon(
                   Icons.arrow_back_outlined,
                   size: 20,
                 ),

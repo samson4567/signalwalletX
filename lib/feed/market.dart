@@ -6,7 +6,6 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_event.dart';
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
-import 'package:signalwavex/feed/homepage.dart';
 import 'package:signalwavex/languages.dart';
 
 class Market extends StatefulWidget {
@@ -210,7 +209,7 @@ class _MarketState extends State<Market> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Contract Markets'.toCurrentLanguage(),
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 16, color: Colors.white, fontFamily: 'inter')),
           const SizedBox(height: 30),
 
@@ -219,14 +218,14 @@ class _MarketState extends State<Market> {
             children: [
               Text(
                 'Name'.toCurrentLanguage(),
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
               ),
               Text(
                 'Price'.toCurrentLanguage(),
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
