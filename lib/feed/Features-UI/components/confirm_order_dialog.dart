@@ -27,8 +27,6 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
               WalletSystemUserBalanceAndTradeCallingState>(
           listener: (context, state) {
         if (state is FollowTradeCallErrorState) {
-          print(
-              "debug_print-ConfirmOrderDialog-error_is_${state.errorMessage}");
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("${state.errorMessage}"),
@@ -84,7 +82,7 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                         child: Text("Cancel".toCurrentLanguage()),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: FancyContainerTwo(
                         height: 45.h,

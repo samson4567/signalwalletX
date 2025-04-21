@@ -19,8 +19,10 @@ class KChartSample extends StatefulWidget {
 class _KChartSampleState extends State<KChartSample> {
   List<KLineEntity>? datas;
   bool showLoading = true;
+  // ignore: unused_field
   MainState _mainState = MainState.MA;
   bool _volHidden = false;
+  // ignore: unused_field
   SecondaryState _secondaryState = SecondaryState.MACD;
   bool isLine = true;
   bool isChinese = true;

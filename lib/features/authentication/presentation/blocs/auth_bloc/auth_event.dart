@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:signalwavex/features/authentication/data/models/set_new_password.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -168,7 +167,6 @@ class ProfileUpdateEvent extends AuthEvent {
   List<Object> get props => [name, phoneNumber, profilePicture];
 }
 
-// GoogleLogin
 final class GoogleLoginEvent extends AuthEvent {
   const GoogleLoginEvent();
 
@@ -176,7 +174,6 @@ final class GoogleLoginEvent extends AuthEvent {
   List<Object> get props => [];
 }
 
-// LoadPreloginDetails
 final class LoadPreloginDetailsEvent extends AuthEvent {
   const LoadPreloginDetailsEvent();
 
@@ -184,7 +181,6 @@ final class LoadPreloginDetailsEvent extends AuthEvent {
   List<Object> get props => [];
 }
 
-// SavePreloginDetails
 final class SavePreloginDetailsEvent extends AuthEvent {
   const SavePreloginDetailsEvent();
 
@@ -192,19 +188,15 @@ final class SavePreloginDetailsEvent extends AuthEvent {
   List<Object> get props => [];
 }
 
+// Event
+final class FetchTransactionHistoryEvent extends AuthEvent {
+  final String userId;
 
+  const FetchTransactionHistoryEvent({required this.userId});
 
-// class SetLanguageEvent extends AuthEvent {
-//   final String languageCode;
-//   final String languageName;
+  @override
+  List<Object> get props => [userId];
 
-//   const SetLanguageEvent({
-//     required this.languageCode,
-//     required this.languageName,
-//   });
-
-//   @override
-//   List<Object> get props => [languageCode, languageName];
-// }
-
-
+  @override
+  String toString() => 'FetchTransactionHistory(userId: $userId)';
+}

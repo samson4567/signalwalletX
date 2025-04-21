@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:signalwavex/core/api/header_interceptor.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/error/exception.dart';
@@ -26,14 +25,14 @@ abstract class ApiClient<T> {
     if (kDebugMode) {
       dio.interceptors.addAll([
         //TODO: Add debug interceptor here
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: true,
-          responseBody: true,
-          error: true,
-          compact: false,
-        )
+        // PrettyDioLogger(
+        //   requestHeader: true,
+        //   requestBody: true,
+        //   responseHeader: true,
+        //   responseBody: true,
+        //   error: true,
+        //   compact: false,
+        // )
       ]);
     }
 

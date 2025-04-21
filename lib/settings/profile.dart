@@ -35,11 +35,6 @@ class _ProfileSectionState extends State<ProfileSection> {
       return;
     }
 
-    // You can print or directly use these values for an API call
-    print("Full Name: ${_fullName.text}");
-    print("Phone: ${_phoneController.text}");
-    print("Image path: ${_selectedImage?.path ?? "No image selected"}");
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Changes saved successfully")),
     );
@@ -62,19 +57,17 @@ class _ProfileSectionState extends State<ProfileSection> {
           const SizedBox(height: 20),
 
           // Avatar
-          Center(
-            child: GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 40,
-                backgroundImage: _selectedImage != null
-                    ? FileImage(_selectedImage!)
-                    : const AssetImage('assets/images/profile.png')
-                        as ImageProvider,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Icon(Icons.camera_alt, color: Colors.white70),
-                ),
+          GestureDetector(
+            onTap: _pickImage,
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage: _selectedImage != null
+                  ? FileImage(_selectedImage!)
+                  : const AssetImage('assets/images/profile.png')
+                      as ImageProvider,
+              child: const Align(
+                alignment: Alignment.bottomRight,
+                child: Icon(Icons.camera_alt, color: Colors.white70),
               ),
             ),
           ),

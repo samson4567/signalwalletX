@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
-import 'package:signalwavex/features/authentication/domain/entities/profile_update_entity.dart';
+
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
+
+import '../../../data/models/transaction_model.dart';
 
 sealed class AuthState extends Equatable {
   const AuthState();
@@ -444,28 +446,36 @@ final class LoadPreloginDetailsErrorState extends AuthState {
   List<Object> get props => [errorMessage];
 }
 
+class FetchTransactionInitialState extends AuthState {
+  const FetchTransactionInitialState();
 
+  @override
+  List<Object> get props => [];
+}
 
-// LoadPreloginDetails
+class FetchTransactionLoadingState extends AuthState {
+  const FetchTransactionLoadingState();
 
+  @override
+  List<Object> get props => [];
+}
 
+class FetchTransactionLoadedState extends AuthState {
+  final List<TransactionModel> transactions;
 
-// class SetLanguageSuccessState extends AuthState {
-//   final String message;
+  const FetchTransactionLoadedState(this.transactions);
 
-//   const SetLanguageSuccessState(this.message, {required String message});
+  @override
+  List<Object> get props => [transactions];
+}
 
-//   @override
-//   List<Object> get props => [message];
-// }
+class FetchTransactionErrorState extends AuthState {
+  final String errorMessage;
 
-// class SetLanguageErrorState extends AuthState {
-//   final String errorMessage;
+  const FetchTransactionErrorState({
+    required this.errorMessage,
+  });
 
-//   const SetLanguageErrorState(this.errorMessage, {required String errorMessage});
-
-//   @override
-//   List<Object> get props => [errorMessage];
-
-
-
+  @override
+  List<Object> get props => [errorMessage];
+}

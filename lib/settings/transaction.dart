@@ -16,7 +16,7 @@ class TransactionHistorySection extends StatelessWidget {
             // Header
             Text(
               'Transaction History'.toCurrentLanguage(),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class TransactionHistorySection extends StatelessWidget {
                       children: [
                         Text(
                           'Real Account'.toCurrentLanguage(),
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ],
                     )),

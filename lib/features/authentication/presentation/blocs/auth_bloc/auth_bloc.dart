@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
+import 'package:signalwavex/features/authentication/data/models/transaction_model.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
@@ -29,6 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleLoginEvent>(_onGoogleLoginEvent);
     on<LoadPreloginDetailsEvent>(_onLoadPreloginDetailsEvent);
     on<SavePreloginDetailsEvent>(_onSavePreloginDetailsEvent);
+    on<FetchTransactionHistoryEvent>(_onFetchTransactionHistoryEvent);
   }
 
 // SavePreloginDetails
@@ -309,8 +311,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       result.fold(
         (error) =>
             emit(SavePreloginDetailsErrorState(errorMessage: error.message)),
-        (preloginDetail) => emit(
-            SavePreloginDetailsSuccessState(message: "login details saved")),
+        (preloginDetail) => emit(const SavePreloginDetailsSuccessState(
+            message: "login details saved")),
       );
     } catch (e) {
       emit(SavePreloginDetailsErrorState(
@@ -320,45 +322,53 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  // _onSavePreloginDetailsEvent
+  Future<void> _onFetchTransactionHistoryEvent(
+    FetchTransactionHistoryEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const FetchTransactionLoadingState());
+
+    try {
+      final result = await authenticationRepository.getTransactionHistory(
+        userId: event.userId,
+      );
+
+      result.fold(
+        (error) {
+          emit(FetchTransactionErrorState(errorMessage: error.message));
+        },
+        (transactionEntities) {
+          final transactionModels = transactionEntities.map((entity) {
+            return TransactionModel(
+              id: entity.id,
+              userId: entity.userId,
+              tid: entity.tid,
+              title: entity.title,
+              purchaseDuration: entity.purchaseDuration,
+              orderTime: entity.orderTime,
+              followCondition: entity.followCondition,
+              createdByAdmin: entity.createdByAdmin,
+              orderId: entity.orderId,
+              symbol: entity.symbol,
+              side: entity.side,
+              type: entity.type,
+              price: entity.price,
+              quantity: entity.quantity,
+              status: entity.status,
+              pnl: entity.pnl,
+              createdAt: entity.createdAt,
+              updatedAt: entity.updatedAt,
+            );
+          }).toList();
+
+          emit(FetchTransactionLoadedState(transactionModels));
+        },
+      );
+    } catch (e) {
+      emit(FetchTransactionErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
 }
-// Future<void> _onFetechAllLanguages(
-//   FetchAllLanguagesEvent event,
-//   Emitter<AuthState> emit,
-// ) async {
-//   emit(FetchAllLanguagesLoadingState());
-
-//   final result = await authenticationRepository.fetchLanguages(
-//     name: event.name,
-//     code: event.code,
-//   );
-
-//   result.fold(
-//     (error) => emit(FetchAllLanguagesErrorState(errorMessage: error.message)),
-//     (response) {
-
-//       emit(FetchAllLanguagesSuccessState(
-//         message: response.
-//         languages: response.languages,
-//       ));
-//     },
-//   );
-// }
-
-// Future<void> _onSetLanguage(
-//   SetLanguageEvent event,
-//   Emitter<AuthState> emit,
-// ) async {
-//   emit(const SetNewPasswordLoadingState());
-
-//   final result = await authenticationRepository.setLanguages(
-//     languageName: event.languageName,
-//     languageCode: event.languageCode,
-//   );
-
-//   result.fold(
-//     (error) => emit(SetLanguageErrorState(errorMessage: error.message)),
-//     (message) => emit(SetLanguageSuccessState(message: message)),
-//   );
-// }
-

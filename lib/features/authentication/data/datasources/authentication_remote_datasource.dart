@@ -7,8 +7,8 @@ import 'package:signalwavex/core/security/secure_key.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/data/models/recent_transaction_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
-import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/transaction_entity.dart';
 
 abstract class AuthenticationRemoteDatasource {
   Future<String> newUserSignUp({required NewUserRequestModel newUserRequest});
@@ -35,6 +35,7 @@ abstract class AuthenticationRemoteDatasource {
 
   Future<String> updateProfile(
       {required name, required phoneNumber, required profilePicture});
+  Future<List<TransactionEntity>> getTransactionHistory({required userId});
 }
 
 class AuthenticationRemoteDatasourceImpl
@@ -237,5 +238,12 @@ class AuthenticationRemoteDatasourceImpl
         });
     return response.data;
   }
+
+  @override
+  Future<List<TransactionEntity>> getTransactionHistory(
+      {required userId}) async {
+    final response = await networkClient.post(
+        endpoint: EndpointConstant.tradeOrders, returnRawData: true);
+    return response.data;
+  }
 }
-// uploadGoogleToken

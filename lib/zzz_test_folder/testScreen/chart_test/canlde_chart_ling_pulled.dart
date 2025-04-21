@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,14 +8,13 @@ import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
+// ignore: must_be_immutable
 class CanldeChartLongPulled extends StatefulWidget {
-  CanldeChartLongPulled({Key? key, this.title, this.chartDetails})
-      : super(key: key);
+  CanldeChartLongPulled({super.key, this.title, this.chartDetails});
 
   final String? title;
   // final Map? askAndBids;
@@ -149,15 +147,9 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
     return BlocConsumer<WebSocketBloc, WebSocketState>(
         listener: (context, state) {
       if (state is SubscribeToCryptoSuccessState) {
-        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
         solveChatData(state.data);
-        print(
-            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
       } else if (state is WebSocketDataState) {
         solveChatData(state.data);
-        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
-        print(
-            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
       } else if (state is WebSocketErrorState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -167,9 +159,6 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
         );
       }
     }, builder: (context, state) {
-      print("debug_print_linechart-building");
-      print("debug_print_linechart-building${state}");
-
       return Container(
         child: Stack(children: <Widget>[
           FancyContainer(
@@ -194,9 +183,7 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
                 isLine: false,
                 // isLine: isLine,
 
-                onSecondaryTap: () {
-                  print('Secondary Tap');
-                },
+                onSecondaryTap: () {},
                 isTrendLine: _isTrendLine,
                 mainState: _mainState,
                 volHidden: true,
@@ -330,7 +317,6 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
   }
 
   void getDataOld() {
-    print("debug_print_linechart-getDataOld-start");
     isLoading = true;
     setState(() {});
 
@@ -340,22 +326,13 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
     final Future<String> future = getChatDataFromInternet();
     //final Future<String> future = getChatDataFromJson();
     future.then((String result) {
-      print(
-          "debug_print_linechart-getDataOld-getChatDataFromInternet-done${result}");
-
       solveChatData(arrangeDataForDisplay(result), fromSingleFetch: true);
-      print(
-          "debug_print_linechart-getDataOld-solveChatData-done${stableDatas?.length}");
     }).catchError((_) {
-      print("debug_print_linechart-getDataOld-error_is_${_}");
-
       showLoading = false;
       setState(() {});
-      print('### datas error $_');
     });
     isLoading = false;
     setState(() {});
-    print("debug_print_linechart-getDataOld-success");
   }
 
   String arrangeDataForDisplay(String data) {
@@ -476,37 +453,24 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
   }
 
   void solveChatData(String result, {bool fromSingleFetch = false}) {
-    print("debug_print_linechart-solveChatData-start");
-    print(
-        "debug_print_linechart-solveChatData-start_with_input_fromSingleFetch_${fromSingleFetch}");
-
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
-    print("debug_print_linechart-solveChatData-parseJson_is=$parseJson");
+
     if (!fromSingleFetch) {
       if (!parseJson["topic"].toString().startsWith("kline.")) {
         return;
       }
     }
     final list = parseJson['data'] as List<dynamic>;
-    print("debug_print_linechart-solveChatData-list_is=$list");
-    print("fromSingleFetch_is=$fromSingleFetch");
+
     datas = list
-        .map((item) =>
-            // ((fromSingleFetch)
-            //     ? KLineEntity.fromJson(item as Map<String, dynamic>)
-            //     :
-            getKLineEntityFromMap(item as Map<String, dynamic>))
-        //  )
-        // KLineEntity.fromJson(item as Map<String, dynamic>))
+        .map((item) => getKLineEntityFromMap(item as Map<String, dynamic>))
         .toList()
         .reversed
         .toList()
         .cast<KLineEntity>();
     try {
       if (fromSingleFetch) {
-        print("sdjkasjdabajb-fromSingleFetch-yes");
         stableDatas = datas;
-        print("sdjkasjdabajb-afterdata-${stableDatas}");
       } else {
         stableDatas ??= [];
         if (stableDatas!.last.open != datas!.first.open) {
@@ -521,8 +485,6 @@ class _CanldeChartLongPulledState extends State<CanldeChartLongPulled> {
         }
       }
     } catch (e) {}
-
-    print("debug_print_linechart-solveChatData-datas_is=$datas");
 
     DataUtil.calculate(datas!);
     showLoading = false;

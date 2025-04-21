@@ -8,8 +8,11 @@ import 'package:signalwavex/features/authentication/data/models/new_user_request
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
+import 'package:signalwavex/features/authentication/domain/entities/transaction_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
+
+import '../models/transaction_model.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   AuthenticationRepositoryImpl({
@@ -207,6 +210,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       final result = await authenticationRemoteDatasource.updateProfile(
           name: name, phoneNumber: phoneNumber, profilePicture: profilePicture);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TransactionEntity>>> getTransactionHistory({
+    required String userId,
+  }) async {
+    try {
+      final List<TransactionEntity> result =
+          await authenticationRemoteDatasource.getTransactionHistory(
+              userId: userId);
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));

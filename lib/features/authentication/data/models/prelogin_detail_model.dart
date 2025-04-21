@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 
 // LoginEntity

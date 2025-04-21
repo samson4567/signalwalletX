@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/custom_image_viewer.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc.dart';
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_event.dart';
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/feed/asset.dart';
 import 'package:signalwavex/languages.dart';
+import 'package:signalwavex/router/api_route.dart';
 
 class Market extends StatefulWidget {
   const Market({super.key});
@@ -70,7 +73,9 @@ class _MarketState extends State<Market> {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () => Navigator.pop(context),
+                          onTap: () {
+                            context.pop(MyAppRouteConstant.home);
+                          },
                           child:
                               const Icon(Icons.arrow_back, color: Colors.white),
                         ),

@@ -6,7 +6,6 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
-import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
 import 'package:signalwavex/languages.dart';
 
 class Withdraw extends StatefulWidget {
@@ -58,7 +57,6 @@ class _WithdrawState extends State<Withdraw> {
       withdrawAddress: address,
     );
 
-    // Dispatch the event to the WalletBloc
     context
         .read<WalletSystemUserBalanceAndTradeCallingBloc>()
         .add(WithdrawalEvent(withdrawEntity: withdrawEntity));
@@ -108,17 +106,17 @@ class _WithdrawState extends State<Withdraw> {
                       children: [
                         Text(
                           'Withdrawal'.toCurrentLanguage(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             fontFamily: 'Inter',
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           'Cash out your assets'.toCurrentLanguage(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             fontFamily: 'inter',
                             color: Colors.grey,
@@ -177,7 +175,7 @@ class _WithdrawState extends State<Withdraw> {
                         child: Center(
                           child: Text(
                             'Withdrawal'.toCurrentLanguage(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),

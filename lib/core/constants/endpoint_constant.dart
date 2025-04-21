@@ -40,6 +40,6 @@ class EndpointConstant {
 
   static const String uploadGoogleToken = "/auth/google";
   static const String fetchTrades = "/user/latest-trade";
-
+  static const String tradeOrders = "/trade/orders";
   // /user/latest-trade
 }

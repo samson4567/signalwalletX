@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
 
+// ignore: must_be_immutable
 class CustomImageView extends StatelessWidget {
   String? imagePath;
 

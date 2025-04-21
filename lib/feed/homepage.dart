@@ -291,17 +291,18 @@ class _HomepageState extends State<Homepage> {
                           if ((decodedData["topic"] as String?)
                                   ?.startsWith("kline.") ??
                               false) {
-                            cad =
-                                calculatePriceChange(decodedData["data"][0]) ??
-                                    {};
+                            setState(() {
+                              // Force rebuild
+                              cad = calculatePriceChange(
+                                      decodedData["data"][0]) ??
+                                  {};
+                            });
                           }
                         }
                         if (state is WebSocketErrorState) {
-                          print(
-                              "debug_print_WebSocketConnectedState-error_is_${state.error}");
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("${state.error}"),
+                              content: Text(state.error),
                               backgroundColor: Colors.blue,
                             ),
                           );
@@ -335,22 +336,18 @@ class _HomepageState extends State<Homepage> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        (cad.isEmpty)
+                                        (cad.isEmpty) // Changed from isNotEmpty to isEmpty
                                             ? "Loading.."
-                                            : "${(cad?["percentageChange"] ?? "")} (${cad?["valueChange"] ?? ""}) ",
-                                        // btcCoinModel?.percentIncrease "Loading.."
-                                        //         .toString() ??
-                                        //     '',
+                                            : "${(cad["percentageChange"] ?? "")} (${cad["valueChange"] ?? ""}) ",
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: ((double.tryParse(
                                                           cad["percentageChange"] ??
-                                                              "") as double?)
+                                                              ""))
                                                       ?.isNegative ??
                                                   false)
                                               ? Colors.red
-                                              : Colors
-                                                  .green, // Replace with your color constant
+                                              : Colors.green,
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -376,7 +373,9 @@ class _HomepageState extends State<Homepage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "${cad?["currentPrice"] ?? "Loading.."}",
+                              cad.isEmpty
+                                  ? "Loading.."
+                                  : "${cad["currentPrice"] ?? "N/A"}",
                               style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
