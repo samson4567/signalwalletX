@@ -25,6 +25,7 @@ class OrderModel extends OrderEntity {
     super.userID,
     super.timePeriod,
     super.tradePeriod,
+    super.rateOfReturn,
   });
 
   Map<String, dynamic> toJson() {
@@ -49,35 +50,36 @@ class OrderModel extends OrderEntity {
       "updated_at": updatedAt,
       "time_period": timePeriod,
       "trade_period": tradePeriod,
+      "rate_of_return": rateOfReturn
     };
   }
 
   factory OrderModel.fromEntity(OrderEntity orderEntity) {
     return OrderModel(
-      id: orderEntity.id,
-      userID: orderEntity.userID,
-      tid: orderEntity.tid,
-      title: orderEntity.title,
-      purchaseDuration: orderEntity.purchaseDuration,
-      orderTime: orderEntity.orderTime,
-      followCondition: orderEntity.followCondition,
-      createdByAdmin: orderEntity.createdByAdmin,
-      orderID: orderEntity.orderID,
-      symbol: orderEntity.symbol,
-      side: orderEntity.side,
-      type: orderEntity.type,
-      price: orderEntity.price,
-      quantity: orderEntity.quantity,
-      status: orderEntity.status,
-      pnl: orderEntity.pnl,
-      createdAt: orderEntity.createdAt,
-      updatedAt: orderEntity.updatedAt,
-    );
+        id: orderEntity.id,
+        userID: orderEntity.userID,
+        tid: orderEntity.tid,
+        title: orderEntity.title,
+        purchaseDuration: orderEntity.purchaseDuration,
+        orderTime: orderEntity.orderTime,
+        followCondition: orderEntity.followCondition,
+        createdByAdmin: orderEntity.createdByAdmin,
+        orderID: orderEntity.orderID,
+        symbol: orderEntity.symbol,
+        side: orderEntity.side,
+        type: orderEntity.type,
+        price: orderEntity.price,
+        quantity: orderEntity.quantity,
+        status: orderEntity.status,
+        pnl: orderEntity.pnl,
+        createdAt: orderEntity.createdAt,
+        updatedAt: orderEntity.updatedAt,
+        rateOfReturn: orderEntity.rateOfReturn);
   }
   factory OrderModel.fromJson(Map jsonMap) {
     return OrderModel(
       id: jsonMap["id"],
-      userID: jsonMap["user_id"],
+      userID: jsonMap["user_id"]?.toString(),
       tid: jsonMap["tid"],
       title: jsonMap["title"],
       purchaseDuration: jsonMap["purchase_duration"],
@@ -85,11 +87,12 @@ class OrderModel extends OrderEntity {
       followCondition: jsonMap["follow_condition"],
       createdByAdmin: jsonMap["created_by_admin"],
       orderID: jsonMap["order_id"],
+      rateOfReturn: jsonMap["rate_of_return"],
       symbol: jsonMap["symbol"],
       side: jsonMap["side"],
       type: jsonMap["type"],
-      price: jsonMap["price"],
-      quantity: jsonMap["quantity"],
+      price: jsonMap["price"]?.toString(),
+      quantity: jsonMap["quantity"]?.toString(),
       status: jsonMap["status"],
       pnl: jsonMap["pnl"],
       createdAt: jsonMap["created_at"],

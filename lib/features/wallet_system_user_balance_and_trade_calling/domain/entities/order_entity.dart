@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class OrderEntity extends Equatable {
-  final double? id;
+  final int? id;
 
   final String? title;
   final String? tid;
@@ -24,6 +24,7 @@ class OrderEntity extends Equatable {
   final String? updatedAt;
   final String? timePeriod;
   final String? tradePeriod;
+  final String? rateOfReturn;
 
   // final String? orderDirection;
   // final double? purchaseDuration;
@@ -53,6 +54,7 @@ class OrderEntity extends Equatable {
     required this.followCondition,
     required this.status,
     required this.userID,
+    required this.rateOfReturn,
   });
 
   @override

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,8 @@ import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/empty_widget.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/features/trading_system/data/models/tradeorder_model.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -100,30 +103,54 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     return [
       {
         "k": "Product",
-        "v": "${orderModel.tradingPair}",
+        "v": "${orderModel.tradingPair ?? "--"}",
         "c": getFigmaColor("F0B90B")
       },
-      {"k": "Status", "v": "${orderModel.status}", "c": Colors.white},
+      {"k": "Status", "v": "${orderModel.status ?? "--"}", "c": Colors.white},
       {
         "k": "Direction",
-        "v": "${orderModel.side}",
+        "v": "${orderModel.side ?? "--"}",
         "c": getFigmaColor("C6E229")
       },
       {
         "k": "Time Period",
-        "v": "${orderModel.purchaseDuration}",
+        "v": "${orderModel.purchaseDuration ?? "--"}",
         "c": Colors.white
       },
-      {"k": "Open Price", "v": "--", "c": Colors.white},
-      {"k": "Amount", "v": "--", "--": Colors.white},
+      {"k": "Price", "v": "${orderModel.price ?? "--"}", "c": Colors.white},
+      {
+        "k": "Quantity",
+        "v": "${orderModel.quantity ?? "--"}",
+        "--": Colors.white
+      },
       {
         "k": "Open Position Time",
-        "v": "${orderModel.orderTime}",
+        "v": "${orderModel.orderTime ?? "--"}",
         "c": Colors.white
       },
       {"k": "Turnover", "v": "30", "c": Colors.white},
-      {"k": "Rate of Return", "v": "87.20%", "c": Colors.white},
-      {"k": "Action", "v": "Cancel", "c": getFigmaColor("CA3F64")},
+      {
+        "k": "Rate of Return",
+        "v": "${orderModel.rateOfReturn ?? "--"}",
+        "c": Colors.white
+      },
+      {
+        "k": "Action",
+        "v": "Follow",
+        "c": Colors.green,
+        "action": () async {
+          OrderEntity? result = await showDialog<OrderEntity>(
+            context: context,
+            builder: (context) => ConfirmOrderDialog(
+              tid: orderModel.orderID!,
+            ),
+          );
+          if (result != null) {
+            currentOrderEntities.add(OrderModel.fromEntity(result));
+            currentTradeEntities.add(TradeModel.fromOrderEntity(result));
+          }
+        }
+      },
     ];
   }
 
@@ -159,6 +186,17 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         .add(const ListTradesAUserIsFollowingEvent());
 
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        context.read<TradingSystemBloc>().add(const FetchActiveTradeEvent());
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    context.read<TradingSystemBloc>().activeTradeMonitor?.cancel();
+    super.dispose();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -218,7 +256,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .8,
                     child: DefaultTabController(
-                        length: 4,
+                        length: 3,
                         child: Column(
                           children: [
                             const TabBar(
@@ -226,7 +264,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                                 Tab(text: "Current Order (1)"),
                                 Tab(text: "Historical Order"),
                                 Tab(text: "Invited me"),
-                                Tab(text: "Follow-plan"),
                               ],
                             ),
                             Expanded(
@@ -256,9 +293,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                                 //   child: Text(Uuid().v4()),
                                 // ),
                                 _buildInviteMeTabview(),
-                                Container(
-                                  child: Text(Uuid().v4()),
-                                ),
                               ]),
                             )
                           ],
@@ -408,6 +442,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   //                   FancyContainerTwo(
   //                     height: 40,
   //                     width: 100,
+
   //                     action: () async {
   //                       if (inviteCodeTextEditingController.text.isEmpty) {
   //                         ScaffoldMessenger.of(context).showSnackBar(
@@ -417,14 +452,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   //                           ),
   //                         );
   //                       }
-
   //                       OrderEntity? result = await showDialog<OrderEntity>(
   //                         context: context,
   //                         builder: (context) => ConfirmOrderDialog(
   //                           tid: inviteCodeTextEditingController.text,
   //                         ),
   //                       );
-
   //                       if (result != null) {
   //                         currentOrderEntities
   //                             .add(OrderModel.fromEntity(result));
@@ -432,6 +465,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   //                             .add(TradeModel.fromOrderEntity(result));
   //                       }
   //                     },
+
   //                     borderColor: Colors.white.withAlpha(10),
   //                     borderRadius: const BorderRadius.horizontal(
   //                         left: Radius.circular(0), right: Radius.circular(10)),
@@ -445,6 +479,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   //                 ],
   //               ),
   //             ),
+
   //             Expanded(
   //               child: Column(
   //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -551,12 +586,34 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                         backgroundColor: Colors.green,
                       ),
                     );
-                  } else {
-                    // Fetch the trade details using the code (tid)
-                    final tradeCode = inviteCodeTextEditingController.text;
-                    await _fetchTradeDetails(tradeCode);
+                  }
+                  OrderEntity? result = await showDialog<OrderEntity>(
+                    context: context,
+                    builder: (context) => ConfirmOrderDialog(
+                      tid: inviteCodeTextEditingController.text,
+                    ),
+                  );
+                  if (result != null) {
+                    currentOrderEntities.add(OrderModel.fromEntity(result));
+                    currentTradeEntities
+                        .add(TradeModel.fromOrderEntity(result));
                   }
                 },
+
+                // action: () async {
+                //   if (inviteCodeTextEditingController.text.isEmpty) {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(
+                //         content: Text("Enter a trade code"),
+                //         backgroundColor: Colors.green,
+                //       ),
+                //     );
+                //   } else {
+                //     // Fetch the trade details using the code (tid)
+                //     final tradeCode = inviteCodeTextEditingController.text;
+                //     await _fetchTradeDetails(tradeCode);
+                //   }
+                // },
                 borderColor: Colors.white.withAlpha(10),
                 borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(0), right: Radius.circular(10)),
@@ -571,33 +628,55 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           ),
         ),
         // Display the order data based on state
-        BlocBuilder<TradingSystemBloc, TradingSystemState>(
+        BlocConsumer<TradingSystemBloc, TradingSystemState>(
+          listener: (context, state) {
+            if (state is TraderOrderFollowedLoaded) {
+              traderOrderFollowedEntity = state.traderOrderFollowed;
+            }
+            if (state is FetchActiveTradeSuccessState) {
+              print(
+                  "debug_print-FeaturesCurrentOrder_build-FetchActiveTradeSuccessState_emmited");
+              currentOrderEntity = state.orderEntity;
+              print(
+                  "debug_print-FeaturesCurrentOrder_build-traderOrderFollowedEntity_is_${traderOrderFollowedEntity}");
+              Future.delayed(10.seconds, () {
+                context.read<TradingSystemBloc>().add(FetchActiveTradeEvent());
+              });
+            }
+          },
           builder: (context, state) {
-            if (state is TraderOrderFollowedLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is TraderOrderFollowedLoaded) {
-              // Display the order info if loaded
+            if (currentOrderEntity?.tid != null) {
+              List inviteMeMapLet = [
+                ...convertOrderEntityToMap(
+                    OrderModel.fromEntity(currentOrderEntity!))
+              ];
               return Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FancyText(
-                      "Order Code: ${state.traderOrderFollowed.tid}",
-                      textColor: Colors.grey,
-                    ),
-                    // Add more details from `state.traderOrderFollowed` here as needed
-                  ],
-                ),
-              );
-            } else if (state is TraderOrderFollowedError) {
-              return Center(
-                child: FancyText(
-                  "Error: ${state.message}",
-                  textColor: Colors.red,
-                ),
-              );
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: inviteMeMapLet
+                    .map(
+                      (e) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FancyText(
+                            e["k"],
+                            textColor: Colors.grey,
+                          ),
+                          FancyText(
+                            action: e["action"],
+                            e["v"] ?? "--",
+                            textColor: e['c'],
+                          )
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ));
+            }
+
+            if (currentOrderEntity == null) {
+              return const Center(child: CircularProgressIndicator());
             } else {
-              // Empty state if no active trade or order is available
               return Expanded(
                 child: Center(
                   child: FancyText(
@@ -610,6 +689,39 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           },
         ),
       ],
+    );
+  }
+
+  Expanded _buildAlternativeMethod(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FancyText(
+            "Order Code: ${traderOrderFollowedEntity?.tid}",
+            textColor: Colors.grey,
+          ),
+          FancyText(
+            action: () async {
+              if (inviteCodeTextEditingController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Enter a trade code"),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } else {
+                // Fetch the trade details using the code (tid)
+                final tradeCode = inviteCodeTextEditingController.text;
+                await _fetchTradeDetails(tradeCode);
+              }
+            },
+            "Follow Order",
+            textColor: ColorConstants.fancyGreen,
+          ),
+          // Add more details from `state.traderOrderFollowed` here as needed
+        ],
+      ),
     );
   }
 

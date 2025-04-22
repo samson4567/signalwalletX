@@ -68,3 +68,14 @@ class FetchTraderOrderFollowed extends TradingSystemEvent {
   @override
   List<Object> get props => [tid];
 }
+
+class FetchActiveTradeEvent extends TradingSystemEvent {
+  const FetchActiveTradeEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+
+
+// FetchActiveTrade

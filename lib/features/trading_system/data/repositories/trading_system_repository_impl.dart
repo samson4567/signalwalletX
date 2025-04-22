@@ -11,6 +11,8 @@ import 'package:signalwavex/features/trading_system/domain/entities/order_book_e
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/repositories/trading_system_repository.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 
 class TradingSystemRepositoryImpl implements TradingSystemRepository {
   TradingSystemRepositoryImpl({
@@ -105,6 +107,18 @@ class TradingSystemRepositoryImpl implements TradingSystemRepository {
           await tradingSystemRemoteDatasource.getTraderOrderFollowed(tid: tid);
       return result;
     } catch (e) {
+      throw mapExceptionToFailure(e);
+    }
+  }
+
+  @override
+  Future<OrderEntity> fetchActiveTrade() async {
+    try {
+      final result = await tradingSystemRemoteDatasource.fetchActiveTrade();
+      return result;
+    } catch (e) {
+      print(
+          "debug_print-TradingSystemRepositoryImpl-fetchActiveTrade-error_is_${e}");
       throw mapExceptionToFailure(e);
     }
   }

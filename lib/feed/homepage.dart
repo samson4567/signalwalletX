@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/languages.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -61,6 +62,10 @@ class _HomepageState extends State<Homepage> {
     context
         .read<WalletSystemUserBalanceAndTradeCallingBloc>()
         .add(const FetchUserTransactionsEvent());
+
+    context
+        .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+        .add(const FetchAllAccountBalanceEvent());
 
     context.read<CoinBloc>().add(const GetBTCDetailEvent());
     context.read<CoinBloc>().add(const GetTopCoinEvent());
@@ -868,6 +873,7 @@ class _HomepageState extends State<Homepage> {
     return result;
   }
 
+  bool isLoadingBalance = true;
   Widget _buildTotalAssetsSection(double screenWidth, BuildContext context) {
     final walletBloc =
         BlocProvider.of<WalletSystemUserBalanceAndTradeCallingBloc>(context);
@@ -880,18 +886,21 @@ class _HomepageState extends State<Homepage> {
       listener: (context, state) {
         if (state is FetchAllAccountBalanceErrorState) {
           // Handle the error state
+          isLoadingBalance = false;
         }
-      },
-      builder: (context, state) {
-        double totalBalance = 0;
-
+        if (state is FetchAllAccountBalanceLoadingState) {
+          // Handle the error state
+          isLoadingBalance = true;
+        }
         if (state is FetchAllAccountBalanceSuccessState) {
           totalBalance = state.listOfWalletsBalances.fold(0, (sum, wallet) {
             final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
             return sum + balance;
           });
+          isLoadingBalance = false;
         }
-
+      },
+      builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -919,23 +928,25 @@ class _HomepageState extends State<Homepage> {
                       ),
                       onPressed: () {
                         isBalanceVisible = !isBalanceVisible;
-
-                        walletBloc.add(const FetchAllAccountBalanceEvent());
+                        setState(() {});
                       },
                     ),
                   ],
                 ),
-                Text(
-                  // Show balance only if visible, otherwise show a placeholder (like '*****')
-                  isBalanceVisible
-                      ? '\$${totalBalance.toStringAsFixed(2)}' // Shows 0.00 if balance is 0
-                      : '*****', // Placeholder text for hidden balance
-                  style: TextStyles.smallText.copyWith(
-                    fontSize: screenWidth * 0.08,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                (state is FetchAllAccountBalanceLoadingState ||
+                        isLoadingBalance)
+                    ? CircularProgressIndicator.adaptive()
+                    : Text(
+                        // Show balance only if visible, otherwise show a placeholder (like '*****')
+                        isBalanceVisible
+                            ? '\$${totalBalance.toStringAsFixed(2)}' // Shows 0.00 if balance is 0
+                            : '*****', // Placeholder text for hidden balance
+                        style: TextStyles.smallText.copyWith(
+                          fontSize: screenWidth * 0.08,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ],
             ),
           ],

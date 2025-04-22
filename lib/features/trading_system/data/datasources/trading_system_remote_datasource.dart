@@ -18,6 +18,8 @@ import 'package:signalwavex/features/trading_system/domain/entities/conversion_e
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 
 abstract class TradingSystemRemoteDatasource {
   Future<OrderBookEntity> fetchOrderBook({required String symbol});
@@ -40,6 +42,7 @@ abstract class TradingSystemRemoteDatasource {
 
   Future<TraderOrderFollowedEntity> getTraderOrderFollowed(
       {required String tid});
+  Future<OrderEntity> fetchActiveTrade();
 }
 
 class TradingSystemRemoteDatasourceImpl
@@ -204,6 +207,21 @@ class TradingSystemRemoteDatasourceImpl
 
     final data = (response.data as Map<String, dynamic>);
     return TraderOrderFollowedModel.fromJson(data);
+  }
+
+  @override
+  Future<OrderEntity> fetchActiveTrade() async {
+    print("debug_print-fetchActiveTrade-started");
+
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.fetchActiveTrade,
+      isAuthHeaderRequired: true,
+    );
+    print("debug_print-fetchActiveTrade-response.data_is_${response.data}");
+
+    OrderModel or = OrderModel.fromJson(response.data);
+    print("debug_print-fetchActiveTrade-OrderModel_is_${or}");
+    return or;
   }
 }
 

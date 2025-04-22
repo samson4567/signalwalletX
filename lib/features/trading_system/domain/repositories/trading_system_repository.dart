@@ -6,6 +6,7 @@ import 'package:signalwavex/features/trading_system/domain/entities/conversion_e
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 
 abstract class TradingSystemRepository {
   Future<Either<Failure, OrderBookEntity>> fetchOrderBook(
@@ -21,4 +22,5 @@ abstract class TradingSystemRepository {
   Future<Either<Failure, String>> getExchangeRate(
       {required String from, required String to});
   Future<TraderOrderFollowedEntity> fetchTraderOrderFollowed(String tid);
+  Future<OrderEntity> fetchActiveTrade();
 }

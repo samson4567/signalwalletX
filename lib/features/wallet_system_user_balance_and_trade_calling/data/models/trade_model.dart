@@ -77,7 +77,7 @@ class TradeModel extends TradeEntity {
   }
   factory TradeModel.fromOrderEntity(OrderEntity orderEntity) {
     return TradeModel(
-        id: orderEntity.id,
+        id: double.tryParse(orderEntity.id.toString()),
         title: orderEntity.title,
         tradingPair: orderEntity.tradingPair,
         purchaseDuration:
