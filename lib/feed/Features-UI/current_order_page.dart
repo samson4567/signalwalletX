@@ -102,37 +102,52 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     // orderModel.;
     return [
       {
-        "k": "Product",
+        "k": "Title",
+        "v": "${orderModel.title ?? "--"}",
+        "--": Colors.white,
+      },
+      {
+        "k": "Trading Pair",
         "v": "${orderModel.tradingPair ?? "--"}",
         "c": getFigmaColor("F0B90B")
       },
-      {"k": "Status", "v": "${orderModel.status ?? "--"}", "c": Colors.white},
+      // {"k": "Status", "v": "${orderModel.status ?? "--"}", "c": Colors.white},
+      // {
+      //   "k": "Direction",
+      //   "v": "${orderModel.side ?? "--"}",
+      //   "c": getFigmaColor("C6E229")
+      // },
       {
-        "k": "Direction",
-        "v": "${orderModel.side ?? "--"}",
-        "c": getFigmaColor("C6E229")
-      },
-      {
-        "k": "Time Period",
+        "k": "Purchase Duration",
         "v": "${orderModel.purchaseDuration ?? "--"}",
         "c": Colors.white
       },
-      {"k": "Price", "v": "${orderModel.price ?? "--"}", "c": Colors.white},
+      // {"k": "Price", "v": "${orderModel.price ?? "--"}", "c": Colors.white},
+      // {
+      //   "k": "Quantity",
+      //   "v": "${orderModel.quantity ?? "--"}",
+      //   "--": Colors.white
+      // },
       {
-        "k": "Quantity",
-        "v": "${orderModel.quantity ?? "--"}",
+        "k": "Release Time",
+        "v": "${orderModel.orderTime ?? "--"}",
         "--": Colors.white
       },
+      // {
+      //   "k": "Open Position Time",
+      //   "v": "${orderModel.orderTime ?? "--"}",
+      //   "c": Colors.white
+      // },
+      // {"k": "Turnover", "v": "30", "c": Colors.white},
+      // {
+      //   "k": "Rate of Return",
+      //   "v": "${orderModel.rateOfReturn ?? "--"}",
+      //   "c": Colors.white
+      // },
       {
-        "k": "Open Position Time",
-        "v": "${orderModel.orderTime ?? "--"}",
-        "c": Colors.white
-      },
-      {"k": "Turnover", "v": "30", "c": Colors.white},
-      {
-        "k": "Rate of Return",
-        "v": "${orderModel.rateOfReturn ?? "--"}",
-        "c": Colors.white
+        "k": "Order Amount",
+        "v": "${orderModel.price ?? "--"}",
+        "--": Colors.white
       },
       {
         "k": "Action",

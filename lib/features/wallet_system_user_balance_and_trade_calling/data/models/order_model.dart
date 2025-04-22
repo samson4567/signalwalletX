@@ -77,6 +77,7 @@ class OrderModel extends OrderEntity {
         rateOfReturn: orderEntity.rateOfReturn);
   }
   factory OrderModel.fromJson(Map jsonMap) {
+    var t = {};
     return OrderModel(
       id: jsonMap["id"],
       userID: jsonMap["user_id"]?.toString(),
