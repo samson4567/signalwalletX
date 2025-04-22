@@ -9,13 +9,6 @@ abstract class TradingSystemEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// final class FetchLiveMarketPricesEvent extends TradingSystemEvent {
-//   const FetchLiveMarketPricesEvent();
-
-//   @override
-//   List<Object> get props => [];
-// }
-
 final class FetchOrderBookEvent extends TradingSystemEvent {
   final String symbol;
   const FetchOrderBookEvent(this.symbol);
@@ -66,21 +59,12 @@ final class GetExchangeRateEvent extends TradingSystemEvent {
   List<Object> get props => [];
 }
 
+// Event to fetch a TraderOrderFollowed by tid
+class FetchTraderOrderFollowed extends TradingSystemEvent {
+  final String tid;
 
+  const FetchTraderOrderFollowed(this.tid);
 
-
-
-
-
-
-
-
-
-
-
-// final class FetchBinanceTicker24hEvent extends TradingSystemEvent {
-//   const FetchBinanceTicker24hEvent();
-
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [tid];
+}

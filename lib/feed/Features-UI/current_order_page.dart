@@ -9,6 +9,9 @@ import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/empty_widget.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
@@ -322,10 +325,167 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     );
   }
 
+  // BlocBuilder<TradingSystemBloc, TradingSystemState> _buildInviteMeTabview() {
+  //   return BlocBuilder<TradingSystemBloc, TradingSystemState>(
+  //     builder: (context, state) {
+  //       // Loading state: show loading indicator
+  //       if (state is TraderOrderFollowedLoading) {
+  //         return const Center(child: CircularProgressIndicator());
+  //       }
+
+  //       // Error state: show error message
+  //       if (state is TraderOrderFollowedError) {
+  //         return Center(
+  //           child: Text(
+  //             state.message,
+  //             style: const TextStyle(color: Colors.red),
+  //           ),
+  //         );
+  //       }
+
+  //       // Loaded state: display the trader's order if available
+  //       if (state is TraderOrderFollowedLoaded) {
+  //         final traderOrderFollowed = state.traderOrderFollowed;
+
+  //         return Column(
+  //           children: [
+  //             const SizedBox(height: 10),
+  //             Row(
+  //               children: [
+  //                 Expanded(
+  //                   child: FancyContainerTwo(
+  //                     height: 40,
+  //                     hasBorder: true,
+  //                     borderColor: Colors.white.withAlpha(10),
+  //                     backgroundColor: getFigmaColor("151517"),
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(8.0),
+  //                       child: FancyText(
+  //                         "Initiate a follow-up order".toCurrentLanguage(),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(width: 10),
+  //                 Expanded(
+  //                   child: FancyContainerTwo(
+  //                     height: 40,
+  //                     hasBorder: true,
+  //                     borderColor: Colors.white.withAlpha(10),
+  //                     backgroundColor: getFigmaColor("151517"),
+  //                     child: Padding(
+  //                       padding: const EdgeInsets.all(8.0),
+  //                       child: FancyText(
+  //                         "Follow this code: ${traderOrderFollowed.tid}"
+  //                             .toCurrentLanguage(),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //             const SizedBox(height: 10),
+  //             FancyContainerTwo(
+  //               height: 40,
+  //               width: double.infinity,
+  //               borderColor: Colors.white.withAlpha(10),
+  //               backgroundColor: getFigmaColor("151517"),
+  //               hasBorder: true,
+  //               child: Row(
+  //                 children: [
+  //                   Expanded(
+  //                     child: TextField(
+  //                       controller: inviteCodeTextEditingController,
+  //                       decoration: const InputDecoration(
+  //                         contentPadding: EdgeInsets.all(10),
+  //                         border: InputBorder.none,
+  //                         hintText: "Enter Order Code",
+  //                         hintStyle: TextStyle(color: Colors.grey),
+  //                       ),
+  //                       onChanged: (value) {},
+  //                     ),
+  //                   ),
+  //                   FancyContainerTwo(
+  //                     height: 40,
+  //                     width: 100,
+  //                     action: () async {
+  //                       if (inviteCodeTextEditingController.text.isEmpty) {
+  //                         ScaffoldMessenger.of(context).showSnackBar(
+  //                           const SnackBar(
+  //                             content: Text("Enter a trade code"),
+  //                             backgroundColor: Colors.green,
+  //                           ),
+  //                         );
+  //                       }
+
+  //                       OrderEntity? result = await showDialog<OrderEntity>(
+  //                         context: context,
+  //                         builder: (context) => ConfirmOrderDialog(
+  //                           tid: inviteCodeTextEditingController.text,
+  //                         ),
+  //                       );
+
+  //                       if (result != null) {
+  //                         currentOrderEntities
+  //                             .add(OrderModel.fromEntity(result));
+  //                         currentTradeEntities
+  //                             .add(TradeModel.fromOrderEntity(result));
+  //                       }
+  //                     },
+  //                     borderColor: Colors.white.withAlpha(10),
+  //                     borderRadius: const BorderRadius.horizontal(
+  //                         left: Radius.circular(0), right: Radius.circular(10)),
+  //                     backgroundColor: getFigmaColor("38393D"),
+  //                     hasBorder: true,
+  //                     child: FancyText(
+  //                       "Confirm".toCurrentLanguage(),
+  //                       textColor: getFigmaColor("707070"),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             Expanded(
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                 children: inviteMeMap
+  //                     .map(
+  //                       (e) => Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                         children: [
+  //                           FancyText(
+  //                             e["k"],
+  //                             textColor: Colors.grey,
+  //                           ),
+  //                           FancyText(
+  //                             e["v"] ?? "--",
+  //                             textColor: e['c'],
+  //                           )
+  //                         ],
+  //                       ),
+  //                     )
+  //                     .toList(),
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       }
+
+  //       // No current trade available (Empty state or waiting for admin to create one)
+  //       return const Center(
+  //         child: Text(
+  //           "No current trade available. Please wait for an admin to create one.",
+  //           style: TextStyle(fontSize: 16, color: Colors.grey),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   Column _buildInviteMeTabview() {
     return Column(
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
@@ -338,12 +498,11 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   padding: const EdgeInsets.all(8.0),
                   child: FancyText(
                     "Initiate a follow-up order".toCurrentLanguage(),
-                    // size: 10,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: FancyContainerTwo(
                 height: 40,
@@ -354,7 +513,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   padding: const EdgeInsets.all(8.0),
                   child: FancyText(
                     "Initiate a follow-up order".toCurrentLanguage(),
-                    // size: 10,
                   ),
                 ),
               ),
@@ -379,11 +537,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                     hintText: "Enter Order Code",
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
-                  onChanged: (value) {
-                    // if (value.length == "TID20250409BPFFGM".length) {
-
-                    // }
-                  },
+                  onChanged: (value) {},
                 ),
               ),
               FancyContainerTwo(
@@ -393,25 +547,18 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   if (inviteCodeTextEditingController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("enter a trade code"),
+                        content: Text("Enter a trade code"),
                         backgroundColor: Colors.green,
                       ),
                     );
-                  }
-                  OrderEntity? result = await showDialog<OrderEntity>(
-                    context: context,
-                    builder: (context) => ConfirmOrderDialog(
-                      tid: inviteCodeTextEditingController.text,
-                    ),
-                  );
-                  if (result != null) {
-                    currentOrderEntities.add(OrderModel.fromEntity(result));
-                    currentTradeEntities
-                        .add(TradeModel.fromOrderEntity(result));
+                  } else {
+                    // Fetch the trade details using the code (tid)
+                    final tradeCode = inviteCodeTextEditingController.text;
+                    await _fetchTradeDetails(tradeCode);
                   }
                 },
                 borderColor: Colors.white.withAlpha(10),
-                borderRadius: BorderRadius.horizontal(
+                borderRadius: const BorderRadius.horizontal(
                     left: Radius.circular(0), right: Radius.circular(10)),
                 backgroundColor: getFigmaColor("38393D"),
                 hasBorder: true,
@@ -423,30 +570,52 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             ],
           ),
         ),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: inviteMeMap
-                .map(
-                  (e) => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FancyText(
-                        e["k"],
-                        textColor: Colors.grey,
-                      ),
-                      FancyText(
-                        e["v"] ?? "--",
-                        textColor: e['c'],
-                      )
-                    ],
+        // Display the order data based on state
+        BlocBuilder<TradingSystemBloc, TradingSystemState>(
+          builder: (context, state) {
+            if (state is TraderOrderFollowedLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is TraderOrderFollowedLoaded) {
+              // Display the order info if loaded
+              return Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FancyText(
+                      "Order Code: ${state.traderOrderFollowed.tid}",
+                      textColor: Colors.grey,
+                    ),
+                    // Add more details from `state.traderOrderFollowed` here as needed
+                  ],
+                ),
+              );
+            } else if (state is TraderOrderFollowedError) {
+              return Center(
+                child: FancyText(
+                  "Error: ${state.message}",
+                  textColor: Colors.red,
+                ),
+              );
+            } else {
+              // Empty state if no active trade or order is available
+              return Expanded(
+                child: Center(
+                  child: FancyText(
+                    "No current trade available. Please wait for an admin to create one.",
+                    textColor: Colors.grey,
                   ),
-                )
-                .toList(),
-          ),
+                ),
+              );
+            }
+          },
         ),
       ],
     );
+  }
+
+  Future<void> _fetchTradeDetails(String tradeCode) async {
+    // Triggering the fetch event for the code entered by the user
+    context.read<TradingSystemBloc>().add(FetchTraderOrderFollowed(tradeCode));
   }
 
   TextEditingController inviteCodeTextEditingController =
@@ -506,15 +675,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                   // CandleStickChart(),
                   CandleStickChart(
                     coinSymbol: selectedCoinModel?.symbol,
-                    // chartDetails: chartDetails ??
-                    //     {
-                    //       "symbol": "BTCUSDT",
-                    //       "period": period,
-                    //       "askAndBids": {}
-                    //     },
                   )
-                  // Center(child: Text('Content of Tab 1')),
-                  // const Center(child: Text('Content of Tab 2')),
                 ]),
               ),
             ],

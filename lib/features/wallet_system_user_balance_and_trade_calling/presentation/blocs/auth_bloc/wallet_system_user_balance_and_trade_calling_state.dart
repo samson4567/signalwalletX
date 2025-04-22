@@ -158,9 +158,7 @@ final class GetAdminPendingWithdrawalRequestErrorState
   @override
   List<Object> get props => [errorMessage];
 }
-///// GetAdminPendingWithdrawalRequest ended .....
 
-///// InternalTransfer
 final class InternalTransferLoadingState
     extends WalletSystemUserBalanceAndTradeCallingState {
   const InternalTransferLoadingState();
@@ -241,9 +239,7 @@ final class ListTradesAUserIsFollowingErrorState
   @override
   List<Object> get props => [errorMessage];
 }
-///// ListTradesAUserIsFollowing ended .....
 
-///// CreateTradeCallBySuperAdmin
 final class CreateTradeCallBySuperAdminLoadingState
     extends WalletSystemUserBalanceAndTradeCallingState {
   const CreateTradeCallBySuperAdminLoadingState();
@@ -268,9 +264,7 @@ final class CreateTradeCallBySuperAdminErrorState
   @override
   List<Object> get props => [errorMessage];
 }
-///// CreateTradeCallBySuperAdmin ended .....
 
-///// FetchAllTrades
 final class FetchAllTradesLoadingState
     extends WalletSystemUserBalanceAndTradeCallingState {
   const FetchAllTradesLoadingState();

@@ -176,8 +176,7 @@ class AuthenticationRemoteDatasourceImpl
     required String userId,
   }) async {
     final response = await networkClient.get(
-      endpoint:
-          '${EndpointConstant.recentTransaction}/$userId', // adjust if needed
+      endpoint: '${EndpointConstant.recentTransaction}/$userId',
       isAuthHeaderRequired: true,
     );
 
@@ -219,13 +218,29 @@ class AuthenticationRemoteDatasourceImpl
   }
 
   @override
-  Future<String> updateProfile(
-      {required name, required phoneNumber, required profilePicture}) async {
+  Future<String> updateProfile({
+    required dynamic name,
+    required dynamic phoneNumber,
+    required dynamic profilePicture,
+  }) async {
+    final file = await MultipartFile.fromFile(
+      profilePicture,
+      filename: profilePicture.split('/').last,
+    );
+
+    final formData = FormData.fromMap({
+      'name': name,
+      'phone_number': phoneNumber,
+      'profile_picture': file,
+    });
+
     final response = await networkClient.post(
       endpoint: EndpointConstant.userProfile,
+      data: formData,
       isAuthHeaderRequired: true,
     );
-    return response.data;
+
+    return response.data['message'];
   }
 
   @override

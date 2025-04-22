@@ -20,17 +20,14 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
 
   Future<void> _onGetBTCDetailEvent(
       GetBTCDetailEvent event, Emitter<CoinState> emit) async {
-    print("debug_print_CoinBloc-_onGetBTCDetailEvent-started");
     emit(const GetBTCDetailLoadingState());
     final result = await coinRepository.getBTCDetails();
-    print("debug_print_CoinBloc-_onGetBTCDetailEvent-result_is_${result}");
+
     result.fold(
       (error) {
-        print("debug_print_CoinBloc-_onGetBTCDetailEvent-error_is_${error}");
         emit(GetBTCDetailErrorState(errorMessage: error.message));
       },
       (coinEntity) {
-        print("debug_print_CoinBloc-_onGetBTCDetailEvent-is_success");
         emit(GetBTCDetailSuccessState(
             coinModel: CoinModel.fromEntity(coinEntity)));
       },
@@ -56,7 +53,6 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
 
   Future<void> _onGetMarketCoinsEvent(
       GetMarketCoinsEvent event, Emitter<CoinState> emit) async {
-    print("debug_print_CoinBloc-_onGetMarketCoinsEvent-started");
     emit(const GetMarketCoinsLoadingState());
     final result = await coinRepository.getMarketCoins();
     result.fold(

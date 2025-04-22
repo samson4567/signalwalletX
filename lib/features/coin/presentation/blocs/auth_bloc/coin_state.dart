@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
-import 'package:signalwavex/features/user/data/models/user_model.dart';
 
 sealed class CoinState extends Equatable {
   const CoinState();
@@ -9,6 +8,7 @@ sealed class CoinState extends Equatable {
   List<Object> get props => [];
 }
 
+// ignore: camel_case_types
 final class coinInitial extends CoinState {
   const coinInitial();
 }

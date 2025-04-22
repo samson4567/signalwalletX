@@ -338,7 +338,6 @@ class FetchAllLanguagesErrorState extends FetchAllLanguagesState {
   List<Object> get props => [errorMessage];
 }
 
-// Profile Update States
 final class ProfileUpdateLoadingState extends AuthState {
   const ProfileUpdateLoadingState();
 }

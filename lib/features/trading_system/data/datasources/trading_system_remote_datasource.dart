@@ -10,12 +10,14 @@ import 'package:signalwavex/features/trading_system/data/models/coin_model.dart'
 import 'package:signalwavex/features/trading_system/data/models/conversion_model.dart';
 
 import 'package:signalwavex/features/trading_system/data/models/order_book_model.dart';
+import 'package:signalwavex/features/trading_system/data/models/tradeorder_model.dart';
 
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
 
 abstract class TradingSystemRemoteDatasource {
   Future<OrderBookEntity> fetchOrderBook({required String symbol});
@@ -35,6 +37,9 @@ abstract class TradingSystemRemoteDatasource {
     String from,
     String to,
   );
+
+  Future<TraderOrderFollowedEntity> getTraderOrderFollowed(
+      {required String tid});
 }
 
 class TradingSystemRemoteDatasourceImpl
@@ -183,6 +188,22 @@ class TradingSystemRemoteDatasourceImpl
     result = rawResult['result'];
 
     return result;
+  }
+
+  @override
+  Future<TraderOrderFollowedEntity> getTraderOrderFollowed(
+      {required String tid}) async {
+    final response = await networkClient.post(
+      endpoint: EndpointConstant.followTradeCall,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+      data: {
+        "tid": tid,
+      },
+    );
+
+    final data = (response.data as Map<String, dynamic>);
+    return TraderOrderFollowedModel.fromJson(data);
   }
 }
 

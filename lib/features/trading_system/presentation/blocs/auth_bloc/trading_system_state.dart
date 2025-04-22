@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
 
 sealed class TradingSystemState extends Equatable {
   const TradingSystemState();
@@ -157,4 +158,24 @@ final class GetExchangeRateErrorState extends TradingSystemState {
 
   @override
   List<Object> get props => [errorMessage];
+}
+
+class TraderOrderFollowedLoading extends TradingSystemState {}
+
+class TraderOrderFollowedLoaded extends TradingSystemState {
+  final TraderOrderFollowedEntity traderOrderFollowed;
+
+  const TraderOrderFollowedLoaded(this.traderOrderFollowed);
+
+  @override
+  List<Object> get props => [traderOrderFollowed];
+}
+
+class TraderOrderFollowedError extends TradingSystemState {
+  final String message;
+
+  const TraderOrderFollowedError(this.message);
+
+  @override
+  List<Object> get props => [message];
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/languages.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionHistorySection extends StatelessWidget {
   const TransactionHistorySection({super.key});
@@ -78,7 +81,7 @@ class TransactionHistorySection extends StatelessWidget {
                         'All account'.toCurrentLanguage(),
                         style: TextStyle(color: Colors.white),
                       ),
-                      Icon(Icons.arrow_drop_down, color: Colors.white),
+                      const Icon(Icons.arrow_drop_down, color: Colors.white),
                     ],
                   ),
                 ),
@@ -115,39 +118,84 @@ class TransactionHistorySection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Account role'.toCurrentLanguage(),
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
+                    style: const TextStyle(color: Colors.grey, fontSize: 10)),
                 Text('Account type'.toCurrentLanguage(),
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
+                    style: const TextStyle(color: Colors.grey, fontSize: 10)),
                 Text('Currency type'.toCurrentLanguage(),
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
+                    style: const TextStyle(color: Colors.grey, fontSize: 10)),
                 Text('Charge fees'.toCurrentLanguage(),
-                    style: TextStyle(color: Colors.grey, fontSize: 10)),
+                    style: const TextStyle(color: Colors.grey, fontSize: 10)),
               ],
             ),
 
             const SizedBox(height: 16),
 
-            // Transaction list
-            Expanded(
-              child: ListView.separated(
-                itemCount: 5,
-                separatorBuilder: (context, index) =>
-                    const Divider(color: Colors.grey, height: 24),
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('demo'.toCurrentLanguage(),
-                          style: TextStyle(color: Colors.white)),
-                      Text('trade'.toCurrentLanguage(),
-                          style: TextStyle(color: Colors.white)),
-                      Text('usdt', style: TextStyle(color: Colors.white)),
-                      Text('-30.00', style: TextStyle(color: Colors.red)),
-                    ],
+            // Fetch transaction history from Bloc
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is FetchTransactionLoadingState) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is FetchTransactionErrorState) {
+                  return Center(
+                    child: Text(
+                      state.errorMessage,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   );
-                },
-              ),
-            ),
+                } else if (state is FetchTransactionLoadedState) {
+                  final transactions = state.transactions;
+
+                  if (transactions.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No transactions yet'.toCurrentLanguage(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  } else {
+                    return Expanded(
+                      child: ListView.separated(
+                        itemCount: transactions.length,
+                        separatorBuilder: (context, index) =>
+                            const Divider(color: Colors.grey, height: 24),
+                        itemBuilder: (context, index) {
+                          final transaction = transactions[index];
+
+                          // Parse pnl value to a double for comparison
+                          final pnl = double.tryParse(transaction.pnl) ?? 0.0;
+
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(transaction.title!.toCurrentLanguage(),
+                                  style: const TextStyle(color: Colors.white)),
+                              Text(transaction.side.toCurrentLanguage(),
+                                  style: const TextStyle(color: Colors.white)),
+                              Text(transaction.symbol,
+                                  style: const TextStyle(color: Colors.white)),
+                              Text(
+                                pnl.toString(),
+                                style: TextStyle(
+                                  color: pnl < 0 ? Colors.red : Colors.green,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                } else {
+                  // Handle unexpected states by displaying the current state
+                  return const Center(
+                    child: Text(
+                      'No Transaction yet ', // Log the unexpected state
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+              },
+            )
           ],
         ),
       ),

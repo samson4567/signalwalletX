@@ -3,11 +3,13 @@ import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_local_datasource.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_remote_datasource.dart';
+import 'package:signalwavex/features/trading_system/data/models/tradeorder_model.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/repositories/trading_system_repository.dart';
 
 class TradingSystemRepositoryImpl implements TradingSystemRepository {
@@ -93,6 +95,17 @@ class TradingSystemRepositoryImpl implements TradingSystemRepository {
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<TraderOrderFollowedEntity> fetchTraderOrderFollowed(String tid) async {
+    try {
+      final result =
+          await tradingSystemRemoteDatasource.getTraderOrderFollowed(tid: tid);
+      return result;
+    } catch (e) {
+      throw mapExceptionToFailure(e);
     }
   }
 }

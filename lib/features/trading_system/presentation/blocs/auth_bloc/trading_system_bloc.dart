@@ -20,6 +20,7 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
     on<GetConversionEvent>(_onGetConversionEvent);
     on<GetCoinListEvent>(_onGetCoinListEvent);
     on<GetExchangeRateEvent>(_onGetExchangeRateEvent);
+    on<FetchTraderOrderFollowed>(_onFetchTraderOrderFollowed);
   }
 
   Future<void> _onFetchOrderBookEvent(
@@ -97,5 +98,20 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
         emit(GetExchangeRateSuccessState(rate: rate));
       },
     );
+  }
+
+  Future<void> _onFetchTraderOrderFollowed(
+    FetchTraderOrderFollowed event,
+    Emitter<TradingSystemState> emit,
+  ) async {
+    emit(TraderOrderFollowedLoading());
+
+    try {
+      final result =
+          await tradingSystemRepository.fetchTraderOrderFollowed(event.tid);
+      emit(TraderOrderFollowedLoaded(result));
+    } catch (e) {
+      emit(TraderOrderFollowedError(e.toString()));
+    }
   }
 }
