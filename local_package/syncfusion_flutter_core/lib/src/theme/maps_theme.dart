@@ -23,8 +23,8 @@ class SfMapsTheme extends InheritedTheme {
   /// Applies the given theme [data] to [child].
   ///
   /// The [data] and [child] arguments must not be null.
-  const SfMapsTheme({Key? key, required this.data, required this.child})
-      : super(key: key, child: child);
+  const SfMapsTheme({super.key, required this.data, required this.child})
+      : super(child: child);
 
   /// Specifies the color and typography values for descendant maps widgets.
   ///

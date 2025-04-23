@@ -1149,7 +1149,7 @@ class ZoomPanBehavior extends ChartBehavior {
 }
 
 extension on Color {
-  withValues({required double alpha}) {
-    return this.withOpacity(alpha);
+  Color withValues({required double alpha}) {
+    return withOpacity(alpha);
   }
 }

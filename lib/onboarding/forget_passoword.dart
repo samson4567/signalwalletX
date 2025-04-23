@@ -180,7 +180,7 @@ class _ForgetPassowordState extends State<ForgetPassoword> {
                   )
                 : Text(
                     'Submit'.toCurrentLanguage(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),

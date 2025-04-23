@@ -205,7 +205,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   children: [
                     Text(
                       'Enter your email code'.toCurrentLanguage(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
@@ -213,7 +213,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     const SizedBox(height: 8),
                     Text(
                       'We have sent a code to your email'.toCurrentLanguage(),
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -257,7 +257,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             ? const CircularProgressIndicator(
                                 color: Colors.white)
                             : Text('Verify'.toCurrentLanguage(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold)),

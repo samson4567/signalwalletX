@@ -10,9 +10,9 @@ Widget buildEmptyWidget(String message, [Widget? actionChild]) {
         FancyContainerTwo(
           nulledAlign: true,
           backgroundColor: Colors.grey.withAlpha(100),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: const Icon(
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
               Icons.delete_outline,
               size: 50,
               color: Colors.grey,

@@ -52,7 +52,7 @@ class AdminPendingWithdrawalRequestModel
   }
 
   factory AdminPendingWithdrawalRequestModel.empty(Map jsonMap) {
-    return AdminPendingWithdrawalRequestModel();
+    return const AdminPendingWithdrawalRequestModel();
   }
 
   @override

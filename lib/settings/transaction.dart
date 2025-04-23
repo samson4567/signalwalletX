@@ -33,15 +33,15 @@ class TransactionHistorySection extends StatelessWidget {
               children: [
                 Text(
                   'Account Role'.toCurrentLanguage(),
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
                 Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: 38),
+                      padding: const EdgeInsets.only(right: 38),
                       child: Text(
                         'Account Type'.toCurrentLanguage(),
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ),
                   ],
@@ -79,7 +79,7 @@ class TransactionHistorySection extends StatelessWidget {
                     children: [
                       Text(
                         'All account'.toCurrentLanguage(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       const Icon(Icons.arrow_drop_down, color: Colors.white),
                     ],
@@ -93,7 +93,7 @@ class TransactionHistorySection extends StatelessWidget {
             // Date label
             Text(
               'Date'.toCurrentLanguage(),
-              style: TextStyle(color: Colors.grey),
+              style: const TextStyle(color: Colors.grey),
             ),
 
             const SizedBox(height: 8),

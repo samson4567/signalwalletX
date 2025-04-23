@@ -184,9 +184,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               WalletSystemUserBalanceAndTradeCallingState>(
           listener: (context, state) {
         if (state is ListTradesAUserIsFollowingSuccessState) {
-          state.listOfTradeEntities.forEach((element) {
+          for (var element in state.listOfTradeEntities) {
             currentTradeEntities.add(TradeModel.fromEntity(element));
-          });
+          }
         }
         if (state is ListTradesAUserIsFollowingErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -194,9 +194,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           );
         }
         if (state is FetchUserTransactionsSuccessState) {
-          state.listOfOrderEntity.forEach((element) {
+          for (var element in state.listOfOrderEntity) {
             historOrderEntities.add(OrderModel.fromEntity(element));
-          });
+          }
         }
         if (state is FetchUserTransactionsErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -257,7 +257,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                                 // ),
                                 _buildInviteMeTabview(),
                                 Container(
-                                  child: Text(Uuid().v4()),
+                                  child: Text(const Uuid().v4()),
                                 ),
                               ]),
                             )
@@ -649,11 +649,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                     children: [
                       Row(
                         children: [
-                          ...["1min", "5min"]
-                              .map(
-                                (e) => _buildTimeSelectButton(e),
-                              )
-                              .toList(),
+                          ...["1min", "5min"].map(
+                            (e) => _buildTimeSelectButton(e),
+                          ),
                           const Icon(Icons.keyboard_arrow_down_rounded),
                         ],
                       ),
@@ -814,7 +812,6 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
 
               DateTime? dateTime2 = dateTime1.add(parseTimeExpression(
                   currentOrderEntities.firstOrNull?.timePeriod ?? "0min"));
-              if (dateTime2 == null) return "--";
 
               return "${dateTime1.hour}:${dateTime1.minute} - ${dateTime2.hour}:${dateTime2.minute}";
             }.call()

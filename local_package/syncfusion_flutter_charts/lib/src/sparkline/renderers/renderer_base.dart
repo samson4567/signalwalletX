@@ -11,7 +11,7 @@ import '../utils/helper.dart';
 abstract class SfSparkChartRenderObjectWidget extends LeafRenderObjectWidget {
   /// Creates the render object for spark chart.
   const SfSparkChartRenderObjectWidget(
-      {Key? key,
+      {super.key,
       this.data,
       this.dataCount,
       this.xValueMapper,
@@ -31,8 +31,7 @@ abstract class SfSparkChartRenderObjectWidget extends LeafRenderObjectWidget {
       this.sparkChartDataDetails,
       this.themeData,
       this.dataPoints,
-      this.coordinatePoints})
-      : super(key: key);
+      this.coordinatePoints});
 
   /// Specifies the data source for the series.
   final List<dynamic>? data;

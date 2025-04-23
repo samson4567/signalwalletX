@@ -35,7 +35,7 @@ import 'utils/typedef.dart';
 class SfFunnelChart extends StatefulWidget {
   /// Creating an argument constructor of SfFunnelChart class.
   const SfFunnelChart({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.backgroundImage,
     this.borderColor = Colors.transparent,
@@ -57,7 +57,7 @@ class SfFunnelChart extends StatefulWidget {
     this.tooltipBehavior,
     this.selectionGesture = ActivationMode.singleTap,
     this.enableMultiSelection = false,
-  }) : super(key: key);
+  });
 
   /// Customizes the chart title.
   ///

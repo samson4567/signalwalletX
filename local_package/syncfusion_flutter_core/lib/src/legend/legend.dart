@@ -187,7 +187,7 @@ class LegendItem {
 class SfLegend extends StatefulWidget {
   /// Creates a [SfLegend].
   const SfLegend({
-    Key? key,
+    super.key,
     required this.items,
     this.shouldAlwaysShowScrollbar = false,
     this.title,
@@ -233,12 +233,11 @@ class SfLegend extends StatefulWidget {
         pointerController = null,
         assert(itemSpacing >= 0),
         assert(spacing >= 0),
-        assert(!isComplex || (isComplex && offset == null)),
-        super(key: key);
+        assert(!isComplex || (isComplex && offset == null));
 
   /// Creates a [SfLegend].
   const SfLegend.builder({
-    Key? key,
+    super.key,
     required this.itemCount,
     required this.itemBuilder,
     this.title,
@@ -282,12 +281,11 @@ class SfLegend extends StatefulWidget {
         pointerSize = Size.zero,
         pointerColor = null,
         pointerController = null,
-        assert(!isComplex || (isComplex && offset == null)),
-        super(key: key);
+        assert(!isComplex || (isComplex && offset == null));
 
   /// Creates a [SfLegend].
   const SfLegend.bar({
-    Key? key,
+    super.key,
     required this.items,
     this.shouldAlwaysShowScrollbar = false,
     this.title,
@@ -334,8 +332,7 @@ class SfLegend extends StatefulWidget {
         onToggledIndicesChanged = null,
         onItemRenderer = null,
         assert(itemSpacing >= 0),
-        assert(!isComplex || (isComplex && offset == null)),
-        super(key: key);
+        assert(!isComplex || (isComplex && offset == null));
 
   /// Specifies the legend items.
   final List<LegendItem>? items;
@@ -1800,7 +1797,7 @@ String _getTrimText(String text, TextStyle style, double maxWidth,
 
 class _SolidBarLegendItem extends StatefulWidget {
   const _SolidBarLegendItem({
-    Key? key,
+    super.key,
     this.labelsPlacement,
     this.labelOverflow,
     this.segmentSize,
@@ -1817,7 +1814,7 @@ class _SolidBarLegendItem extends StatefulWidget {
     this.pointerColor,
     this.pointerBuilder,
     this.pointerController,
-  }) : super(key: key);
+  });
 
   final LegendLabelsPlacement? labelsPlacement;
   final LegendLabelOverflow? labelOverflow;

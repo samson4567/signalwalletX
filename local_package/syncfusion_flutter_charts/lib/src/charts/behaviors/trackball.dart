@@ -2561,15 +2561,14 @@ class TrackballOpacityRenderBox extends RenderOpacity {
 
 class TrackballBuilderRenderObjectWidget extends SingleChildRenderObjectWidget {
   const TrackballBuilderRenderObjectWidget(
-      {Key? key,
+      {super.key,
       this.index,
       required this.xPos,
       required this.yPos,
       required this.builder,
       required this.chartPointInfo,
       required this.trackballBehavior,
-      required Widget child})
-      : super(key: key, child: child);
+      required Widget super.child});
 
   final int? index;
   final double xPos;

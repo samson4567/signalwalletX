@@ -37,9 +37,9 @@ WalletAccountEntity? getCoinWaletDetails(
   WalletAccountEntity? result;
   List<WalletAccountEntity> walletAccountEntities =
       context.read<AppBloc>().state.listOfWalletAccounts ?? [];
-  walletAccountEntities.forEach((element) {
+  for (var element in walletAccountEntities) {
     if (element.currency == coinEntity.symbol) result = element;
-  });
+  }
   return result;
 }
 
@@ -224,19 +224,17 @@ getCoinImageFromAsset(CoinEntity coinEntity) {
     },
   ];
   String? result;
-  coins.forEach(
-    (element) {
-      if (element['name']?.toLowerCase() == coinEntity.name?.toLowerCase() &&
-          coinEntity.name != null) {
-        result = element["icon"];
-      }
-    },
-  );
+  for (var element in coins) {
+    if (element['name']?.toLowerCase() == coinEntity.name?.toLowerCase() &&
+        coinEntity.name != null) {
+      result = element["icon"];
+    }
+  }
   return result;
 }
 
 Map<String, dynamic>? calculatePriceChange(Map<String, dynamic> data) {
-  if (data == null || data.isEmpty) {
+  if (data.isEmpty) {
     return null;
   }
 

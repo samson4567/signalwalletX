@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:
-                      Text("GoogleLoginErrorState-\n" + state.errorMessage),
+                      Text("GoogleLoginErrorState-\n${state.errorMessage}"),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ? const CircularProgressIndicator(color: Colors.black)
                     : Text(
                         'Log into Account'.toCurrentLanguage(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
@@ -323,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           onPressed: () {
-            context.read<AuthBloc>().add(GoogleLoginEvent());
+            context.read<AuthBloc>().add(const GoogleLoginEvent());
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -336,7 +336,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(width: 10.0),
               Text(
                 'Continue with Google'.toCurrentLanguage(),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ],
           ),
@@ -353,7 +353,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Text(
             'Are you new here?'.toCurrentLanguage(),
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           TextButton(
             onPressed: () {
@@ -363,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onTap: () => context.push(MyAppRouteConstant.createAccount),
               child: Text(
                 'Create account'.toCurrentLanguage(),
-                style: TextStyle(color: Colors.blue),
+                style: const TextStyle(color: Colors.blue),
               ),
             ),
           ),

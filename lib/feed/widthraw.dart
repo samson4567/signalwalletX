@@ -428,7 +428,7 @@ class _WithdrawState extends State<Withdraw> {
                 },
                 child: Text(
                   'Close'.toCurrentLanguage(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),

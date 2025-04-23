@@ -28,7 +28,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       (userModel) {
         appBloc
             .add(UserUpdateEvent(updatedUserModel: (userModel as UserModel)));
-        emit(GetUserDetailSuccessState(userModel: (userModel as UserModel)));
+        emit(GetUserDetailSuccessState(userModel: userModel));
       },
     );
   }

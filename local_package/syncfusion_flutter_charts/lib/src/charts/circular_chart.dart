@@ -56,7 +56,7 @@ import 'utils/typedef.dart';
 class SfCircularChart extends StatefulWidget {
   /// Creating an argument constructor of SfCircularChart class.
   const SfCircularChart({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.backgroundImage,
     this.annotations,
@@ -82,7 +82,7 @@ class SfCircularChart extends StatefulWidget {
     this.tooltipBehavior,
     this.selectionGesture = ActivationMode.singleTap,
     this.enableMultiSelection = false,
-  }) : super(key: key);
+  });
 
   /// Customizes the chart title.
   ///

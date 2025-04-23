@@ -197,8 +197,9 @@ class _SetNewPasswordState extends State<SetNewPassword> {
         keyboardType: TextInputType.emailAddress,
         suffixImagePath: 'assets/icons/mail.png',
         validator: (value) {
-          if (value == null || value.isEmpty)
+          if (value == null || value.isEmpty) {
             return 'Please enter your email'.toCurrentLanguage();
+          }
           return null;
         },
       ),
@@ -222,8 +223,9 @@ class _SetNewPasswordState extends State<SetNewPassword> {
           setState(() => _obscurePassword = !_obscurePassword);
         },
         validator: (value) {
-          if (value == null || value.isEmpty)
+          if (value == null || value.isEmpty) {
             return 'Please enter your password'.toCurrentLanguage();
+          }
           return null;
         },
       ),
@@ -247,10 +249,12 @@ class _SetNewPasswordState extends State<SetNewPassword> {
           setState(() => _obscurePassword = !_obscurePassword);
         },
         validator: (value) {
-          if (value == null || value.isEmpty)
+          if (value == null || value.isEmpty) {
             return 'Please confirm password'.toCurrentLanguage();
-          if (value != passwordController.text)
+          }
+          if (value != passwordController.text) {
             return 'Passwords do not match'.toCurrentLanguage();
+          }
           return null;
         },
       ),
@@ -282,7 +286,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                 ? const CircularProgressIndicator(color: Colors.black)
                 : Text(
                     'Reset Password'.toCurrentLanguage(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
           ),

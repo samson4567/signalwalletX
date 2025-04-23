@@ -242,7 +242,7 @@ class LegendItem {
 class LegendLayout extends StatefulWidget {
   /// Constructor for the [LegendLayout].
   const LegendLayout({
-    Key? key,
+    super.key,
     this.showLegend = false,
     this.padding = const EdgeInsets.all(10),
     this.backgroundImage,
@@ -284,7 +284,7 @@ class LegendLayout extends StatefulWidget {
     this.onTouchMove,
     this.onTouchUp,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// Specifies whether to shows or hides the legend.
   final bool showLegend;
@@ -538,7 +538,7 @@ enum _LegendSlot { legendTitle, legend, plotArea }
 class _LegendLayoutHandler
     extends SlottedMultiChildRenderObjectWidget<_LegendSlot, RenderBox> {
   const _LegendLayoutHandler({
-    Key? key,
+    super.key,
     this.onTouchDown,
     this.onTouchMove,
     this.onTouchUp,
@@ -560,7 +560,7 @@ class _LegendLayoutHandler
     required this.legendTitle,
     required this.legend,
     required this.plotArea,
-  }) : super(key: key);
+  });
 
   final Function(Offset)? onTouchDown;
   final Function(Offset)? onTouchMove;
@@ -1989,7 +1989,7 @@ class _LegendIconShape extends CustomPainter {
 }
 
 extension on Color {
-  withValues({required double alpha}) {
-    return this.withOpacity(alpha);
+  ui.Color withValues({required double alpha}) {
+    return withOpacity(alpha);
   }
 }

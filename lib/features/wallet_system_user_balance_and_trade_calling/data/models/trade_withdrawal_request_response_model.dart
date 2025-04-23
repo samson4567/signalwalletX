@@ -25,7 +25,7 @@ class TradeWithdrawalRequestResponseModel
   }
 
   factory TradeWithdrawalRequestResponseModel.empty(Map jsonMap) {
-    return TradeWithdrawalRequestResponseModel();
+    return const TradeWithdrawalRequestResponseModel();
   }
 
   @override

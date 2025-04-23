@@ -27,6 +27,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -39,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     internetConnection.hasInternetAccess.then(
       (value) {
-        print("debug_print_internetConnection.hasInternetAccess${value}");
+        print("debug_print_internetConnection.hasInternetAccess$value");
         hasInternet = true;
       },
     );

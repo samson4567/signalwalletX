@@ -21,7 +21,7 @@ class SubscribeToCryptoSuccessState extends WebSocketState {
   final String topic;
   final String data;
 
-  SubscribeToCryptoSuccessState({
+  const SubscribeToCryptoSuccessState({
     required this.topic,
     required this.data,
   });

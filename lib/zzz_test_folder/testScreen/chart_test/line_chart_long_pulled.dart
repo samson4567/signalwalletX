@@ -107,20 +107,20 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
     double amount = 0.0;
     bids.sort((left, right) => left.price.compareTo(right.price));
     //累加买入委托量
-    bids.reversed.forEach((item) {
+    for (var item in bids.reversed) {
       amount += item.vol;
       item.vol = amount;
       _bids!.insert(0, item);
-    });
+    }
 
     amount = 0.0;
     asks.sort((left, right) => left.price.compareTo(right.price));
     //累加卖出委托量
-    asks.forEach((item) {
+    for (var item in asks) {
       amount += item.vol;
       item.vol = amount;
       _asks!.add(item);
-    });
+    }
     setState(() {});
   }
 
@@ -186,7 +186,7 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
                     hideGrid: true,
                     isTapShowInfoDialog: false,
                     verticalTextAlignment: _verticalTextAlignment,
-                    maDayList: [1, 100, 1000],
+                    maDayList: const [1, 100, 1000],
                   ),
                 ),
               ),
@@ -268,7 +268,6 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
           setState(() {});
         }
       },
-      child: Text(text),
       style: TextButton.styleFrom(
         // primary: Colors.white,
         minimumSize: const Size(88, 44),
@@ -278,6 +277,7 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
         ),
         backgroundColor: Colors.blue,
       ),
+      child: Text(text),
     );
   }
 
@@ -305,28 +305,26 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
     Map decodedData = jsonDecode(data);
     List rawListOfUsableData = decodedData['result']["list"];
     List treatedListOfUsableData = [];
-    rawListOfUsableData.forEach(
-      (element) {
-        // {start: 1744682400000, end: 1744682699999, interval: 5,
-        //  open: 84935.5, close: 84933, high: 84975,
-        // low: 84881.9, volume: 35.206, turnover: 2990181.6381,
-        // confirm: false, timestamp: 1744682518560,}
-        List item = element;
-        treatedListOfUsableData.add({
-          "start": item[0],
-          "end": null,
-          "interval": null,
-          "open": item[1],
-          "close": item[4],
-          "high": item[2],
-          "low": item[3],
-          "volume": item[5],
-          "turnover": item[6],
-          "confirm": true,
-          "timestamp": item[0],
-        });
-      },
-    );
+    for (var element in rawListOfUsableData) {
+      // {start: 1744682400000, end: 1744682699999, interval: 5,
+      //  open: 84935.5, close: 84933, high: 84975,
+      // low: 84881.9, volume: 35.206, turnover: 2990181.6381,
+      // confirm: false, timestamp: 1744682518560,}
+      List item = element;
+      treatedListOfUsableData.add({
+        "start": item[0],
+        "end": null,
+        "interval": null,
+        "open": item[1],
+        "close": item[4],
+        "high": item[2],
+        "low": item[3],
+        "volume": item[5],
+        "turnover": item[6],
+        "confirm": true,
+        "timestamp": item[0],
+      });
+    }
     decodedData["data"] = treatedListOfUsableData;
     return jsonEncode(decodedData);
   }
@@ -417,7 +415,7 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
   void solveChatData(String result, {bool fromSingleFetch = false}) {
     print("debug_print_linechart-solveChatData-start");
     print(
-        "debug_print_linechart-solveChatData-start_with_input_fromSingleFetch_${fromSingleFetch}");
+        "debug_print_linechart-solveChatData-start_with_input_fromSingleFetch_$fromSingleFetch");
 
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
     print("debug_print_linechart-solveChatData-parseJson_is=$parseJson");
@@ -503,7 +501,7 @@ class KLineCorrectorEntity {
       tempTime = tempTime! * 1000;
     }
 
-    final int? timeLet = tempTime;
+    final int timeLet = tempTime;
     final double ratioLet =
         double.tryParse(json['ratio'] ?? "")?.toDouble() ?? 0;
     final double changeLet =

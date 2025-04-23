@@ -43,7 +43,8 @@ class _SettingsState extends State<Settings>
             onPressed: () => context.push(MyAppRouteConstant.home)),
         title: Text(
           "Settings".toCurrentLanguage(),
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),

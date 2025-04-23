@@ -27,7 +27,7 @@ class DepositAddressModel extends DepositAddressEntity {
   }
 
   factory DepositAddressModel.empty(Map jsonMap) {
-    return DepositAddressModel();
+    return const DepositAddressModel();
   }
 
   @override

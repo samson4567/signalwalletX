@@ -19,7 +19,7 @@ class VerificationSection extends StatelessWidget {
         children: [
           Text(
             "Password".toCurrentLanguage(),
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
               fontSize: 22,
@@ -29,7 +29,7 @@ class VerificationSection extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             "New passoword".toCurrentLanguage(),
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
               fontSize: 15,
@@ -48,7 +48,7 @@ class VerificationSection extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             "Comfirm passoword".toCurrentLanguage(),
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
               fontSize: 15,
@@ -81,7 +81,7 @@ class VerificationSection extends StatelessWidget {
               ),
               child: Text(
                 "Save Changes".toCurrentLanguage(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'inter',
                   color: Colors.black,
                   fontSize: 16,

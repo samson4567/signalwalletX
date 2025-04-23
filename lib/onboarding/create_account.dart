@@ -385,7 +385,7 @@ class _CreateAccountState extends State<CreateAccount> {
         children: [
           Text(
             'Already have an account?'.toCurrentLanguage(),
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           TextButton(
             onPressed: () {
@@ -393,7 +393,7 @@ class _CreateAccountState extends State<CreateAccount> {
             },
             child: Text(
               'Login'.toCurrentLanguage(),
-              style: TextStyle(color: Colors.blue),
+              style: const TextStyle(color: Colors.blue),
             ),
           ),
         ],

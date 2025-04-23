@@ -14,13 +14,12 @@ import 'spark_chart_trackball.dart';
 class SparkChartTrackballRenderer extends StatefulWidget {
   /// Creates the trackball renderer.
   const SparkChartTrackballRenderer(
-      {Key? key,
+      {super.key,
       this.trackball,
       this.coordinatePoints,
       this.dataPoints,
       this.themeData,
-      this.sparkChart})
-      : super(key: key);
+      this.sparkChart});
 
   /// Specifies the spark chart trackball.
   final SparkChartTrackball? trackball;

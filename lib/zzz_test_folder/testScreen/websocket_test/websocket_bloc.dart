@@ -37,7 +37,7 @@ class WebSocketBloc extends Bloc<WebSocketEvent, WebSocketState> {
 
           try {
             final decodedData = json.decode(data);
-            print("ajsabjsjbsdnksknd${decodedData}");
+            print("ajsabjsjbsdnksknd$decodedData");
             print("ajsabjsjbsdnksknd=topic${decodedData["topic"]}");
 
             if ((decodedData['topic'] as String).startsWith("kline.")) {
@@ -64,7 +64,7 @@ class WebSocketBloc extends Bloc<WebSocketEvent, WebSocketState> {
             //
           } else {
             add(WebSocketErrorEvent(error.toString()));
-            print("sdbajsdkjbadasdbhaj-errormessage-last-${error}");
+            print("sdbajsdkjbadasdbhaj-errormessage-last-$error");
           }
         },
         onDone: () {

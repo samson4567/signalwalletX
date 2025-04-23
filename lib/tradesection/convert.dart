@@ -177,7 +177,7 @@ class _ConvertState extends State<Convert> {
                                       color: Colors.grey, fontSize: 14),
                                 )
                               : Text(
-                                  'Exchange rate: 1 ${selectedFromCoin?.symbol} = ${exchangeRate} ${selectedToCoin?.symbol}',
+                                  'Exchange rate: 1 ${selectedFromCoin?.symbol} = $exchangeRate ${selectedToCoin?.symbol}',
                                   style: const TextStyle(
                                       color: Colors.grey, fontSize: 14),
                                 );

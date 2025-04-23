@@ -5,7 +5,6 @@ import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/router/api_route.dart';
-import 'package:signalwavex/settings/profile.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -44,7 +44,7 @@ class UserModel extends UserEntity {
   }
 
   factory UserModel.empty() {
-    return UserModel();
+    return const UserModel();
   }
 
   factory UserModel.createFromLogin(Map json) {

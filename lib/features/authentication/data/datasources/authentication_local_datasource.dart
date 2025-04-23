@@ -46,7 +46,6 @@ class AuthenticationLocalDatasourceImpl
   @override
   Future savePreloginDetail(
       {required PreloginDetailEntity preloginDetailEntity}) async {
-    ;
     final preloginDetailRaw = jsonEncode(
         PreloginDetailModel.fromEntity(preloginDetailEntity).toJson());
     await appPreferenceService.saveValue<String>(

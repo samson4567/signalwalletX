@@ -348,9 +348,9 @@ class WaterfallConnectorLineSettings extends ConnectorLineSettings {
   /// Creating an argument constructor of WaterfallConnectorLineSettings class.
   const WaterfallConnectorLineSettings({
     double? width,
-    Color? color,
+    super.color,
     this.dashArray = const <double>[0, 0],
-  }) : super(color: color, width: width ?? 1);
+  }) : super(width: width ?? 1);
 
   /// Dashes of the waterfall chart connector line.
   ///

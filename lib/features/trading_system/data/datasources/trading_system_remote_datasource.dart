@@ -150,14 +150,14 @@ class TradingSystemRemoteDatasourceImpl
     };
     headers["Content-Type"] = "application/json";
     http.Response r = await http.get(
-        Uri.https("$simpleswapBaseUrl", "/v3/estimates", body),
+        Uri.https(simpleswapBaseUrl, "/v3/estimates", body),
         headers: headers);
     // estimatedAmount
     dynamic rawResult = jsonDecode(r.body);
 
     String conversionRate = getPerOne(
         range['min'] as String, rawResult['result']['estimatedAmount']);
-    result = '$conversionRate';
+    result = conversionRate;
 
     return result;
   }

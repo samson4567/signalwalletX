@@ -30,7 +30,7 @@ import 'utils/typedef.dart';
 class SfPyramidChart extends StatefulWidget {
   /// Creating an argument constructor of [SfPyramidChart] class.
   const SfPyramidChart({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.backgroundImage,
     this.borderColor = Colors.transparent,
@@ -52,7 +52,7 @@ class SfPyramidChart extends StatefulWidget {
     this.tooltipBehavior,
     this.selectionGesture = ActivationMode.singleTap,
     this.enableMultiSelection = false,
-  }) : super(key: key);
+  });
 
   /// Customizes the chart title.
   ///

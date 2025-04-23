@@ -28,8 +28,8 @@ import '../../theme.dart';
 ///
 class SfChartTheme extends InheritedTheme {
   /// Creating an argument constructor of SfChartTheme class.
-  const SfChartTheme({Key? key, required this.data, required this.child})
-      : super(key: key, child: child);
+  const SfChartTheme({super.key, required this.data, required this.child})
+      : super(child: child);
 
   /// Specifies the color and typography values for descendant chart widgets.
   ///
