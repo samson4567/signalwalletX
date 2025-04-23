@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
@@ -125,10 +126,7 @@ class _DepositPageState extends State<DepositPage> {
                             label: 'Select the coins you want to deposit',
                             selectedItem: selectedCoin,
                             imagePath: "assets/icons/bitcoin.png",
-                            itemList: listOfCoins
-                                    ?.map((coin) => coin.symbol!)
-                                    .toList() ??
-                                [],
+                            itemList: listOfCoins ?? [],
                             onChanged: (value) {
                               selectedChain = null;
                               setState(() {});
@@ -191,7 +189,8 @@ class _DepositPageState extends State<DepositPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                      "deposit detail fetched successfully"),
+                                    "deposit detail fetched successfully",
+                                  ),
                                   backgroundColor: Colors.green,
                                 ),
                               );
@@ -312,9 +311,10 @@ class _DepositPageState extends State<DepositPage> {
     required String label,
     required String? selectedItem,
     required String imagePath,
-    required List<String> itemList,
+    required List<CoinEntity> itemList,
     required ValueChanged<String?> onChanged,
   }) {
+    // getCoinImageFromAsset
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -334,9 +334,9 @@ class _DepositPageState extends State<DepositPage> {
             children: [
               Row(
                 children: [
-                  if (imagePath.isNotEmpty)
+                  if (selectedCoinModel != null)
                     Image.asset(
-                      imagePath,
+                      getCoinImageFromAsset(selectedCoinModel!),
                       width: 24,
                       height: 24,
                     ),
@@ -356,8 +356,17 @@ class _DepositPageState extends State<DepositPage> {
                 onChanged: onChanged,
                 items: itemList.map((item) {
                   return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
+                    value: item.symbol,
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          getCoinImageFromAsset(item),
+                          width: 24,
+                          height: 24,
+                        ),
+                        Text(item.symbol ?? ""),
+                      ],
+                    ),
                   );
                 }).toList(),
               ),
