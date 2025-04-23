@@ -39,7 +39,7 @@ class EndpointConstant {
   static const String userProfile = "/auth/profile/update";
 
   static const String uploadGoogleToken = "/auth/google";
-  static const String fetchTrades = "/user/latest-trade";
+  static const String fetchActiveTrade = "/user/latest-trade";
   static const String tradeOrders = "/trade/orders";
   // /user/latest-trade
 }

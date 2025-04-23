@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/component/flow_amination_screen.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
@@ -21,7 +25,9 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
     on<GetCoinListEvent>(_onGetCoinListEvent);
     on<GetExchangeRateEvent>(_onGetExchangeRateEvent);
     on<FetchTraderOrderFollowed>(_onFetchTraderOrderFollowed);
+    on<FetchActiveTradeEvent>(_onFetchActiveTradeEvent);
   }
+  Timer? activeTradeMonitor;
 
   Future<void> _onFetchOrderBookEvent(
       FetchOrderBookEvent event, Emitter<TradingSystemState> emit) async {
@@ -114,4 +120,30 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
       emit(TraderOrderFollowedError(e.toString()));
     }
   }
+
+  Future<void> _onFetchActiveTradeEvent(
+    FetchActiveTradeEvent event,
+    Emitter<TradingSystemState> emit,
+  ) async {
+    print("debug_print-_onFetchActiveTradeEvent-statrted");
+    emit(FetchActiveTradeLoadingState());
+    // activeTradeMonitor = Timer.periodic(
+    //   10.seconds,
+    //   (timer) async {
+    try {
+      final result = await tradingSystemRepository.fetchActiveTrade();
+      print("debug_print-_onFetchActiveTradeEvent-result_fetched_${result}");
+      emit(FetchActiveTradeSuccessState(orderEntity: result));
+      currentOrderEntity = result;
+      print(
+          "debug_print-_onFetchActiveTradeEvent-FetchActiveTradeSuccessState_emmited${result}");
+    } catch (e) {
+      print("debug_print-_onFetchActiveTradeEvent-error_is_${e} ");
+      emit(FetchActiveTradeErrorState(errorMessage: e.toString()));
+    }
+    //   },
+    // );
+  }
+
+  // _onFetchActiveTradeEvent
 }

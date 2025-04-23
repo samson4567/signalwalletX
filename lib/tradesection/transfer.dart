@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
@@ -26,6 +27,7 @@ class _TransferPageState extends State<TransferPage> {
 
   @override
   Widget build(BuildContext context) {
+    availableBalance = totalBalance;
     return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {

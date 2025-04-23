@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_container_two.dart';
 import 'package:signalwavex/component/fancy_text.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
@@ -57,7 +58,8 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                 ),
                 const SizedBox(height: 20),
                 FancyText(
-                  "${"Order amount".toCurrentLanguage()} (109.23)",
+                  "${"Order amount".toCurrentLanguage()}",
+                  // (109.23)",
                   weight: FontWeight.w600,
                   textColor: Colors.white.withOpacity(.70),
                   size: 18,
@@ -92,7 +94,10 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                         child: FancyText(
                           action: () {
                             try {
-                              context.pop();
+                              context
+                                  .read<
+                                      WalletSystemUserBalanceAndTradeCallingBloc>()
+                                  .add(FollowTradeCallEvent(widget.tid));
                             } catch (e) {}
                           },
                           "Confirm".toCurrentLanguage(),

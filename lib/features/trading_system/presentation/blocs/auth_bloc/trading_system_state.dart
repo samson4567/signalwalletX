@@ -3,6 +3,7 @@ import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/order_book_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 
 sealed class TradingSystemState extends Equatable {
   const TradingSystemState();
@@ -179,3 +180,29 @@ class TraderOrderFollowedError extends TradingSystemState {
   @override
   List<Object> get props => [message];
 }
+
+///// FetchActiveTrade
+final class FetchActiveTradeLoadingState extends TradingSystemState {
+  const FetchActiveTradeLoadingState();
+}
+
+final class FetchActiveTradeSuccessState extends TradingSystemState {
+  final OrderEntity orderEntity;
+
+  const FetchActiveTradeSuccessState({required this.orderEntity});
+
+  @override
+  List<Object> get props => [orderEntity];
+}
+
+final class FetchActiveTradeErrorState extends TradingSystemState {
+  final String errorMessage;
+
+  const FetchActiveTradeErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// FetchActiveTrade ended .....
+
+
