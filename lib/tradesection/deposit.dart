@@ -335,11 +335,16 @@ class _DepositPageState extends State<DepositPage> {
               Row(
                 children: [
                   if (selectedCoinModel != null)
-                    Image.asset(
-                      getCoinImageFromAsset(selectedCoinModel!),
-                      width: 24,
-                      height: 24,
-                    ),
+                    (getCoinImageFromAsset(selectedCoinModel!) == null)
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                          )
+                        : Image.asset(
+                            getCoinImageFromAsset(selectedCoinModel!),
+                            width: 24,
+                            height: 24,
+                          ),
                   const SizedBox(width: 8),
                   Text(
                     selectedItem ?? "select a coin",
@@ -359,12 +364,20 @@ class _DepositPageState extends State<DepositPage> {
                     value: item.symbol,
                     child: Row(
                       children: [
-                        Image.asset(
-                          getCoinImageFromAsset(item),
-                          width: 24,
-                          height: 24,
-                        ),
-                        Text(item.symbol ?? ""),
+                        (getCoinImageFromAsset(item) == null)
+                            ? SizedBox(
+                                width: 24,
+                                height: 24,
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Image.asset(
+                                  getCoinImageFromAsset(item),
+                                  width: 24,
+                                  height: 24,
+                                ),
+                              ),
+                        Text(item.name ?? ""),
                       ],
                     ),
                   );
