@@ -103,12 +103,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     return [
       {
         "k": "Title",
-        "v": "${orderModel.title ?? "--"}",
+        "v": orderModel.title ?? "--",
         "--": Colors.white,
       },
       {
         "k": "Trading Pair",
-        "v": "${orderModel.tradingPair ?? "--"}",
+        "v": orderModel.symbol ?? "--",
         "c": getFigmaColor("F0B90B")
       },
       // {"k": "Status", "v": "${orderModel.status ?? "--"}", "c": Colors.white},
@@ -119,7 +119,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       // },
       {
         "k": "Purchase Duration",
-        "v": "${orderModel.purchaseDuration ?? "--"}",
+        "v": orderModel.purchaseDuration ?? "--",
         "c": Colors.white
       },
       // {"k": "Price", "v": "${orderModel.price ?? "--"}", "c": Colors.white},
@@ -130,7 +130,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       // },
       {
         "k": "Release Time",
-        "v": "${orderModel.orderTime ?? "--"}",
+        "v": orderModel.orderTime ?? "--",
         "--": Colors.white
       },
       // {
@@ -146,7 +146,8 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       // },
       {
         "k": "Order Amount",
-        "v": "${orderModel.price ?? "--"}",
+        "v": "${totalBalance * .01}",
+        // "${orderModel.price ?? "--"}",
         "--": Colors.white
       },
       {
