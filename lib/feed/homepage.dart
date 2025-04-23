@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:signalwavex/core/app_variables.dart';
+import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/languages.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -54,9 +57,23 @@ class _HomepageState extends State<Homepage> {
         const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
 
     getData();
+    // FetchCoinPriceEvent
 
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        liveDataFecthRepeater = Timer.periodic(
+          5.seconds,
+          (timer) {
+            context.read<CoinBloc>().add(const FetchCoinPriceEvent("BTCUSDT"));
+          },
+        );
+      },
+    );
   }
+
+  double formerPrice = 0;
+  double currentPrice = 0;
 
   getData() {
     context
@@ -120,6 +137,13 @@ class _HomepageState extends State<Homepage> {
           );
         }
         // GetTopCoin reactions ended.....
+
+        if (state is FetchCoinPriceSuccessState) {
+          hasloadedPrice = true;
+          formerPrice = currentPrice;
+          currentPrice = double.tryParse(state.price ?? "") ?? 0;
+          setState(() {});
+        }
       }, builder: (context, state) {
         return SafeArea(
           child: Column(
@@ -222,6 +246,8 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  bool hasloadedPrice = false;
+
   Widget _buildFancyContainer(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -251,6 +277,16 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
     );
+  }
+
+  double getPercentagepriceChange() {
+    return (formerPrice > 0)
+        ? (currentPrice - formerPrice) / formerPrice
+        : (currentPrice - formerPrice) / 1;
+  }
+
+  double getpriceChange() {
+    return currentPrice - formerPrice;
   }
 
   Map<String, dynamic> cad = {};
@@ -341,14 +377,13 @@ class _HomepageState extends State<Homepage> {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        (cad.isEmpty) // Changed from isNotEmpty to isEmpty
+                                        (!hasloadedPrice) // Changed from isNotEmpty to isEmpty
                                             ? "Loading.."
-                                            : "${(cad["percentageChange"] ?? "")} (${cad["valueChange"] ?? ""}) ",
+                                            // : "${(cad["percentageChange"] ?? "")} (${cad["valueChange"] ?? ""}) ",
+                                            : "${getPercentagepriceChange().toStringAsFixed(4)}% (${getpriceChange().toStringAsFixed(4)}) ",
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: ((double.tryParse(
-                                                          cad["percentageChange"] ??
-                                                              ""))
+                                          color: ((getPercentagepriceChange())
                                                       ?.isNegative ??
                                                   false)
                                               ? Colors.red
@@ -378,9 +413,10 @@ class _HomepageState extends State<Homepage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              cad.isEmpty
+                              !hasloadedPrice
                                   ? "Loading.."
-                                  : "${cad["currentPrice"] ?? "N/A"}",
+                                  // : "${cad["currentPrice"] ?? "N/A"}",
+                                  : "${currentPrice}",
                               style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,

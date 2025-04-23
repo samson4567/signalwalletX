@@ -14,8 +14,9 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
     on<GetBTCDetailEvent>(_onGetBTCDetailEvent);
     on<GetTopCoinEvent>(_onGetTopCoinEvent);
     on<GetMarketCoinsEvent>(_onGetMarketCoinsEvent);
+    on<FetchCoinPriceEvent>(_onFetchCoinPriceEvent);
 
-    // GetMarketCoins
+    // FetchCoinPrice
   }
 
   Future<void> _onGetBTCDetailEvent(
@@ -71,5 +72,22 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
     );
   }
 
-  // _onGetMarketCoinsEvent
+  Future<void> _onFetchCoinPriceEvent(
+      FetchCoinPriceEvent event, Emitter<CoinState> emit) async {
+    emit(const FetchCoinPriceLoadingState());
+    final result = await coinRepository.fetchCoinPrice(
+        tradingPairSymbol: event.tradingPairSymbol);
+    result.fold(
+      (error) => emit(FetchCoinPriceErrorState(errorMessage: error.message)),
+      (price) {
+        emit(
+          FetchCoinPriceSuccessState(
+            price: price,
+          ),
+        );
+      },
+    );
+  }
+
+  // _onFetchCoinPriceEvent
 }

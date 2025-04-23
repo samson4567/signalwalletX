@@ -144,6 +144,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
       //   "v": "${orderModel.rateOfReturn ?? "--"}",
       //   "c": Colors.white
       // },
+
       {
         "k": "Order Amount",
         "v": "${totalBalance * .01}",

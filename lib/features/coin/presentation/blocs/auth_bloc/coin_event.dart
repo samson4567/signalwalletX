@@ -29,3 +29,13 @@ final class GetMarketCoinsEvent extends CoinEvent {
   @override
   List<Object> get props => [];
 }
+
+// FetchCoinPrice
+
+final class FetchCoinPriceEvent extends CoinEvent {
+  final String tradingPairSymbol;
+  const FetchCoinPriceEvent(this.tradingPairSymbol);
+
+  @override
+  List<Object> get props => [tradingPairSymbol];
+}

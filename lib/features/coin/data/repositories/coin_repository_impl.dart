@@ -49,4 +49,21 @@ class CoinRepositoryImpl implements CoinRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, String?>> fetchCoinPrice(
+      {required String tradingPairSymbol}) async {
+    print("debug_print-CoinRepositoryImpl-fetchCoinPrice-started");
+    try {
+      final result = await coinRemoteDatasource.fetchCoinPrice(
+          tradPairSymbol: tradingPairSymbol);
+      print(
+          "debug_print-CoinRepositoryImpl-fetchCoinPrice-result_is_${result}");
+
+      return right(result);
+    } catch (e) {
+      print("debug_print-CoinRepositoryImpl-fetchCoinPrice-e_is_${e}");
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }

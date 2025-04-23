@@ -85,6 +85,29 @@ final class GetMarketCoinsErrorState extends CoinState {
 }
 ///// GetMarketCoins ended .....
 
+///// FetchCoinPrice
+final class FetchCoinPriceLoadingState extends CoinState {
+  const FetchCoinPriceLoadingState();
+}
+
+final class FetchCoinPriceSuccessState extends CoinState {
+  final String? price;
+
+  const FetchCoinPriceSuccessState({required this.price});
+
+  @override
+  List<Object> get props => [price ?? ""];
+}
+
+final class FetchCoinPriceErrorState extends CoinState {
+  final String errorMessage;
+
+  const FetchCoinPriceErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// FetchCoinPrice ended .....
 
 
-// GetMarketCoins
+// FetchCoinPrice
