@@ -8,6 +8,7 @@ abstract class CoinRemoteDatasource {
   Future<CoinEntity> getBTCDetail();
   Future<List<CoinEntity>> getTopCoins();
   Future<List<CoinEntity>> getMarketCoins();
+  Future<String?> fetchCoinPrice({required String tradPairSymbol});
 }
 
 class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
@@ -67,5 +68,19 @@ class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
         .toList();
 
     return result;
+  }
+
+  @override
+  Future<String?> fetchCoinPrice({required String tradPairSymbol}) async {
+    print("debug_print-CoinRemoteDatasourceImpl-fetchCoinPrice-started");
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.fetchCoinPrice + tradPairSymbol,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+    print(
+        "debug_print-CoinRemoteDatasourceImpl-fetchCoinPrice-response.data_is_${response.data}");
+
+    return (response.data as Map)["liveKline"]["closePrice"]?.toString();
   }
 }
