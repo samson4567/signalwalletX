@@ -51,7 +51,7 @@ class CoinModel extends CoinEntity {
   }
 
   factory CoinModel.empty() {
-    return CoinModel();
+    return const CoinModel();
   }
 
   factory CoinModel.fromEntity(CoinEntity coinEntity) {

@@ -36,7 +36,7 @@ class PlaceABuyOrSellOrderRequestModel
   }
 
   factory PlaceABuyOrSellOrderRequestModel.empty(Map jsonMap) {
-    return PlaceABuyOrSellOrderRequestModel();
+    return const PlaceABuyOrSellOrderRequestModel();
   }
 
   @override

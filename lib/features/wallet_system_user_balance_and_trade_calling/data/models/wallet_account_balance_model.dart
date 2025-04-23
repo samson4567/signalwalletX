@@ -36,7 +36,7 @@ class WalletAccountModel extends WalletAccountEntity {
   }
 
   factory WalletAccountModel.empty(Map jsonMap) {
-    return WalletAccountModel();
+    return const WalletAccountModel();
   }
 
   @override

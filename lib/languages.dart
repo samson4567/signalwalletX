@@ -2218,8 +2218,8 @@ String currentLanguage = "English";
 
 extension StringLanguageConverter on String {
   String toCurrentLanguage() {
-    this.replaceAll("\\'", '');
-    this.replaceAll('\\"', '');
+    replaceAll("\\'", '');
+    replaceAll('\\"', '');
 
     // print("sdsjdksdajkhsdajhd_${this}_${languageDetailsGrand}");
     String result = this;
@@ -2241,6 +2241,6 @@ toCurrentLanguageFunction(String input) {
     result =
         (element[input.toLowerCase()]?[currentLanguage] as String?) ?? result;
   }
-  print("debug_print_toCurrentLanguageFunction_${currentLanguage}");
+  print("debug_print_toCurrentLanguageFunction_$currentLanguage");
   return result;
 }

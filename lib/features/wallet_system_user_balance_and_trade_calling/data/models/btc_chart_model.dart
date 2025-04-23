@@ -2,18 +2,12 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 
 class BtcDataChartModel extends BtcDataChartEntity {
   const BtcDataChartModel({
-    String? name, // Nullable name
-    required double price,
-    required double percentIncrease,
-    required List<ChartData> chart,
-    required String symbol,
-  }) : super(
-          name: name,
-          price: price,
-          percentIncrease: percentIncrease,
-          chart: chart,
-          symbol: symbol,
-        );
+    super.name, // Nullable name
+    required super.price,
+    required super.percentIncrease,
+    required super.chart,
+    required super.symbol,
+  });
 
   factory BtcDataChartModel.fromJson(Map<String, dynamic> json) {
     return BtcDataChartModel(

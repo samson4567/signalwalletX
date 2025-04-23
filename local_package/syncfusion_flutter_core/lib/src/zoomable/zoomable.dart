@@ -81,7 +81,7 @@ class ZoomableDetails {
 class Zoomable extends StatefulWidget {
   /// Creates a [Zoomable].
   const Zoomable({
-    Key? key,
+    super.key,
     required this.controller,
     required this.boundary,
     this.minZoomLevel = 1.0,
@@ -95,8 +95,7 @@ class Zoomable extends StatefulWidget {
     this.onComplete,
     this.child,
   })  : assert(minZoomLevel >= 1 && minZoomLevel <= maxZoomLevel),
-        assert(frictionCoefficient > 0.0),
-        super(key: key);
+        assert(frictionCoefficient > 0.0);
 
   /// Holds the details of the current zoom level and actual rect. These details
   /// can be used in multiple widget which used the same zoomable widget.

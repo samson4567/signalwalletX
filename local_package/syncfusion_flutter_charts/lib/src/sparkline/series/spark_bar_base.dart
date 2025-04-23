@@ -38,7 +38,7 @@ class SfSparkBarChart extends StatefulWidget {
   /// }
   /// ```
   SfSparkBarChart(
-      {Key? key,
+      {super.key,
       List<num>? data,
       this.plotBand,
       this.borderWidth = 0,
@@ -57,8 +57,7 @@ class SfSparkBarChart extends StatefulWidget {
       this.labelDisplayMode,
       this.labelStyle,
       this.trackball})
-      : _sparkChartDataDetails = SparkChartDataDetails(data: data),
-        super(key: key);
+      : _sparkChartDataDetails = SparkChartDataDetails(data: data);
 
   /// Creates the spark bar chart for the provided set of data with its default view.
   ///
@@ -112,7 +111,7 @@ class SfSparkBarChart extends StatefulWidget {
   /// }
   /// ```
   SfSparkBarChart.custom(
-      {Key? key,
+      {super.key,
 
       /// Data count for the spark charts.
       int? dataCount,
@@ -142,8 +141,7 @@ class SfSparkBarChart extends StatefulWidget {
       : _sparkChartDataDetails = SparkChartDataDetails(
             dataCount: dataCount,
             xValueMapper: xValueMapper,
-            yValueMapper: yValueMapper),
-        super(key: key);
+            yValueMapper: yValueMapper);
 
   /// Inverts the axis from right to left.
   ///

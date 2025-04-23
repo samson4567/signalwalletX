@@ -28,8 +28,8 @@ import '../../theme.dart';
 ///
 class SfGaugeTheme extends InheritedTheme {
   /// Initialize the gauge theme
-  const SfGaugeTheme({Key? key, required this.data, required this.child})
-      : super(key: key, child: child);
+  const SfGaugeTheme({super.key, required this.data, required this.child})
+      : super(child: child);
 
   /// Specifies the color and typography values for descendant gauges widgets.
   ///

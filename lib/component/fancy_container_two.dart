@@ -90,7 +90,7 @@ class _FancyContainerTwoState extends State<FancyContainerTwo> {
               child: widget.child,
             ),
           )
-        : Container(
+        : SizedBox(
             width: widget.width,
             height: widget.height,
             child: const Center(

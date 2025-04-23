@@ -184,7 +184,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                               textColor: getFigmaColor("FFFFFF", 60),
                               size: 14.w,
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             FancyContainerTwo(
                               backgroundColor: getFigmaColor("0ECB81", 20),
                               radius: 5,
@@ -202,7 +202,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   FittedBox(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,7 +220,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -234,7 +234,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -251,7 +251,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   FittedBox(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,7 +269,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -283,7 +283,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -300,7 +300,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   FittedBox(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -318,7 +318,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -332,8 +332,8 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 10),
-                        SizedBox()
+                        const SizedBox(width: 10),
+                        const SizedBox()
                       ],
                     ),
                   ),
@@ -371,7 +371,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                                 textColor: getFigmaColor("FFFFFF", 60),
                                 size: 14.w,
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               FancyContainerTwo(
                                 backgroundColor: getFigmaColor("0ECB81", 20),
                                 radius: 5,
@@ -389,7 +389,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     FittedBox(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -407,7 +407,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -421,7 +421,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -438,7 +438,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     FittedBox(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -456,7 +456,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -470,7 +470,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -484,7 +484,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -505,7 +505,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             FittedBox(
               child: Row(
                 children: [
@@ -520,7 +520,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   FancyContainerTwo(
                     backgroundColor: getFigmaColor("222629"),
                     radius: 5,
@@ -532,7 +532,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   FancyContainerTwo(
                     backgroundColor: getFigmaColor("222629"),
                     radius: 5,
@@ -544,7 +544,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   FancyContainerTwo(
                     backgroundColor: getFigmaColor("222629"),
                     radius: 5,
@@ -623,7 +623,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             ),
           ],
         ),
-        Divider(
+        const Divider(
           height: 2,
         )
       ],
@@ -744,15 +744,15 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
         /// available and max buy ui
         _buildavailableAndMaxBuy(),
 
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
 
         /// reduce only and TP/SL  check boxes and the divider ui
-        _buildReduceOnlyTPSLCheckBoxesAndDIvider(), SizedBox(height: 10),
+        _buildReduceOnlyTPSLCheckBoxesAndDIvider(), const SizedBox(height: 10),
         _buildtriggerPriceSlab(),
         _buildtriggerPriceSlab(hint: "SL trigger price (USDT)"),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _buildBuySellColumn(),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _buildMarginMaxAndLiquidPrice(),
       ],
     );
@@ -772,7 +772,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             weight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         FancyContainerTwo(
           height: 32,
           width: double.infinity,
@@ -1061,7 +1061,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           children: [
             FancyText(
@@ -1075,7 +1075,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Align(
           alignment: Alignment.centerLeft,
           child: FancyText(
@@ -1104,7 +1104,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
             ),
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           children: [
             FancyText(
@@ -1203,7 +1203,7 @@ class _PerpetualScreenState extends State<PerpetualScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 6.0, vertical: 0),
                 child: Text(
-                  "${selectedText}",
+                  selectedText,
                   style: TextStyle(
                     color: getFigmaColor("EAECEF"),
                     fontSize: 14.w,

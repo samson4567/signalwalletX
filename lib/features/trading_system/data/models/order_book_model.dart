@@ -26,7 +26,7 @@ class OrderBookModel extends OrderBookEntity {
   }
 
   factory OrderBookModel.empty(Map jsonMap) {
-    return OrderBookModel();
+    return const OrderBookModel();
   }
 
   @override

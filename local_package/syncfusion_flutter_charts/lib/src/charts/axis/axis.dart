@@ -36,7 +36,7 @@ typedef _AlignLabel = double Function(double position, AxisLabel label);
 abstract class ChartAxis extends LeafRenderObjectWidget {
   /// Creating an argument constructor of [ChartAxis] class.
   const ChartAxis({
-    Key? key,
+    super.key,
     this.name,
     this.plotOffset,
     this.plotOffsetStart,
@@ -82,7 +82,7 @@ abstract class ChartAxis extends LeafRenderObjectWidget {
     this.multiLevelLabelStyle = const MultiLevelLabelStyle(),
     this.multiLevelLabelFormatter,
     this.axisLabelFormatter,
-  }) : super(key: key);
+  });
 
   /// Toggles the visibility of the axis.
   ///
@@ -3661,7 +3661,7 @@ abstract class _GridLineRenderer {
 }
 
 class _HorizontalGridLineRenderer extends _GridLineRenderer {
-  _HorizontalGridLineRenderer(RenderChartAxis axis) : super(axis);
+  _HorizontalGridLineRenderer(super.axis);
 
   @override
   void _drawMajorGridLines(PaintingContext context, Offset offset) {
@@ -3728,7 +3728,7 @@ class _HorizontalGridLineRenderer extends _GridLineRenderer {
 }
 
 class _VerticalGridLineRenderer extends _GridLineRenderer {
-  _VerticalGridLineRenderer(RenderChartAxis axis) : super(axis);
+  _VerticalGridLineRenderer(super.axis);
 
   @override
   void _drawMajorGridLines(PaintingContext context, Offset offset) {
@@ -3939,13 +3939,13 @@ abstract class _PlotBandRenderer {
 }
 
 extension on Color {
-  withValues({required double alpha}) {
-    return this.withOpacity(alpha);
+  Color withValues({required double alpha}) {
+    return withOpacity(alpha);
   }
 }
 
 class _HorizontalPlotBandRenderer extends _PlotBandRenderer {
-  _HorizontalPlotBandRenderer(RenderChartAxis axis) : super(axis);
+  _HorizontalPlotBandRenderer(super.axis);
 
   @override
   void _drawText(PaintingContext context, Rect bounds, AxisPlotBand plotBand) {
@@ -3980,7 +3980,7 @@ class _HorizontalPlotBandRenderer extends _PlotBandRenderer {
 }
 
 class _VerticalPlotBandRenderer extends _PlotBandRenderer {
-  _VerticalPlotBandRenderer(RenderChartAxis axis) : super(axis);
+  _VerticalPlotBandRenderer(super.axis);
 
   @override
   void _drawText(PaintingContext context, Rect bounds, AxisPlotBand plotBand) {

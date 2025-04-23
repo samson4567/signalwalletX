@@ -383,7 +383,7 @@ class _DepositPageState extends State<DepositPage> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: (selectedItem == null && coinModel == null)
-          ? Text("Select a coin")
+          ? const Text("Select a coin")
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

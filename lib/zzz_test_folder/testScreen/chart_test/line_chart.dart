@@ -15,7 +15,7 @@ import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
 class LineChart extends StatefulWidget {
-  LineChart({Key? key, this.title, this.chartDetails}) : super(key: key);
+  LineChart({super.key, this.title, this.chartDetails});
 
   final String? title;
   // final Map? askAndBids;
@@ -68,9 +68,8 @@ class _LineChartState extends State<LineChart> {
 
   @override
   void initState() {
-    context
-        .read<WebSocketBloc>()
-        .add(WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
+    context.read<WebSocketBloc>().add(
+        const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
     super.initState();
     getDataOld();
     getData();
@@ -110,20 +109,20 @@ class _LineChartState extends State<LineChart> {
     double amount = 0.0;
     bids.sort((left, right) => left.price.compareTo(right.price));
     //累加买入委托量
-    bids.reversed.forEach((item) {
+    for (var item in bids.reversed) {
       amount += item.vol;
       item.vol = amount;
       _bids!.insert(0, item);
-    });
+    }
 
     amount = 0.0;
     asks.sort((left, right) => left.price.compareTo(right.price));
     //累加卖出委托量
-    asks.forEach((item) {
+    for (var item in asks) {
       amount += item.vol;
       item.vol = amount;
       _asks!.add(item);
-    });
+    }
     setState(() {});
   }
 
@@ -167,7 +166,7 @@ class _LineChartState extends State<LineChart> {
       }
     }, builder: (context, state) {
       print("debug_print_linechart-building");
-      print("debug_print_linechart-building${state}");
+      print("debug_print_linechart-building$state");
 
       return Container(
         child: Stack(children: <Widget>[
@@ -209,7 +208,7 @@ class _LineChartState extends State<LineChart> {
                 hideGrid: true,
                 isTapShowInfoDialog: false,
                 verticalTextAlignment: _verticalTextAlignment,
-                maDayList: [1, 100, 1000],
+                maDayList: const [1, 100, 1000],
               ),
             ),
           ),
@@ -291,7 +290,6 @@ class _LineChartState extends State<LineChart> {
           setState(() {});
         }
       },
-      child: Text(text),
       style: TextButton.styleFrom(
         // primary: Colors.white,
         minimumSize: const Size(88, 44),
@@ -301,6 +299,7 @@ class _LineChartState extends State<LineChart> {
         ),
         backgroundColor: Colors.blue,
       ),
+      child: Text(text),
     );
   }
 
@@ -341,28 +340,26 @@ class _LineChartState extends State<LineChart> {
     Map decodedData = jsonDecode(data);
     List rawListOfUsableData = decodedData['result']["list"];
     List treatedListOfUsableData = [];
-    rawListOfUsableData.forEach(
-      (element) {
-        // {start: 1744682400000, end: 1744682699999, interval: 5,
-        //  open: 84935.5, close: 84933, high: 84975,
-        // low: 84881.9, volume: 35.206, turnover: 2990181.6381,
-        // confirm: false, timestamp: 1744682518560,}
-        List item = element;
-        treatedListOfUsableData.add({
-          "start": item[0],
-          "end": null,
-          "interval": null,
-          "open": item[1],
-          "close": item[4],
-          "high": item[2],
-          "low": item[3],
-          "volume": item[5],
-          "turnover": item[6],
-          "confirm": true,
-          "timestamp": item[0],
-        });
-      },
-    );
+    for (var element in rawListOfUsableData) {
+      // {start: 1744682400000, end: 1744682699999, interval: 5,
+      //  open: 84935.5, close: 84933, high: 84975,
+      // low: 84881.9, volume: 35.206, turnover: 2990181.6381,
+      // confirm: false, timestamp: 1744682518560,}
+      List item = element;
+      treatedListOfUsableData.add({
+        "start": item[0],
+        "end": null,
+        "interval": null,
+        "open": item[1],
+        "close": item[4],
+        "high": item[2],
+        "low": item[3],
+        "volume": item[5],
+        "turnover": item[6],
+        "confirm": true,
+        "timestamp": item[0],
+      });
+    }
     decodedData["data"] = treatedListOfUsableData;
     return jsonEncode(decodedData);
   }
@@ -393,48 +390,48 @@ class _LineChartState extends State<LineChart> {
     'https://api.huobi.br.com/market/history/kline?period=1day&size=300&symbol=btcusdt';
 
     String startDateStamp = DateTime.now()
-        .subtract(Duration(days: 1))
+        .subtract(const Duration(days: 1))
         .millisecondsSinceEpoch
         .toString();
     if (widget.chartDetails?["period"] == "1") {
       startDateStamp = DateTime.now()
-          .subtract(Duration(minutes: 1 * 3))
+          .subtract(const Duration(minutes: 1 * 3))
           .millisecondsSinceEpoch
           .toString();
     }
     if (widget.chartDetails?["period"] == "3") {
       startDateStamp = DateTime.now()
-          .subtract(Duration(minutes: 1 * 3))
+          .subtract(const Duration(minutes: 1 * 3))
           .millisecondsSinceEpoch
           .toString();
     }
     if (widget.chartDetails?["period"] == "5") {
       startDateStamp = DateTime.now()
-          .subtract(Duration(minutes: 5 * 3))
+          .subtract(const Duration(minutes: 5 * 3))
           .millisecondsSinceEpoch
           .toString();
     }
     if (widget.chartDetails?["period"] == "D") {
       startDateStamp = DateTime.now()
-          .subtract(Duration(days: 1 * 3))
+          .subtract(const Duration(days: 1 * 3))
           .millisecondsSinceEpoch
           .toString();
     }
     if (widget.chartDetails?["period"] == "M") {
       startDateStamp = DateTime.now()
-          .subtract(Duration(days: 30 * 2))
+          .subtract(const Duration(days: 30 * 2))
           .millisecondsSinceEpoch
           .toString();
     }
     if (widget.chartDetails?["period"] == "Y") {
       startDateStamp = DateTime.now()
-          .subtract(Duration(days: 365 * 2))
+          .subtract(const Duration(days: 365 * 2))
           .millisecondsSinceEpoch
           .toString();
     }
     url =
         // "http://api-testnet.bybit.com/v5/market/kline?category=inverse&symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=60&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
-        "http://api-testnet.bybit.com/v5/market/kline?symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=${widget.chartDetails?["period"] ?? "60"}&start=${startDateStamp}&end=${DateTime.now().millisecondsSinceEpoch}";
+        "http://api-testnet.bybit.com/v5/market/kline?symbol=${widget.chartDetails?["symbol"] ?? "BTC"}USD&interval=${widget.chartDetails?["period"] ?? "60"}&start=$startDateStamp&end=${DateTime.now().millisecondsSinceEpoch}";
 
     late String result;
     final response = await http.get(Uri.parse(url));
@@ -554,7 +551,7 @@ class KLineCorrectorEntity {
       tempTime = tempTime! * 1000;
     }
 
-    final int? timeLet = tempTime;
+    final int timeLet = tempTime;
     final double ratioLet =
         double.tryParse(json['ratio'] ?? "")?.toDouble() ?? 0;
     final double changeLet =

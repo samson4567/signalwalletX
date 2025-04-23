@@ -54,7 +54,7 @@ class ConversionModel extends ConversionEntity {
   }
 
   factory ConversionModel.empty(Map jsonMap) {
-    return ConversionModel();
+    return const ConversionModel();
   }
 
   @override

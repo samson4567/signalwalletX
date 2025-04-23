@@ -40,7 +40,7 @@ class _LanguageSectionState extends State<LanguageSection> {
         children: [
           Text(
             "Language".toCurrentLanguage(),
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
               fontSize: 22,
@@ -50,7 +50,7 @@ class _LanguageSectionState extends State<LanguageSection> {
           const SizedBox(height: 20),
           Text(
             "Choose your language".toCurrentLanguage(),
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'inter',
               color: Colors.white,
               fontSize: 15,
@@ -76,7 +76,7 @@ class _LanguageSectionState extends State<LanguageSection> {
               ),
               hint: Text(
                 "Select language".toCurrentLanguage(),
-                style: TextStyle(color: Colors.white70),
+                style: const TextStyle(color: Colors.white70),
               ),
               items: languages.entries.map((entry) {
                 return DropdownMenuItem<String>(
@@ -97,21 +97,13 @@ class _LanguageSectionState extends State<LanguageSection> {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () {
-                if (currentLanguage != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "${"Selected language".toCurrentLanguage()}: ${currentLanguage!}",
-                      ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "${"Selected language".toCurrentLanguage()}: ${currentLanguage!}",
                     ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            "Please select a language".toCurrentLanguage())),
-                  );
-                }
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellow,
@@ -123,7 +115,7 @@ class _LanguageSectionState extends State<LanguageSection> {
               ),
               child: Text(
                 "Save Changes".toCurrentLanguage(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'inter',
                   color: Colors.black,
                   fontSize: 16,

@@ -3,7 +3,6 @@ import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_local_datasource.dart';
 import 'package:signalwavex/features/trading_system/data/datasources/trading_system_remote_datasource.dart';
-import 'package:signalwavex/features/trading_system/data/models/tradeorder_model.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/conversion_entity.dart';
 

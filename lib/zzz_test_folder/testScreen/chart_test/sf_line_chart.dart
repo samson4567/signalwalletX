@@ -24,7 +24,7 @@ class _SfLineChartCustomState extends State<SfLineChartCustom> {
       body: Center(
         child: Container(
           child: SfCartesianChart(
-            primaryXAxis: DateTimeAxis(),
+            primaryXAxis: const DateTimeAxis(),
             series: <CartesianSeries>[
               // Renders line chart
               LineSeries<SalesData, DateTime>(

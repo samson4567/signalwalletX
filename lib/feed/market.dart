@@ -86,7 +86,7 @@ class _MarketState extends State<Market> {
                     ),
                     Text(
                       "Market Trading".toCurrentLanguage(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontFamily: 'Inter',
@@ -130,10 +130,10 @@ class _MarketState extends State<Market> {
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Search  by currency pair'.toCurrentLanguage(),
-          hintStyle: TextStyle(color: const Color(0xFF8F8F8F), fontSize: 10),
+          hintStyle: const TextStyle(color: Color(0xFF8F8F8F), fontSize: 10),
           border: InputBorder.none,
-          prefixIcon: Icon(Icons.search, color: Colors.grey),
-          contentPadding: EdgeInsets.symmetric(vertical: 10),
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
         ),
       ),
     );
@@ -266,7 +266,7 @@ class _MarketState extends State<Market> {
                         children: [
                           const Icon(
                             Icons.star_border,
-                            color: const Color(0xFF313131),
+                            color: Color(0xFF313131),
                             size: 18,
                           ),
                           const SizedBox(width: 12),
@@ -300,7 +300,7 @@ class _MarketState extends State<Market> {
                                 coin.percentIncrease!,
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  color: const Color(0xFF3BCC70),
+                                  color: Color(0xFF3BCC70),
                                 ),
                               ),
                             ],

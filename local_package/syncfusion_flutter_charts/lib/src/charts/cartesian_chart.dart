@@ -108,7 +108,7 @@ import 'utils/typedef.dart';
 class SfCartesianChart extends StatefulWidget {
   /// Creating an argument constructor of [SfCartesianChart] class.
   const SfCartesianChart({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.enableSideBySideSeriesPlacement = true,
     this.borderColor = Colors.transparent,
@@ -156,7 +156,7 @@ class SfCartesianChart extends StatefulWidget {
     this.title = const ChartTitle(),
     this.axes = const <ChartAxis>[],
     this.indicators = const <TechnicalIndicator>[],
-  }) : super(key: key);
+  });
 
   /// Customizes the chart title.
   ///

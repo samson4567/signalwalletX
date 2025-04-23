@@ -8,7 +8,7 @@ import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 
 class KChartSample extends StatefulWidget {
-  KChartSample({Key? key, this.title}) : super(key: key);
+  const KChartSample({super.key, this.title});
 
   final String? title;
 
@@ -63,20 +63,20 @@ class _KChartSampleState extends State<KChartSample> {
     double amount = 0.0;
     bids.sort((left, right) => left.price.compareTo(right.price));
     //累加买入委托量
-    bids.reversed.forEach((item) {
+    for (var item in bids.reversed) {
       amount += item.vol;
       item.vol = amount;
       _bids!.insert(0, item);
-    });
+    }
 
     amount = 0.0;
     asks.sort((left, right) => left.price.compareTo(right.price));
     //累加卖出委托量
-    asks.forEach((item) {
+    for (var item in asks) {
       amount += item.vol;
       item.vol = amount;
       _asks!.add(item);
-    });
+    }
     setState(() {});
   }
 
@@ -118,7 +118,7 @@ class _KChartSampleState extends State<KChartSample> {
                   hideGrid: false,
                   isTapShowInfoDialog: false,
                   verticalTextAlignment: _verticalTextAlignment,
-                  maDayList: [1, 100, 1000],
+                  maDayList: const [1, 100, 1000],
                 ),
               ),
             ),
@@ -132,7 +132,7 @@ class _KChartSampleState extends State<KChartSample> {
         ),
         buildButtons(),
         if (_bids != null && _asks != null)
-          Container(
+          SizedBox(
             height: 230,
             width: double.infinity,
             child: DepthChart(_bids!, _asks!, chartColors),
@@ -172,17 +172,17 @@ class _KChartSampleState extends State<KChartSample> {
             onPressed: () => _showNowPrice = !_showNowPrice),
         button("Customize UI", onPressed: () {
           setState(() {
-            this.isChangeUI = !this.isChangeUI;
-            if (this.isChangeUI) {
+            isChangeUI = !isChangeUI;
+            if (isChangeUI) {
               chartColors.selectBorderColor = Colors.red;
               chartColors.selectFillColor = Colors.red;
               chartColors.lineFillColor = Colors.red;
               chartColors.kLineColor = Colors.yellow;
             } else {
-              chartColors.selectBorderColor = Color(0xff6C7A86);
-              chartColors.selectFillColor = Color(0xff0D1722);
-              chartColors.lineFillColor = Color(0x554C86CD);
-              chartColors.kLineColor = Color(0xff4C86CD);
+              chartColors.selectBorderColor = const Color(0xff6C7A86);
+              chartColors.selectFillColor = const Color(0xff0D1722);
+              chartColors.lineFillColor = const Color(0x554C86CD);
+              chartColors.kLineColor = const Color(0xff4C86CD);
             }
           });
         }),
@@ -207,7 +207,6 @@ class _KChartSampleState extends State<KChartSample> {
           setState(() {});
         }
       },
-      child: Text(text),
       style: TextButton.styleFrom(
         // primary: Colors.white,
         minimumSize: const Size(88, 44),
@@ -217,6 +216,7 @@ class _KChartSampleState extends State<KChartSample> {
         ),
         backgroundColor: Colors.blue,
       ),
+      child: Text(text),
     );
   }
 

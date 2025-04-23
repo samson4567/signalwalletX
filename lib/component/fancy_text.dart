@@ -30,7 +30,7 @@ class FancyText extends StatefulWidget {
 
 class _FancyTextState extends State<FancyText> {
   bool isLoading = false;
-  TextStyle textStyle = TextStyle();
+  TextStyle textStyle = const TextStyle();
 
   @override
   Widget build(BuildContext context) {

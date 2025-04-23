@@ -2,34 +2,20 @@ import 'package:signalwavex/features/authentication/domain/entities/recent_trans
 
 class RecentTransactionModel extends RecentTransactionEntity {
   const RecentTransactionModel({
-    required int id,
-    required int userId,
-    required String orderId,
-    required String symbol,
-    required String side,
-    required String type,
-    required String price,
-    required String quantity,
-    required String status,
-    required String pnl,
-    required String createdAt,
-    required String updatedAt,
-    String? iconUrl, // Added as optional
-  }) : super(
-          id: id,
-          userId: userId,
-          orderId: orderId,
-          symbol: symbol,
-          side: side,
-          type: type,
-          price: price,
-          quantity: quantity,
-          status: status,
-          pnl: pnl,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-          iconUrl: iconUrl, // Passed to super
-        );
+    required super.id,
+    required super.userId,
+    required super.orderId,
+    required super.symbol,
+    required super.side,
+    required super.type,
+    required super.price,
+    required super.quantity,
+    required super.status,
+    required super.pnl,
+    required super.createdAt,
+    required super.updatedAt,
+    super.iconUrl, // Added as optional
+  });
 
   factory RecentTransactionModel.fromJson(Map<String, dynamic> json) {
     return RecentTransactionModel(

@@ -37,7 +37,7 @@ class _RadioButtonState extends State<RadioButton> {
       onTap: () {
         // isSelected = !isSelected;
         // widget.isHignlighted=!widget.isHignlighted
-        widget.onclick?.call(widget.text);
+        widget.onclick.call(widget.text);
         setState(() {});
       },
       child: Container(

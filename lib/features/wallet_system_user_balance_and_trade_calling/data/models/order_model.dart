@@ -102,7 +102,7 @@ class OrderModel extends OrderEntity {
   }
 
   factory OrderModel.empty(Map jsonMap) {
-    return OrderModel();
+    return const OrderModel();
   }
 
   @override

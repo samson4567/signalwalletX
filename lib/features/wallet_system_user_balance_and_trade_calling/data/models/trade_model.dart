@@ -88,7 +88,7 @@ class TradeModel extends TradeEntity {
   }
 
   factory TradeModel.empty(Map jsonMap) {
-    return TradeModel();
+    return const TradeModel();
   }
 
   @override

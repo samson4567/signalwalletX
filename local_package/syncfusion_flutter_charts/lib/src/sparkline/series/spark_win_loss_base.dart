@@ -40,7 +40,7 @@ class SfSparkWinLossChart extends StatefulWidget {
   /// }
   /// ```
   SfSparkWinLossChart(
-      {Key? key,
+      {super.key,
       List<num>? data,
       this.plotBand,
       this.borderWidth = 0,
@@ -58,8 +58,7 @@ class SfSparkWinLossChart extends StatefulWidget {
       this.firstPointColor,
       this.lastPointColor,
       this.trackball})
-      : _sparkChartDataDetails = SparkChartDataDetails(data: data),
-        super(key: key);
+      : _sparkChartDataDetails = SparkChartDataDetails(data: data);
 
   /// Creates the spark win loss chart for the provided set of data with its
   /// default view.
@@ -114,7 +113,7 @@ class SfSparkWinLossChart extends StatefulWidget {
   /// }
   /// ```
   SfSparkWinLossChart.custom(
-      {Key? key,
+      {super.key,
 
       /// Data count for the spark charts.
       int? dataCount,
@@ -143,8 +142,7 @@ class SfSparkWinLossChart extends StatefulWidget {
       : _sparkChartDataDetails = SparkChartDataDetails(
             dataCount: dataCount,
             xValueMapper: xValueMapper,
-            yValueMapper: yValueMapper),
-        super(key: key);
+            yValueMapper: yValueMapper);
 
   /// Inverts the axis from right to left.
   ///

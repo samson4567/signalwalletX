@@ -46,10 +46,10 @@ import 'treemap_theme.dart';
 class SfTheme extends StatelessWidget {
   /// Creating an argument constructor of [SfTheme] class.
   const SfTheme({
-    Key? key,
+    super.key,
     this.data,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// Specifies a widget that can hold single child.
   ///
@@ -216,8 +216,7 @@ class SfTheme extends StatelessWidget {
 }
 
 class _SfInheritedTheme extends InheritedTheme {
-  const _SfInheritedTheme({Key? key, this.data, required Widget child})
-      : super(key: key, child: child);
+  const _SfInheritedTheme({super.key, this.data, required super.child});
   final SfThemeData? data;
   @override
   bool updateShouldNotify(_SfInheritedTheme oldWidget) =>

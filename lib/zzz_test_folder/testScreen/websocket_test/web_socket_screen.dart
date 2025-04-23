@@ -75,7 +75,7 @@ class _WebSocketScreenState extends State<WebSocketScreen> {
       }, builder: (context, state) {
         return Column(
           children: [
-            Text("${stateYen}"),
+            Text(stateYen),
             // Expanded(
             //   child:
 

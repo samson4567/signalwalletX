@@ -212,7 +212,7 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                 children: [
                   Text(
                     'Enter your email code'.toCurrentLanguage(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
@@ -220,7 +220,7 @@ class _VerifyForgetPasswordOtpState extends State<VerifyForgetPasswordOtp> {
                   const SizedBox(height: 8),
                   Text(
                     'We have sent a code to your email'.toCurrentLanguage(),
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
                   Row(

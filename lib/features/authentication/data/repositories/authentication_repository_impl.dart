@@ -116,7 +116,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       final String? idToken = googleAuth.idToken;
       final String? accessToken = googleAuth.accessToken;
       print(
-          "debug_print-AuthenticationRepositoryImpl-googleSignIn-${googleUser}");
+          "debug_print-AuthenticationRepositoryImpl-googleSignIn-$googleUser");
       if (accessToken != null) {
         // return Right(idToken); // or you could use accessToken
 

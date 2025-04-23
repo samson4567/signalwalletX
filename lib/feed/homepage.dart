@@ -1110,7 +1110,7 @@ Duration parseTimeExpression(String timeExpression) {
     result = Duration(minutes: registeredValue);
   }
 
-  print("debug_print-parseTimeExpression-result_is_${result}");
+  print("debug_print-parseTimeExpression-result_is_$result");
   return result;
 }
 

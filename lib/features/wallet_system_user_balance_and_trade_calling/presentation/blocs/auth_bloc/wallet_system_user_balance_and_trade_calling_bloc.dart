@@ -4,6 +4,7 @@ import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_b
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/admin_pending_withdrawal_request_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_withdrawal_request_response_model.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/repositories/wallet_system_user_balance_and_trade_calling_repository.dart';
 
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
@@ -37,6 +38,7 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     on<WithdrawalEvent>(_onWithdrawalEvent);
     on<BtcDataChartEvent>(_onBtcDataChartEvent);
     on<FetchUserTransactionsEvent>(_onFetchUserTransactionsEvent);
+    on<FollowTradeCallEvent>(_onFollowTradeCallEvent);
 
     //FetchUserTransactions
   }
@@ -257,6 +259,26 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
       (listOfOrderEntity) {
         emit(FetchUserTransactionsSuccessState(
             listOfOrderEntity: listOfOrderEntity));
+      },
+    );
+  }
+
+  Future<void> _onFollowTradeCallEvent(
+    FollowTradeCallEvent event,
+    Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
+  ) async {
+    // Optional: show loading state if you have one
+    emit(const FollowTradeCallLoadingState());
+
+    final result = await walletSystemUserBalanceAndTradeCallingRepository
+        .followTradeCall(tradeCallID: event.tradeCallID);
+
+    result.fold(
+      (error) {
+        emit(FollowTradeCallErrorState(errorMessage: error.message));
+      },
+      (orderEntity) {
+        emit(FollowTradeCallSuccessState(orderEntity: orderEntity));
       },
     );
   }
