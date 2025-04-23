@@ -70,10 +70,11 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                     Expanded(
                       child: FancyContainerTwo(
                         action: () {
-                          context
-                              .read<
-                                  WalletSystemUserBalanceAndTradeCallingBloc>()
-                              .add(FollowTradeCallEvent(widget.tid));
+                          // context
+                          //     .read<
+                          //         WalletSystemUserBalanceAndTradeCallingBloc>()
+                          //     .add(FollowTradeCallEvent(widget.tid));
+
                           // try {
                           //   context.pop();
                           // } catch (e) {}

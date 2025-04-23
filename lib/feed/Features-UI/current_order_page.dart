@@ -101,38 +101,38 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   List convertOrderEntityToMap(OrderModel orderModel) {
     // orderModel.;
     return [
-      {
-        "k": "Title",
-        "v": orderModel.title ?? "--",
-        "--": Colors.white,
-      },
-      {
-        "k": "Trading Pair",
-        "v": orderModel.symbol ?? "--",
-        "c": getFigmaColor("F0B90B")
-      },
-      // {"k": "Status", "v": "${orderModel.status ?? "--"}", "c": Colors.white},
       // {
-      //   "k": "Direction",
-      //   "v": "${orderModel.side ?? "--"}",
-      //   "c": getFigmaColor("C6E229")
+      //   "k": "Title",
+      //   "v": orderModel.title ?? "--",
+      //   "--": Colors.white,
       // },
-      {
-        "k": "Purchase Duration",
-        "v": orderModel.purchaseDuration ?? "--",
-        "c": Colors.white
-      },
-      // {"k": "Price", "v": "${orderModel.price ?? "--"}", "c": Colors.white},
       // {
-      //   "k": "Quantity",
-      //   "v": "${orderModel.quantity ?? "--"}",
+      //   "k": "Trading Pair",
+      //   "v": orderModel.symbol ?? "--",
+      //   "c": getFigmaColor("F0B90B")
+      // },
+      // // {"k": "Status", "v": "${orderModel.status ?? "--"}", "c": Colors.white},
+      // // {
+      // //   "k": "Direction",
+      // //   "v": "${orderModel.side ?? "--"}",
+      // //   "c": getFigmaColor("C6E229")
+      // // },
+      // {
+      //   "k": "Purchase Duration",
+      //   "v": orderModel.purchaseDuration ?? "--",
+      //   "c": Colors.white
+      // },
+      // // {"k": "Price", "v": "${orderModel.price ?? "--"}", "c": Colors.white},
+      // // {
+      // //   "k": "Quantity",
+      // //   "v": "${orderModel.quantity ?? "--"}",
+      // //   "--": Colors.white
+      // // },
+      // {
+      //   "k": "Release Time",
+      //   "v": orderModel.orderTime ?? "--",
       //   "--": Colors.white
       // },
-      {
-        "k": "Release Time",
-        "v": orderModel.orderTime ?? "--",
-        "--": Colors.white
-      },
       // {
       //   "k": "Open Position Time",
       //   "v": "${orderModel.orderTime ?? "--"}",
