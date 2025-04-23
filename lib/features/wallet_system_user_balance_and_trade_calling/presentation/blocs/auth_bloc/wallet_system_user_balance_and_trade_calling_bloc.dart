@@ -267,7 +267,6 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     FollowTradeCallEvent event,
     Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
   ) async {
-    // Optional: show loading state if you have one
     emit(const FollowTradeCallLoadingState());
 
     final result = await walletSystemUserBalanceAndTradeCallingRepository

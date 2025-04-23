@@ -5,14 +5,13 @@ import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_local_datasource.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_remote_datasource.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
+import 'package:signalwavex/features/authentication/domain/entities/kyc_enitity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/recent_transaction_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/transaction_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/verify_sign_up_entity.dart';
 import 'package:signalwavex/features/authentication/domain/repositories/authentication_repository.dart';
-
-import '../models/transaction_model.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   AuthenticationRepositoryImpl({

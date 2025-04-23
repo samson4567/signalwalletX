@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:signalwavex/features/authentication/data/models/kyc_model.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -199,4 +200,13 @@ final class FetchTransactionHistoryEvent extends AuthEvent {
 
   @override
   String toString() => 'FetchTransactionHistory(userId: $userId)';
+}
+
+class SubmitKycEvent extends AuthEvent {
+  final KycModel kycModel;
+
+  const SubmitKycEvent(this.kycModel);
+
+  @override
+  List<Object> get props => [kycModel];
 }

@@ -478,3 +478,18 @@ class FetchTransactionErrorState extends AuthState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class KycInitial extends AuthState {}
+
+class KycSubmitting extends AuthState {}
+
+class KycSubmitted extends AuthState {}
+
+class KycError extends AuthState {
+  final String message;
+
+  const KycError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
