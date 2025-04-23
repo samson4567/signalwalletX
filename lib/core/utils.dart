@@ -187,6 +187,32 @@ getCoinImageFromAsset(CoinEntity coinEntity) {
       'percentage': '1.12%',
     },
     {
+      'icon': 'assets/icons/usdc.png',
+      'name': 'USD Coin',
+      'price': '\$6,345.2',
+      'percentage': '1.12%',
+    },
+
+    {
+      'icon': 'assets/icons/tether.png',
+      'name': 'Tether',
+      'price': '\$6,345.2',
+      'percentage': '1.12%',
+    },
+    {
+      'icon': 'assets/icons/dai.png',
+      'name': 'dai',
+      'price': '\$6,345.2',
+      'percentage': '1.12%',
+    },
+    {
+      'icon': 'assets/icons/shiba_Inu.png',
+      'name': 'shiba inu',
+      'price': '\$6,345.2',
+      'percentage': '1.12%',
+    },
+    // assets/icons/shiba_Inu.png
+    {
       'icon': 'assets/icons/doge.png',
       'name': 'Dogecoin',
       'price': '\$0342.24',
