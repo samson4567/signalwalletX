@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
@@ -49,7 +50,7 @@ Drawer drawerComponent(BuildContext context) {
                 context, Icons.support, 'Support', MyAppRouteConstant.settings),
             BlocBuilder<AppBloc, AppState>(
               builder: (context, state) {
-                if (state.user == null) {
+                if (userModelG == null) {
                   return const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text(
@@ -76,12 +77,12 @@ Drawer drawerComponent(BuildContext context) {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              state.user?.email ?? 'No email',
+                              userModelG?.email ?? 'No email',
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 10),
                             ),
                             Text(
-                              '${state.user?.id ?? 'No ID'}',
+                              '${userModelG?.id ?? 'No ID'}',
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 10),
                             ),
