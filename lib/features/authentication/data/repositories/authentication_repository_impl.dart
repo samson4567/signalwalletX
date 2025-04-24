@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:signalwavex/core/error/failure.dart';
@@ -206,7 +208,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   Future<Either<Failure, String>> updateProfile(
       {required String name,
       required String phoneNumber,
-      required String profilePicture}) async {
+      required File profilePicture}) async {
     try {
       final result = await authenticationRemoteDatasource.updateProfile(
           name: name, phoneNumber: phoneNumber, profilePicture: profilePicture);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
@@ -34,7 +36,7 @@ abstract class AuthenticationRemoteDatasource {
   Future<Map> uploadGoogleSignInToken({required String token});
 
   Future<String> updateProfile(
-      {required name, required phoneNumber, required profilePicture});
+      {required name, required phoneNumber, required File profilePicture});
   Future<List<TransactionEntity>> getTransactionHistory({required userId});
 }
 
@@ -221,11 +223,11 @@ class AuthenticationRemoteDatasourceImpl
   Future<String> updateProfile({
     required dynamic name,
     required dynamic phoneNumber,
-    required dynamic profilePicture,
+    required File profilePicture,
   }) async {
     final file = await MultipartFile.fromFile(
-      profilePicture,
-      filename: profilePicture.split('/').last,
+      profilePicture.path,
+      filename: profilePicture.path.split('/').last,
     );
 
     final formData = FormData.fromMap({
@@ -238,6 +240,7 @@ class AuthenticationRemoteDatasourceImpl
       endpoint: EndpointConstant.userProfile,
       data: formData,
       isAuthHeaderRequired: true,
+      returnRawData: true,
     );
 
     return response.data['message'];

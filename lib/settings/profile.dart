@@ -7,6 +7,8 @@ import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
+import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_event.dart';
 import 'package:signalwavex/languages.dart';
 
 class ProfileSection extends StatefulWidget {
@@ -46,8 +48,8 @@ class _ProfileSectionState extends State<ProfileSection> {
     context.read<AuthBloc>().add(ProfileUpdateEvent(
           name: _fullName.text,
           phoneNumber: _phoneController.text,
-          profilePicture: _selectedImage!.path,
-          imageFile: _selectedImage!,
+          profilePicture: _selectedImage!,
+          // : _selectedImage!,
         ));
   }
 
@@ -71,6 +73,7 @@ class _ProfileSectionState extends State<ProfileSection> {
               ),
             );
           }
+          context.read<UserBloc>().add(const GetUserDetailEvent());
         } else if (state is ProfileUpdateErrorState) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
