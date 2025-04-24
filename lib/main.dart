@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -12,6 +13,7 @@ import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
+import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/feed/l10.dart';
 import 'package:signalwavex/router/router.dart';
@@ -74,20 +76,54 @@ class _MyAppState extends State<MyApp> {
             create: (_) => getItInstance<CoinBloc>()), // Inject CoinBloc
       ],
       child: ScreenUtilInit(
-        designSize: const Size(440, 956),
-        builder: (context, child) => MaterialApp.router(
-          theme: ThemeData.from(
-            colorScheme: const ColorScheme.dark(
-              primary: ColorConstants.fancyGreen,
-            ),
-          ),
-          supportedLocales: L10n.all,
-          // localizationsDelegates: Apploca,\
-          themeMode: ThemeMode.dark,
-          debugShowCheckedModeBanner: false,
-          routerConfig: AppRouter.router,
+          designSize: const Size(440, 956),
+          builder: (context, child) => ShelledGrandWidget()),
+    );
+  }
+}
+
+class ShelledGrandWidget extends StatefulWidget {
+  const ShelledGrandWidget({super.key});
+
+  @override
+  State<ShelledGrandWidget> createState() => _ShelledGrandWidgetState();
+}
+
+class _ShelledGrandWidgetState extends State<ShelledGrandWidget> {
+  late Timer balanceFetchRepeater;
+  @override
+  void initState() {
+    balanceFetchRepeater = Timer.periodic(
+      10.seconds,
+      (timer) {
+        try {
+          context.read<UserBloc>().add(const GetUserDetailEvent());
+        } catch (e) {}
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    balanceFetchRepeater.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      theme: ThemeData.from(
+        colorScheme: const ColorScheme.dark(
+          primary: ColorConstants.fancyGreen,
         ),
       ),
+      supportedLocales: L10n.all,
+      // localizationsDelegates: Apploca,\
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      routerConfig: AppRouter.router,
     );
   }
 }
