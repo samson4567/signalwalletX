@@ -155,13 +155,12 @@ class FetchAllLanguagesEvent extends AuthEvent {
 class ProfileUpdateEvent extends AuthEvent {
   final String name;
   final String phoneNumber;
-  final String profilePicture;
+  final File profilePicture;
 
   const ProfileUpdateEvent({
     required this.name,
     required this.phoneNumber,
     required this.profilePicture,
-    required File imageFile,
   });
 
   @override

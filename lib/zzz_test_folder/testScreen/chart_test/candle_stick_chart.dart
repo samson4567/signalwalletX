@@ -93,7 +93,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
           () {
             dataRegeter();
             try {
-              setState(() {});
+              if (mounted) setState(() {});
             } catch (e) {}
           },
         );

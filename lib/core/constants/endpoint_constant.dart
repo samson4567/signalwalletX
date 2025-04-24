@@ -42,4 +42,7 @@ class EndpointConstant {
   static const String fetchActiveTrade = "/user/latest-trade";
   static const String tradeOrders = "/trade/orders";
   static const String fetchCoinPrice = "/market/klines?symbol=";
+  static const String kycVerification = "/auth/verify-id";
+
+//
 }

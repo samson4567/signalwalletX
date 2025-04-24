@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/features/user/domain/entities/kyc_request_entity.dart';
 
 abstract class UserEvent extends Equatable {
   const UserEvent();
@@ -13,3 +14,14 @@ final class GetUserDetailEvent extends UserEvent {
   @override
   List<Object> get props => [];
 }
+
+final class KycVerificationEvent extends UserEvent {
+  final KycRequestEntity kycRequestEntity;
+  const KycVerificationEvent(this.kycRequestEntity);
+
+  @override
+  List<Object> get props => [kycRequestEntity];
+}
+
+
+// KycVerification

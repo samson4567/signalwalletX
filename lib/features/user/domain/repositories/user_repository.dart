@@ -4,4 +4,5 @@ import 'package:signalwavex/features/user/domain/entities/user_entity.dart';
 
 abstract class UserRepository {
   Future<Either<Failure, UserEntity>> getUserDetails();
+  Future<Either<Failure, String>> kycVerification();
 }

@@ -7,8 +7,11 @@ import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
+import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
+import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_state.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -30,49 +33,55 @@ class _AssetsState extends State<Assets> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = screenWidth * 0.05;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      key: _scaffoldKey, // Add scaffold key
-      drawer: drawerComponent(context),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {
-                      context.push(MyAppRouteConstant.home);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      color: Colors.white,
-                      size: screenWidth * 0.08,
+    return BlocConsumer<UserBloc, UserState>(listener: (context, state) {
+      if (state is GetUserDetailSuccessState) {
+        setState(() {});
+      }
+    }, builder: (context, state) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        key: _scaffoldKey, // Add scaffold key
+        drawer: drawerComponent(context),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () {
+                        context.push(MyAppRouteConstant.home);
+                      },
                     ),
-                    onPressed: () {
-                      _scaffoldKey.currentState
-                          ?.openDrawer(); // Open drawer correctly
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: screenWidth * 0.04),
-              _buildFancyContainer(context),
-              SizedBox(height: screenWidth * 0.04),
-              SizedBox(height: screenWidth * 0.04),
-              SizedBox(height: screenWidth * 0.04),
-              _buildAccountSection()
-            ],
+                    IconButton(
+                      icon: Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                        size: screenWidth * 0.08,
+                      ),
+                      onPressed: () {
+                        _scaffoldKey.currentState
+                            ?.openDrawer(); // Open drawer correctly
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenWidth * 0.04),
+                _buildFancyContainer(context),
+                SizedBox(height: screenWidth * 0.04),
+                SizedBox(height: screenWidth * 0.04),
+                SizedBox(height: screenWidth * 0.04),
+                _buildAccountSection()
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildFancyContainer(BuildContext context) {
@@ -335,6 +344,14 @@ class _AssetsState extends State<Assets> {
   }
 
   Widget _buildAccountContainer(String title, String value) {
+    double tadeBalance = 0;
+    userModelG?.wallets?.forEach(
+      (element) {
+        if (element.accountType == "trade") {
+          tadeBalance += (double.tryParse(element.actualQuantity ?? '0') ?? 0);
+        }
+      },
+    );
     return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {
@@ -351,7 +368,7 @@ class _AssetsState extends State<Assets> {
         }
         String displayedValue = value; // Default value
         if (title == 'Trade'.toCurrentLanguage()) {
-          displayedValue = '\$${totalBalance.toStringAsFixed(2)}';
+          displayedValue = '\$${tadeBalance}';
         }
         return FancyContainer(
           width: 400,

@@ -26,7 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<OtpVerificationEvent>(_onOtpVerificationEvent);
     on<SetNewPasswordEvent>(_onSetNewPasswordEvent);
     on<ProfileUpdateEvent>(_onProfileUpdateEvent);
-    // on<FetchAllLanguagesEvent>(_onFetechAllLanguages);
     on<GoogleLoginEvent>(_onGoogleLoginEvent);
     on<LoadPreloginDetailsEvent>(_onLoadPreloginDetailsEvent);
     on<SavePreloginDetailsEvent>(_onSavePreloginDetailsEvent);

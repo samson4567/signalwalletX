@@ -6,6 +6,7 @@ import 'package:signalwavex/features/user/domain/entities/user_entity.dart';
 
 abstract class UserRemoteDatasource {
   Future<UserEntity> getUserDetails();
+  Future<String> kycVerification();
 }
 
 class UserRemoteDatasourceImpl implements UserRemoteDatasource {
@@ -27,5 +28,16 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
 
     final result = UserModel.fromJson((response.data as Map));
     return result;
+  }
+
+  @override
+  Future<String> kycVerification() async {
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.getConversions,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+
+    return response.message;
   }
 }

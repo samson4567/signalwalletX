@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
@@ -37,7 +39,7 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, String>> updateProfile(
       {required String name,
       required String phoneNumber,
-      required String profilePicture});
+      required File profilePicture});
 
   Future<Either<Failure, PreloginDetailEntity>> loadPreloginDetail();
   Future<Either<Failure, void>> savePreloginDetail(

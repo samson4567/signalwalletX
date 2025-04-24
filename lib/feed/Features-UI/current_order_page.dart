@@ -172,7 +172,9 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
 
   @override
   void dispose() {
-    context.read<TradingSystemBloc>().activeTradeMonitor?.cancel();
+    try {
+      context.read<TradingSystemBloc>().activeTradeMonitor?.cancel();
+    } catch (e) {}
     super.dispose();
   }
 
