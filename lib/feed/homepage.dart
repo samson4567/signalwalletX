@@ -193,7 +193,7 @@ class _HomepageState extends State<Homepage> {
       double screenWidth, GlobalKey<ScaffoldState> scaffoldKey) {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        final user = context.read<AppBloc>().state.user;
+        // final user = context.read<AppBloc>().state.user;
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: Column(
@@ -220,7 +220,7 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${"Good Morning".toCurrentLanguage()}, ${user?.email}',
+                        '${"Good Morning".toCurrentLanguage()}, ${userModelG?.email ?? ""}',
                         style: TextStyles.smallText.copyWith(
                           fontSize: screenWidth * 0.022,
                           color: Colors.white.withOpacity(0.7),

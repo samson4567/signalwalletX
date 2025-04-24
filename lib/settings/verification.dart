@@ -121,9 +121,10 @@ class VerificationSection extends StatelessWidget {
     required String hint,
   }) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Last Name".toCurrentLanguage(),
+          label.toCurrentLanguage(),
           style: const TextStyle(
             fontFamily: 'inter',
             color: Colors.white,
@@ -136,8 +137,8 @@ class VerificationSection extends StatelessWidget {
           height: 34,
           width: 386,
           controller: textEditingController,
-          label: "Last Name",
-          hintText: "Enter last name".toCurrentLanguage(),
+          label: label,
+          hintText: hint.toCurrentLanguage(),
           obscureText: true,
         ),
       ],
