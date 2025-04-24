@@ -35,3 +35,30 @@ final class GetUserDetailErrorState extends UserState {
   List<Object> get props => [errorMessage];
 }
 ///// GetUserDetail ended .....
+
+///// KycVerification
+final class KycVerificationLoadingState extends UserState {
+  const KycVerificationLoadingState();
+}
+
+final class KycVerificationSuccessState extends UserState {
+  final String message;
+
+  const KycVerificationSuccessState({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class KycVerificationErrorState extends UserState {
+  final String errorMessage;
+
+  const KycVerificationErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// KycVerification ended .....
+
+
+// KycVerification

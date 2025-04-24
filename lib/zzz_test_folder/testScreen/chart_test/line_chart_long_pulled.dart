@@ -447,7 +447,9 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
   bool nextDataIsNew = false;
   @override
   void dispose() {
-    context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
+    try {
+      context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
+    } catch (e) {}
     super.dispose();
   }
 

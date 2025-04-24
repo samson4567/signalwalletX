@@ -25,4 +25,15 @@ class UserRepositoryImpl implements UserRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> kycVerification() async {
+    try {
+      final result = await userRemoteDatasource.kycVerification();
+
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/core/app_variables.dart';
 // import 'package:signalwavex/features/app_bloc/data/models/user_model.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
@@ -15,8 +16,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({required this.userRepository, required this.appBloc})
       : super(const UserInitial()) {
     on<GetUserDetailEvent>(_onGetUserDetailEvent);
+    on<KycVerificationEvent>(_onKycVerificationEvent);
 
-    // GetUserDetailEvent
+    // KycVerification
   }
 
   Future<void> _onGetUserDetailEvent(
@@ -26,10 +28,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     result.fold(
       (error) => emit(GetUserDetailErrorState(errorMessage: error.message)),
       (userModel) {
+        userModelG = userModel;
         appBloc
             .add(UserUpdateEvent(updatedUserModel: (userModel as UserModel)));
         emit(GetUserDetailSuccessState(userModel: userModel));
       },
     );
   }
+
+  Future<void> _onKycVerificationEvent(
+      KycVerificationEvent event, Emitter<UserState> emit) async {
+    emit(const KycVerificationLoadingState());
+    final result = await userRepository.kycVerification();
+    result.fold(
+      (error) => emit(KycVerificationErrorState(errorMessage: error.message)),
+      (message) {
+        emit(KycVerificationSuccessState(message: message));
+      },
+    );
+  }
+
+  // _onKycVerificationEvent
 }

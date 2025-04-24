@@ -336,7 +336,7 @@ class _DepositPageState extends State<DepositPage> {
                 children: [
                   if (selectedCoinModel != null)
                     (getCoinImageFromAsset(selectedCoinModel!) == null)
-                        ? SizedBox(
+                        ? const SizedBox(
                             width: 24,
                             height: 24,
                           )
@@ -365,7 +365,7 @@ class _DepositPageState extends State<DepositPage> {
                     child: Row(
                       children: [
                         (getCoinImageFromAsset(item) == null)
-                            ? SizedBox(
+                            ? const SizedBox(
                                 width: 24,
                                 height: 24,
                               )
@@ -377,7 +377,7 @@ class _DepositPageState extends State<DepositPage> {
                                   height: 24,
                                 ),
                               ),
-                        Text(item.name ?? ""),
+                        Text(item.symbol ?? ""),
                       ],
                     ),
                   );

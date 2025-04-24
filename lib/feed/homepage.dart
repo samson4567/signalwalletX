@@ -65,11 +65,23 @@ class _HomepageState extends State<Homepage> {
         liveDataFecthRepeater = Timer.periodic(
           5.seconds,
           (timer) {
-            context.read<CoinBloc>().add(const FetchCoinPriceEvent("BTCUSDT"));
+            // context.read<CoinBloc>().add(const FetchCoinPriceEvent("BTCUSDT"));
+            try {
+              context
+                  .read<CoinBloc>()
+                  .add(const FetchCoinPriceEvent("BTCUSDT"));
+            } catch (e) {}
           },
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    liveDataFecthRepeater?.cancel();
+
+    super.dispose();
   }
 
   double formerPrice = 0;
