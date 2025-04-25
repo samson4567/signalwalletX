@@ -21,6 +21,7 @@ getAndSetInitialData(BuildContext context) {
       .add(const GetpnlEvent());
   // getUserCoinBalances(context);
   getCoins(context);
+  getUserDetails(context);
 }
 
 getUserCoinBalances(BuildContext context) {

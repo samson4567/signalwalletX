@@ -23,12 +23,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future<void> _onGetUserDetailEvent(
       GetUserDetailEvent event, Emitter<UserState> emit) async {
+    print("debug_print-UserBloc-_onGetUserDetailEvent-called");
     emit(const GetUserDetailLoadingState());
+    print(
+        "debug_print-UserBloc-_onGetUserDetailEvent-GetUserDetailLoadingState_emitted");
     final result = await userRepository.getUserDetails();
+
     result.fold(
-      (error) => emit(GetUserDetailErrorState(errorMessage: error.message)),
+      (error) {
+        print("debug_print-UserBloc-_onGetUserDetailEvent-error_is_${error}");
+        emit(GetUserDetailErrorState(errorMessage: error.message));
+      },
       (userModel) {
         userModelG = userModel;
+        print(
+            "debug_print-UserBloc-_onGetUserDetailEvent-userModel_is_${userModel}");
         appBloc
             .add(UserUpdateEvent(updatedUserModel: (userModel as UserModel)));
         emit(GetUserDetailSuccessState(userModel: userModel));
