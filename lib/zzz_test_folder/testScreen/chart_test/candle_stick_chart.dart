@@ -91,8 +91,8 @@ class _CandleStickChartState extends State<CandleStickChart> {
         Future.delayed(
           2.seconds,
           () {
-            dataRegeter();
             try {
+              dataRegeter();
               if (mounted) setState(() {});
             } catch (e) {}
           },

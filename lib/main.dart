@@ -97,6 +97,7 @@ class _ShelledGrandWidgetState extends State<ShelledGrandWidget> {
       10.seconds,
       (timer) {
         try {
+          print("debug_print-balanceFetchRepeater-doing");
           context.read<UserBloc>().add(const GetUserDetailEvent());
         } catch (e) {}
       },
