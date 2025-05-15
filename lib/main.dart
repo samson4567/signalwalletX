@@ -94,7 +94,7 @@ class _ShelledGrandWidgetState extends State<ShelledGrandWidget> {
   @override
   void initState() {
     balanceFetchRepeater = Timer.periodic(
-      10.seconds,
+      30.seconds,
       (timer) {
         try {
           print("debug_print-balanceFetchRepeater-doing");

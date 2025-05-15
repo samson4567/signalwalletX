@@ -6,6 +6,7 @@ import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
+import 'package:signalwavex/core/services/phone_number_verifier.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/data/models/recent_transaction_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
@@ -15,7 +16,12 @@ import 'package:signalwavex/features/authentication/domain/entities/transaction_
 abstract class AuthenticationRemoteDatasource {
   Future<String> newUserSignUp({required NewUserRequestModel newUserRequest});
   Future<String> verifySignUp({required String email, required String otp});
+  Future<bool> verifySignUpPhoneNumberVersion(
+      {required PhoneNumberVerifier phoneNumberVerifier, required String otp});
+  // sendPhone
   Future<String> resendOtp({required String email});
+  Future<PhoneNumberVerifier> sendPhoneNumberOTP({required String phoneNumber});
+
   Future<Map> login({required String email, required String password});
   Future<String> logout({required String token});
   Future<String> updatePassword({
@@ -263,5 +269,26 @@ class AuthenticationRemoteDatasourceImpl
     final response = await networkClient.post(
         endpoint: EndpointConstant.tradeOrders, returnRawData: true);
     return response.data;
+  }
+
+  @override
+  Future<bool> verifySignUpPhoneNumberVersion(
+      {required PhoneNumberVerifier phoneNumberVerifier,
+      required String otp}) async {
+    // PhoneNumberVerifier pnv = PhoneNumberVerifier();
+    // pnv.sendOTP(phoneNumber);
+    try {
+      return await phoneNumberVerifier.confirmOTP(int.parse(otp));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<PhoneNumberVerifier> sendPhoneNumberOTP(
+      {required String phoneNumber}) async {
+    PhoneNumberVerifier pnv = PhoneNumberVerifier();
+    await pnv.sendOTP(phoneNumber);
+    return pnv;
   }
 }

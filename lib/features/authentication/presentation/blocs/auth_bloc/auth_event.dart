@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:signalwavex/core/services/phone_number_verifier.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -199,3 +200,33 @@ final class FetchTransactionHistoryEvent extends AuthEvent {
   @override
   String toString() => 'FetchTransactionHistory(userId: $userId)';
 }
+
+// SendPhoneNumberOTPEvent
+final class SendPhoneNumberOTPEvent extends AuthEvent {
+  final String phoneNumber;
+
+  const SendPhoneNumberOTPEvent({required this.phoneNumber});
+
+  @override
+  List<Object> get props => [phoneNumber];
+
+  @override
+  String toString() => 'FetchTransactionHistory(phoneNumber: $phoneNumber)';
+}
+
+final class VerifySignUpPhoneNumberVersionEvent extends AuthEvent {
+  final String otp;
+  final PhoneNumberVerifier phoneNumberVerifier;
+
+  const VerifySignUpPhoneNumberVersionEvent(
+      {required this.phoneNumberVerifier, required this.otp});
+
+  @override
+  List<Object> get props => [otp, phoneNumberVerifier];
+
+  @override
+  String toString() => 'FetchTransactionHistory(phoneNumber: $otp)';
+}
+
+
+// VerifySignUpPhoneNumberVersion

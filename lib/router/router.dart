@@ -12,6 +12,7 @@ import 'package:signalwavex/onboarding/forget_passoword_otp.dart';
 import 'package:signalwavex/onboarding/login_screen.dart';
 import 'package:signalwavex/onboarding/set_newpassword.dart';
 import 'package:signalwavex/onboarding/varify_account.dart';
+import 'package:signalwavex/onboarding/varify_account_by_phone.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/settings.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/test_screen.dart';
@@ -70,6 +71,13 @@ class AppRouter {
         builder: (context, state) =>
             VerifyEmail(email: (state.extra as Map)['email']),
       ),
+      GoRoute(
+        name: MyAppRouteConstant.varifyAccountByPhone,
+        path: MyAppRouteConstant.varifyAccountByPhone,
+        builder: (context, state) => VarifyAccountByPhone(
+            phoneNumberVerifier: (state.extra as Map)['phoneNumberVerifier']),
+      ),
+
       GoRoute(
           name: MyAppRouteConstant.setNewpassoword,
           path: MyAppRouteConstant.setNewpassoword,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
+import 'package:signalwavex/core/services/phone_number_verifier.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
@@ -47,4 +48,8 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, List<TransactionEntity>>> getTransactionHistory({
     required String userId,
   });
+  Future<Either<Failure, PhoneNumberVerifier>> sendPhoneNumberOTP(
+      {required String phoneNumber});
+  Future<Either<Failure, bool>> verifySignUpPhoneNumberVersion(
+      {required PhoneNumberVerifier phoneNumberVerifier, required String otp});
 }
