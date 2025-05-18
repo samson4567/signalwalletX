@@ -534,8 +534,35 @@ final class VerifySignUpPhoneNumberVersionErrorState extends AuthState {
   List<Object> get props => [errorMessage];
 }
 
+// RegisterPhoneNumberAsVerified
+final class RegisterPhoneNumberAsVerifiedLoadingState extends AuthState {
+  const RegisterPhoneNumberAsVerifiedLoadingState();
+}
+
+final class RegisterPhoneNumberAsVerifiedSuccessState extends AuthState {
+  final String message;
+
+  const RegisterPhoneNumberAsVerifiedSuccessState({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
+final class RegisterPhoneNumberAsVerifiedErrorState extends AuthState {
+  final String errorMessage;
+
+  const RegisterPhoneNumberAsVerifiedErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
 
 
 
 
-// VerifySignUpPhoneNumberVersion
+
+// RegisterPhoneNumberAsVerified

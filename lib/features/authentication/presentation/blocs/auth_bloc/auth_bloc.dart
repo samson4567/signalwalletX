@@ -33,9 +33,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SendPhoneNumberOTPEvent>(_onSendPhoneNumberOTPEvent);
     on<VerifySignUpPhoneNumberVersionEvent>(
         _onVerifySignUpPhoneNumberVersionEvent);
+
+    on<RegisterPhoneNumberAsVerifiedEvent>(
+        _onRegisterPhoneNumberAsVerifiedEvent);
   }
 
-// VerifySignUpPhoneNumberVersion
+// RegisterPhoneNumberAsVerified
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
     emit(const NewUserSignUpLoadingState());
@@ -420,5 +423,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-// _onVerifySignUpPhoneNumberVersionEvent
+  Future<void> _onRegisterPhoneNumberAsVerifiedEvent(
+      RegisterPhoneNumberAsVerifiedEvent event, Emitter<AuthState> emit) async {
+    emit(const RegisterPhoneNumberAsVerifiedLoadingState());
+
+    try {
+      final result = await authenticationRepository
+          .registerPhoneNumberAsVerified(phoneNumber: event.phoneNumber);
+
+      result.fold(
+        (error) => emit(RegisterPhoneNumberAsVerifiedErrorState(
+            errorMessage: error.message)),
+        (message) =>
+            emit(RegisterPhoneNumberAsVerifiedSuccessState(message: message)),
+      );
+    } catch (e) {
+      emit(RegisterPhoneNumberAsVerifiedErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+// _onRegisterPhoneNumberAsVerifiedEvent
 }

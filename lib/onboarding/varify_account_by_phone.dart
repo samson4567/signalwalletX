@@ -163,12 +163,16 @@ class _VarifyAccountByPhoneState extends State<VarifyAccountByPhone> {
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is VerifySignUpPhoneNumberVersionSuccessState) {
+              context.read<AuthBloc>().add(RegisterPhoneNumberAsVerifiedEvent(
+                  phoneNumber:
+                      widget.phoneNumberVerifier.phoneNumberAttribute!));
               setState(() => isVerifying = false);
               _showDialog(
                   'success',
                   'You are all set'.toCurrentLanguage(),
                   'Your account has been verified successfully.'
                       .toCurrentLanguage());
+              // RegisterPhoneNumberAsVerifiedEvent
             } else if (state is VerifySignUpPhoneNumberVersionErrorState) {
               setState(() => isVerifying = false);
               _showDialog('error', 'Invalid OTP'.toCurrentLanguage(),

@@ -283,6 +283,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> registerPhoneNumberAsVerified(
+      {required String phoneNumber}) async {
+    try {
+      final result = await authenticationRemoteDatasource
+          .registerPhoneNumberAsVerified(phoneNumber: phoneNumber);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }
 
 //  try {

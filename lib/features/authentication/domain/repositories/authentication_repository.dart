@@ -52,4 +52,7 @@ abstract class AuthenticationRepository {
       {required String phoneNumber});
   Future<Either<Failure, bool>> verifySignUpPhoneNumberVersion(
       {required PhoneNumberVerifier phoneNumberVerifier, required String otp});
+
+
+      Future<Either<Failure,String>> registerPhoneNumberAsVerified({required String phoneNumber});
 }

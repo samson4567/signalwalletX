@@ -21,6 +21,7 @@ abstract class AuthenticationRemoteDatasource {
   // sendPhone
   Future<String> resendOtp({required String email});
   Future<PhoneNumberVerifier> sendPhoneNumberOTP({required String phoneNumber});
+  Future<String> registerPhoneNumberAsVerified({required String phoneNumber});
 
   Future<Map> login({required String email, required String password});
   Future<String> logout({required String token});
@@ -59,9 +60,14 @@ class AuthenticationRemoteDatasourceImpl
   @override
   Future<String> newUserSignUp(
       {required NewUserRequestModel newUserRequest}) async {
+    Map data = newUserRequest.toJson();
+    if (!(data["email"] as String).contains("@")) {
+      data["phone"] = data["email"];
+      data.remove("email");
+    }
     final response = await networkClient.post(
       endpoint: EndpointConstant.signUp,
-      data: newUserRequest.toJson(),
+      data: data,
     );
 
     return response.message;
@@ -93,12 +99,17 @@ class AuthenticationRemoteDatasourceImpl
 
   @override
   Future<Map> login({required String email, required String password}) async {
+    Map data = {
+      "email": email,
+      "password": password,
+    };
+    if (!(data["email"] as String).contains("@")) {
+      data["phone"] = data["email"];
+      data.remove("email");
+    }
     final response = await networkClient.post(
       endpoint: EndpointConstant.login,
-      data: {
-        "email": email,
-        "password": password,
-      },
+      data: data,
     );
 
     return response.data;
@@ -290,5 +301,18 @@ class AuthenticationRemoteDatasourceImpl
     PhoneNumberVerifier pnv = PhoneNumberVerifier();
     await pnv.sendOTP(phoneNumber);
     return pnv;
+  }
+
+  @override
+  Future<String> registerPhoneNumberAsVerified(
+      {required String phoneNumber}) async {
+    final response = await networkClient.post(
+      endpoint: EndpointConstant.registerPhoneNumberAsVerified,
+      returnRawData: true,
+      data: {
+        "phone": phoneNumber,
+      },
+    );
+    return response.message;
   }
 }

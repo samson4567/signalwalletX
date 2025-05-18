@@ -214,6 +214,7 @@ final class SendPhoneNumberOTPEvent extends AuthEvent {
   String toString() => 'FetchTransactionHistory(phoneNumber: $phoneNumber)';
 }
 
+// VerifySignUpPhoneNumberVersion
 final class VerifySignUpPhoneNumberVersionEvent extends AuthEvent {
   final String otp;
   final PhoneNumberVerifier phoneNumberVerifier;
@@ -228,5 +229,18 @@ final class VerifySignUpPhoneNumberVersionEvent extends AuthEvent {
   String toString() => 'FetchTransactionHistory(phoneNumber: $otp)';
 }
 
+// RegisterPhoneNumberAsVerified
+final class RegisterPhoneNumberAsVerifiedEvent extends AuthEvent {
+  final String phoneNumber;
 
-// VerifySignUpPhoneNumberVersion
+  const RegisterPhoneNumberAsVerifiedEvent({required this.phoneNumber});
+
+  @override
+  List<Object> get props => [phoneNumber];
+
+  @override
+  String toString() => 'phoneNumber: $phoneNumber';
+}
+
+
+// RegisterPhoneNumberAsVerified

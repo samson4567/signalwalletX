@@ -163,8 +163,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
         controller: emailController,
-        label: 'Email'.toCurrentLanguage(),
-        hintText: 'Enter your email'.toCurrentLanguage(),
+        label: 'Email/Phone Number'.toCurrentLanguage(),
+        hintText: 'Enter your email/phone number'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
