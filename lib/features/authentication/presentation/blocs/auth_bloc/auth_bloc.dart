@@ -30,9 +30,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoadPreloginDetailsEvent>(_onLoadPreloginDetailsEvent);
     on<SavePreloginDetailsEvent>(_onSavePreloginDetailsEvent);
     on<FetchTransactionHistoryEvent>(_onFetchTransactionHistoryEvent);
+    on<SendPhoneNumberOTPEvent>(_onSendPhoneNumberOTPEvent);
+    on<VerifySignUpPhoneNumberVersionEvent>(
+        _onVerifySignUpPhoneNumberVersionEvent);
+
+    on<RegisterPhoneNumberAsVerifiedEvent>(
+        _onRegisterPhoneNumberAsVerifiedEvent);
   }
 
-// SavePreloginDetails
+// RegisterPhoneNumberAsVerified
   Future<void> _onNewUserSignUpEvent(
       NewUserSignUpEvent event, Emitter<AuthState> emit) async {
     emit(const NewUserSignUpLoadingState());
@@ -370,4 +376,74 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ));
     }
   }
+
+  Future<void> _onSendPhoneNumberOTPEvent(
+      SendPhoneNumberOTPEvent event, Emitter<AuthState> emit) async {
+    emit(const SendPhoneNumberOTPLoadingState());
+
+    try {
+      final result = await authenticationRepository.sendPhoneNumberOTP(
+          phoneNumber: event.phoneNumber);
+
+      result.fold(
+        (error) =>
+            emit(SendPhoneNumberOTPErrorState(errorMessage: error.message)),
+        (phoneNumberVerifier) => emit(SendPhoneNumberOTPSuccessState(
+            phoneNumberVerifier: phoneNumberVerifier)),
+      );
+    } catch (e) {
+      emit(SendPhoneNumberOTPErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+  Future<void> _onVerifySignUpPhoneNumberVersionEvent(
+      VerifySignUpPhoneNumberVersionEvent event,
+      Emitter<AuthState> emit) async {
+    emit(const VerifySignUpPhoneNumberVersionLoadingState());
+
+    try {
+      final result =
+          await authenticationRepository.verifySignUpPhoneNumberVersion(
+              phoneNumberVerifier: event.phoneNumberVerifier, otp: event.otp);
+
+      result.fold(
+        (error) => emit(VerifySignUpPhoneNumberVersionErrorState(
+            errorMessage: error.message)),
+        (isSuccess) => emit(
+            VerifySignUpPhoneNumberVersionSuccessState(isSuccess: isSuccess)),
+      );
+    } catch (e) {
+      emit(VerifySignUpPhoneNumberVersionErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+  Future<void> _onRegisterPhoneNumberAsVerifiedEvent(
+      RegisterPhoneNumberAsVerifiedEvent event, Emitter<AuthState> emit) async {
+    emit(const RegisterPhoneNumberAsVerifiedLoadingState());
+
+    try {
+      final result = await authenticationRepository
+          .registerPhoneNumberAsVerified(phoneNumber: event.phoneNumber);
+
+      result.fold(
+        (error) => emit(RegisterPhoneNumberAsVerifiedErrorState(
+            errorMessage: error.message)),
+        (message) =>
+            emit(RegisterPhoneNumberAsVerifiedSuccessState(message: message)),
+      );
+    } catch (e) {
+      emit(RegisterPhoneNumberAsVerifiedErrorState(
+        errorMessage:
+            e is Exception ? e.toString() : 'An unknown error occurred',
+      ));
+    }
+  }
+
+// _onRegisterPhoneNumberAsVerifiedEvent
 }

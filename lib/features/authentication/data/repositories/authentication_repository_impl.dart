@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
+import 'package:signalwavex/core/services/phone_number_verifier.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_local_datasource.dart';
 import 'package:signalwavex/features/authentication/data/datasources/authentication_remote_datasource.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
@@ -253,4 +254,51 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, PhoneNumberVerifier>> sendPhoneNumberOTP(
+      {required String phoneNumber}) async {
+    try {
+      final result = await authenticationRemoteDatasource.sendPhoneNumberOTP(
+          phoneNumber: phoneNumber);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> verifySignUpPhoneNumberVersion(
+      {required PhoneNumberVerifier phoneNumberVerifier,
+      required String otp}) async {
+    try {
+      final result =
+          await authenticationRemoteDatasource.verifySignUpPhoneNumberVersion(
+              phoneNumberVerifier: phoneNumberVerifier, otp: otp);
+      return (result)
+          ? right(result)
+          : left(mapExceptionToFailure("otp is incorrect"));
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> registerPhoneNumberAsVerified(
+      {required String phoneNumber}) async {
+    try {
+      final result = await authenticationRemoteDatasource
+          .registerPhoneNumberAsVerified(phoneNumber: phoneNumber);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }
+
+//  try {
+//       final result = await authenticationRemoteDatasource.verifySignUpPhoneNumberVersion(phoneNumberVerifier: phoneNumberVerifier, otp: otp);
+//       return right(result);
+//     } catch (e) {
+//       return left(mapExceptionToFailure(e));
+//     }

@@ -21,7 +21,8 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailOrPhoneNumberController =
+      TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -47,17 +48,44 @@ class _CreateAccountState extends State<CreateAccount> {
           listener: (context, state) {
             if (state is NewUserSignUpSuccessState) {
               // Navigate to the verify email screen on success
-              context.push(MyAppRouteConstant.verifyEmail,
-                  extra: {'email': emailController.text});
+              if (emailOrPhoneNumberController.text.contains("@")) {
+                context.push(MyAppRouteConstant.verifyEmail,
+                    extra: {'email': emailOrPhoneNumberController.text});
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.green,
+                    content: Text("sending otp"),
+                  ),
+                );
+                context.read<AuthBloc>().add(SendPhoneNumberOTPEvent(
+                    phoneNumber: emailOrPhoneNumberController.text));
+              }
             } else if (state is NewUserSignUpErrorState) {
               // Show an error message if sign-up fails
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.errorMessage)),
+                SnackBar(
+                  content: Text(state.errorMessage),
+                ),
               );
             }
+
+            if (state is SendPhoneNumberOTPSuccessState) {
+              context.push(MyAppRouteConstant.varifyAccountByPhone,
+                  extra: {'phoneNumberVerifier': state.phoneNumberVerifier});
+            }
+            if (state is SendPhoneNumberOTPErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+
             if (state is GoogleLoginSuccessState) {
               context.push(MyAppRouteConstant.verifyEmail,
-                  extra: {'email': emailController.text});
+                  extra: {'email': emailOrPhoneNumberController.text});
             } else if (state is GoogleLoginErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -135,9 +163,9 @@ class _CreateAccountState extends State<CreateAccount> {
     return Padding(
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: TextFormFieldWithCustomStyles(
-        controller: emailController,
-        label: 'Email'.toCurrentLanguage(),
-        hintText: 'Enter your email'.toCurrentLanguage(),
+        controller: emailOrPhoneNumberController,
+        label: 'Email/Phone Number'.toCurrentLanguage(),
+        hintText: 'Enter your email/phone number'.toCurrentLanguage(),
         fillColor: Colors.black,
         labelColor: Colors.white,
         hintColor: Colors.white.withOpacity(0.6),
@@ -257,9 +285,10 @@ class _CreateAccountState extends State<CreateAccount> {
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.yellow,
         onTap: () {
+          // ()
           context.read<AuthBloc>().add(
                 NewUserSignUpEvent(
-                  email: emailController.text,
+                  email: emailOrPhoneNumberController.text,
                   password: passwordController.text,
                   confirmPassword: confirmPasswordController.text,
                 ),

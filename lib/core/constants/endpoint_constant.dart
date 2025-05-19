@@ -44,5 +44,7 @@ class EndpointConstant {
   static const String fetchCoinPrice = "/market/klines?symbol=";
   static const String kycVerification = "/auth/verify-id";
 
-//
+  static const String registerPhoneNumberAsVerified = "/auth/phone/verify";
+
+// /auth/phone/verify
 }

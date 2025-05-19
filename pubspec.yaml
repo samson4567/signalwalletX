@@ -35,6 +35,8 @@ dependencies:
   uuid:
   syncfusion_flutter_charts:
     path: ./local_package/syncfusion_flutter_charts
+  flutter_otp:
+    path: ./local_package/flutter_otp-master
   
   
   # for the crypto

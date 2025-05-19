@@ -19,4 +19,7 @@ class MyAppRouteConstant {
   static const String forgetPassowrd = '/forgetPassowrd';
   static const String forgetPassowrdOTP = '/forgetPassowrdOtp';
   static const String setNewpassoword = '/setNewpassoword';
+  static const String varifyAccountByPhone = '/varifyAccountByPhone';
+
+  // varifyAccountByPhone
 }

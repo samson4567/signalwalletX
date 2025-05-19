@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:signalwavex/core/services/phone_number_verifier.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
 import 'package:signalwavex/features/authentication/domain/entities/prelogin_detail_entity.dart';
 
@@ -493,3 +494,90 @@ class KycError extends AuthState {
   @override
   List<Object> get props => [message];
 }
+
+// SendPhoneNumberOTP
+final class SendPhoneNumberOTPLoadingState extends AuthState {
+  const SendPhoneNumberOTPLoadingState();
+}
+
+final class SendPhoneNumberOTPSuccessState extends AuthState {
+  final PhoneNumberVerifier phoneNumberVerifier;
+
+  const SendPhoneNumberOTPSuccessState({
+    required this.phoneNumberVerifier,
+  });
+
+  @override
+  List<Object> get props => [
+        phoneNumberVerifier,
+      ];
+}
+
+final class SendPhoneNumberOTPErrorState extends AuthState {
+  final String errorMessage;
+
+  const SendPhoneNumberOTPErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// VerifySignUpPhoneNumberVersion
+final class VerifySignUpPhoneNumberVersionLoadingState extends AuthState {
+  const VerifySignUpPhoneNumberVersionLoadingState();
+}
+
+final class VerifySignUpPhoneNumberVersionSuccessState extends AuthState {
+  final bool isSuccess;
+
+  const VerifySignUpPhoneNumberVersionSuccessState({
+    required this.isSuccess,
+  });
+
+  @override
+  List<Object> get props => [
+        isSuccess,
+      ];
+}
+
+final class VerifySignUpPhoneNumberVersionErrorState extends AuthState {
+  final String errorMessage;
+
+  const VerifySignUpPhoneNumberVersionErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+// RegisterPhoneNumberAsVerified
+final class RegisterPhoneNumberAsVerifiedLoadingState extends AuthState {
+  const RegisterPhoneNumberAsVerifiedLoadingState();
+}
+
+final class RegisterPhoneNumberAsVerifiedSuccessState extends AuthState {
+  final String message;
+
+  const RegisterPhoneNumberAsVerifiedSuccessState({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
+final class RegisterPhoneNumberAsVerifiedErrorState extends AuthState {
+  final String errorMessage;
+
+  const RegisterPhoneNumberAsVerifiedErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+
+
+
+
+
+// RegisterPhoneNumberAsVerified
