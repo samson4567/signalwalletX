@@ -25,7 +25,7 @@ Future<void> main() async {
   // Initialize dependency injection
   await init();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
