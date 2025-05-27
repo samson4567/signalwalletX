@@ -255,33 +255,33 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, PhoneNumberVerifier>> sendPhoneNumberOTP(
-      {required String phoneNumber}) async {
-    try {
-      final result = await authenticationRemoteDatasource.sendPhoneNumberOTP(
-          phoneNumber: phoneNumber);
-      return right(result);
-    } catch (e) {
-      return left(mapExceptionToFailure(e));
-    }
-  }
+  // @override
+  // Future<Either<Failure, PhoneNumberVerifier>> sendPhoneNumberOTP(
+  //     {required String phoneNumber}) async {
+  //   try {
+  //     final result = await authenticationRemoteDatasource.sendPhoneNumberOTP(
+  //         phoneNumber: phoneNumber);
+  //     return right(result);
+  //   } catch (e) {
+  //     return left(mapExceptionToFailure(e));
+  //   }
+  // }
 
-  @override
-  Future<Either<Failure, bool>> verifySignUpPhoneNumberVersion(
-      {required PhoneNumberVerifier phoneNumberVerifier,
-      required String otp}) async {
-    try {
-      final result =
-          await authenticationRemoteDatasource.verifySignUpPhoneNumberVersion(
-              phoneNumberVerifier: phoneNumberVerifier, otp: otp);
-      return (result)
-          ? right(result)
-          : left(mapExceptionToFailure("otp is incorrect"));
-    } catch (e) {
-      return left(mapExceptionToFailure(e));
-    }
-  }
+  // @override
+  // Future<Either<Failure, bool>> verifySignUpPhoneNumberVersion(
+  //     {required PhoneNumberVerifier phoneNumberVerifier,
+  //     required String otp}) async {
+  //   try {
+  //     final result =
+  //         await authenticationRemoteDatasource.verifySignUpPhoneNumberVersion(
+  //             phoneNumberVerifier: phoneNumberVerifier, otp: otp);
+  //     return (result)
+  //         ? right(result)
+  //         : left(mapExceptionToFailure("otp is incorrect"));
+  //   } catch (e) {
+  //     return left(mapExceptionToFailure(e));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, String>> registerPhoneNumberAsVerified(
@@ -289,6 +289,29 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       final result = await authenticationRemoteDatasource
           .registerPhoneNumberAsVerified(phoneNumber: phoneNumber);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> verifyCode(
+      String verificationId, String otpCode) async {
+    try {
+      final result = await authenticationRemoteDatasource.verifyCode(
+          verificationId, otpCode);
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> verifyPhoneNumber(String phoneNumber) async {
+    try {
+      final result =
+          await authenticationRemoteDatasource.verifyPhoneNumber(phoneNumber);
       return right(result);
     } catch (e) {
       return left(mapExceptionToFailure(e));

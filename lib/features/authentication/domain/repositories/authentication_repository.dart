@@ -49,11 +49,12 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, List<TransactionEntity>>> getTransactionHistory({
     required String userId,
   });
-  Future<Either<Failure, PhoneNumberVerifier>> sendPhoneNumberOTP(
+  //  Future<Either<Failure, PhoneNumberVerifier>> sendPhoneNumberOTP(
+  //     {required String phoneNumber});
+  Future<Either<Failure, void>> verifyCode(
+      String verificationId, String otpCode);
+  Future<Either<Failure, String>> verifyPhoneNumber(String phoneNumber);
+
+  Future<Either<Failure, String>> registerPhoneNumberAsVerified(
       {required String phoneNumber});
-  Future<Either<Failure, bool>> verifySignUpPhoneNumberVersion(
-      {required PhoneNumberVerifier phoneNumberVerifier, required String otp});
-
-
-      Future<Either<Failure,String>> registerPhoneNumberAsVerified({required String phoneNumber});
 }

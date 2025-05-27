@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:signalwavex/core/services/phone_number_verifier.dart';
+import 'package:signalwavex/features/authentication/data/models/kyc_model.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
@@ -225,7 +227,7 @@ final class SendPhoneNumberOTPEvent extends AuthEvent {
 // VerifySignUpPhoneNumberVersion
 final class VerifySignUpPhoneNumberVersionEvent extends AuthEvent {
   final String otp;
-  final PhoneNumberVerifier phoneNumberVerifier;
+  final String phoneNumberVerifier;
 
   const VerifySignUpPhoneNumberVersionEvent(
       {required this.phoneNumberVerifier, required this.otp});

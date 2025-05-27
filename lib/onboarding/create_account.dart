@@ -53,7 +53,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     extra: {'email': emailOrPhoneNumberController.text});
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     backgroundColor: Colors.green,
                     content: Text("sending otp"),
                   ),
@@ -71,8 +71,9 @@ class _CreateAccountState extends State<CreateAccount> {
             }
 
             if (state is SendPhoneNumberOTPSuccessState) {
-              context.push(MyAppRouteConstant.varifyAccountByPhone,
-                  extra: {'phoneNumberVerifier': state.phoneNumberVerifier});
+              // context.push(MyAppRouteConstant.varifyAccountByPhone,
+              //     extra: {'phoneNumberVerifier': state.phoneNumberVerifier});
+              print('${state.phoneNumberVerifier}***************');
             }
             if (state is SendPhoneNumberOTPErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -286,13 +287,17 @@ class _CreateAccountState extends State<CreateAccount> {
         color: Colors.yellow,
         onTap: () {
           // ()
-          context.read<AuthBloc>().add(
-                NewUserSignUpEvent(
-                  email: emailOrPhoneNumberController.text,
-                  password: passwordController.text,
-                  confirmPassword: confirmPasswordController.text,
-                ),
-              );
+          // context.read<AuthBloc>().add(
+          //       NewUserSignUpEvent(
+          //         email: emailOrPhoneNumberController.text,
+          //         password: passwordController.text,
+          //         confirmPassword: confirmPasswordController.text,
+          //       ),
+          //     );
+          print(
+              '***************************************${emailOrPhoneNumberController.text}');
+          context.read<AuthBloc>().add(SendPhoneNumberOTPEvent(
+              phoneNumber: emailOrPhoneNumberController.text));
         },
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {

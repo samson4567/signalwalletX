@@ -12,9 +12,11 @@ import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
 
 class VarifyAccountByPhone extends StatefulWidget {
-  final PhoneNumberVerifier phoneNumberVerifier;
+  // final PhoneNumberVerifier phoneNumberVerifier;
 
-  const VarifyAccountByPhone({super.key, required this.phoneNumberVerifier});
+  const VarifyAccountByPhone({
+    super.key,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -63,11 +65,11 @@ class _VarifyAccountByPhoneState extends State<VarifyAccountByPhone> {
       isVerifying = true;
     });
 
-    context.read<AuthBloc>().add(
-          VerifySignUpPhoneNumberVersionEvent(
-              phoneNumberVerifier: widget.phoneNumberVerifier,
-              otp: enteredCode),
-        );
+    // context.read<AuthBloc>().add(
+    //       VerifySignUpPhoneNumberVersionEvent(
+    //           phoneNumberVerifier: widget.phoneNumberVerifier,
+    //           otp: enteredCode),
+    //     );
   }
 
   void _resendOtp() {
@@ -77,8 +79,8 @@ class _VarifyAccountByPhoneState extends State<VarifyAccountByPhone> {
       isResending = true;
     });
 
-    context.read<AuthBloc>().add(SendPhoneNumberOTPEvent(
-        phoneNumber: widget.phoneNumberVerifier.phoneNumberAttribute!));
+    // context.read<AuthBloc>().add(SendPhoneNumberOTPEvent(
+    //     phoneNumber: widget.phoneNumberVerifier.phoneNumberAttribute!));
   }
 
 // PhoneNumberVerifier
@@ -163,9 +165,9 @@ class _VarifyAccountByPhoneState extends State<VarifyAccountByPhone> {
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is VerifySignUpPhoneNumberVersionSuccessState) {
-              context.read<AuthBloc>().add(RegisterPhoneNumberAsVerifiedEvent(
-                  phoneNumber:
-                      widget.phoneNumberVerifier.phoneNumberAttribute!));
+              // context.read<AuthBloc>().add(RegisterPhoneNumberAsVerifiedEvent(
+              //     phoneNumber:
+              //         widget.phoneNumberVerifier.phoneNumberAttribute!));
               setState(() => isVerifying = false);
               _showDialog(
                   'success',

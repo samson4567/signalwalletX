@@ -234,19 +234,13 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
 
   @override
   Future<Either<Failure, List<OrderEntity>>> fetchUserTransactions() async {
-    print(
-        "debug_print_WalletSystemUserBalanceAndTradeCallingRepositoryImpl-fetchUserTransactions-started");
     try {
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource
               .fetchUserTransactions();
-      print(
-          "debug_print_WalletSystemUserBalanceAndTradeCallingRepositoryImpl-fetchUserTransactions-result_is_$result");
 
       return right(result);
     } catch (e) {
-      print(
-          "debug_print_WalletSystemUserBalanceAndTradeCallingRepositoryImpl-fetchUserTransactions-error_is_$e");
       return left(mapExceptionToFailure(e));
     }
   }

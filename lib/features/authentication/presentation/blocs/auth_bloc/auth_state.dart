@@ -501,7 +501,7 @@ final class SendPhoneNumberOTPLoadingState extends AuthState {
 }
 
 final class SendPhoneNumberOTPSuccessState extends AuthState {
-  final PhoneNumberVerifier phoneNumberVerifier;
+  final String phoneNumberVerifier;
 
   const SendPhoneNumberOTPSuccessState({
     required this.phoneNumberVerifier,
@@ -528,16 +528,7 @@ final class VerifySignUpPhoneNumberVersionLoadingState extends AuthState {
 }
 
 final class VerifySignUpPhoneNumberVersionSuccessState extends AuthState {
-  final bool isSuccess;
-
-  const VerifySignUpPhoneNumberVersionSuccessState({
-    required this.isSuccess,
-  });
-
-  @override
-  List<Object> get props => [
-        isSuccess,
-      ];
+  const VerifySignUpPhoneNumberVersionSuccessState();
 }
 
 final class VerifySignUpPhoneNumberVersionErrorState extends AuthState {

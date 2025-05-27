@@ -33,6 +33,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SendPhoneNumberOTPEvent>(_onSendPhoneNumberOTPEvent);
     on<VerifySignUpPhoneNumberVersionEvent>(
         _onVerifySignUpPhoneNumberVersionEvent);
+    // on<SendPhoneNumberOTPEvent>(_onSendPhoneNumberOTPEvent);
+    // on<VerifySignUpPhoneNumberVersionEvent>(
+    //     _onVerifySignUpPhoneNumberVersionEvent);
 
     on<RegisterPhoneNumberAsVerifiedEvent>(
         _onRegisterPhoneNumberAsVerifiedEvent);
@@ -382,8 +385,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const SendPhoneNumberOTPLoadingState());
 
     try {
-      final result = await authenticationRepository.sendPhoneNumberOTP(
-          phoneNumber: event.phoneNumber);
+      final result =
+          await authenticationRepository.verifyPhoneNumber(event.phoneNumber);
 
       result.fold(
         (error) =>
@@ -405,15 +408,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const VerifySignUpPhoneNumberVersionLoadingState());
 
     try {
-      final result =
-          await authenticationRepository.verifySignUpPhoneNumberVersion(
-              phoneNumberVerifier: event.phoneNumberVerifier, otp: event.otp);
+      final result = await authenticationRepository.verifyCode(
+          event.phoneNumberVerifier, event.otp);
 
       result.fold(
         (error) => emit(VerifySignUpPhoneNumberVersionErrorState(
             errorMessage: error.message)),
-        (isSuccess) => emit(
-            VerifySignUpPhoneNumberVersionSuccessState(isSuccess: isSuccess)),
+        (isSuccess) => emit(VerifySignUpPhoneNumberVersionSuccessState()),
       );
     } catch (e) {
       emit(VerifySignUpPhoneNumberVersionErrorState(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550382093722",
+    "project_id": "signalwavex-51061",
+    "storage_bucket": "signalwavex-51061.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550382093722:android:821a0901b22397af462623",
+        "android_client_info": {
+          "package_name": "com.signalapps.signalwavex"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi6sdqra_tNZhX9C06DsRol_WSdL4jjqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

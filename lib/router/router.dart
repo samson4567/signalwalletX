@@ -71,12 +71,12 @@ class AppRouter {
         builder: (context, state) =>
             VerifyEmail(email: (state.extra as Map)['email']),
       ),
-      GoRoute(
-        name: MyAppRouteConstant.varifyAccountByPhone,
-        path: MyAppRouteConstant.varifyAccountByPhone,
-        builder: (context, state) => VarifyAccountByPhone(
-            phoneNumberVerifier: (state.extra as Map)['phoneNumberVerifier']),
-      ),
+      // GoRoute(
+      //   name: MyAppRouteConstant.varifyAccountByPhone,
+      //   path: MyAppRouteConstant.varifyAccountByPhone,
+      //   builder: (context, state) => VarifyAccountByPhone(
+      //       phoneNumberVerifier: (state.extra as Map)['phoneNumberVerifier']),
+      // ),
 
       GoRoute(
           name: MyAppRouteConstant.setNewpassoword,

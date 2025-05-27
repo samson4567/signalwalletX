@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
@@ -16,11 +17,13 @@ import 'package:signalwavex/features/authentication/domain/entities/transaction_
 abstract class AuthenticationRemoteDatasource {
   Future<String> newUserSignUp({required NewUserRequestModel newUserRequest});
   Future<String> verifySignUp({required String email, required String otp});
-  Future<bool> verifySignUpPhoneNumberVersion(
-      {required PhoneNumberVerifier phoneNumberVerifier, required String otp});
+  Future<String> verifyPhoneNumber(
+    String phoneNumber,
+  );
+
   // sendPhone
   Future<String> resendOtp({required String email});
-  Future<PhoneNumberVerifier> sendPhoneNumberOTP({required String phoneNumber});
+  Future<void> verifyCode(String verificationId, String otpCode);
   Future<String> registerPhoneNumberAsVerified({required String phoneNumber});
 
   Future<Map> login({required String email, required String password});
@@ -283,25 +286,73 @@ class AuthenticationRemoteDatasourceImpl
   }
 
   @override
-  Future<bool> verifySignUpPhoneNumberVersion(
-      {required PhoneNumberVerifier phoneNumberVerifier,
-      required String otp}) async {
-    // PhoneNumberVerifier pnv = PhoneNumberVerifier();
-    // pnv.sendOTP(phoneNumber);
-    try {
-      return await phoneNumberVerifier.confirmOTP(int.parse(otp));
-    } catch (e) {
-      return false;
-    }
+  Future<String> verifyPhoneNumber(String phoneNumber) async {
+    print("This is the credentials phoneNumber $phoneNumber");
+    String? verificationIdtobeTaken;
+
+    // await _authClient.
+    //MAKE SURE THE PHONENUMBER STARTS WITH THEIR COUNTRY CODE.
+    //THIS IS THE FUNCTION TO BE CALLED FOR YOU TO HAVE THE VERIFY PHONE NUMBER FUNCTION CALLED.
+    FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        timeout: const Duration(seconds: 60),
+        //WHEN THE VERIFICATION IS COMPLETED.
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          print(
+              "This is the verification process being completed##########################");
+          //  result = await _authClient.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {},
+        //THIS IS WHEN THE CODE WOULD BE SENT WITH A VERIFICATION ID HERE AT THE FRONT END.
+
+        codeSent: (String verificationId, int? resendToken) {
+          verificationIdtobeTaken = verificationId;
+          print(
+              "This is the verificationId sent to me $verificationId *********************************************8");
+          print(
+              'This is the resendToken being sent also $verificationIdtobeTaken');
+        },
+        codeAutoRetrievalTimeout: (String verificationIdCode) {
+          verificationIdtobeTaken = verificationIdCode;
+        });
+
+    return verificationIdtobeTaken ?? '';
   }
 
   @override
-  Future<PhoneNumberVerifier> sendPhoneNumberOTP(
-      {required String phoneNumber}) async {
-    PhoneNumberVerifier pnv = PhoneNumberVerifier();
-    await pnv.sendOTP(phoneNumber);
-    return pnv;
+  Future<void> verifyCode(String verificationId, String otpCode) async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: otpCode,
+    );
+    try {
+      final user = await FirebaseAuth.instance.signInWithCredential(credential);
+      print(user.user?.displayName ?? '');
+    } catch (e) {
+      print("This is the catched error ${e.toString()}");
+    }
   }
+
+  // @override
+  // Future<bool> verifySignUpPhoneNumberVersion(
+  //     {required PhoneNumberVerifier phoneNumberVerifier,
+  //     required String otp}) async {
+  //   // PhoneNumberVerifier pnv = PhoneNumberVerifier();
+  //   // pnv.sendOTP(phoneNumber);
+  //   try {
+  //     return await phoneNumberVerifier.confirmOTP(int.parse(otp));
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  // @override
+  // Future<PhoneNumberVerifier> sendPhoneNumberOTP(
+  //     {required String phoneNumber}) async {
+  //   PhoneNumberVerifier pnv = PhoneNumberVerifier();
+  //   await pnv.sendOTP(phoneNumber);
+  //   return pnv;
+  // }
 
   @override
   Future<String> registerPhoneNumberAsVerified(
