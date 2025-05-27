@@ -1,4 +1,4 @@
-package com.example.clapmi
+package com.signalapps.signalwavex
 
 import io.flutter.embedding.android.FlutterActivity
 
