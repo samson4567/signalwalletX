@@ -10,6 +10,7 @@ import 'package:signalwavex/onboarding/create_account.dart';
 import 'package:signalwavex/onboarding/forget_passoword.dart';
 import 'package:signalwavex/onboarding/forget_passoword_otp.dart';
 import 'package:signalwavex/onboarding/login_screen.dart';
+import 'package:signalwavex/onboarding/phone_auth_webview.dart';
 import 'package:signalwavex/onboarding/set_newpassword.dart';
 import 'package:signalwavex/onboarding/varify_account.dart';
 import 'package:signalwavex/onboarding/varify_account_by_phone.dart';
@@ -32,7 +33,16 @@ class AppRouter {
         path: MyAppRouteConstant.splashScreen,
         builder: (context, state) => const SplashScreen(),
       ),
-      // TestScreen
+      GoRoute(
+        name: MyAppRouteConstant.phoneAuthWebview,
+        path: MyAppRouteConstant.phoneAuthWebview,
+        builder: (context, state) => PhoneAuthWebview(
+          registrationUrl: (state.extra as Map)['registrationUrl'],
+          successRedirectUrl: (state.extra as Map)['successRedirectUrl'],
+          onfinished: (state.extra as Map)['onfinished'],
+        ),
+      ),
+      // PhoneAuthWebview
       GoRoute(
         name: MyAppRouteConstant.testScreen,
         path: MyAppRouteConstant.testScreen,

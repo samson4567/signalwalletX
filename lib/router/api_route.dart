@@ -20,6 +20,7 @@ class MyAppRouteConstant {
   static const String forgetPassowrdOTP = '/forgetPassowrdOtp';
   static const String setNewpassoword = '/setNewpassoword';
   static const String varifyAccountByPhone = '/varifyAccountByPhone';
+  static const String phoneAuthWebview = '/phoneAuthWebview';
 
-  // varifyAccountByPhone
+  // phoneAuthWebview
 }
