@@ -32,7 +32,7 @@ class UserModel extends UserEntity {
       uid: jsonMap["uid"],
       id: jsonMap["id"],
       name: jsonMap["name"],
-      email: jsonMap["email"],
+      email: jsonMap["email"] ?? jsonMap["phone"],
       role: jsonMap["role"],
       isVerified: jsonMap["is_verified"],
       wallets: (jsonMap["wallets"] as List?)
@@ -49,7 +49,7 @@ class UserModel extends UserEntity {
 
   factory UserModel.createFromLogin(Map json) {
     return UserModel(
-      email: json["email"] ?? "",
+      email: json["email"] ?? json["phone"] ?? "",
       id: json["id"] ?? 0,
       name: json["name"] ?? "",
       uid: json["uid"] ?? "",
@@ -59,7 +59,7 @@ class UserModel extends UserEntity {
 
   @override
   String toString() {
-    return "${super.toString()} ${toJson()}";
+    return "${toJson()}";
   }
 }
 

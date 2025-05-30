@@ -9,6 +9,8 @@ import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
@@ -68,8 +70,8 @@ class _LineChartState extends State<LineChart> {
 
   @override
   void initState() {
-    context.read<WebSocketBloc>().add(
-        const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
+    // context.read<WebSocketBloc>().add(
+    //     const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
     super.initState();
     getDataOld();
     getData();
@@ -144,26 +146,25 @@ class _LineChartState extends State<LineChart> {
 
     // chartColors.lineFillInsideColor = ColorConstants.fancyGreen;
 // solveChatData
-    return BlocConsumer<WebSocketBloc, WebSocketState>(
-        listener: (context, state) {
-      if (state is SubscribeToCryptoSuccessState) {
-        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
-        solveChatData(state.data);
-        print(
-            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
-      } else if (state is WebSocketDataState) {
-        solveChatData(state.data);
-        print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
-        print(
-            "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
-      } else if (state is WebSocketErrorState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.error),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+    return BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+      // if (state is SubscribeToCryptoSuccessState) {
+      //   print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
+      //   solveChatData(state.data);
+      //   print(
+      //       "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
+      // } else if (state is WebSocketDataState) {
+      //   solveChatData(state.data);
+      //   print("debug_print_linechart-SubscribeToCryptoSuccessState-start");
+      //   print(
+      //       "debug_print_linechart-SubscribeToCryptoSuccessState-solveChatData-ended");
+      // } else if (state is WebSocketErrorState) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text(state.error),
+      //       backgroundColor: Colors.red,
+      //     ),
+      //   );
+      // }
     }, builder: (context, state) {
       print("debug_print_linechart-building");
       print("debug_print_linechart-building$state");
@@ -307,10 +308,10 @@ class _LineChartState extends State<LineChart> {
     isLoading = true;
     setState(() {});
 
-    context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
-          interval: widget.chartDetails?["period"] ?? "5",
-          symbol: widget.chartDetails?["symbol"] ?? "BTC",
-        ));
+    // context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
+    //       interval: widget.chartDetails?["period"] ?? "5",
+    //       symbol: widget.chartDetails?["symbol"] ?? "BTC",
+    //     ));
 
     isLoading = false;
     setState(() {});
@@ -497,7 +498,7 @@ class _LineChartState extends State<LineChart> {
   bool nextDataIsNew = false;
   @override
   void dispose() {
-    context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
+    // context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
     super.dispose();
   }
 

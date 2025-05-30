@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 getItInstance<TradingSystemBloc>()), // Inject TradingSystemBloc
         BlocProvider(
             create: (_) => getItInstance<UserBloc>()), // Inject UserBloc
-        BlocProvider(create: (_) => WebSocketBloc()), // Inject WebSocketBloc
+        // BlocProvider(create: (_) => WebSocketBloc()), // Inject WebSocketBloc
         BlocProvider(
             create: (_) => getItInstance<CoinBloc>()), // Inject CoinBloc
       ],

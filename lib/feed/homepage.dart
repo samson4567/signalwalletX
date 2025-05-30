@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:signalwavex/core/app_variables.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/languages.dart';
 
@@ -53,8 +55,8 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getAndSetInitialData(context);
-    context.read<WebSocketBloc>().add(
-        const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
+    // context.read<WebSocketBloc>().add(
+    //     const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
 
     getData();
     // FetchCoinPriceEvent
@@ -121,10 +123,10 @@ class _HomepageState extends State<Homepage> {
         // GetBTCDetail reactions
         if (state is GetBTCDetailSuccessState) {
           btcCoinModel = state.coinModel;
-          context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
-                interval: period,
-                symbol: "BTC",
-              ));
+          // context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
+          //       interval: period,
+          //       symbol: "BTC",
+          //     ));
 
           setState(() {});
         } else if (state is GetBTCDetailErrorState) {
@@ -337,38 +339,38 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                       )
-                    : BlocConsumer<WebSocketBloc, WebSocketState>(
+                    : BlocConsumer<AuthBloc, AuthState>(
                         listener: (context, state) {
-                        if (state is WebSocketDataState) {
-                          final decodedData = jsonDecode(state.data);
-                          if ((decodedData["topic"] as String?)
-                                  ?.startsWith("kline.") ??
-                              false) {
-                            setState(() {
-                              // Force rebuild
-                              cad = calculatePriceChange(
-                                      decodedData["data"][0]) ??
-                                  {};
-                            });
-                          }
-                        }
-                        if (state is WebSocketErrorState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: Colors.blue,
-                            ),
-                          );
-                        }
+                        // if (state is WebSocketDataState) {
+                        //   final decodedData = jsonDecode(state.data);
+                        //   if ((decodedData["topic"] as String?)
+                        //           ?.startsWith("kline.") ??
+                        //       false) {
+                        //     setState(() {
+                        //       // Force rebuild
+                        //       cad = calculatePriceChange(
+                        //               decodedData["data"][0]) ??
+                        //           {};
+                        //     });
+                        //   }
+                        // }
+                        // if (state is WebSocketErrorState) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text(state.error),
+                        //       backgroundColor: Colors.blue,
+                        //     ),
+                        //   );
+                        // }
 
-                        if (state is WebSocketConnectedState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("connected".toCurrentLanguage()),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                        }
+                        // if (state is WebSocketConnectedState) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text("connected".toCurrentLanguage()),
+                        //       backgroundColor: Colors.green,
+                        //     ),
+                        //   );
+                        // }
                         // state;
                       }, builder: (context, state) {
                         return Column(

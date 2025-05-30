@@ -65,6 +65,7 @@ Page resource error:
           ''');
           },
           onNavigationRequest: (NavigationRequest request) {
+            print("asjdksadakdahdkadh-url_is${request.url}");
             if (request.url.startsWith(widget.successRedirectUrl)) {
               debugPrint('Blocking navigation to ${request.url}');
               // This is our success URL, so we'll close the WebView

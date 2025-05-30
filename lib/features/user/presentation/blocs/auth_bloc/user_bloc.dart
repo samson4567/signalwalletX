@@ -8,6 +8,7 @@ import 'package:signalwavex/features/user/data/models/user_model.dart';
 import 'package:signalwavex/features/user/domain/repositories/user_repository.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_event.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_state.dart';
+import 'dart:developer' as logger;
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepository userRepository;
@@ -35,8 +36,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(GetUserDetailErrorState(errorMessage: error.message));
       },
       (userModel) {
-        userModelG = userModel;
-        print(
+        // userModelG = userModel;
+        userModelG = UserModel(
+          email: userModelG?.email,
+          id: userModel.id,
+          isVerified: userModel.isVerified,
+          name: userModel.name,
+          role: userModel.role,
+          uid: userModel.uid,
+          wallets: userModel.wallets,
+        );
+        logger.log(
             "debug_print-UserBloc-_onGetUserDetailEvent-userModel_is_${userModel}");
         appBloc
             .add(UserUpdateEvent(updatedUserModel: (userModel as UserModel)));
