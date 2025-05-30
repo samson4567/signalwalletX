@@ -368,34 +368,48 @@ class _LoginScreenState extends State<LoginScreen> {
 //
                 String? whereTo = await showDialog(
                   context: context,
-                  builder: (context) => FancyContainerTwo(
-                      child: Column(
-                    children: [
-                      FancyText("How do you want to sign up"),
-                      10.verticalSpace,
-                      FancyContainerTwo(
-                        height: 40,
-                        backgroundColor: ColorConstants.fancyGreen,
-                        action: () {
-                          context.pop("phoneNumber");
-                        },
-                        child: Text("Sign up with phone number"),
-                      ),
-                      5.verticalSpace,
-                      FancyContainerTwo(
-                        height: 40,
-                        action: () {
-                          context.pop("phoneNumber");
-                        },
+                  builder: (context) => Dialog(
+                    child: FancyContainerTwo(
+                        backgroundColor: Colors.black,
                         hasBorder: true,
-                        borderColor: ColorConstants.fancyGreen,
-                        child: FancyText(
-                          "Sign up with email",
-                          textColor: ColorConstants.fancyGreen,
-                        ),
-                      )
-                    ],
-                  )),
+                        borderColor: Colors.yellow,
+                        nulledAlign: true,
+                        radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FancyText("How do you want to sign up?"),
+                              10.verticalSpace,
+                              FancyContainerTwo(
+                                height: 40,
+                                backgroundColor: Colors.yellow,
+                                action: () {
+                                  context.pop("phoneNumber");
+                                },
+                                child: FancyText(
+                                  "Sign up with phone number",
+                                  textColor: Colors.black,
+                                ),
+                              ),
+                              5.verticalSpace,
+                              FancyContainerTwo(
+                                height: 40,
+                                action: () {
+                                  context.pop("phoneNumber");
+                                },
+                                hasBorder: true,
+                                borderColor: Colors.yellow,
+                                child: FancyText(
+                                  "Sign up with email",
+                                  textColor: Colors.yellow,
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
                 );
                 if (whereTo == null) {
                   ScaffoldMessenger.of(context)
