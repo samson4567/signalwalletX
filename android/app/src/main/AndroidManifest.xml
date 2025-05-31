@@ -3,11 +3,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS"/>
     <application
-<<<<<<< HEAD
-        android:label="signalwavex"
-=======
         android:label="SignalWalletX"
->>>>>>> 8b18e4ed2e5329bbf4d21a29715f3ea5af0acfea
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
