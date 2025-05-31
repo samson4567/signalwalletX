@@ -309,8 +309,7 @@ class AuthenticationRemoteDatasourceImpl
           verificationIdtobeTaken = verificationId;
           print(
               "This is the verificationId sent to me $verificationId *********************************************8");
-          print(
-              'This is the resendToken being sent also $resendToken');
+          print('This is the resendToken being sent also $resendToken');
         },
         codeAutoRetrievalTimeout: (String verificationIdCode) {
           verificationIdtobeTaken = verificationIdCode;

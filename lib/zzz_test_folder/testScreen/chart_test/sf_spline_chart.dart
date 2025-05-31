@@ -6,6 +6,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/sample_view.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
@@ -40,11 +42,10 @@ class _SplineDefaultState extends SampleViewState {
       ChartData(2014, 40),
     ];
     return Scaffold(
-        body: BlocConsumer<WebSocketBloc, WebSocketState>(
-            listener: (context, state) {
-      if (state is WebSocketDataState) {
-        rawData = jsonDecode(state.data);
-      }
+        body: BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+      // if (state is WebSocketDataState) {
+      //   rawData = jsonDecode(state.data);
+      // }
     }, builder: (context, state) {
       return Center(
           child: Container(

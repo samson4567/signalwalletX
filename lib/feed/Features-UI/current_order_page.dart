@@ -9,6 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signalwavex/component/drawer_component.dart';
 import 'package:signalwavex/component/empty_widget.dart';
 import 'package:signalwavex/core/app_variables.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/data/models/tradeorder_model.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_entity.dart';
@@ -669,11 +671,11 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
           "period": period,
           "askAndBids": {}
         };
-        context.read<WebSocketBloc>().add(
-              SubscribeToCryptoEvent(
-                  interval: period.toUpperCase(),
-                  symbol: selectedCoinModel?.symbol ?? "BTC"),
-            );
+        // context.read<WebSocketBloc>().add(
+        //       SubscribeToCryptoEvent(
+        //           interval: period.toUpperCase(),
+        //           symbol: selectedCoinModel?.symbol ?? "BTC"),
+        //     );
 
         setState(() {});
       },
@@ -839,11 +841,11 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                       "period": period,
                       "askAndBids": {}
                     };
-                    context.read<WebSocketBloc>().add(
-                          SubscribeToCryptoEvent(
-                              interval: period.toUpperCase(),
-                              symbol: selectedCoinModel!.symbol),
-                        );
+                    // context.read<WebSocketBloc>().add(
+                    //       SubscribeToCryptoEvent(
+                    //           interval: period.toUpperCase(),
+                    //           symbol: selectedCoinModel!.symbol),
+                    //     );
                     // selectedCoinModel?.symbol;
                     setState(() {});
                   },
@@ -862,21 +864,21 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             ))
           ],
         ),
-        BlocConsumer<WebSocketBloc, WebSocketState>(listener: (context, state) {
-          if (state is WebSocketDataState) {
-            final decodedData = jsonDecode(state.data);
-            if ((decodedData["topic"] as String?)?.startsWith("kline.") ??
-                false) {}
-            try {} catch (e) {}
-          }
-          if (state is WebSocketConnectedState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("connected".toCurrentLanguage()),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
+        BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+          // if (state is WebSocketDataState) {
+          //   final decodedData = jsonDecode(state.data);
+          //   if ((decodedData["topic"] as String?)?.startsWith("kline.") ??
+          //       false) {}
+          //   try {} catch (e) {}
+          // }
+          // if (state is WebSocketConnectedState) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       content: Text("connected".toCurrentLanguage()),
+          //       backgroundColor: Colors.green,
+          //     ),
+          //   );
+          // }
           // state;
         }, builder: (context, state) {
           return Row(
