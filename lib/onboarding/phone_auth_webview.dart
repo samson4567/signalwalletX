@@ -64,9 +64,20 @@ Page resource error:
   isForMainFrame: ${error.isForMainFrame}
           ''');
           },
+          onUrlChange: (change) {
+            print("asjdksadakdahdkadh-onUrlChange-url_is${change.url}");
+            if (change.url?.contains(widget.successRedirectUrl) ?? false) {
+              debugPrint('Blocking navigation to ${change.url}');
+              // This is our success URL, so we'll close the WebView
+              // and potentially navigate to a success screen in the app.
+              widget.onfinished.call(context);
+            }
+            debugPrint('Allowing navigation to ${change.url}');
+          },
           onNavigationRequest: (NavigationRequest request) {
-            print("asjdksadakdahdkadh-url_is${request.url}");
-            if (request.url.startsWith(widget.successRedirectUrl)) {
+            print(
+                "asjdksadakdahdkadh-onNavigationRequest-url_is${request.url}");
+            if (request.url.contains(widget.successRedirectUrl)) {
               debugPrint('Blocking navigation to ${request.url}');
               // This is our success URL, so we'll close the WebView
               // and potentially navigate to a success screen in the app.

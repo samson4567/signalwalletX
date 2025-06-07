@@ -419,7 +419,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (whereTo == "phoneNumber") {
                   context.push(MyAppRouteConstant.phoneAuthWebview, extra: {
                     "registrationUrl": "https://signalwavex.com/signup",
-                    "successRedirectUrl": "https://signalwavex.com/login",
+                    "successRedirectUrl": "signalwavex.com/login",
                     "onfinished": (BuildContext context) {
                       context.push(MyAppRouteConstant.login);
                     }
