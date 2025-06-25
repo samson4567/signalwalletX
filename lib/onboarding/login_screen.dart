@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -67,9 +66,13 @@ class _LoginScreenState extends State<LoginScreen> {
               context.push(MyAppRouteConstant.feedPage,
                   extra: {'email'.toCurrentLanguage(): state.email});
             } else if (state is LoginErrorState) {
+              String error = state.errorMessage;
+              if (!state.errorMessage.contains("cancel")) {
+                error = "something went wrong";
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.errorMessage),
+                  content: Text(error),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -397,7 +400,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               FancyContainerTwo(
                                 height: 40,
                                 action: () {
-                                  context.pop("phoneNumber");
+                                  context.pop("email");
                                 },
                                 hasBorder: true,
                                 borderColor: Colors.yellow,

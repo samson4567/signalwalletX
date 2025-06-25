@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:signalwavex/core/error/exception.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/datasources/wallet_system_user_balance_and_trade_calling_local_datasource.dart';
@@ -103,14 +104,19 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
   @override
   Future<Either<Failure, String>> doInternalTransfer(
       {required InternalTransferEntity internalTransferEntity}) async {
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-doInternalTransfer-started");
     try {
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource
               .doInternalTransfer(
                   internalTransferEntity: internalTransferEntity);
-
+      print(
+          "debug_print-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-doInternalTransfer-result_is_${result}");
       return right(result);
     } catch (e) {
+      print(
+          "debug_print-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-doInternalTransfer-e_is_${(e as ClientException).message}");
       return left(mapExceptionToFailure(e));
     }
   }

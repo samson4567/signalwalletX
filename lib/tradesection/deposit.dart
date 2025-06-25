@@ -76,12 +76,21 @@ class _DepositPageState extends State<DepositPage> {
         centerTitle: true,
       ),
       body: BlocConsumer<TradingSystemBloc, TradingSystemState>(
-          listener: (BuildContext context, TradingSystemState state) {
+          buildWhen: (previous, current) {
+        return (current is GetCoinListSuccessState ||
+            current is GetCoinListErrorState ||
+            current is GetCoinListLoadingState);
+      }, listener: (BuildContext context, TradingSystemState state) {
         if (state is GetCoinListSuccessState) {
-          listOfCoins = (state.listOfCoinEntity as List<CoinModel>);
+          listOfCoins = (state.listOfCoinEntity as List<CoinModel>).where(
+            (element) {
+              return (element.symbol ?? "").toUpperCase() == "USDT" ||
+                  (element.symbol ?? "").toUpperCase() == "USDC";
+            },
+          ).toList();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("coin successfully"),
+              content: Text("coin fetched successfully"),
               backgroundColor: Colors.green,
             ),
           );
@@ -180,7 +189,12 @@ class _DepositPageState extends State<DepositPage> {
                           BlocConsumer<
                                   WalletSystemUserBalanceAndTradeCallingBloc,
                                   WalletSystemUserBalanceAndTradeCallingState>(
-                              listener: (BuildContext context,
+                              buildWhen: (previous, current) {
+                            return (current
+                                    is DepositAddressRetrivalErrorState ||
+                                current is DepositAddressRetrivalLoadingState ||
+                                current is DepositAddressRetrivalSuccessState);
+                          }, listener: (BuildContext context,
                                   WalletSystemUserBalanceAndTradeCallingState
                                       state) {
                             if (state is DepositAddressRetrivalSuccessState) {
@@ -194,7 +208,7 @@ class _DepositPageState extends State<DepositPage> {
                                   backgroundColor: Colors.green,
                                 ),
                               );
-// _showDialog('success');
+                              if (mounted) setState(() {});
                             }
 
                             if (state is DepositAddressRetrivalErrorState) {
@@ -242,12 +256,35 @@ class _DepositPageState extends State<DepositPage> {
                                   TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                             const SizedBox(height: 8),
-                            Image.memory(
-                              getImageDataFromString(
-                                  selectedDepositAddressModel!.qRCode!),
-                              // 'assets/icons/qr.png', // Replace with actual QR code asset
-                              width: 100,
-                              height: 100,
+                            FancyContainerTwo(
+                              // borderColor: Colors.red,
+                              // hasBorder: true,
+                              // height: 30,
+                              // width: 40,
+                              action: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child: Image.memory(
+                                        getImageDataFromString(
+                                            selectedDepositAddressModel!
+                                                .qRCode!),
+                                        // 'assets/icons/qr.png', // Replace with actual QR code asset
+                                        // width: 100,
+                                        // height: 100,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Image.memory(
+                                getImageDataFromString(
+                                    selectedDepositAddressModel!.qRCode!),
+                                // 'assets/icons/qr.png', // Replace with actual QR code asset
+                                width: 100,
+                                height: 100,
+                              ),
                             ),
                             const SizedBox(height: 8),
                             const Text(
@@ -441,7 +478,11 @@ class _DepositPageState extends State<DepositPage> {
                           const Icon(Icons.arrow_drop_down, color: Colors.grey),
                       underline: const SizedBox(),
                       onChanged: onChanged,
-                      items: coinModel!.chains?.map((item) {
+                      items: coinModel!.chains
+                          ?.where(
+                        (element) => element.toLowerCase() != "trx",
+                      )
+                          ?.map((item) {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: Text(item),

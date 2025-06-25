@@ -81,6 +81,7 @@ abstract class ApiClient<T> {
       }
       // try {
     } on DioException catch (e) {
+      print("jsdkasjdbasdasbdjasdjkbkjkb-endpoint_${endpoint}_${e}");
       _handleError(e);
       rethrow;
     }

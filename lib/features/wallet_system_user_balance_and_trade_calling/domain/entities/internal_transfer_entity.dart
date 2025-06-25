@@ -5,14 +5,16 @@ class InternalTransferEntity extends Equatable {
   final String? amount;
   final String? fromAccount;
   final String? toAccount;
+  final String fromWallet;
+  final String toWallet;
 
   const InternalTransferEntity({
     required this.toAccount,
     required this.fromAccount,
     required this.currency,
     required this.amount,
-    required String fromWallet,
-    required String toWallet,
+    required this.fromWallet,
+    required this.toWallet,
   });
 
   @override

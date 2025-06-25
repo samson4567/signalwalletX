@@ -77,15 +77,27 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   @override
   Future<DepositAddressEntity> retriveDepositAddress(
       {required String currency, required String chain}) async {
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-started");
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-input_is_${[
+      currency,
+      chain
+    ]}");
     final response = await networkClient.post(
       endpoint: EndpointConstant.retriveDepositAddress,
       isAuthHeaderRequired: true,
       returnRawData: true,
       data: {
         "currency": currency,
-        "chain": chain,
+        "chain": chain.toLowerCase(),
       },
     );
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-response_is_${[
+      response.data,
+      response.message,
+    ]}");
     DepositAddressModel result = DepositAddressModel.fromJson(response.data);
     return result;
   }
@@ -138,11 +150,21 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   @override
   Future<String> doInternalTransfer(
       {required InternalTransferEntity internalTransferEntity}) async {
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-starterd");
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-input_is_${InternalTransferModel.fromEntity(internalTransferEntity).toInternalTransferJson()}");
     final response = await networkClient.post(
       endpoint: EndpointConstant.doInternalTransfer,
       isAuthHeaderRequired: true,
-      data: (internalTransferEntity as InternalTransferModel).toJson(),
+      data: InternalTransferModel.fromEntity(internalTransferEntity)
+          .toInternalTransferJson(),
     );
+    print(
+        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-response_is_${[
+      response.data,
+      response.message,
+    ]}");
 
     return response.message;
   }

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/user/data/models/user_model.dart';
+import 'package:signalwavex/features/user/domain/entities/referral_code_response_entity.dart';
+import 'package:signalwavex/features/user/domain/entities/referral_lists_response_entity.dart';
 
 sealed class UserState extends Equatable {
   const UserState();
@@ -60,5 +62,54 @@ final class KycVerificationErrorState extends UserState {
 }
 ///// KycVerification ended .....
 
+///// GetRefferalCode
+final class GetRefferalCodeLoadingState extends UserState {
+  const GetRefferalCodeLoadingState();
+}
 
-// KycVerification
+final class GetRefferalCodeSuccessState extends UserState {
+  final ReferralCodeResponseEntity referralCodeResponseEntity;
+
+  const GetRefferalCodeSuccessState({required this.referralCodeResponseEntity});
+
+  @override
+  List<Object> get props => [referralCodeResponseEntity];
+}
+
+final class GetRefferalCodeErrorState extends UserState {
+  final String errorMessage;
+
+  const GetRefferalCodeErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// GetRefferalCode ended .....
+
+///// GetRefferalList
+final class GetRefferalListLoadingState extends UserState {
+  const GetRefferalListLoadingState();
+}
+
+final class GetRefferalListSuccessState extends UserState {
+  final ReferralListsResponseEntity referralListsResponseEntity;
+
+  const GetRefferalListSuccessState(
+      {required this.referralListsResponseEntity});
+
+  @override
+  List<Object> get props => [referralListsResponseEntity];
+}
+
+final class GetRefferalListErrorState extends UserState {
+  final String errorMessage;
+
+  const GetRefferalListErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
+///// GetRefferalList ended .....
+
+
+// GetRefferalList

@@ -50,8 +50,8 @@ class VerificationSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildInput(
-            label: "NIN",
-            hint: "Enter NIN",
+            label: "id",
+            hint: "Enter id",
             textEditingController: idNumberController,
           ),
           const SizedBox(height: 30),

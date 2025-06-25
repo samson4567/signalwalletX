@@ -45,6 +45,10 @@ class EndpointConstant {
   static const String kycVerification = "/auth/verify-id";
 
   static const String registerPhoneNumberAsVerified = "/auth/phone/verify";
+  static const String getRefferalCode = "/me/referral-code";
+  static const String getRefferalList = "/me/referrals";
+
+  // /me/referral-code
 
 // /auth/phone/verify
 }

@@ -1,12 +1,18 @@
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
+import 'package:signalwavex/features/user/data/models/referral_code_response_model.dart';
+import 'package:signalwavex/features/user/data/models/referral_lists_response_model.dart';
 import 'package:signalwavex/features/user/data/models/user_model.dart';
+import 'package:signalwavex/features/user/domain/entities/referral_code_response_entity.dart';
+import 'package:signalwavex/features/user/domain/entities/referral_lists_response_entity.dart';
 import 'package:signalwavex/features/user/domain/entities/user_entity.dart';
 
 abstract class UserRemoteDatasource {
   Future<UserEntity> getUserDetails();
   Future<String> kycVerification();
+  Future<ReferralCodeResponseEntity> getRefferalCode();
+  Future<ReferralListsResponseEntity> getRefferalList();
 }
 
 class UserRemoteDatasourceImpl implements UserRemoteDatasource {
@@ -42,5 +48,27 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
     );
 
     return response.message;
+  }
+
+  @override
+  Future<ReferralCodeResponseEntity> getRefferalCode() async {
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.getRefferalCode,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+
+    return ReferralCodeResponseModel.fromJson(response.data);
+  }
+
+  @override
+  Future<ReferralListsResponseEntity> getRefferalList() async {
+    final response = await networkClient.get(
+      endpoint: EndpointConstant.getRefferalList,
+      isAuthHeaderRequired: true,
+      returnRawData: true,
+    );
+
+    return ReferralListsResponseModel.fromJson(response.data);
   }
 }

@@ -64,15 +64,24 @@ class AuthenticationRemoteDatasourceImpl
   Future<String> newUserSignUp(
       {required NewUserRequestModel newUserRequest}) async {
     Map data = newUserRequest.toJson();
+    print("debug_print-newUserSignUp-started");
+    print("debug_print-newUserSignUp-data_is_${data}");
+
     if (!(data["email"] as String).contains("@")) {
       data["phone"] = data["email"];
       data.remove("email");
     }
+    print("debug_print-newUserSignUp-afterData_is_${data}");
+
     final response = await networkClient.post(
       endpoint: EndpointConstant.signUp,
       data: data,
     );
-
+    print("debug_print-newUserSignUp-response_is_${[
+      response.data,
+      response.message,
+      response.success,
+    ]}");
     return response.message;
   }
 

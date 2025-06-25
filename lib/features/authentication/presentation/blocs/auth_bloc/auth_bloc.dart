@@ -92,25 +92,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       password: event.password,
     );
 
-    result.fold((error) => emit(LoginErrorState(errorMessage: error.message)),
-        (entity) {
-      appBloc.add(
-        UserUpdateEvent(
-          updatedUserModel: UserModel.createFromLogin(
-            entity["user"],
+    result.fold(
+      (error) => emit(LoginErrorState(errorMessage: error.message)),
+      (entity) {
+        appBloc.add(
+          UserUpdateEvent(
+            updatedUserModel: UserModel.createFromLogin(
+              entity["user"],
+            ),
           ),
-        ),
-      );
-      userModelG = UserModel.createFromLogin(
-        entity["user"],
-      );
-      emit(LoginSuccessState(
-          email: UserModel.createFromLogin(
-                entity["user"],
-              ).email ??
-              "",
-          message: "Login Successful"));
-    });
+        );
+        userModelG = UserModel.createFromLogin(
+          entity["user"],
+        );
+        emit(
+          LoginSuccessState(
+              email: UserModel.createFromLogin(
+                    entity["user"],
+                  ).email ??
+                  "",
+              message: "Login Successful"),
+        );
+      },
+    );
   }
 
   Future<void> _onLogoutEvent(

@@ -287,13 +287,13 @@ class _CreateAccountState extends State<CreateAccount> {
         color: Colors.yellow,
         onTap: () {
           // ()
-          // context.read<AuthBloc>().add(
-          //       NewUserSignUpEvent(
-          //         email: emailOrPhoneNumberController.text,
-          //         password: passwordController.text,
-          //         confirmPassword: confirmPasswordController.text,
-          //       ),
-          //     );
+          context.read<AuthBloc>().add(
+                NewUserSignUpEvent(
+                  email: emailOrPhoneNumberController.text,
+                  password: passwordController.text,
+                  confirmPassword: confirmPasswordController.text,
+                ),
+              );
           print(
               '***************************************${emailOrPhoneNumberController.text}');
           context.read<AuthBloc>().add(SendPhoneNumberOTPEvent(

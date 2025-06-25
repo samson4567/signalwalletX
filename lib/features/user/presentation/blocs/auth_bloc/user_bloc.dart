@@ -18,8 +18,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       : super(const UserInitial()) {
     on<GetUserDetailEvent>(_onGetUserDetailEvent);
     on<KycVerificationEvent>(_onKycVerificationEvent);
+    on<GetRefferalCodeEvent>(_onGetRefferalCodeEvent);
 
-    // KycVerification
+    on<GetRefferalListEvent>(_onGetRefferalListEvent);
+
+    // GetRefferalList
   }
 
   Future<void> _onGetUserDetailEvent(
@@ -67,5 +70,31 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     );
   }
 
-  // _onKycVerificationEvent
+  Future<void> _onGetRefferalCodeEvent(
+      GetRefferalCodeEvent event, Emitter<UserState> emit) async {
+    emit(const GetRefferalCodeLoadingState());
+    final result = await userRepository.getRefferalCode();
+    result.fold(
+      (error) => emit(GetRefferalCodeErrorState(errorMessage: error.message)),
+      (referralCodeResponseEntity) {
+        emit(GetRefferalCodeSuccessState(
+            referralCodeResponseEntity: referralCodeResponseEntity));
+      },
+    );
+  }
+
+  Future<void> _onGetRefferalListEvent(
+      GetRefferalListEvent event, Emitter<UserState> emit) async {
+    emit(const GetRefferalListLoadingState());
+    final result = await userRepository.getRefferalList();
+    result.fold(
+      (error) => emit(GetRefferalListErrorState(errorMessage: error.message)),
+      (referralListsResponseEntity) {
+        emit(GetRefferalListSuccessState(
+            referralListsResponseEntity: referralListsResponseEntity));
+      },
+    );
+  }
+
+  // _onGetRefferalListEvent
 }
