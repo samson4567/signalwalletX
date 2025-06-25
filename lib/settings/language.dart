@@ -15,13 +15,13 @@ class _LanguageSectionState extends State<LanguageSection> {
     'es': 'Spanish',
     'fr': 'French',
     'de': 'German',
-    'ja': 'Japanese',
-    'ru': 'Russian',
-    'ar': 'Arabic',
-    'pt': 'Portuguese',
-    'hi': 'Hindi',
-    'yo': 'Yoruba',
-    'ig': 'Igbo',
+    // 'ja': 'Japanese',
+    // 'ru': 'Russian',
+    // 'ar': 'Arabic',
+    // 'pt': 'Portuguese',
+    // 'hi': 'Hindi',
+    // 'yo': 'Yoruba',
+    // 'ig': 'Igbo',
   };
 
   @override
