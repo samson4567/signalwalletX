@@ -18,6 +18,9 @@ double totalBalance = 0;
 
 TraderOrderFollowedEntity? traderOrderFollowedEntity;
 
-OrderEntity? currentOrderEntity;
+OrderEntity? currentOrderEntityToFollow;
+bool currentOrderEntityToFollowIsLoading = false;
 
 UserEntity? userModelG;
+
+String? pnlG;

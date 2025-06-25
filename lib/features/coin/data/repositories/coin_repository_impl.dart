@@ -41,11 +41,15 @@ class CoinRepositoryImpl implements CoinRepository {
 
   @override
   Future<Either<Failure, List<CoinEntity>>> getMarketCoins() async {
+    print("bdhbjfhbsdjfbjs-CoinRepositoryImpl-getMarketCoins-started");
     try {
       final result = await coinRemoteDatasource.getMarketCoins();
-
+      print(
+          "bdhbjfhbsdjfbjs-CoinRepositoryImpl-getMarketCoins-result_is_$result");
       return right(result);
     } catch (e) {
+      print("bdhbjfhbsdjfbjs-CoinRepositoryImpl-getMarketCoins-error");
+      print("bdhbjfhbsdjfbjs-CoinRepositoryImpl-getMarketCoins-error_is_$e");
       return left(mapExceptionToFailure(e));
     }
   }

@@ -9,6 +9,7 @@ import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/core/app_variables.dart';
+import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
@@ -38,8 +39,6 @@ class _AssetsState extends State<Assets> {
     logger.log("debug_print-Assets-build-${listOfWalletAccountEntityG}");
     return BlocConsumer<UserBloc, UserState>(listener: (context, state) {
       if (state is GetUserDetailSuccessState) {
-
-
         setState(() {});
       }
     }, builder: (context, state) {
@@ -236,7 +235,8 @@ class _AssetsState extends State<Assets> {
           if (state is StorePNLSuccessState) {}
         }, builder: (context, state) {
           return Text(
-            '+\$${state.pnl?.substring(0, 4) ?? 0}',
+            getDisplayVersionOfpnl(pnlG),
+            // '+\$${pnlG?.substring(0, 4) ?? 0}',
             style: TextStyles.smallText.copyWith(
               fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
               color: ColorConstants.numyelcolor,
@@ -436,4 +436,3 @@ sdsdsddsf
 fresh banter
 */
 }
-

@@ -34,12 +34,16 @@ class CoinModel extends CoinEntity {
   }
 
   factory CoinModel.fromJson(Map jsonMap) {
+    print("bdhbjfhbsdjfbjs-CoinModel.fromJson-started");
+    print("bdhbjfhbsdjfbjs-CoinModel.fromJson-jsonMap_is>>$jsonMap");
+
     String? percent =
         ((jsonMap['price_change_percent'] ?? jsonMap['percent_increase']) ==
                 null)
             ? null
             : ((jsonMap['price_change_percent'] ?? jsonMap['percent_increase']))
                 .toString();
+    print("bdhbjfhbsdjfbjs-CoinModel.fromJson-percent_is>>$percent");
     return CoinModel(
       chains: [...((jsonMap["chains"] as List?) ?? [])],
       symbol: jsonMap["symbol"],

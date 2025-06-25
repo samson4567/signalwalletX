@@ -7,6 +7,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/admin_pending_withdrawal_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/historical_order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
@@ -112,7 +113,7 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
               .doInternalTransfer(
                   internalTransferEntity: internalTransferEntity);
       print(
-          "debug_print-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-doInternalTransfer-result_is_${result}");
+          "debug_print-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-doInternalTransfer-result_is_$result");
       return right(result);
     } catch (e) {
       print(
@@ -138,13 +139,18 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
   @override
   Future<Either<Failure, List<TradeEntity>>>
       listTradesAUserIsFollowing() async {
+    print(
+        "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-listTradesAUserIsFollowing-started");
     try {
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource
               .listTradesAUserIsFollowing();
-
+      print(
+          "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-listTradesAUserIsFollowing-result_is_${result}");
       return right(result);
     } catch (e) {
+      print(
+          "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-listTradesAUserIsFollowing-e_is_${e}");
       return left(mapExceptionToFailure(e));
     }
   }
@@ -196,12 +202,17 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
 
   @override
   Future<Either<Failure, String>> getpnl() async {
+    print(
+        "sdbjashdajsd-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-getpnl-started");
     try {
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource.getpnl();
-
+      print(
+          "sdbjashdajsd-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-getpnl-result_is>>$result");
       return right(result);
     } catch (e) {
+      print(
+          "sdbjashdajsd-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-getpnl-error_is>>$e");
       return left(mapExceptionToFailure(e));
     }
   }
@@ -239,7 +250,8 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
   }
 
   @override
-  Future<Either<Failure, List<OrderEntity>>> fetchUserTransactions() async {
+  Future<Either<Failure, List<HistoricalOrderEntity>>>
+      fetchUserTransactions() async {
     try {
       final result =
           await walletSystemUserBalanceAndTradeCallingRemoteDatasource
@@ -247,6 +259,30 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
 
       return right(result);
     } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteOrderRequest(
+      {required String tradeIdInString,
+      required String tradeIdInNumber,
+      required String symbol}) async {
+    print(
+        "hasvhdvashvdja-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-deleteOrderRequest-started");
+    try {
+      final result =
+          await walletSystemUserBalanceAndTradeCallingRemoteDatasource
+              .deleteOrderRequest(
+                  tradeIdInNumber: tradeIdInNumber,
+                  symbol: symbol,
+                  tradeIdInString: tradeIdInString);
+      print(
+          "hasvhdvashvdja-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-deleteOrderRequest-result_is>>${result}");
+      return right(result);
+    } catch (e) {
+      print(
+          "hasvhdvashvdja-WalletSystemUserBalanceAndTradeCallingRepositoryImpl-deleteOrderRequest-e_is>>${e}");
       return left(mapExceptionToFailure(e));
     }
   }

@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:signalwavex/core/error/failure.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/historical_order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/admin_pending_withdrawal_request_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/btc_chart_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/deposit_address_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/historical_order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
@@ -46,5 +48,11 @@ abstract class WalletSystemUserBalanceAndTradeCallingRepository {
   Future<Either<Failure, BtcDataChartEntity>> fetchBtcDataChart({
     required String symbol,
   });
-  Future<Either<Failure, List<OrderEntity>>> fetchUserTransactions();
+  Future<Either<Failure, List<HistoricalOrderEntity>>> fetchUserTransactions();
+
+  Future<Either<Failure, String>> deleteOrderRequest({
+    required String tradeIdInNumber,
+    required String symbol,
+    required String tradeIdInString,
+  });
 }

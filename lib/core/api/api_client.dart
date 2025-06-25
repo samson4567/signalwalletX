@@ -143,6 +143,7 @@ abstract class ApiClient<T> {
         throw const NetworkException();
       }
     } on DioException catch (e) {
+      print("hasvhdvashvdja_error_is>>${e.message}");
       _handleError(e);
       rethrow;
     }

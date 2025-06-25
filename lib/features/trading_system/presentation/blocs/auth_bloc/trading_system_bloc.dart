@@ -134,7 +134,7 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
       final result = await tradingSystemRepository.fetchActiveTrade();
       print("debug_print-_onFetchActiveTradeEvent-result_fetched_${result}");
       emit(FetchActiveTradeSuccessState(orderEntity: result));
-      currentOrderEntity = result;
+      currentOrderEntityToFollow = result;
       print(
           "debug_print-_onFetchActiveTradeEvent-FetchActiveTradeSuccessState_emmited${result}");
     } catch (e) {

@@ -30,6 +30,7 @@ class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
 
     CoinEntity result = CoinModel.fromJson((response.data as Map));
 
+    print("klsabdhbadhab-${result}");
     return result;
   }
 
@@ -48,24 +49,28 @@ class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
           (e) => CoinModel.fromJson(e),
         )
         .toList();
-
+    print("ssdbaldbjkasbdbasdhbs-${result}");
     return result;
   }
 
   @override
   Future<List<CoinEntity>> getMarketCoins() async {
+    print("bdhbjfhbsdjfbjs-getMarketCoins-started");
     final response = await networkClient.get(
       endpoint: EndpointConstant.marketCoin,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-
+    print("bdhbjfhbsdjfbjs-getMarketCoins-response_gotten");
+    print("bdhbjfhbsdjfbjs-getMarketCoins-response.data_is>>${response.data}");
     List rawList = (response.data as Map)["coins"];
+    print("bdhbjfhbsdjfbjs-getMarketCoins-rawList_is>>${rawList}");
     List<CoinEntity> result = rawList
         .map(
           (e) => CoinModel.fromJson(e),
         )
         .toList();
+    print("bdhbjfhbsdjfbjs-getMarketCoins-result_is>>${result}");
 
     return result;
   }

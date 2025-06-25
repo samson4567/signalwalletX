@@ -1,7 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 
 class TradeEntity extends Equatable {
-  final double? id;
+  final int? id;
   final String? title;
   final String? tradingPair;
   final String? orderDirection;
@@ -10,6 +12,8 @@ class TradeEntity extends Equatable {
   final String? followCondition;
   final String? status;
   final String? adminID;
+  final Map? rawDetail;
+
   const TradeEntity({
     required this.orderDirection,
     required this.tradingPair,
@@ -20,6 +24,7 @@ class TradeEntity extends Equatable {
     required this.followCondition,
     required this.status,
     required this.adminID,
+    required this.rawDetail,
   });
 
   @override

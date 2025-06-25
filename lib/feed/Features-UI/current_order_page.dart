@@ -17,9 +17,11 @@ import 'package:signalwavex/features/trading_system/domain/entities/tradeorder_e
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_event.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/historical_order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/trade_model.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/order_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/trade_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -61,44 +63,61 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     {"k": "Open Position Time", "v": "2025/02/9 08:29:17", "c": Colors.white},
     {"k": "Turnover", "v": "30", "c": Colors.white},
     {"k": "Rate of Return", "v": "87.20%", "c": Colors.white},
-    {"k": "Action", "v": "Cancel", "c": getFigmaColor("CA3F64")},
+    {
+      "k": "Action",
+      "v": "Cancel",
+      "c": getFigmaColor("CA3F64"),
+      "action": () {}
+    },
   ];
 
   List convertTradeEntityToMap(TradeModel tradeModel) {
     return [
       {
         "k": "Product",
-        "v": "${tradeModel.tradingPair}",
+        "v": "${tradeModel.tradingPair ?? "--"}",
         "c": getFigmaColor("F0B90B")
       },
       {"k": "Status", "v": "${tradeModel.status}", "c": Colors.white},
       {
         "k": "Direction",
-        "v": "${tradeModel.orderDirection}",
+        "v": "${tradeModel.orderDirection ?? "--"}",
         "c": getFigmaColor("C6E229")
       },
       {
         "k": "Time Period",
-        "v": "${tradeModel.purchaseDuration}",
+        "v": "${tradeModel.purchaseDuration ?? "--"}",
         "c": Colors.white
       },
       {"k": "Open Price", "v": "--", "c": Colors.white},
       {"k": "Amount", "v": "--", "--": Colors.white},
       {
         "k": "Open Position Time",
-        "v": "${tradeModel.orderTime}",
+        "v": "${tradeModel.orderTime ?? "--"}",
         "c": Colors.white
       },
       {"k": "Turnover", "v": "30", "c": Colors.white},
       {"k": "Rate of Return", "v": "87.20%", "c": Colors.white},
-      {"k": "Action", "v": "Cancel", "c": getFigmaColor("CA3F64")},
+      {
+        "k": "Action",
+        "v": "Cancel",
+        "c": getFigmaColor("CA3F64"),
+        "action": () {
+          // DeleteOrderRequest
+          context.read<WalletSystemUserBalanceAndTradeCallingBloc>().add(
+              DeleteOrderRequestEvent(
+                  tradeIdInNumber: "${tradeModel.id}",
+                  symbol: tradeModel.rawDetail?["symbol"]!,
+                  tradeIdInString: tradeModel.rawDetail?["tid"]!));
+        }
+      },
     ];
   }
 
   List<TradeModel> currentTradeEntities = [];
   List<OrderModel> currentOrderEntities = [];
 
-  List<OrderModel> historOrderEntities = [];
+  List<HistoricalOrderModel> historOrderEntities = [];
 
   List convertOrderEntityToMap(OrderModel orderModel) {
     // orderModel.;
@@ -125,10 +144,74 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             ),
           );
           if (result != null) {
-            currentOrderEntities.add(OrderModel.fromEntity(result));
-            currentTradeEntities.add(TradeModel.fromOrderEntity(result));
+            context.read<WalletSystemUserBalanceAndTradeCallingBloc>().add(
+                  const ListTradesAUserIsFollowingEvent(),
+                );
+            // currentTradeEntities.add(TradeModel.fromOrderEntity(result));
           }
+          currentOrderEntityToFollow = null;
         }
+      },
+    ];
+  }
+
+  List convertHistoricalOrderEntityToMap(
+      HistoricalOrderModel historicalOrderModel) {
+    return [
+      {
+        "k": "Product",
+        "v": historicalOrderModel.product ?? "--",
+        "c": getFigmaColor("F0B90B")
+      },
+      {
+        "k": "Status",
+        "v": historicalOrderModel.status ?? "--",
+        "c": Colors.white
+      },
+      {
+        "k": "Direction",
+        "v": historicalOrderModel.direction ?? "--",
+        "c": getFigmaColor("C6E229")
+      },
+      {
+        "k": "Time Period",
+        "v": historicalOrderModel.timePeriod ?? "--",
+        "c": Colors.white
+      },
+      {
+        "k": "Amount",
+        "v": historicalOrderModel.amount ?? "--",
+        "c": Colors.white
+      },
+      {
+        "k": "Open Position Time",
+        "v": "${historicalOrderModel.openPositionTime ?? "--"}",
+        "c": Colors.white
+      },
+      {
+        "k": "Open Price",
+        "v": historicalOrderModel.openPrice ?? "--",
+        "c": Colors.white
+      },
+      {
+        "k": "Settlement price",
+        "v": "${historicalOrderModel.settlementPrice ?? "--"}",
+        "c": Colors.white
+      },
+      {
+        "k": "Turnover",
+        "v": "${historicalOrderModel.turnover ?? "--"}",
+        "c": Colors.white
+      },
+      {
+        "k": "Profit/Loss",
+        "v": historicalOrderModel.profitLoss ?? "--",
+        "c": getFigmaColor("CA3F64")
+      },
+      {
+        "k": "Rate of Return",
+        "v": historicalOrderModel.rateOfReturn ?? "--",
+        "c": Colors.white
       },
     ];
   }
@@ -156,17 +239,18 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
 
   @override
   void initState() {
-    context
-        .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-        .add(const FetchUserTransactionsEvent());
-
-    context
-        .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-        .add(const ListTradesAUserIsFollowingEvent());
-
     super.initState();
+
     SchedulerBinding.instance.addPostFrameCallback(
       (timeStamp) {
+        context
+            .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+            .add(const FetchUserTransactionsEvent());
+
+        context
+            .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+            .add(const ListTradesAUserIsFollowingEvent());
+
         context.read<TradingSystemBloc>().add(const FetchActiveTradeEvent());
       },
     );
@@ -193,7 +277,10 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         actions: [
           IconButton(
               onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
+                context
+                    .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+                    .add(const ListTradesAUserIsFollowingEvent());
+                // _scaffoldKey.currentState?.openDrawer();
               },
               icon: const Icon(Icons.menu))
         ],
@@ -203,9 +290,22 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               WalletSystemUserBalanceAndTradeCallingState>(
           listener: (context, state) {
         if (state is ListTradesAUserIsFollowingSuccessState) {
-          for (var element in state.listOfTradeEntities) {
-            currentTradeEntities.add(TradeModel.fromEntity(element));
+          print(
+              "dbakbdkajbsdsksbdba-ListTradesAUserIsFollowingSuccessState_emited");
+          currentTradeEntities = [];
+          for (TradeEntity element in state.listOfTradeEntities) {
+            currentOrderEntities
+                .add(OrderModel.fromJson(element.rawDetail ?? {}));
+            if (element.status?.toLowerCase() == "new") {
+              currentTradeEntities.add(TradeModel.fromEntity(element));
+            }
           }
+          if (currentOrderEntityToFollow?.tid ==
+                  currentTradeEntities.firstOrNull?.rawDetail?["tid"] &&
+              currentOrderEntityToFollow?.tid != null) {
+            currentOrderEntityToFollow = null;
+          }
+          setState(() {});
         }
         if (state is ListTradesAUserIsFollowingErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -214,7 +314,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         }
         if (state is FetchUserTransactionsSuccessState) {
           for (var element in state.listOfOrderEntity) {
-            historOrderEntities.add(OrderModel.fromEntity(element));
+            historOrderEntities.add(HistoricalOrderModel.fromEntity(element));
           }
         }
         if (state is FetchUserTransactionsErrorState) {
@@ -250,32 +350,38 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                             Expanded(
                               child: TabBarView(children: [
                                 _buildCurrentOrderTabview(),
-                                SingleChildScrollView(
-                                  child: Column(
-                                    children: List.generate(
-                                      historOrderEntities.length,
-                                      (index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 28.0),
-                                          child: SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .7,
-                                              child: _buildHistoryOrderTabview(
-                                                  historOrderEntities[index])),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
+                                historOrderEntities.isEmpty
+                                    ? buildEmptyWidget("No Order History Yet")
+                                    : SingleChildScrollView(
+                                        child: Column(
+                                          children: List.generate(
+                                            historOrderEntities.length,
+                                            (index) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 28.0),
+                                                child: SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            .7,
+                                                    child:
+                                                        _buildHistoryOrderTabview(
+                                                            historOrderEntities[
+                                                                index])),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                 // Container(
                                 //   child: Text(Uuid().v4()),
                                 // ),
                                 _buildInviteMeTabview(),
                               ]),
-                            )
+                            ),
+                            120.verticalSpace,
                           ],
                         )),
                   )
@@ -288,35 +394,67 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
     );
   }
 
+  bool currentFollowedOrderEntityIsLoading = false;
   Widget _buildCurrentOrderTabview() {
-    if (currentTradeEntities.isNotEmpty) {
-      List latestOrderDetail =
-          convertTradeEntityToMap(currentTradeEntities.first);
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: latestOrderDetail.map((e) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FancyText(
-                e["k"],
-                textColor: Colors.grey,
-              ),
-              FancyText(
-                e["v"] ?? "--",
-                textColor: e['c'],
-              )
-            ],
+    return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
+        WalletSystemUserBalanceAndTradeCallingState>(
+      listener: (context, state) {
+        if (state is DeleteOrderRequestErrorState ||
+            state is DeleteOrderRequestSuccessState ||
+            state is DeleteOrderRequestLoadingState) {
+          currentFollowedOrderEntityIsLoading =
+              state is DeleteOrderRequestLoadingState;
+        }
+
+        if (state is DeleteOrderRequestSuccessState) {
+          print(
+              "debug_print-FeaturesCurrentOrder_build-DeleteOrderRequestSuccessState");
+          currentTradeEntities = [];
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Order canceled"),
+              backgroundColor: Colors.green,
+            ),
           );
-        }).toList(),
-      );
-    } else {
-      return buildEmptyWidget("No Current Order Yet");
-    }
+          setState(() {});
+          context.read<TradingSystemBloc>().add(FetchActiveTradeEvent());
+        }
+      },
+      builder: (context, state) {
+        if (currentFollowedOrderEntityIsLoading) {
+          return CircularProgressIndicator.adaptive();
+        }
+        if (currentTradeEntities.isNotEmpty) {
+          List latestOrderDetail =
+              convertTradeEntityToMap(currentTradeEntities.first);
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: latestOrderDetail.map((e) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FancyText(
+                    e["k"],
+                    textColor: Colors.grey,
+                  ),
+                  FancyText(
+                    action: e["action"],
+                    e["v"] ?? "--",
+                    textColor: e['c'],
+                  )
+                ],
+              );
+            }).toList(),
+          );
+        } else {
+          return buildEmptyWidget("No Current Order Yet");
+        }
+      },
+    );
   }
 
-  Column _buildHistoryOrderTabview(OrderModel orderModel) {
-    List thaList = convertOrderEntityToMap(orderModel);
+  Column _buildHistoryOrderTabview(HistoricalOrderModel historicalOrderModel) {
+    List thaList = convertHistoricalOrderEntityToMap(historicalOrderModel);
     // historOrderEntities.map((e) => ).toList();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -417,9 +555,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                     ),
                   );
                   if (result != null) {
-                    currentOrderEntities.add(OrderModel.fromEntity(result));
-                    currentTradeEntities
-                        .add(TradeModel.fromOrderEntity(result));
+                    context
+                        .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+                        .add(const ListTradesAUserIsFollowingEvent());
+                    // currentOrderEntities.add(OrderModel.fromEntity(result));
+                    // currentTradeEntities
+                    //     .add(TradeModel.fromOrderEntity(result));
                   }
                 },
 
@@ -453,13 +594,23 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
         // Display the order data based on state
         BlocConsumer<TradingSystemBloc, TradingSystemState>(
           listener: (context, state) {
+            if (state is FetchActiveTradeSuccessState ||
+                state is FetchActiveTradeErrorState ||
+                state is FetchActiveTradeLoadingState) {
+              currentOrderEntityToFollowIsLoading =
+                  state is FetchActiveTradeLoadingState;
+            }
             if (state is TraderOrderFollowedLoaded) {
               traderOrderFollowedEntity = state.traderOrderFollowed;
             }
             if (state is FetchActiveTradeSuccessState) {
               print(
                   "debug_print-FeaturesCurrentOrder_build-FetchActiveTradeSuccessState_emmited");
-              currentOrderEntity = state.orderEntity;
+              if (state.orderEntity.tid !=
+                      currentTradeEntities.firstOrNull?.rawDetail?["tid"] &&
+                  state.orderEntity.tid != null) {
+                currentOrderEntityToFollow = state.orderEntity;
+              }
               print(
                   "debug_print-FeaturesCurrentOrder_build-traderOrderFollowedEntity_is_${traderOrderFollowedEntity}");
               Future.delayed(10.seconds, () {
@@ -468,10 +619,10 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             }
           },
           builder: (context, state) {
-            if (currentOrderEntity?.tid != null) {
+            if (currentOrderEntityToFollow?.tid != null) {
               List inviteMeMapLet = [
                 ...convertOrderEntityToMap(
-                    OrderModel.fromEntity(currentOrderEntity!))
+                    OrderModel.fromEntity(currentOrderEntityToFollow!))
               ];
               return Expanded(
                   child: Column(
@@ -497,7 +648,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               ));
             }
 
-            if (currentOrderEntity == null) {
+            if (currentOrderEntityToFollowIsLoading) {
               return const Center(child: CircularProgressIndicator());
             } else {
               return Expanded(
