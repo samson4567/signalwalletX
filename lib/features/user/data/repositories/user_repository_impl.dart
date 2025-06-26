@@ -3,6 +3,7 @@ import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/features/user/data/datasources/user_local_datasource.dart';
 import 'package:signalwavex/features/user/data/datasources/user_remote_datasource.dart';
+import 'package:signalwavex/features/user/domain/entities/kyc_request_entity.dart';
 import 'package:signalwavex/features/user/domain/entities/referral_code_response_entity.dart';
 import 'package:signalwavex/features/user/domain/entities/referral_lists_response_entity.dart';
 import 'package:signalwavex/features/user/domain/entities/user_entity.dart';
@@ -29,9 +30,11 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, String>> kycVerification() async {
+  Future<Either<Failure, String>> kycVerification(
+      {required KycRequestEntity kycRequestEntity}) async {
     try {
-      final result = await userRemoteDatasource.kycVerification();
+      final result = await userRemoteDatasource.kycVerification(
+          kycRequestEntity: kycRequestEntity);
 
       return right(result);
     } catch (e) {

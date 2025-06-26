@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 
 class KycRequestEntity extends Equatable {
   final String? firstName;
   final String? idNumber;
   final String? country;
+  final File? docImage;
 
   final String? lastName;
   final String? idType;
@@ -14,6 +17,7 @@ class KycRequestEntity extends Equatable {
     required this.idType,
     required this.country,
     required this.idNumber,
+    required this.docImage,
   });
 
   @override
@@ -23,6 +27,7 @@ class KycRequestEntity extends Equatable {
         idType,
         country,
         idNumber,
+        docImage,
       ];
 }
 

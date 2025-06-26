@@ -25,17 +25,24 @@ class _ConvertState extends State<Convert> {
   // Mock coin data
   final List<CoinEntity> coinList = [
     const CoinEntity(
-        symbol: 'BTC', name: 'Bitcoin', imagePath: 'assets/icons/bitcoin.png'),
+        symbol: 'USDC', name: 'USD Coin', imagePath: 'assets/icons/usdc.png'),
     const CoinEntity(
-        symbol: 'ETH', name: 'Ethereum', imagePath: 'assets/icons/sol.png'),
-    const CoinEntity(
-        symbol: 'TON', name: 'Toncoin', imagePath: 'assets/icons/ton.png'),
-    const CoinEntity(
-        symbol: 'XRP', name: 'Ripple', imagePath: 'assets/icons/xrp.png'),
-    const CoinEntity(
-        symbol: 'BCH', name: 'Bitcoin Cash', imagePath: 'assets/icons/bch.png'),
-    const CoinEntity(
-        symbol: 'LTC', name: 'Litecoin', imagePath: 'assets/icons/lit.png'),
+        symbol: 'USDT', name: 'Tether', imagePath: 'assets/icons/tether.png'),
+    // const CoinEntity(
+    // symbol: 'BTC', name: 'Bitcoin', imagePath: 'assets/icons/bitcoin.png'),
+
+    // assets/icons/usdc.png
+
+    // const CoinEntity(
+    //     symbol: 'ETH', name: 'Ethereum', imagePath: 'assets/icons/sol.png'),
+    // const CoinEntity(
+    //     symbol: 'TON', name: 'Toncoin', imagePath: 'assets/icons/ton.png'),
+    // const CoinEntity(
+    //     symbol: 'XRP', name: 'Ripple', imagePath: 'assets/icons/xrp.png'),
+    // const CoinEntity(
+    //     symbol: 'BCH', name: 'Bitcoin Cash', imagePath: 'assets/icons/bch.png'),
+    // const CoinEntity(
+    //     symbol: 'LTC', name: 'Litecoin', imagePath: 'assets/icons/lit.png'),
   ];
 
   triggerGetRateEventWhenSuit() {

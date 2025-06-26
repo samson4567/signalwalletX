@@ -61,7 +61,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<void> _onKycVerificationEvent(
       KycVerificationEvent event, Emitter<UserState> emit) async {
     emit(const KycVerificationLoadingState());
-    final result = await userRepository.kycVerification();
+    final result = await userRepository.kycVerification(
+        kycRequestEntity: event.kycRequestEntity);
     result.fold(
       (error) => emit(KycVerificationErrorState(errorMessage: error.message)),
       (message) {

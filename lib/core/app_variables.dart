@@ -24,3 +24,6 @@ bool currentOrderEntityToFollowIsLoading = false;
 UserEntity? userModelG;
 
 String? pnlG;
+
+double exchangeBalance = 0;
+double tradeBalance = 0;

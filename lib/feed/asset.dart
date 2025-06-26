@@ -125,9 +125,6 @@ class _AssetsState extends State<Assets> {
     );
   }
 
-  double exchangeBalance = 0;
-  double tradeBalance = 0;
-  double totalBalance = 0;
   Widget _buildTotalAssetsSection(double screenWidth, BuildContext context) {
     final walletBloc =
         BlocProvider.of<WalletSystemUserBalanceAndTradeCallingBloc>(context);

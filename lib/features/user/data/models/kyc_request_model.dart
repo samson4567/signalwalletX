@@ -9,6 +9,7 @@ class KycRequestModel extends KycRequestEntity {
     super.idType,
     super.country,
     super.idNumber,
+    super.docImage,
   });
 
   Map<String, dynamic> toJson() {
@@ -17,7 +18,8 @@ class KycRequestModel extends KycRequestEntity {
       "last_name": lastName,
       "country": country,
       "id_type": idType,
-      "id_number": idNumber
+      "id_number": idNumber,
+      "id_document": docImage
     };
   }
 
@@ -28,6 +30,17 @@ class KycRequestModel extends KycRequestEntity {
       country: jsonMap["country"],
       idType: jsonMap["id_type"],
       idNumber: jsonMap["id_number"],
+      docImage: jsonMap["id_document"],
+    );
+  }
+  factory KycRequestModel.fromEntity(KycRequestEntity kycRequestEntity) {
+    return KycRequestModel(
+      firstName: kycRequestEntity.firstName,
+      lastName: kycRequestEntity.lastName,
+      country: kycRequestEntity.country,
+      idType: kycRequestEntity.idType,
+      idNumber: kycRequestEntity.idNumber,
+      docImage: kycRequestEntity.docImage,
     );
   }
 

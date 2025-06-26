@@ -268,12 +268,13 @@ class _TransferPageState extends State<TransferPage> {
   }
 
   Widget _buildCurrencyContainer() {
-    List<String> currencies = listOfWalletAccountEntityG
-        .map(
-          (e) => e.currency ?? '',
-        )
-        .toSet()
-        .toList();
+    List<String> currencies = ["USDT", "USDC"];
+    // listOfWalletAccountEntityG
+    //     .map(
+    //       (e) => e.currency ?? '',
+    //     )
+    //     .toSet()
+    //     .toList();
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -357,10 +358,12 @@ class _TransferPageState extends State<TransferPage> {
       _showDialog('invalid');
     } else if (amount > availableBalance) {
       _showDialog('insufficient');
-    } else if (amount < 1) {
-      _showDialog('Error',
-          headerLiteral: "insufficient", message: "Amount less than 1");
-    } else {
+    }
+    //  else if (amount < 1) {
+    //   _showDialog('Error',
+    //       headerLiteral: "insufficient", message: "Amount less than 1");
+    // }
+    else {
       final transferEntity = InternalTransferEntity(
         amount: amount.toString(),
         fromWallet: "",

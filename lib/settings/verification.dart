@@ -1,14 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:signalwavex/component/fancy_container_two.dart';
+import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/features/user/domain/entities/kyc_request_entity.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_event.dart';
 import 'package:signalwavex/languages.dart';
 
-class VerificationSection extends StatelessWidget {
+class VerificationSection extends StatefulWidget {
   const VerificationSection({super.key});
 
+  @override
+  State<VerificationSection> createState() => _VerificationSectionState();
+}
+
+class _VerificationSectionState extends State<VerificationSection> {
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  File? selectedImage;
   @override
   Widget build(BuildContext context) {
     final TextEditingController firstNameController = TextEditingController();
@@ -28,6 +50,26 @@ class VerificationSection extends StatelessWidget {
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Center(
+            child: FancyContainerTwo(
+              height: 50,
+              width: 50,
+              action: _pickImage,
+              backgroundColor: Colors.yellow,
+              child: (selectedImage == null)
+                  ? FancyContainerTwo(
+                      backgroundColor: Colors.black.withAlpha(100),
+                      child: const Icon(
+                        Icons.camera_enhance_rounded,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Image.file(
+                      selectedImage!,
+                    ),
             ),
           ),
           const SizedBox(height: 24),
@@ -59,12 +101,22 @@ class VerificationSection extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () {
+                if (selectedImage == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Kindly submit your id document image"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  return;
+                }
                 final kycRequestEntity = KycRequestEntity(
                   firstName: firstNameController.text,
                   lastName: lastNameController.text,
                   idType: "nin",
                   country: countryController.text,
                   idNumber: idNumberController.text,
+                  docImage: selectedImage!,
                 );
 
                 context
