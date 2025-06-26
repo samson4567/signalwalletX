@@ -67,20 +67,20 @@ class HistoricalOrderModel extends HistoricalOrderEntity {
     );
   }
   factory HistoricalOrderModel.fromEntity(
-      HistoricalOrderEntity internalTransferEntity) {
+      HistoricalOrderEntity historicalOrderEntity) {
     return HistoricalOrderModel(
-      profitLoss: internalTransferEntity.profitLoss,
-      amount: internalTransferEntity.amount,
-      openPositionTime: internalTransferEntity.openPositionTime,
-      openPrice: internalTransferEntity.openPrice,
-      direction: internalTransferEntity.direction,
-      product: internalTransferEntity.product,
-      rateOfReturn: internalTransferEntity.rateOfReturn,
-      settlementPrice: internalTransferEntity.settlementPrice,
-      status: internalTransferEntity.status,
-      timePeriod: internalTransferEntity.timePeriod,
-      tradePeriod: internalTransferEntity.tradePeriod,
-      turnover: internalTransferEntity.turnover,
+      profitLoss: historicalOrderEntity.profitLoss,
+      amount: historicalOrderEntity.amount,
+      openPositionTime: historicalOrderEntity.openPositionTime,
+      openPrice: historicalOrderEntity.openPrice,
+      direction: historicalOrderEntity.direction,
+      product: historicalOrderEntity.product,
+      rateOfReturn: historicalOrderEntity.rateOfReturn,
+      settlementPrice: historicalOrderEntity.settlementPrice,
+      status: historicalOrderEntity.status,
+      timePeriod: historicalOrderEntity.timePeriod,
+      tradePeriod: historicalOrderEntity.tradePeriod,
+      turnover: historicalOrderEntity.turnover,
     );
   }
 

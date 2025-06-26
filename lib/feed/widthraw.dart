@@ -89,6 +89,9 @@ class _WithdrawState extends State<Withdraw> {
             if (state is WithdrawalErrorState) {
               _showDialog('insufficient');
             } else if (state is WithdrawalSuccessState) {
+              context.read<WalletSystemUserBalanceAndTradeCallingBloc>().add(
+                    const FetchUserTransactionsEvent(),
+                  );
               _showDialog('success');
             }
           },

@@ -62,6 +62,9 @@ class _TransferPageState extends State<TransferPage> {
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {
         if (state is InternalTransferSuccessState) {
+          context.read<WalletSystemUserBalanceAndTradeCallingBloc>().add(
+                const FetchUserTransactionsEvent(),
+              );
           _showDialog('success', message: state.message);
         } else if (state is InternalTransferErrorState) {
           _showDialog('Error',
