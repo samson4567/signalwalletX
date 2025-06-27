@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/fancy_text.dart';
+import 'package:signalwavex/features/trading_system/domain/entities/coin_entity.dart';
 
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/languages.dart';
+import 'package:signalwavex/settings/referral_section.dart';
 
 class Withdraw extends StatefulWidget {
   const Withdraw({super.key});
@@ -17,7 +20,7 @@ class Withdraw extends StatefulWidget {
 }
 
 class _WithdrawState extends State<Withdraw> {
-  String selectedCoin = 'BTC';
+  String selectedCoin = 'USDC';
   String selectedChain = 'TRC20';
   String walletAddress = '';
   final TextEditingController fromAmountController = TextEditingController();
@@ -26,13 +29,17 @@ class _WithdrawState extends State<Withdraw> {
 
   final TextEditingController walletAddressController = TextEditingController();
 
-  final List<Map<String, String>> coinList = [
-    {'label': 'BTC', 'imagePath': 'assets/icons/bitcoin.png'},
-    {'label': 'ETH', 'imagePath': 'assets/icons/sol.png'},
-    {'label': 'TON', 'imagePath': 'assets/icons/ton.png'},
-    {'label': 'XRP', 'imagePath': 'assets/icons/xrp.png'},
-    {'label': 'BCH', 'imagePath': 'assets/icons/bch.png'},
-    {'label': 'LTC', 'imagePath': 'assets/icons/lit.png'},
+  final List<CoinEntity> coinList = [
+    const CoinEntity(
+        symbol: 'USDC', name: 'USD Coin', imagePath: 'assets/icons/usdc.png'),
+    const CoinEntity(
+        symbol: 'USDT', name: 'Tether', imagePath: 'assets/icons/tether.png'),
+    // {'label': 'BTC', 'imagePath': 'assets/icons/bitcoin.png'},
+    // {'label': 'ETH', 'imagePath': 'assets/icons/sol.png'},
+    // {'label': 'TON', 'imagePath': 'assets/icons/ton.png'},
+    // {'label': 'XRP', 'imagePath': 'assets/icons/xrp.png'},
+    // {'label': 'BCH', 'imagePath': 'assets/icons/bch.png'},
+    // {'label': 'LTC', 'imagePath': 'assets/icons/lit.png'},
   ];
 
   final List<String> chainList = ['TRC20', 'ERC20', 'BEP20'];
@@ -134,20 +141,23 @@ class _WithdrawState extends State<Withdraw> {
                     _buildSelectionContainer(
                       label: 'Please select the currency to withdraw'
                           .toCurrentLanguage(),
-                      selectedItem: selectedCoin,
-                      imagePath: coinList.firstWhere((coin) =>
-                          coin['label'] == selectedCoin)['imagePath']!,
-                      itemList: coinList.map((coin) => coin['label']!).toList(),
+                      selectedItem: coinList
+                          .firstWhere((coin) => coin.symbol == selectedCoin),
+                      imagePath: coinList
+                          .firstWhere((coin) => coin.symbol == selectedCoin)
+                          .imagePath!,
+                      itemList: coinList,
+                      // .map((coin) => coin.symbol!).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedCoin = value!;
+                          selectedCoin = value!.symbol!;
                         });
                       },
                     ),
                     const SizedBox(height: 16),
                     _buildInfoContainer(),
                     const SizedBox(height: 16),
-                    _buildSelectionContainer(
+                    _buildChainListSelectionContainer(
                       label: 'Select Chain'.toCurrentLanguage(),
                       selectedItem: selectedChain,
                       itemList: chainList,
@@ -200,6 +210,76 @@ class _WithdrawState extends State<Withdraw> {
 
   Widget _buildSelectionContainer({
     required String label,
+    required CoinEntity selectedItem,
+    required String imagePath,
+    required List<CoinEntity> itemList,
+    required ValueChanged<CoinEntity?> onChanged,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131313),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  if (imagePath.isNotEmpty)
+                    Image.asset(
+                      imagePath,
+                      width: 24,
+                      height: 24,
+                    ),
+                  const SizedBox(width: 8),
+                  Text(
+                    selectedItem.symbol!,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ],
+              ),
+              DropdownButton<CoinEntity>(
+                value: selectedItem,
+                dropdownColor: Colors.black,
+                style: const TextStyle(color: Colors.white),
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                underline: const SizedBox(),
+                onChanged: onChanged,
+                items: itemList.map((item) {
+                  return DropdownMenuItem<CoinEntity>(
+                    value: item,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset(item.imagePath!),
+                        ),
+                        5.horizontalSpace,
+                        Text(item.symbol!),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChainListSelectionContainer({
+    required String label,
     required String selectedItem,
     required String imagePath,
     required List<String> itemList,
@@ -232,7 +312,7 @@ class _WithdrawState extends State<Withdraw> {
                     ),
                   const SizedBox(width: 8),
                   Text(
-                    selectedItem,
+                    selectedItem!,
                     style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ],
@@ -404,7 +484,7 @@ class _WithdrawState extends State<Withdraw> {
                   if (d != null) {
                     dString = (d * .05).toStringAsFixed(2);
                   }
-                  return "${(d == null) ? "--" : dString}";
+                  return (d == null) ? "--" : dString;
                 }.call(),
                 textColor: Colors.white,
               )

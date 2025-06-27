@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:signalwavex/component/back_button.dart';
 
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
@@ -46,6 +47,22 @@ class _AssetsState extends State<Assets> {
         backgroundColor: Colors.black,
         key: _scaffoldKey, // Add scaffold key
         drawer: drawerComponent(context),
+        // appBar: AppBar(
+        //   leading: buildBackArrow(context),
+        //   actions: [
+        //     IconButton(
+        //       icon: Icon(
+        //         Icons.menu,
+        //         color: Colors.white,
+        //         size: screenWidth * 0.08,
+        //       ),
+        //       onPressed: () {
+        //         _scaffoldKey.currentState
+        //             ?.openDrawer(); // Open drawer correctly
+        //       },
+        //     ),
+        //   ],
+        // ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
           child: SingleChildScrollView(
@@ -57,29 +74,13 @@ class _AssetsState extends State<Assets> {
                 //   action: () {
                 //     setState(() {});
                 //   },
+                // // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+
+                //   ],
                 // ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () {
-                        context.push(MyAppRouteConstant.home);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                        size: screenWidth * 0.08,
-                      ),
-                      onPressed: () {
-                        _scaffoldKey.currentState
-                            ?.openDrawer(); // Open drawer correctly
-                      },
-                    ),
-                  ],
-                ),
                 SizedBox(height: screenWidth * 0.04),
                 _buildFancyContainer(context),
                 SizedBox(height: screenWidth * 0.04),

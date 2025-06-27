@@ -390,32 +390,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
                               Expanded(
                                 child: TabBarView(children: [
                                   _buildCurrentOrderTabview(),
-                                  historOrderEntities.isEmpty
-                                      ? buildEmptyWidget("No Order History Yet")
-                                      : SingleChildScrollView(
-                                          child: Column(
-                                            children: List.generate(
-                                              historOrderEntities.length,
-                                              (index) {
-                                                return Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 28.0),
-                                                  child: SizedBox(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              .7,
-                                                      child:
-                                                          _buildHistoryOrderTabview(
-                                                              historOrderEntities[
-                                                                  index])),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
+                                  (state is FetchAllAccountBalanceLoadingState)
+                                      ? Center(
+                                          child: CircularProgressIndicator
+                                              .adaptive(),
+                                        )
+                                      : _buildHistoryTab(),
                                   // Container(
                                   //   child: Text(Uuid().v4()),
                                   // ),
@@ -1109,4 +1089,25 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
   Map cad = {};
   String selectedMinute = "5min";
   int remainingMinuteInSeconds = 0;
+
+  _buildHistoryTab() {
+    return historOrderEntities.isEmpty
+        ? buildEmptyWidget("No Order History Yet")
+        : SingleChildScrollView(
+            child: Column(
+              children: List.generate(
+                historOrderEntities.length,
+                (index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 28.0),
+                    child: SizedBox(
+                        height: MediaQuery.of(context).size.height * .7,
+                        child: _buildHistoryOrderTabview(
+                            historOrderEntities[index])),
+                  );
+                },
+              ),
+            ),
+          );
+  }
 }

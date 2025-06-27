@@ -135,9 +135,9 @@ class _ConvertState extends State<Convert> {
                     },
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Exchange rate: 1.00',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  Text(
+                    'Exchange rate: $rateUsdcToUsdt',
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                   const SizedBox(height: 16),
                   _buildConvertButton(),
@@ -148,6 +148,25 @@ class _ConvertState extends State<Convert> {
         ),
       ),
     );
+  }
+
+  double getFromAmount() {
+    return double.tryParse(fromAmountController.text) ?? 0;
+  }
+
+  String getToAmount() {
+    if (selectedFromCoin == null || selectedToCoin == null) {
+      return "--";
+    }
+    double fromAmount = getFromAmount();
+    double toAmount = 0;
+    if (selectedFromCoin!.symbol?.toLowerCase() == "usdc") {
+      toAmount = fromAmount * rateUsdcToUsdt;
+    } else {
+      toAmount = fromAmount / rateUsdcToUsdt;
+    }
+
+    return toAmount.toStringAsFixed(5);
   }
 
   BlocConsumer<TradingSystemBloc, TradingSystemState> _buildOldExchangeRate() {
@@ -208,6 +227,8 @@ class _ConvertState extends State<Convert> {
   }
 
   String? exchangeRate;
+  double rateUsdcToUsdt = 0.9995;
+
   Widget _buildConversionContainer(
     String label,
     CoinEntity? selectedCoin,
@@ -235,7 +256,8 @@ class _ConvertState extends State<Convert> {
               Expanded(
                 child: (isTo)
                     ? Text(
-                        controller.text,
+                        getToAmount(),
+                        // controller.text,
                         style: const TextStyle(color: Colors.grey),
                       )
                     : TextField(
