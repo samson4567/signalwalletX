@@ -1,13 +1,10 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:signalwavex/core/api/signalwalletX_network_client.dart';
 import 'package:signalwavex/core/constants/endpoint_constant.dart';
 import 'package:signalwavex/core/db/app_preference_service.dart';
 import 'package:signalwavex/core/security/secure_key.dart';
-import 'package:signalwavex/core/services/phone_number_verifier.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
 import 'package:signalwavex/features/authentication/data/models/recent_transaction_model.dart';
 import 'package:signalwavex/features/authentication/domain/entities/language_entity.dart';
@@ -64,24 +61,24 @@ class AuthenticationRemoteDatasourceImpl
   Future<String> newUserSignUp(
       {required NewUserRequestModel newUserRequest}) async {
     Map data = newUserRequest.toJson();
-    print("debug_print-newUserSignUp-started");
-    print("debug_print-newUserSignUp-data_is_${data}");
+    // print("debug_print-newUserSignUp-started");
+    // print("debug_print-newUserSignUp-data_is_${data}");
 
     if (!(data["email"] as String).contains("@")) {
       data["phone"] = data["email"];
       data.remove("email");
     }
-    print("debug_print-newUserSignUp-afterData_is_${data}");
+    // print("debug_print-newUserSignUp-afterData_is_${data}");
 
     final response = await networkClient.post(
       endpoint: EndpointConstant.signUp,
       data: data,
     );
-    print("debug_print-newUserSignUp-response_is_${[
-      response.data,
-      response.message,
-      response.success,
-    ]}");
+    // print("debug_print-newUserSignUp-response_is_${[
+    //   response.data,
+    //   response.message,
+    //   response.success,
+    // ]}");
     return response.message;
   }
 
@@ -298,24 +295,32 @@ class AuthenticationRemoteDatasourceImpl
   Future<String> verifyPhoneNumber(String phoneNumber) async {
     print("This is the credentials phoneNumber $phoneNumber");
     String? verificationIdtobeTaken;
+    int? resendOtPtoken;
 
     // await _authClient.
     //MAKE SURE THE PHONENUMBER STARTS WITH THEIR COUNTRY CODE.
     //THIS IS THE FUNCTION TO BE CALLED FOR YOU TO HAVE THE VERIFY PHONE NUMBER FUNCTION CALLED.
     FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: phoneNumber,
+        forceResendingToken: resendOtPtoken,
         timeout: const Duration(seconds: 60),
         //WHEN THE VERIFICATION IS COMPLETED.
         verificationCompleted: (PhoneAuthCredential credential) async {
+          await FirebaseAuth.instance.signInWithCredential(credential);
+          // ScaffoldMessenger.of(context)
+          //     .showSnackBar(SnackBar(content: Text("Logged in automatically")));
           print(
               "This is the verification process being completed##########################");
           //  result = await _authClient.signInWithCredential(credential);
         },
-        verificationFailed: (FirebaseAuthException e) {},
+        verificationFailed: (FirebaseAuthException e) {
+          print('Verification failed: ${e.message}');
+        },
         //THIS IS WHEN THE CODE WOULD BE SENT WITH A VERIFICATION ID HERE AT THE FRONT END.
 
         codeSent: (String verificationId, int? resendToken) {
           verificationIdtobeTaken = verificationId;
+          resendOtPtoken = resendToken;
           print(
               "This is the verificationId sent to me $verificationId *********************************************8");
           print('This is the resendToken being sent also $resendToken');

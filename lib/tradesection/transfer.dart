@@ -39,16 +39,11 @@ class _TransferPageState extends State<TransferPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("sajhdhsbdjhasbdahsdb-selectedFromOption_${selectedFromOption}");
     listOfWalletAccountEntityOnUse = listOfWalletAccountEntityG
         .where(
           (element) => element.accountType == selectedFromOption.toLowerCase(),
         )
         .toList();
-    print("sajhdhsbdjhasbdahsdb-selectedFromOption_lsigthd_${[
-      listOfWalletAccountEntityG.length,
-      listOfWalletAccountEntityOnUse.length,
-    ]}");
 
     availableBalance = listOfWalletAccountEntityOnUse
         .where(
@@ -122,7 +117,7 @@ class _TransferPageState extends State<TransferPage> {
                               selectedFromOption = value!;
                               selectedToOption = optionsList
                                   .where(
-                                    (element) => selectedToOption != element,
+                                    (element) => selectedFromOption != element,
                                   )
                                   .toList()[0];
                             });
@@ -194,20 +189,24 @@ class _TransferPageState extends State<TransferPage> {
                   style: const TextStyle(fontSize: 16, color: Colors.white)),
             ],
           ),
-          DropdownButton<String>(
-            value: selectedValue,
-            dropdownColor: Colors.black,
-            style: const TextStyle(color: Colors.white),
-            icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-            underline: const SizedBox(),
-            onChanged: onChanged,
-            items: options.map((option) {
-              return DropdownMenuItem<String>(
-                value: option,
-                child: Text(option),
-              );
-            }).toList(),
-          ),
+          if (label == 'To')
+            Text(selectedValue,
+                style: const TextStyle(fontSize: 16, color: Colors.white)),
+          if (label != 'To')
+            DropdownButton<String>(
+              value: selectedValue,
+              dropdownColor: Colors.black,
+              style: const TextStyle(color: Colors.white),
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+              underline: const SizedBox(),
+              onChanged: onChanged,
+              items: options.map((option) {
+                return DropdownMenuItem<String>(
+                  value: option,
+                  child: Text(option),
+                );
+              }).toList(),
+            ),
         ],
       ),
     );
@@ -349,14 +348,8 @@ class _TransferPageState extends State<TransferPage> {
   }
 
   void _handleExchange() {
-    print("sabahsjdadjhb-amountController.text_is_${amountController.text}");
-
     String amountinString = amountController.text.replaceAll("\$", "");
-    print(
-        "sabahsjdadjhb-amountController.text_afterwards_is_${amountinString}");
-
     final double? amount = double.tryParse(amountinString);
-    print("sabahsjdadjhb-amount_is_${amount}");
     if (amount == null || amount <= 0) {
       _showDialog('invalid');
     } else if (amount > availableBalance) {

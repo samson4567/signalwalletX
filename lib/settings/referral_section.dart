@@ -4,16 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moment_dart/moment_dart.dart';
 import 'package:signalwavex/component/fancy_text.dart';
-import 'package:signalwavex/component/textform_filled.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_event.dart';
-import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
 import 'package:signalwavex/features/user/domain/entities/referral_code_response_entity.dart';
 import 'package:signalwavex/features/user/domain/entities/referral_lists_response_entity.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_event.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_state.dart';
-import 'package:signalwavex/feed/Features-UI/current_order_page.dart';
 import 'package:signalwavex/languages.dart';
 
 class ReferralSection extends StatefulWidget {

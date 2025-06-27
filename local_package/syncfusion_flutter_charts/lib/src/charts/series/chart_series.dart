@@ -2818,7 +2818,7 @@ class ChartSeriesController<T, D> {
   ///       final CartesianChartPoint? chartPoint =
   ///         _chartSeriesController?.pixelToPoint(value);
   ///       print('X point: ${chartPoint?.x}');
-  ///       print('Y point: ${chartPoint?.y}');
+  ///       ('Y point: ${chartPoint?.y}');
   ///     },
   ///   );
   /// }

@@ -30,7 +30,7 @@ class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
 
     CoinEntity result = CoinModel.fromJson((response.data as Map));
 
-    print("klsabdhbadhab-${result}");
+  //  print("klsabdhbadhab-${result}");
     return result;
   }
 
@@ -49,42 +49,42 @@ class CoinRemoteDatasourceImpl implements CoinRemoteDatasource {
           (e) => CoinModel.fromJson(e),
         )
         .toList();
-    print("ssdbaldbjkasbdbasdhbs-${result}");
+  //  print("ssdbaldbjkasbdbasdhbs-${result}");
     return result;
   }
 
   @override
   Future<List<CoinEntity>> getMarketCoins() async {
-    print("bdhbjfhbsdjfbjs-getMarketCoins-started");
+ //   print("bdhbjfhbsdjfbjs-getMarketCoins-started");
     final response = await networkClient.get(
       endpoint: EndpointConstant.marketCoin,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    print("bdhbjfhbsdjfbjs-getMarketCoins-response_gotten");
-    print("bdhbjfhbsdjfbjs-getMarketCoins-response.data_is>>${response.data}");
+    // print("bdhbjfhbsdjfbjs-getMarketCoins-response_gotten");
+    // print("bdhbjfhbsdjfbjs-getMarketCoins-response.data_is>>${response.data}");
     List rawList = (response.data as Map)["coins"];
-    print("bdhbjfhbsdjfbjs-getMarketCoins-rawList_is>>${rawList}");
+   // print("bdhbjfhbsdjfbjs-getMarketCoins-rawList_is>>${rawList}");
     List<CoinEntity> result = rawList
         .map(
           (e) => CoinModel.fromJson(e),
         )
         .toList();
-    print("bdhbjfhbsdjfbjs-getMarketCoins-result_is>>${result}");
+  //  print("bdhbjfhbsdjfbjs-getMarketCoins-result_is>>${result}");
 
     return result;
   }
 
   @override
   Future<String?> fetchCoinPrice({required String tradPairSymbol}) async {
-    print("debug_print-CoinRemoteDatasourceImpl-fetchCoinPrice-started");
+  //  print("debug_print-CoinRemoteDatasourceImpl-fetchCoinPrice-started");
     final response = await networkClient.get(
       endpoint: EndpointConstant.fetchCoinPrice + tradPairSymbol,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    print(
-        "debug_print-CoinRemoteDatasourceImpl-fetchCoinPrice-response.data_is_${response.data}");
+    // print(
+    //     "debug_print-CoinRemoteDatasourceImpl-fetchCoinPrice-response.data_is_${response.data}");
 
     return (response.data as Map)["liveKline"]["closePrice"]?.toString();
   }

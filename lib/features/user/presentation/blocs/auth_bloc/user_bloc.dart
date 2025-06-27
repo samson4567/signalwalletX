@@ -29,13 +29,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       GetUserDetailEvent event, Emitter<UserState> emit) async {
     print("debug_print-UserBloc-_onGetUserDetailEvent-called");
     emit(const GetUserDetailLoadingState());
-    print(
-        "debug_print-UserBloc-_onGetUserDetailEvent-GetUserDetailLoadingState_emitted");
+    // print(
+    //     "debug_print-UserBloc-_onGetUserDetailEvent-GetUserDetailLoadingState_emitted");
     final result = await userRepository.getUserDetails();
 
     result.fold(
       (error) {
-        print("debug_print-UserBloc-_onGetUserDetailEvent-error_is_${error}");
+        // print("debug_print-UserBloc-_onGetUserDetailEvent-error_is_${error}");
         emit(GetUserDetailErrorState(errorMessage: error.message));
       },
       (userModel) {

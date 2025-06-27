@@ -25,7 +25,7 @@ dependencies:
   fl_chart: ^0.68.0
   flutter_animate:
   flutter_svg:
-  moment_dart:
+  moment_dart: ^5.2.3
   cached_network_image:
   intl:
 
