@@ -55,4 +55,6 @@ abstract class WalletSystemUserBalanceAndTradeCallingRepository {
     required String symbol,
     required String tradeIdInString,
   });
+  Future<Either<Failure, List<HistoricalOrderEntity>>>
+      fetchUserAllTransactions();
 }

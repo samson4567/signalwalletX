@@ -84,16 +84,19 @@ class TradingSystemRemoteDatasourceImpl
   @override
   Future<ConversionEntity> convert(
       {required ConversionEntity conversionEntity}) async {
+    print("debug_print-TradingSystemRemoteDatasource-convert-started");
     Map data = (conversionEntity as ConversionModel).toConvertRequestMap();
+    print("debug_print-TradingSystemRemoteDatasource-convert-data_is>>${data}");
     final response = await networkClient.post(
         endpoint: EndpointConstant.convert,
         isAuthHeaderRequired: true,
         returnRawData: true,
         data: data);
-
+    print("debug_print-TradingSystemRemoteDatasource-convert-data_is>>${data}");
     ConversionModel result =
         ConversionModel.fromConvertResponseMap((response.data as Map));
-
+    print(
+        "debug_print-TradingSystemRemoteDatasource-convert-result_is>>${result}");
     return result;
   }
 
@@ -134,6 +137,7 @@ class TradingSystemRemoteDatasourceImpl
 
   @override
   Future<String> getExchangeRate(String from, String to) async {
+    print("debug_print-TradingSystemRemoteDatasource-getExchangeRate-started");
     String result = '';
 
     Map<String, dynamic> range = await getRange(from, to);

@@ -176,3 +176,11 @@ final class DeleteOrderRequestEvent
   @override
   List<Object> get props => [];
 }
+
+final class FetchUserAllTransactionsEvent
+    extends WalletSystemUserBalanceAndTradeCallingEvent {
+  const FetchUserAllTransactionsEvent();
+
+  @override
+  List<Object> get props => [];
+}

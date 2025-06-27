@@ -54,12 +54,14 @@ class TradingSystemRepositoryImpl implements TradingSystemRepository {
   @override
   Future<Either<Failure, ConversionEntity>> convert(
       {required ConversionEntity conversionEntity}) async {
+    print("debug_print-TradingSystemRepositoryImpl-convert-started");
     try {
       final result = await tradingSystemRemoteDatasource.convert(
           conversionEntity: conversionEntity);
 
       return right(result);
     } catch (e) {
+      print("debug_print-TradingSystemRepositoryImpl-convert-Erroe_is>>$e");
       return left(mapExceptionToFailure(e));
     }
   }

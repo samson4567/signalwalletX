@@ -286,4 +286,18 @@ class WalletSystemUserBalanceAndTradeCallingRepositoryImpl
       return left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, List<HistoricalOrderEntity>>>
+      fetchUserAllTransactions() async {
+    try {
+      final result =
+          await walletSystemUserBalanceAndTradeCallingRemoteDatasource
+              .fetchUserAllTransactions();
+
+      return right(result);
+    } catch (e) {
+      return left(mapExceptionToFailure(e));
+    }
+  }
 }

@@ -49,6 +49,7 @@ abstract class WalletSystemUserBalanceAndTradeCallingRemoteDatasource {
 
   Future<BtcDataChartEntity> fetchBtcDataChart({required String symbol});
   Future<List<HistoricalOrderEntity>> fetchUserTransactions();
+  Future<List<HistoricalOrderEntity>> fetchUserAllTransactions();
 
   Future<String> deleteOrderRequest({
     required String tradeIdInNumber,
@@ -309,22 +310,50 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
 
   @override
   Future<List<HistoricalOrderEntity>> fetchUserTransactions() async {
-    print("*************************************************************************************************8dbfjsdjfbdsbkf-fetchUserTransactions-started");
+    print(
+        "*************************************************************************************************8dbfjsdjfbdsbkf-fetchUserTransactions-started");
     final response = await networkClient.get(
-      endpoint: EndpointConstant.fetchCompletedTrade,
-      isAuthHeaderRequired: true,
-      returnRawData: true,
-    );
+        endpoint: EndpointConstant.fetchCompletedTrade,
+        isAuthHeaderRequired: true,
+        returnRawData: true,
+        params: {"range": "today"});
     print(
         "dbfjsdjfbdsbkf-fetchUserTransactions-response.data_is_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%${response.data}");
     List rawList = (response.data as Map)["history"];
-    print("dbfjsdjfbdsbkf-fetchUserTransactions-rawList_is_${rawList}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    print(
+        "dbfjsdjfbdsbkf-fetchUserTransactions-rawList_is_${rawList}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     List<HistoricalOrderEntity> result = rawList
         .map(
           (e) => HistoricalOrderModel.fromJson(e),
         )
         .toList();
-    print("dbfjsdjfbdsbkf-fetchUserTransactions-result_is_**********************-------------------------------------------------------------------------------${result}");
+    print(
+        "dbfjsdjfbdsbkf-fetchUserTransactions-result_is_**********************-------------------------------------------------------------------------------${result}");
+
+    return result;
+  }
+
+  @override
+  Future<List<HistoricalOrderEntity>> fetchUserAllTransactions() async {
+    print(
+        "*************************************************************************************************8dbfjsdjfbdsbkf-fetchUserTransactions-started");
+    final response = await networkClient.get(
+        endpoint: EndpointConstant.fetchCompletedTrade,
+        isAuthHeaderRequired: true,
+        returnRawData: true,
+        params: {"range": "all"});
+    print(
+        "dbfjsdjfbdsbkf-fetchUserTransactions-response.data_is_%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%${response.data}");
+    List rawList = (response.data as Map)["history"];
+    print(
+        "dbfjsdjfbdsbkf-fetchUserTransactions-rawList_is_${rawList}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    List<HistoricalOrderEntity> result = rawList
+        .map(
+          (e) => HistoricalOrderModel.fromJson(e),
+        )
+        .toList();
+    print(
+        "dbfjsdjfbdsbkf-fetchUserTransactions-result_is_**********************-------------------------------------------------------------------------------${result}");
 
     return result;
   }

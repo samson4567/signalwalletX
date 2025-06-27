@@ -38,10 +38,12 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     on<WithdrawalEvent>(_onWithdrawalEvent);
     on<BtcDataChartEvent>(_onBtcDataChartEvent);
     on<FetchUserTransactionsEvent>(_onFetchUserTransactionsEvent);
+
     on<FollowTradeCallEvent>(_onFollowTradeCallEvent);
     on<DeleteOrderRequestEvent>(_onDeleteOrderRequestEvent);
+    on<FetchUserAllTransactionsEvent>(_onFetchUserAllTransactionsEvent);
 
-    //DeleteOrderRequest
+    //FetchUserAllTransactions
   }
 
   Future<void> _onFetchAllAccountBalanceEvent(FetchAllAccountBalanceEvent event,
@@ -307,5 +309,26 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     );
   }
 
-  // _onDeleteOrderRequestEvent
+  Future<void> _onFetchUserAllTransactionsEvent(
+    FetchUserAllTransactionsEvent event,
+    Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
+  ) async {
+    print("hasvhdvashvdja-_onFetchUserAllTransactionsEvent-started");
+    emit(const FetchUserAllTransactionsLoadingState());
+    print("hasvhdvashvdja-_onFetchUserAllTransactionsEvent-started");
+    final result = await walletSystemUserBalanceAndTradeCallingRepository
+        .fetchUserAllTransactions();
+
+    result.fold(
+      (error) {
+        emit(FetchUserAllTransactionsErrorState(errorMessage: error.message));
+      },
+      (listOfOrderEntity) {
+        emit(FetchUserAllTransactionsSuccessState(
+            listOfOrderEntity: listOfOrderEntity));
+      },
+    );
+  }
+
+  // _onFetchUserAllTransactionsEvent
 }

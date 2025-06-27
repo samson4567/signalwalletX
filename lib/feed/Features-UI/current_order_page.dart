@@ -256,7 +256,7 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
             .add(const FetchAllAccountBalanceEvent());
         context
             .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-            .add(const FetchUserTransactionsEvent());
+            .add(const FetchUserAllTransactionsEvent());
 
         context
             .read<WalletSystemUserBalanceAndTradeCallingBloc>()
@@ -352,12 +352,12 @@ class _FeaturesCurrentOrderState extends State<FeaturesCurrentOrder> {
               SnackBar(content: Text(state.errorMessage)),
             );
           }
-          if (state is FetchUserTransactionsSuccessState) {
+          if (state is FetchUserAllTransactionsSuccessState) {
             for (var element in state.listOfOrderEntity) {
               historOrderEntities.add(HistoricalOrderModel.fromEntity(element));
             }
           }
-          if (state is FetchUserTransactionsErrorState) {
+          if (state is FetchUserAllTransactionsErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.errorMessage)),
             );

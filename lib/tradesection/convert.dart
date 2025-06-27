@@ -135,67 +135,10 @@ class _ConvertState extends State<Convert> {
                     },
                   ),
                   const SizedBox(height: 12),
-                  BlocConsumer<TradingSystemBloc, TradingSystemState>(
-                      buildWhen: (previous, current) {
-                    return (current is GetExchangeRateSuccessState ||
-                        current is GetExchangeRateLoadingState ||
-                        current is GetExchangeRateErrorState);
-                  }, listener:
-                          (BuildContext context, TradingSystemState state) {
-                    // isLoading
-                    // if (state is ConversionLoadingState) {
-                    //   isLoading = true;
-                    // }
-                    if (state is GetExchangeRateSuccessState) {
-                      exchangeRate = state.rate;
-                      exchangeRate =
-                          (double.parse(exchangeRate!)).toStringAsFixed(6);
-                      exchangeRate = (double.parse(exchangeRate!) == 0)
-                          ? state.rate
-                          : exchangeRate;
-                      toAmountController.text = (double.parse(exchangeRate!) *
-                              double.parse(fromAmountController.text))
-                          .toStringAsFixed(6);
-                      toAmountController.text =
-                          (double.parse(toAmountController.text) == 0)
-                              ? (double.parse(exchangeRate!) *
-                                      double.parse(fromAmountController.text))
-                                  .toStringAsFixed(6)
-                              : toAmountController.text;
-                      setState(() {});
-                    } else if (state is GetExchangeRateErrorState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.errorMessage),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    }
-                  }, builder: (context, state) {
-                    if (selectedFromCoin != null &&
-                        selectedToCoin != null &&
-                        fromAmountController.text.isNotEmpty) {
-                      return (state is GetExchangeRateLoadingState)
-                          ? const Text(
-                              'Fetching Exchange Rate...',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 14),
-                            )
-                          : (state is GetExchangeRateErrorState)
-                              ? const Text(
-                                  'Exchange rate: not found',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 14),
-                                )
-                              : Text(
-                                  'Exchange rate: 1 ${selectedFromCoin?.symbol} = $exchangeRate ${selectedToCoin?.symbol}',
-                                  style: const TextStyle(
-                                      color: Colors.grey, fontSize: 14),
-                                );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }),
+                  const Text(
+                    'Exchange rate: 1.00',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                   const SizedBox(height: 16),
                   _buildConvertButton(),
                 ],
@@ -205,6 +148,63 @@ class _ConvertState extends State<Convert> {
         ),
       ),
     );
+  }
+
+  BlocConsumer<TradingSystemBloc, TradingSystemState> _buildOldExchangeRate() {
+    return BlocConsumer<TradingSystemBloc, TradingSystemState>(
+        buildWhen: (previous, current) {
+      return (current is GetExchangeRateSuccessState ||
+          current is GetExchangeRateLoadingState ||
+          current is GetExchangeRateErrorState);
+    }, listener: (BuildContext context, TradingSystemState state) {
+      // isLoading
+      // if (state is ConversionLoadingState) {
+      //   isLoading = true;
+      // }
+      if (state is GetExchangeRateSuccessState) {
+        exchangeRate = state.rate;
+        exchangeRate = (double.parse(exchangeRate!)).toStringAsFixed(6);
+        exchangeRate =
+            (double.parse(exchangeRate!) == 0) ? state.rate : exchangeRate;
+        toAmountController.text = (double.parse(exchangeRate!) *
+                double.parse(fromAmountController.text))
+            .toStringAsFixed(6);
+        toAmountController.text = (double.parse(toAmountController.text) == 0)
+            ? (double.parse(exchangeRate!) *
+                    double.parse(fromAmountController.text))
+                .toStringAsFixed(6)
+            : toAmountController.text;
+        setState(() {});
+      } else if (state is GetExchangeRateErrorState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.errorMessage),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    }, builder: (context, state) {
+      if (selectedFromCoin != null &&
+          selectedToCoin != null &&
+          fromAmountController.text.isNotEmpty) {
+        return (state is GetExchangeRateLoadingState)
+            ? const Text(
+                'Fetching Exchange Rate...',
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+              )
+            : (state is GetExchangeRateErrorState)
+                ? const Text(
+                    'Exchange rate: not found',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  )
+                : Text(
+                    'Exchange rate: 1 ${selectedFromCoin?.symbol} = $exchangeRate ${selectedToCoin?.symbol}',
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  );
+      } else {
+        return const SizedBox();
+      }
+    });
   }
 
   String? exchangeRate;

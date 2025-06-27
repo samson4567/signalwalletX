@@ -443,7 +443,30 @@ final class DeleteOrderRequestErrorState
   List<Object> get props => [errorMessage];
 }
 
+// FetchUserAllTransactions
+final class FetchUserAllTransactionsLoadingState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  const FetchUserAllTransactionsLoadingState();
+}
+
+class FetchUserAllTransactionsSuccessState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final List<HistoricalOrderEntity> listOfOrderEntity;
+
+  const FetchUserAllTransactionsSuccessState({required this.listOfOrderEntity});
+}
+
+final class FetchUserAllTransactionsErrorState
+    extends WalletSystemUserBalanceAndTradeCallingState {
+  final String errorMessage;
+
+  const FetchUserAllTransactionsErrorState({required this.errorMessage});
+
+  @override
+  List<Object> get props => [errorMessage];
+}
 
 
 
-// deleteOrderRequest
+
+// FetchUserAllTransactions

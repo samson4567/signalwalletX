@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/component/fancy_text.dart';
 
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/withdraw_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
@@ -21,6 +22,8 @@ class _WithdrawState extends State<Withdraw> {
   String walletAddress = '';
   final TextEditingController fromAmountController = TextEditingController();
   final TextEditingController toAmountController = TextEditingController();
+  final TextEditingController handlingFeeController = TextEditingController();
+
   final TextEditingController walletAddressController = TextEditingController();
 
   final List<Map<String, String>> coinList = [
@@ -162,8 +165,8 @@ class _WithdrawState extends State<Withdraw> {
                     ),
                     const SizedBox(height: 16),
                     _buildHeadFeeContainer(
-                      'Handling Fee'.toCurrentLanguage(),
-                      toAmountController,
+                      'Handling Fee (5%)'.toCurrentLanguage(),
+                      handlingFeeController,
                     ),
                     const SizedBox(height: 16),
                     Container(
@@ -321,6 +324,9 @@ class _WithdrawState extends State<Withdraw> {
                     hintStyle: TextStyle(color: Colors.grey),
                     border: InputBorder.none,
                   ),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
               ),
             ],
@@ -330,7 +336,7 @@ class _WithdrawState extends State<Withdraw> {
     );
   }
 
-  Widget _buildHeadFeeContainer(
+  Widget _buildAmountContainer(
     String label,
     TextEditingController controller,
   ) {
@@ -363,6 +369,57 @@ class _WithdrawState extends State<Withdraw> {
                   ),
                 ),
               ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeadFeeContainer(
+    String label,
+    TextEditingController controller,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131313),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FancyText(
+                () {
+                  double? d = double.tryParse(toAmountController.text);
+                  String dString = "$d";
+                  if (d != null) {
+                    dString = (d * .05).toStringAsFixed(2);
+                  }
+                  return "${(d == null) ? "--" : dString}";
+                }.call(),
+                textColor: Colors.white,
+              )
+              // Expanded(
+              //   child: TextField(
+              //     controller: controller,
+              //     style: const TextStyle(color: Colors.white),
+              //     keyboardType: TextInputType.number,
+              //     decoration: const InputDecoration(
+              //       hintText: '0',
+              //       hintStyle: TextStyle(color: Colors.grey),
+              //       border: InputBorder.none,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],
