@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:signalwavex/features/trading_system/domain/entities/place_a_buy_or_sell_order_request_entity.dart';
 
 // PlaceABuyOrSellOrderRequestEntity

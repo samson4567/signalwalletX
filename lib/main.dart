@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -19,7 +17,6 @@ import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_even
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/feed/l10.dart';
 import 'package:signalwavex/router/router.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,13 +71,13 @@ class _MyAppState extends State<MyApp> {
                 getItInstance<TradingSystemBloc>()), // Inject TradingSystemBloc
         BlocProvider(
             create: (_) => getItInstance<UserBloc>()), // Inject UserBloc
-        BlocProvider(create: (_) => WebSocketBloc()), // Inject WebSocketBloc
+        // BlocProvider(create: (_) => WebSocketBloc()), // Inject WebSocketBloc
         BlocProvider(
             create: (_) => getItInstance<CoinBloc>()), // Inject CoinBloc
       ],
       child: ScreenUtilInit(
           designSize: const Size(440, 956),
-          builder: (context, child) => ShelledGrandWidget()),
+          builder: (context, child) => const ShelledGrandWidget()),
     );
   }
 }

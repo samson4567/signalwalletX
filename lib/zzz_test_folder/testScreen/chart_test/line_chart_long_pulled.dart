@@ -121,7 +121,7 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
       item.vol = amount;
       _asks!.add(item);
     }
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   String? formerPeriod;
@@ -265,7 +265,7 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
       onPressed: () {
         if (onPressed != null) {
           onPressed();
-          setState(() {});
+          if (mounted) setState(() {});
         }
       },
       style: TextButton.styleFrom(
@@ -283,7 +283,7 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
 
   void getData() {
     isLoading = true;
-    setState(() {});
+    if (mounted) setState(() {});
 
     /*
      * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
@@ -294,10 +294,10 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
       solveChatData(result, fromSingleFetch: true);
     }).catchError((_) {
       showLoading = false;
-      setState(() {});
+      if (mounted) setState(() {});
     });
     isLoading = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   String arrangeDataForDisplay(String data) {
@@ -441,14 +441,14 @@ class _LineChartLongPulledState extends State<LineChartLongPulled> {
 
     DataUtil.calculate(datas!);
     showLoading = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   bool nextDataIsNew = false;
   @override
   void dispose() {
     try {
-      context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
+      // context.read<WebSocketBloc>().add(WebSocketDisconnectEvent());
     } catch (e) {}
     super.dispose();
   }

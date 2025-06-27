@@ -340,7 +340,7 @@ class HeadTailWidgetController {
   Future animateForward() async {
     direction = Direction.forward;
     if (isTailVisible) {
-      print("isTailVisible");
+      // print("isTailVisible");
       await tailAnimationController?.forward();
     } else {
       await headAnimationController?.forward();

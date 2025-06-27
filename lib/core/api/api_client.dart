@@ -81,6 +81,7 @@ abstract class ApiClient<T> {
       }
       // try {
     } on DioException catch (e) {
+      // print("jsdkasjdbasdasbdjasdjkbkjkb-endpoint_${endpoint}_${e}");
       _handleError(e);
       rethrow;
     }
@@ -142,6 +143,7 @@ abstract class ApiClient<T> {
         throw const NetworkException();
       }
     } on DioException catch (e) {
+      ("hasvhdvashvdja_error_is>>${e.message}");
       _handleError(e);
       rethrow;
     }

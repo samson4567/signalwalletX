@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:signalwavex/core/app_variables.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
+import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/historical_order_model.dart';
 import 'package:signalwavex/languages.dart';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -28,16 +29,12 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_even
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart_long_pulled.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -53,8 +50,8 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getAndSetInitialData(context);
-    context.read<WebSocketBloc>().add(
-        const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
+    // context.read<WebSocketBloc>().add(
+    //     const WebSocketConnectEvent("wss://stream.bybit.com/v5/public/linear"));
 
     getData();
     // FetchCoinPriceEvent
@@ -106,7 +103,7 @@ class _HomepageState extends State<Homepage> {
   Map askBids = {};
   CoinModel? btcCoinModel;
   List<CoinModel>? listOfCoinModel;
-  List<OrderModel>? listOfOrderEntity;
+  List<HistoricalOrderModel>? listOfOrderEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -121,10 +118,10 @@ class _HomepageState extends State<Homepage> {
         // GetBTCDetail reactions
         if (state is GetBTCDetailSuccessState) {
           btcCoinModel = state.coinModel;
-          context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
-                interval: period,
-                symbol: "BTC",
-              ));
+          // context.read<WebSocketBloc>().add(SubscribeToCryptoEvent(
+          //       interval: period,
+          //       symbol: "BTC",
+          //     ));
 
           setState(() {});
         } else if (state is GetBTCDetailErrorState) {
@@ -337,38 +334,38 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                       )
-                    : BlocConsumer<WebSocketBloc, WebSocketState>(
+                    : BlocConsumer<AuthBloc, AuthState>(
                         listener: (context, state) {
-                        if (state is WebSocketDataState) {
-                          final decodedData = jsonDecode(state.data);
-                          if ((decodedData["topic"] as String?)
-                                  ?.startsWith("kline.") ??
-                              false) {
-                            setState(() {
-                              // Force rebuild
-                              cad = calculatePriceChange(
-                                      decodedData["data"][0]) ??
-                                  {};
-                            });
-                          }
-                        }
-                        if (state is WebSocketErrorState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: Colors.blue,
-                            ),
-                          );
-                        }
+                        // if (state is WebSocketDataState) {
+                        //   final decodedData = jsonDecode(state.data);
+                        //   if ((decodedData["topic"] as String?)
+                        //           ?.startsWith("kline.") ??
+                        //       false) {
+                        //     setState(() {
+                        //       // Force rebuild
+                        //       cad = calculatePriceChange(
+                        //               decodedData["data"][0]) ??
+                        //           {};
+                        //     });
+                        //   }
+                        // }
+                        // if (state is WebSocketErrorState) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text(state.error),
+                        //       backgroundColor: Colors.blue,
+                        //     ),
+                        //   );
+                        // }
 
-                        if (state is WebSocketConnectedState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("connected".toCurrentLanguage()),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                        }
+                        // if (state is WebSocketConnectedState) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text("connected".toCurrentLanguage()),
+                        //       backgroundColor: Colors.green,
+                        //     ),
+                        //   );
+                        // }
                         // state;
                       }, builder: (context, state) {
                         return Column(
@@ -599,7 +596,7 @@ class _HomepageState extends State<Homepage> {
       if (state is FetchUserTransactionsSuccessState) {
         listOfOrderEntity = state.listOfOrderEntity
             .map(
-              (e) => OrderModel.fromEntity(e),
+              (e) => HistoricalOrderModel.fromEntity(e),
             )
             .toList();
         setState(() {});
@@ -683,7 +680,7 @@ class _HomepageState extends State<Homepage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            transaction.symbol!,
+                                            transaction.product ?? "--",
                                             // ['name']!,
                                             style: const TextStyle(
                                               fontSize: 14,
@@ -692,7 +689,8 @@ class _HomepageState extends State<Homepage> {
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
-                                            transaction.side?.toLowerCase() ??
+                                            transaction.direction
+                                                    ?.toLowerCase() ??
                                                 "-",
                                             // 'Buy',
                                             style: const TextStyle(
@@ -708,7 +706,7 @@ class _HomepageState extends State<Homepage> {
                                           CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          transaction.quantity ?? "-",
+                                          transaction.amount ?? "-",
                                           // transaction['amount']!,
                                           style: const TextStyle(
                                             fontSize: 14,
@@ -718,8 +716,10 @@ class _HomepageState extends State<Homepage> {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
+                                          //  ?? "--",
                                           getTrasactionDateFormat(
-                                              transaction.orderTime),
+                                            transaction.openPositionTime,
+                                          ),
                                           // transaction.orderTime ?? "-",
                                           // ['time']!,
                                           style: const TextStyle(
@@ -1003,32 +1003,53 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  bool sometine = false;
   Widget _buildPnLSection(double screenWidth) {
-    return Row(
-      children: [
-        Text(
-          'Today\'s PnL:',
-          style: TextStyles.subtitle.copyWith(
-            fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
-            color: const Color.fromRGBO(255, 255, 255, 0.7),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(width: screenWidth * 0.01), // 1% spacing
-        BlocConsumer<AppBloc, AppState>(
-            listener: (BuildContext context, AppState state) {
-          if (state is StorePNLSuccessState) {}
-        }, builder: (context, state) {
-          return Text(
-            '+\$${state.pnl?.substring(0, 4) ?? 0}',
-            style: TextStyles.smallText.copyWith(
+    if (sometine) {
+      return CircularProgressIndicator.adaptive();
+    }
+    return GestureDetector(
+      onTap: () {
+        context
+            .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+            .add(const GetpnlEvent());
+        sometine = true;
+        setState(() {});
+        Future.delayed(
+          2.seconds,
+          () {
+            sometine = false;
+            setState(() {});
+          },
+        );
+      },
+      child: Row(
+        children: [
+          Text(
+            'Today\'s PnL:',
+            style: TextStyles.subtitle.copyWith(
               fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
-              color: ColorConstants.numyelcolor,
+              color: const Color.fromRGBO(255, 255, 255, 0.7),
               fontWeight: FontWeight.bold,
             ),
-          );
-        }),
-      ],
+          ),
+          SizedBox(width: screenWidth * 0.01), // 1% spacing
+          BlocConsumer<AppBloc, AppState>(
+              listener: (BuildContext context, AppState state) {
+            if (state is StorePNLSuccessState) {}
+          }, builder: (context, state) {
+            return Text(
+              getDisplayVersionOfpnl(pnlG),
+              // '+\$${pnlG?.substring(0, 4) ?? 0}',
+              style: TextStyles.smallText.copyWith(
+                fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
+                color: ColorConstants.numyelcolor,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          }),
+        ],
+      ),
     );
   }
 

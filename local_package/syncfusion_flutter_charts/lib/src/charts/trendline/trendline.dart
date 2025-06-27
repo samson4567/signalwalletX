@@ -435,7 +435,7 @@ class Trendline {
   ///           Trendline(
   ///             onRenderDetailsUpdate: (TrendlineRenderParams args) {
   ///               print('Slope value: ' + args.slope![0].toString());
-  ///               print('r-squared value: ' + args.rSquaredValue.toString());
+  ///               ('r-squared value: ' + args.rSquaredValue.toString());
   ///               print('Intercept value (x): ' + args.intercept.toString());
   ///             }
   ///           )

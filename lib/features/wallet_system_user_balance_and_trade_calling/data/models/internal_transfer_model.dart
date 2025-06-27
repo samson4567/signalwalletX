@@ -16,8 +16,27 @@ class InternalTransferModel extends InternalTransferEntity {
       "currency": currency,
       "from_account": fromAccount,
       "to_account": toAccount,
+      "amount": amount,
+      "from_wallet": fromWallet,
+      "to_wallet": toWallet,
+    };
+  }
+
+  Map<String, dynamic> toInternalTransferJson() {
+    return {
+      "currency": currency,
+      "from_account": fromAccount,
+      "to_account": toAccount,
       "amount": amount
     };
+    // return {
+    //   "currency": currency,
+    //   "from_account": fromAccount,
+    //   "to_account": toAccount,
+    //   "amount": amount,
+    //   "from_wallet": fromWallet,
+    //   "to_wallet": toWallet,
+    // };
   }
 
   factory InternalTransferModel.fromJson(Map jsonMap) {
@@ -26,8 +45,19 @@ class InternalTransferModel extends InternalTransferEntity {
       amount: jsonMap["amount"],
       fromAccount: jsonMap["from_account"],
       toAccount: jsonMap["to_account"],
-      fromWallet: '',
-      toWallet: '',
+      fromWallet: jsonMap["from_wallet"] ?? '',
+      toWallet: jsonMap["to_wallet"] ?? '',
+    );
+  }
+  factory InternalTransferModel.fromEntity(
+      InternalTransferEntity internalTransferEntity) {
+    return InternalTransferModel(
+      currency: internalTransferEntity.currency,
+      amount: internalTransferEntity.amount,
+      fromAccount: internalTransferEntity.fromAccount,
+      toAccount: internalTransferEntity.toAccount,
+      fromWallet: internalTransferEntity.fromWallet,
+      toWallet: internalTransferEntity.toWallet,
     );
   }
 

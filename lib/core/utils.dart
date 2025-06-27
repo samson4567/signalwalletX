@@ -163,8 +163,8 @@ dynamic handleJsonResponse(http.Response response) {
 
 getTrasactionDateFormat(String? dateTimeString) {
   String formattedTime = "-";
-
-  if (dateTimeString != null) {
+  // print("dsjksdbjasdjbkj-dateTimeString_is>>${dateTimeString}<<");
+  if (dateTimeString != null && dateTimeString != "null") {
     DateTime dateTime = DateTime.parse(dateTimeString);
 
     // Create a DateFormat object for the desired output format
@@ -282,4 +282,19 @@ Map<String, dynamic>? calculatePriceChange(Map<String, dynamic> data) {
     'valueChange': change.abs().toStringAsFixed(4),
     'currentPrice': close,
   };
+}
+
+getDisplayVersionOfpnl(String? pnlParam) {
+  if (pnlParam == null) {
+    return "0";
+  }
+  String result = "";
+
+  double doubleVersionOfpnlParam = double.parse(pnlParam);
+  if (doubleVersionOfpnlParam < 0) {
+    result = '-\$${doubleVersionOfpnlParam.toStringAsFixed(5)}';
+  } else {
+    result = '+\$${doubleVersionOfpnlParam.toStringAsFixed(5)}';
+  }
+  return result;
 }

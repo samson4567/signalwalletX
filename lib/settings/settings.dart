@@ -5,6 +5,7 @@ import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/language.dart';
 import 'package:signalwavex/settings/password.dart';
 import 'package:signalwavex/settings/profile.dart';
+import 'package:signalwavex/settings/referral_section.dart';
 import 'package:signalwavex/settings/transaction.dart';
 import 'package:signalwavex/settings/verification.dart';
 
@@ -22,7 +23,7 @@ class _SettingsState extends State<Settings>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
   }
 
   @override
@@ -62,6 +63,7 @@ class _SettingsState extends State<Settings>
               Tab(text: "Password".toCurrentLanguage()),
               Tab(text: "Verification".toCurrentLanguage()),
               Tab(text: "Language".toCurrentLanguage()),
+              Tab(text: "referrals".toCurrentLanguage()),
             ],
           ),
           Expanded(
@@ -73,6 +75,7 @@ class _SettingsState extends State<Settings>
                 PasswordSection(),
                 VerificationSection(),
                 LanguageSection(),
+                ReferralSection()
               ],
             ),
           ),

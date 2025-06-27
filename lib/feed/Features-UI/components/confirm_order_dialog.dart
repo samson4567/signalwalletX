@@ -75,9 +75,9 @@ class _ConfirmOrderDialogState extends State<ConfirmOrderDialog> {
                           //         WalletSystemUserBalanceAndTradeCallingBloc>()
                           //     .add(FollowTradeCallEvent(widget.tid));
 
-                          // try {
-                          //   context.pop();
-                          // } catch (e) {}
+                          try {
+                            context.pop();
+                          } catch (e) {}
                         },
                         height: 45.h,
                         hasBorder: true,

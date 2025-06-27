@@ -357,7 +357,7 @@ class SfPyramidChart extends StatefulWidget {
   ///    return Container(
   ///        child: SfPyramidChart(
   ///            onDataLabelTapped: (DataLabelTapDetails args) {
-  ///                 print(arg.seriesIndex);
+  ///                 (arg.seriesIndex);
   ///                  }
   ///        )
   ///    );
@@ -386,7 +386,7 @@ class SfPyramidChart extends StatefulWidget {
   ///    return Container(
   ///        child: SfPyramidChart(
   ///            onChartTouchInteractionMove: (ChartTouchInteractionArgs args){
-  ///               print(args.position.dx.toString());
+  ///               (args.position.dx.toString());
   ///               print(args.position.dy.toString());
   ///             }
   ///        )

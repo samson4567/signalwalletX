@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/internal_transfer_entity.dart';
+import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/domain/entities/wallet_account_balance_entity.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
@@ -16,25 +17,56 @@ class TransferPage extends StatefulWidget {
 }
 
 class _TransferPageState extends State<TransferPage> {
-  String selectedAction = 'Trade';
-  String selectedToOption = 'TRC20';
+  String selectedFromOption = 'Trade';
+  String selectedToOption = 'Exchange';
   final List<String> actionList = ['Trade', 'Convert', 'Transfer'];
   final List<String> toOptionsList = ['TRC20', 'ERC20'];
+  final List<String> optionsList = ["Trade", "Exchange"];
 
+  String? selectedCurrency;
   double availableBalance = 0.0;
 
   TextEditingController amountController = TextEditingController();
+  @override
+  void initState() {
+    availableBalance = totalBalance;
+    super.initState();
+  }
+
+  List<WalletAccountEntity> listOfTradeWalletAccountEntity = [];
+  List<WalletAccountEntity> listOfExchangeWalletAccountEntity = [];
+  List<WalletAccountEntity> listOfWalletAccountEntityOnUse = [];
 
   @override
   Widget build(BuildContext context) {
-    availableBalance = totalBalance;
+    listOfWalletAccountEntityOnUse = listOfWalletAccountEntityG
+        .where(
+          (element) => element.accountType == selectedFromOption.toLowerCase(),
+        )
+        .toList();
+
+    availableBalance = listOfWalletAccountEntityOnUse
+        .where(
+      (element) => element.currency == selectedCurrency,
+    )
+        .fold(0, (sum, wallet) {
+      final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+      return sum + balance;
+    });
     return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
         WalletSystemUserBalanceAndTradeCallingState>(
       listener: (context, state) {
         if (state is InternalTransferSuccessState) {
+          context.read<WalletSystemUserBalanceAndTradeCallingBloc>().add(
+                const FetchUserTransactionsEvent(),
+              );
           _showDialog('success', message: state.message);
         } else if (state is InternalTransferErrorState) {
-          _showDialog('insufficient', message: state.errorMessage);
+          _showDialog('Error',
+              headerLiteral: "Error",
+              message: (state.errorMessage.length < 25)
+                  ? state.errorMessage
+                  : "Something Went Wrong");
         }
       },
       builder: (context, state) {
@@ -74,23 +106,40 @@ class _TransferPageState extends State<TransferPage> {
                       children: [
                         _buildActionDropdownContainer(
                           'From',
-                          'Trade',
-                          selectedAction,
-                          actionList,
+                          selectedFromOption,
+                          optionsList,
+                          // .where(
+                          //   (element) => selectedToOption != element,
+                          // )
+                          // .toList(),
                           (value) {
-                            setState(() => selectedAction = value!);
+                            setState(() {
+                              selectedFromOption = value!;
+                              selectedToOption = optionsList
+                                  .where(
+                                    (element) => selectedFromOption != element,
+                                  )
+                                  .toList()[0];
+                            });
                           },
                         ),
                         const SizedBox(height: 16),
                         _buildActionDropdownContainer(
                           'To',
-                          'Exchange',
                           selectedToOption,
-                          toOptionsList,
+                          optionsList,
                           (value) {
+                            // .where(
+                            //     (element) => selectedAction != element,
+                            //   )
+                            if (selectedFromOption == value) {
+                              return;
+                            }
                             setState(() => selectedToOption = value!);
                           },
                         ),
+                        const SizedBox(height: 16),
+                        _buildCurrencyContainer(),
                         const SizedBox(height: 16),
                         _buildAmountContainer(),
                         const SizedBox(height: 8),
@@ -117,7 +166,6 @@ class _TransferPageState extends State<TransferPage> {
 
   Widget _buildActionDropdownContainer(
     String label,
-    String valueLabel,
     String selectedValue,
     List<String> options,
     ValueChanged<String?> onChanged,
@@ -137,24 +185,28 @@ class _TransferPageState extends State<TransferPage> {
               Text(label,
                   style: const TextStyle(fontSize: 16, color: Colors.grey)),
               const SizedBox(height: 4),
-              Text(valueLabel,
+              Text(selectedValue,
                   style: const TextStyle(fontSize: 16, color: Colors.white)),
             ],
           ),
-          DropdownButton<String>(
-            value: selectedValue,
-            dropdownColor: Colors.black,
-            style: const TextStyle(color: Colors.white),
-            icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-            underline: const SizedBox(),
-            onChanged: onChanged,
-            items: options.map((option) {
-              return DropdownMenuItem<String>(
-                value: option,
-                child: Text(option),
-              );
-            }).toList(),
-          ),
+          if (label == 'To')
+            Text(selectedValue,
+                style: const TextStyle(fontSize: 16, color: Colors.white)),
+          if (label != 'To')
+            DropdownButton<String>(
+              value: selectedValue,
+              dropdownColor: Colors.black,
+              style: const TextStyle(color: Colors.white),
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+              underline: const SizedBox(),
+              onChanged: onChanged,
+              items: options.map((option) {
+                return DropdownMenuItem<String>(
+                  value: option,
+                  child: Text(option),
+                );
+              }).toList(),
+            ),
         ],
       ),
     );
@@ -189,22 +241,84 @@ class _TransferPageState extends State<TransferPage> {
               ),
               TextButton(
                 onPressed: () {
-                  final blocState = context
-                      .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-                      .state;
-                  if (blocState is FetchAllAccountBalanceSuccessState) {
-                    availableBalance = double.tryParse(
-                            blocState.listOfWalletsBalances.first.currency ??
-                                '${0}') ??
-                        0.0;
+                  // final blocState = context
+                  //     .read<WalletSystemUserBalanceAndTradeCallingBloc>()
+                  //     .state;
+                  // if (blocState is FetchAllAccountBalanceSuccessState) {
+                  //   availableBalance = double.tryParse(
+                  //           blocState.listOfWalletsBalances.first.currency ??
+                  //               '${0}') ??
+                  //       0.0;
 
-                    // Format availableBalance with dollar sign
-                    amountController.text = _formatCurrency(availableBalance);
-                  }
+                  //   // Format availableBalance with dollar sign
+
+                  // }
+                  try {
+                    amountController.text = "${availableBalance}";
+                  } catch (e) {}
                 },
                 child: const Text(
                   'Max',
                   style: TextStyle(color: Colors.yellow),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCurrencyContainer() {
+    List<String> currencies = ["USDT", "USDC"];
+    // listOfWalletAccountEntityG
+    //     .map(
+    //       (e) => e.currency ?? '',
+    //     )
+    //     .toSet()
+    //     .toList();
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131313),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Currency', style: TextStyle(fontSize: 14, color: Colors.grey)),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButton<String>(
+                  value: selectedCurrency,
+                  isExpanded: true,
+                  dropdownColor: Colors.black,
+                  style: const TextStyle(color: Colors.white),
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                  underline: const SizedBox(),
+                  onChanged: (value) {
+                    print(
+                        "sajhdhsbdjhasbdahsdb-onChanged-listOfWalletAccountEntityOnUse.length_${listOfWalletAccountEntityOnUse.length}");
+                    // availableBalance = listOfWalletAccountEntityOnUse
+                    //     .where(
+                    //   (element) => element.currency == value,
+                    // )
+                    //     .fold(0, (sum, wallet) {
+                    //   final balance =
+                    //       double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+                    //   return sum + balance;
+                    // });
+                    selectedCurrency = value;
+                    setState(() {});
+                  },
+                  items: currencies.map((option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
                 ),
               ),
             ],
@@ -234,33 +348,40 @@ class _TransferPageState extends State<TransferPage> {
   }
 
   void _handleExchange() {
-    final double? amount = double.tryParse(amountController.text);
-
+    String amountinString = amountController.text.replaceAll("\$", "");
+    final double? amount = double.tryParse(amountinString);
     if (amount == null || amount <= 0) {
       _showDialog('invalid');
     } else if (amount > availableBalance) {
       _showDialog('insufficient');
-    } else {
+    }
+    //  else if (amount < 1) {
+    //   _showDialog('Error',
+    //       headerLiteral: "insufficient", message: "Amount less than 1");
+    // }
+    else {
       final transferEntity = InternalTransferEntity(
         amount: amount.toString(),
-        fromWallet: selectedAction,
-        toWallet: selectedToOption,
-        toAccount: '',
-        fromAccount: '',
-        currency: '',
+        fromWallet: "",
+        toWallet: "",
+        toAccount: selectedToOption.toLowerCase(),
+        fromAccount: selectedFromOption.toLowerCase(),
+        currency: selectedCurrency,
       );
-      context
-          .read<WalletSystemUserBalanceAndTradeCallingBloc>()
-          .add(InternalTransferEvent(transferEntity));
+      context.read<WalletSystemUserBalanceAndTradeCallingBloc>().add(
+            InternalTransferEvent(transferEntity),
+          );
     }
   }
 
-  void _showDialog(String type, {String? message}) {
+  void _showDialog(String type, {String? headerLiteral, String? message}) {
     String title = type == 'success'
         ? 'Transaction Successful'
         : type == 'invalid'
             ? 'Invalid Amount'
-            : 'Insufficient Funds';
+            : type == "insufficient"
+                ? 'Insufficient Funds'
+                : headerLiteral ?? "";
 
     String finalMessage = message ??
         (type == 'success'

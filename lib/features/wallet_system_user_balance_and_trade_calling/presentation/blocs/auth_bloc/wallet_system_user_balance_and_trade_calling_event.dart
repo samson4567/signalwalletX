@@ -160,3 +160,19 @@ final class FetchUserTransactionsEvent
   @override
   List<Object> get props => [];
 }
+
+// DeleteOrderRequest
+
+final class DeleteOrderRequestEvent
+    extends WalletSystemUserBalanceAndTradeCallingEvent {
+  final String tradeIdInNumber;
+  final String tradeIdInString;
+  final String symbol;
+  const DeleteOrderRequestEvent(
+      {required this.tradeIdInNumber,
+      required this.symbol,
+      required this.tradeIdInString});
+
+  @override
+  List<Object> get props => [];
+}

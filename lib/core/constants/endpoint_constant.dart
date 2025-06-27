@@ -20,7 +20,11 @@ class EndpointConstant {
   static const String getpnl = '/user/pnl';
   static const String fetchOrderBook = '/market/orderbook';
   static const String placeABuyOrSellOrderRequest = '/trade/order';
+  static const String deleteOrderRequest = '/trade/order';
+
   static const String fetchCompletedTrade = '/trade/history';
+  static const String fetchCompletedTradeNew = '/trade/orders';
+
   static const String convert = '/wallet/convert';
   static const String getConversions = '/wallet/conversions';
   static const String getTradableCoin = "/market/tradable-coins";
@@ -45,6 +49,10 @@ class EndpointConstant {
   static const String kycVerification = "/auth/verify-id";
 
   static const String registerPhoneNumberAsVerified = "/auth/phone/verify";
+  static const String getRefferalCode = "/me/referral-code";
+  static const String getRefferalList = "/me/referrals";
+
+  // /me/referral-code
 
 // /auth/phone/verify
 }

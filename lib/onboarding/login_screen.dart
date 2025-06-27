@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signalwavex/component/color.dart';
+import 'package:signalwavex/component/fancy_container_two.dart';
+import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
+import 'package:signalwavex/component/snackbars.dart';
 import 'package:signalwavex/component/textform_filled.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
@@ -63,9 +66,13 @@ class _LoginScreenState extends State<LoginScreen> {
               context.push(MyAppRouteConstant.feedPage,
                   extra: {'email'.toCurrentLanguage(): state.email});
             } else if (state is LoginErrorState) {
+              String error = state.errorMessage;
+              if (!state.errorMessage.contains("cancel")) {
+                error = "something went wrong";
+              }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.errorMessage),
+                  content: Text(error),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -360,7 +367,70 @@ class _LoginScreenState extends State<LoginScreen> {
               // Navigate to sign-up page
             },
             child: GestureDetector(
-              onTap: () => context.push(MyAppRouteConstant.createAccount),
+              onTap: () async {
+//
+                String? whereTo = await showDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                    child: FancyContainerTwo(
+                        backgroundColor: Colors.black,
+                        hasBorder: true,
+                        borderColor: Colors.yellow,
+                        nulledAlign: true,
+                        radius: 15,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FancyText("How do you want to sign up?"),
+                              10.verticalSpace,
+                              FancyContainerTwo(
+                                height: 40,
+                                backgroundColor: Colors.yellow,
+                                action: () {
+                                  context.pop("phoneNumber");
+                                },
+                                child: FancyText(
+                                  "Sign up with phone number",
+                                  textColor: Colors.black,
+                                ),
+                              ),
+                              5.verticalSpace,
+                              FancyContainerTwo(
+                                height: 40,
+                                action: () {
+                                  context.pop("email");
+                                },
+                                hasBorder: true,
+                                borderColor: Colors.yellow,
+                                child: FancyText(
+                                  "Sign up with email",
+                                  textColor: Colors.yellow,
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
+                );
+                if (whereTo == null) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(generalSnackBar("Select a sign in method"));
+                  return;
+                }
+                if (whereTo == "phoneNumber") {
+                  context.push(MyAppRouteConstant.phoneAuthWebview, extra: {
+                    "registrationUrl": "https://signalwavex.com/signup",
+                    "successRedirectUrl": "signalwavex.com/login",
+                    "onfinished": (BuildContext context) {
+                      context.push(MyAppRouteConstant.login);
+                    }
+                  });
+                } else {
+                  context.push(MyAppRouteConstant.createAccount);
+                }
+              },
               child: Text(
                 'Create account'.toCurrentLanguage(),
                 style: const TextStyle(color: Colors.blue),

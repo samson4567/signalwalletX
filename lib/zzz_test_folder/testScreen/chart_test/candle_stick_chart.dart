@@ -81,7 +81,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
       item.vol = amount;
       _asks!.add(item);
     }
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   bool toReget = false;
@@ -227,7 +227,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
       onPressed: () {
         if (onPressed != null) {
           onPressed();
-          setState(() {});
+          if (mounted) setState(() {});
         }
       },
       style: TextButton.styleFrom(
@@ -254,7 +254,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
       solveChatData(result);
     }).catchError((_) {
       showLoading = false;
-      setState(() {});
+      if (mounted) setState(() {});
     });
   }
 
@@ -290,7 +290,7 @@ class _CandleStickChartState extends State<CandleStickChart> {
         .cast<KLineEntity>();
     DataUtil.calculate(datas!);
     showLoading = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override

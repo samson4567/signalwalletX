@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_event.dart';
 import 'package:signalwavex/features/authentication/data/models/new_user_request_model.dart';
@@ -91,19 +92,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       password: event.password,
     );
 
-    result.fold((error) => emit(LoginErrorState(errorMessage: error.message)),
-        (entity) {
-      appBloc.add(
-        UserUpdateEvent(
-          updatedUserModel: UserModel.createFromLogin(
-            entity["user"],
+    result.fold(
+      (error) => emit(LoginErrorState(errorMessage: error.message)),
+      (entity) {
+        appBloc.add(
+          UserUpdateEvent(
+            updatedUserModel: UserModel.createFromLogin(
+              entity["user"],
+            ),
           ),
-        ),
-      );
-
-      emit(LoginSuccessState(
-          email: entity["user"]["email"], message: "Login Successful"));
-    });
+        );
+        userModelG = UserModel.createFromLogin(
+          entity["user"],
+        );
+        emit(
+          LoginSuccessState(
+              email: UserModel.createFromLogin(
+                    entity["user"],
+                  ).email ??
+                  "",
+              message: "Login Successful"),
+        );
+      },
+    );
   }
 
   Future<void> _onLogoutEvent(

@@ -2241,6 +2241,6 @@ toCurrentLanguageFunction(String input) {
     result =
         (element[input.toLowerCase()]?[currentLanguage] as String?) ?? result;
   }
-  print("debug_print_toCurrentLanguageFunction_$currentLanguage");
+  // print("debug_print_toCurrentLanguageFunction_$currentLanguage");
   return result;
 }

@@ -157,7 +157,8 @@ class TradingSystemRemoteDatasourceImpl
         headers: headers);
     // estimatedAmount
     dynamic rawResult = jsonDecode(r.body);
-
+    print(
+        '******************************************************************$rawResult');
     String conversionRate = getPerOne(
         range['min'] as String, rawResult['result']['estimatedAmount']);
     result = conversionRate;

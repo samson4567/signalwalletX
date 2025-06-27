@@ -23,5 +23,19 @@ final class KycVerificationEvent extends UserEvent {
   List<Object> get props => [kycRequestEntity];
 }
 
+final class GetRefferalCodeEvent extends UserEvent {
+  const GetRefferalCodeEvent();
 
-// KycVerification
+  @override
+  List<Object> get props => [];
+}
+
+final class GetRefferalListEvent extends UserEvent {
+  const GetRefferalListEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+
+// GetRefferalList

@@ -7,7 +7,6 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_bloc
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_event.dart';
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
-import 'package:signalwavex/feed/asset.dart';
 import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
 

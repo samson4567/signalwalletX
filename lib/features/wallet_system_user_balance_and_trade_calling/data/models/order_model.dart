@@ -50,7 +50,7 @@ class OrderModel extends OrderEntity {
       "updated_at": updatedAt,
       "time_period": timePeriod,
       "trade_period": tradePeriod,
-      "rate_of_return": rateOfReturn
+      "rate_of_return": rateOfReturn,
     };
   }
 
@@ -77,16 +77,16 @@ class OrderModel extends OrderEntity {
         rateOfReturn: orderEntity.rateOfReturn);
   }
   factory OrderModel.fromJson(Map jsonMap) {
-    var t = {};
     return OrderModel(
-      id: jsonMap["id"],
+      id: ((jsonMap["id"] ?? 0) as int),
+      //  jsonMap["id"],
       userID: jsonMap["user_id"]?.toString(),
       tid: jsonMap["tid"],
       title: jsonMap["title"],
       purchaseDuration: jsonMap["purchase_duration"],
       orderTime: jsonMap["order_time"],
       followCondition: jsonMap["follow_condition"],
-      createdByAdmin: jsonMap["created_by_admin"],
+      createdByAdmin: ((jsonMap["created_by_admin"] ?? 0) as int),
       orderID: jsonMap["order_id"],
       rateOfReturn: jsonMap["rate_of_return"],
       symbol: jsonMap["symbol"],

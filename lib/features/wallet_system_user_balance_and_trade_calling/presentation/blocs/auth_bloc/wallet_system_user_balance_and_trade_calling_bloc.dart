@@ -39,8 +39,9 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
     on<BtcDataChartEvent>(_onBtcDataChartEvent);
     on<FetchUserTransactionsEvent>(_onFetchUserTransactionsEvent);
     on<FollowTradeCallEvent>(_onFollowTradeCallEvent);
+    on<DeleteOrderRequestEvent>(_onDeleteOrderRequestEvent);
 
-    //FetchUserTransactions
+    //DeleteOrderRequest
   }
 
   Future<void> _onFetchAllAccountBalanceEvent(FetchAllAccountBalanceEvent event,
@@ -204,6 +205,7 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
       (error) => emit(GetpnlErrorState(errorMessage: error.message)),
       (pnl) {
         appBloc.add(StorePNLEvent(pnl: pnl));
+        pnlG = pnl;
         emit(GetpnlSuccessState(pnl: pnl));
       },
     );
@@ -281,4 +283,29 @@ class WalletSystemUserBalanceAndTradeCallingBloc extends Bloc<
       },
     );
   }
+
+  Future<void> _onDeleteOrderRequestEvent(
+    DeleteOrderRequestEvent event,
+    Emitter<WalletSystemUserBalanceAndTradeCallingState> emit,
+  ) async {
+    print("hasvhdvashvdja-_onDeleteOrderRequestEvent-started");
+    emit(const DeleteOrderRequestLoadingState());
+    print("hasvhdvashvdja-_onDeleteOrderRequestEvent-started");
+    final result = await walletSystemUserBalanceAndTradeCallingRepository
+        .deleteOrderRequest(
+            symbol: event.symbol,
+            tradeIdInNumber: event.tradeIdInNumber,
+            tradeIdInString: event.tradeIdInString);
+
+    result.fold(
+      (error) {
+        emit(DeleteOrderRequestErrorState(errorMessage: error.message));
+      },
+      (message) {
+        emit(DeleteOrderRequestSuccessState(message: message));
+      },
+    );
+  }
+
+  // _onDeleteOrderRequestEvent
 }

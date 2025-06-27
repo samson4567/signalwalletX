@@ -25,6 +25,7 @@ dependencies:
   fl_chart: ^0.68.0
   flutter_animate:
   flutter_svg:
+  moment_dart: ^5.2.3
   cached_network_image:
   intl:
 
@@ -76,7 +77,7 @@ dependencies:
   firebase_auth: ^5.5.2
   image_picker: ^1.1.2
   flutter_local_notifications: ^19.1.0
-  firebase_app_check: ^0.3.2+6
+  webview_flutter:
 
 dev_dependencies:
   flutter_test:

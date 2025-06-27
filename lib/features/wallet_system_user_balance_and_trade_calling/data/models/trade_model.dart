@@ -14,6 +14,7 @@ class TradeModel extends TradeEntity {
     super.followCondition,
     super.status,
     super.adminID,
+    super.rawDetail,
   });
 
   Map<String, dynamic> toJson() {
@@ -62,7 +63,8 @@ class TradeModel extends TradeEntity {
         purchaseDuration: jsonMap["purchase_duration"],
         orderTime: jsonMap["order_time"],
         followCondition: jsonMap["follow_condition"],
-        status: jsonMap["status"]);
+        status: jsonMap["status"],
+        rawDetail: jsonMap);
   }
   factory TradeModel.fromEntity(TradeEntity tradeEntity) {
     return TradeModel(
@@ -73,11 +75,12 @@ class TradeModel extends TradeEntity {
         purchaseDuration: tradeEntity.purchaseDuration,
         orderTime: tradeEntity.orderTime,
         followCondition: tradeEntity.followCondition,
-        status: tradeEntity.status);
+        status: tradeEntity.status,
+        rawDetail: tradeEntity.rawDetail);
   }
   factory TradeModel.fromOrderEntity(OrderEntity orderEntity) {
     return TradeModel(
-        id: double.tryParse(orderEntity.id.toString()),
+        id: orderEntity.id,
         title: orderEntity.title,
         tradingPair: orderEntity.tradingPair,
         purchaseDuration:

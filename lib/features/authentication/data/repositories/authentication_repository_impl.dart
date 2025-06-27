@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:signalwavex/core/error/exception.dart';
 import 'package:signalwavex/core/error/failure.dart';
 import 'package:signalwavex/core/mapper/failure_mapper.dart';
 import 'package:signalwavex/core/services/phone_number_verifier.dart';
@@ -34,6 +35,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           newUserRequest: newUserRequest);
       return right(result);
     } catch (e) {
+      print(
+          "debug_print-AuthenticationRepositoryImpl-newUserSignUp-error_is${(e as ClientException).description}");
       return left(mapExceptionToFailure(e));
     }
   }

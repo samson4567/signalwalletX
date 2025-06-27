@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 
 import 'package:signalwavex/component/color.dart';
 import 'package:signalwavex/component/drawer_component.dart';
+import 'package:signalwavex/component/fancy_text.dart';
 import 'package:signalwavex/component/fansycontainer.dart';
 import 'package:signalwavex/component/textstyle.dart';
 import 'package:signalwavex/core/app_variables.dart';
+import 'package:signalwavex/core/utils.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_bloc.dart';
 import 'package:signalwavex/features/app_bloc/presentation/blocs/auth_bloc/app_state.dart';
 import 'package:signalwavex/features/user/presentation/blocs/auth_bloc/user_bloc.dart';
@@ -17,6 +19,7 @@ import 'package:signalwavex/features/wallet_system_user_balance_and_trade_callin
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/languages.dart';
 import 'package:signalwavex/router/api_route.dart';
+import 'dart:developer' as logger;
 
 class Assets extends StatefulWidget {
   const Assets({super.key});
@@ -33,6 +36,7 @@ class _AssetsState extends State<Assets> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = screenWidth * 0.05;
+    logger.log("debug_print-Assets-build-${listOfWalletAccountEntityG}");
     return BlocConsumer<UserBloc, UserState>(listener: (context, state) {
       if (state is GetUserDetailSuccessState) {
         setState(() {});
@@ -48,6 +52,12 @@ class _AssetsState extends State<Assets> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // FancyText(
+                //   "text",
+                //   action: () {
+                //     setState(() {});
+                //   },
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -130,9 +140,23 @@ class _AssetsState extends State<Assets> {
         }
       },
       builder: (context, state) {
-        double totalBalance = 0;
-
         if (state is FetchAllAccountBalanceSuccessState) {
+          exchangeBalance = state.listOfWalletsBalances
+              .where(
+            (element) => element.accountType == "exchange",
+          )
+              .fold(0, (sum, wallet) {
+            final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+            return sum + balance;
+          });
+          tradeBalance = state.listOfWalletsBalances
+              .where(
+            (element) => element.accountType == "trade",
+          )
+              .fold(0, (sum, wallet) {
+            final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
+            return sum + balance;
+          });
           totalBalance = state.listOfWalletsBalances.fold(0, (sum, wallet) {
             final balance = double.tryParse(wallet.actualQuantity ?? '0') ?? 0;
             return sum + balance;
@@ -208,7 +232,8 @@ class _AssetsState extends State<Assets> {
           if (state is StorePNLSuccessState) {}
         }, builder: (context, state) {
           return Text(
-            '+\$${state.pnl?.substring(0, 4) ?? 0}',
+            getDisplayVersionOfpnl(pnlG),
+            // '+\$${pnlG?.substring(0, 4) ?? 0}',
             style: TextStyles.smallText.copyWith(
               fontSize: screenWidth * 0.045, // Font size 4.5% of screen width
               color: ColorConstants.numyelcolor,
@@ -334,9 +359,11 @@ class _AssetsState extends State<Assets> {
           ),
         ),
         const SizedBox(height: 10),
-        _buildAccountContainer('Exchange'.toCurrentLanguage(), '\$0.000'),
+        _buildAccountContainer('Exchange'.toCurrentLanguage(),
+            '\$${exchangeBalance.toStringAsFixed(2)}'),
         const SizedBox(height: 10),
-        _buildAccountContainer('Trade'.toCurrentLanguage(), '\$3,200'),
+        _buildAccountContainer('Trade'.toCurrentLanguage(),
+            '\$${tradeBalance.toStringAsFixed(2)}'),
         const SizedBox(height: 10),
         // _buildAccountContainer('Perpetual'.toCurrentLanguage(), '\$0.000'),
       ],
@@ -368,7 +395,7 @@ class _AssetsState extends State<Assets> {
         }
         String displayedValue = value; // Default value
         if (title == 'Trade'.toCurrentLanguage()) {
-          displayedValue = '\$${tadeBalance}';
+          displayedValue = '${value}';
         }
         return FancyContainer(
           width: 400,
@@ -400,4 +427,9 @@ class _AssetsState extends State<Assets> {
       },
     );
   }
+  /*
+sdsdsddsf
+
+fresh banter
+*/
 }
