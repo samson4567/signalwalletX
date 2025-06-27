@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:signalwavex/core/app_variables.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:signalwavex/features/authentication/presentation/blocs/auth_bloc/auth_state.dart';
-import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/historical_order_model.dart';
 import 'package:signalwavex/languages.dart';
 
@@ -31,16 +29,12 @@ import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_even
 import 'package:signalwavex/features/coin/presentation/blocs/auth_bloc/coin_state.dart';
 import 'package:signalwavex/features/trading_system/data/models/coin_model.dart';
 import 'package:signalwavex/features/trading_system/presentation/blocs/auth_bloc/trading_system_state.dart';
-import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/data/models/order_model.dart';
 
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_bloc.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_event.dart';
 import 'package:signalwavex/features/wallet_system_user_balance_and_trade_calling/presentation/blocs/auth_bloc/wallet_system_user_balance_and_trade_calling_state.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/chart_test/line_chart_long_pulled.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_bloc.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_event.dart';
-import 'package:signalwavex/zzz_test_folder/testScreen/websocket_test/websocket_state.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

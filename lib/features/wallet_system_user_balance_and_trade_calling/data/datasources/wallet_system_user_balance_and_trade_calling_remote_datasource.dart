@@ -86,13 +86,13 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   @override
   Future<DepositAddressEntity> retriveDepositAddress(
       {required String currency, required String chain}) async {
-    print(
-        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-started");
-    print(
-        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-input_is_${[
-      currency,
-      chain
-    ]}");
+    // print(
+    //     "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-started");
+    // print(
+    //     "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasource-retriveDepositAddress-input_is_${[
+    //   currency,
+    //   chain
+    // ]}");
     final response = await networkClient.post(
       endpoint: EndpointConstant.retriveDepositAddress,
       isAuthHeaderRequired: true,
@@ -159,21 +159,21 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
   @override
   Future<String> doInternalTransfer(
       {required InternalTransferEntity internalTransferEntity}) async {
-    print(
-        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-starterd");
-    print(
-        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-input_is_${InternalTransferModel.fromEntity(internalTransferEntity).toInternalTransferJson()}");
+    // print(
+    //     "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-starterd");
+    // print(
+    //     "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-input_is_${InternalTransferModel.fromEntity(internalTransferEntity).toInternalTransferJson()}");
     final response = await networkClient.post(
       endpoint: EndpointConstant.doInternalTransfer,
       isAuthHeaderRequired: true,
       data: InternalTransferModel.fromEntity(internalTransferEntity)
           .toInternalTransferJson(),
     );
-    print(
-        "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-response_is_${[
-      response.data,
-      response.message,
-    ]}");
+    // print(
+    //     "debug_print-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-doInternalTransfer-response_is_${[
+    //   response.data,
+    //   response.message,
+    // ]}");
 
     return response.message;
   }
@@ -193,25 +193,25 @@ class WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl
 
   @override
   Future<List<TradeEntity>> listTradesAUserIsFollowing() async {
-    print(
-        "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-started");
+    // print(
+    //     "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-started");
     final response = await networkClient.get(
       endpoint: EndpointConstant.listTradesAUserIsFollowing,
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    print(
-        "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-response.data_is>>${response.data}");
+    // print(
+    //     "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-response.data_is>>${response.data}");
     List rawList = (response.data as Map)["followed_trades"];
-    print(
-        "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-rawList_is>>${rawList}");
+    // print(
+    //     "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-rawList_is>>${rawList}");
     List<TradeEntity> result = rawList
         .map(
           (e) => TradeModel.fromJson(e),
         )
         .toList();
-    print(
-        "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-result_is>>${result}");
+    // print(
+    //     "dbakbdkajbsdsksbdba-WalletSystemUserBalanceAndTradeCallingRemoteDatasourceImpl-result_is>>${result}");
     return result;
   }
 

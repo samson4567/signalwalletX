@@ -125,20 +125,20 @@ class TradingSystemBloc extends Bloc<TradingSystemEvent, TradingSystemState> {
     FetchActiveTradeEvent event,
     Emitter<TradingSystemState> emit,
   ) async {
-    print("debug_print-_onFetchActiveTradeEvent-statrted");
+    // print("debug_print-_onFetchActiveTradeEvent-statrted");
     emit(FetchActiveTradeLoadingState());
     // activeTradeMonitor = Timer.periodic(
     //   10.seconds,
     //   (timer) async {
     try {
       final result = await tradingSystemRepository.fetchActiveTrade();
-      print("debug_print-_onFetchActiveTradeEvent-result_fetched_${result}");
+      // print("debug_print-_onFetchActiveTradeEvent-result_fetched_${result}");
       emit(FetchActiveTradeSuccessState(orderEntity: result));
       currentOrderEntityToFollow = result;
-      print(
-          "debug_print-_onFetchActiveTradeEvent-FetchActiveTradeSuccessState_emmited${result}");
+      // print(
+      //     "debug_print-_onFetchActiveTradeEvent-FetchActiveTradeSuccessState_emmited${result}");
     } catch (e) {
-      print("debug_print-_onFetchActiveTradeEvent-error_is_${e} ");
+      // print("debug_print-_onFetchActiveTradeEvent-error_is_${e} ");
       emit(FetchActiveTradeErrorState(errorMessage: e.toString()));
     }
     //   },

@@ -13,7 +13,6 @@ import 'package:signalwavex/onboarding/login_screen.dart';
 import 'package:signalwavex/onboarding/phone_auth_webview.dart';
 import 'package:signalwavex/onboarding/set_newpassword.dart';
 import 'package:signalwavex/onboarding/varify_account.dart';
-import 'package:signalwavex/onboarding/varify_account_by_phone.dart';
 import 'package:signalwavex/router/api_route.dart';
 import 'package:signalwavex/settings/settings.dart';
 import 'package:signalwavex/zzz_test_folder/testScreen/test_screen.dart';

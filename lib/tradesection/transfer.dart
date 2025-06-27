@@ -39,16 +39,11 @@ class _TransferPageState extends State<TransferPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("sajhdhsbdjhasbdahsdb-selectedFromOption_${selectedFromOption}");
     listOfWalletAccountEntityOnUse = listOfWalletAccountEntityG
         .where(
           (element) => element.accountType == selectedFromOption.toLowerCase(),
         )
         .toList();
-    print("sajhdhsbdjhasbdahsdb-selectedFromOption_lsigthd_${[
-      listOfWalletAccountEntityG.length,
-      listOfWalletAccountEntityOnUse.length,
-    ]}");
 
     availableBalance = listOfWalletAccountEntityOnUse
         .where(
@@ -349,14 +344,8 @@ class _TransferPageState extends State<TransferPage> {
   }
 
   void _handleExchange() {
-    print("sabahsjdadjhb-amountController.text_is_${amountController.text}");
-
     String amountinString = amountController.text.replaceAll("\$", "");
-    print(
-        "sabahsjdadjhb-amountController.text_afterwards_is_${amountinString}");
-
     final double? amount = double.tryParse(amountinString);
-    print("sabahsjdadjhb-amount_is_${amount}");
     if (amount == null || amount <= 0) {
       _showDialog('invalid');
     } else if (amount > availableBalance) {

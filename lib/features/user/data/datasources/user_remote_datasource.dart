@@ -29,14 +29,14 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
 
   @override
   Future<UserEntity> getUserDetails() async {
-    print("debug_print-UserRemoteDatasourceImpl-getUserDetails-called");
+    // print("debug_print-UserRemoteDatasourceImpl-getUserDetails-called");
     final response = await networkClient.get(
       endpoint: EndpointConstant.fetchAllBalances, // e get as e be
       isAuthHeaderRequired: true,
       returnRawData: true,
     );
-    print(
-        "debug_print-UserRemoteDatasourceImpl-getUserDetails-response.data_is_${response.data}");
+    // print(
+    //     "debug_print-UserRemoteDatasourceImpl-getUserDetails-response.data_is_${response.data}");
 
     final result = UserModel.fromJson((response.data as Map));
     return result;

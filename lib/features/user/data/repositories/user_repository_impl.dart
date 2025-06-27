@@ -55,15 +55,15 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, ReferralListsResponseEntity>> getRefferalList() async {
-    print("debug_print-UserRepositoryImpl-getRefferalList-start");
+    // print("debug_print-UserRepositoryImpl-getRefferalList-start");
     try {
       final result = await userRemoteDatasource.getRefferalList();
-      print(
-          "debug_print-UserRepositoryImpl-getRefferalList-result_is_${result}");
+      // print(
+      //     "debug_print-UserRepositoryImpl-getRefferalList-result_is_${result}");
 
       return right(result);
     } catch (e) {
-      print("debug_print-UserRepositoryImpl-getRefferalList-e_is_${e}");
+      // print("debug_print-UserRepositoryImpl-getRefferalList-e_is_${e}");
       return left(mapExceptionToFailure(e));
     }
   }
