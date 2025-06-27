@@ -556,43 +556,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildFancyRecentTransaction(BuildContext context) {
-    final List<Map<String, String>> transactions = [
-      {
-        'icon': 'assets/icons/doge.png',
-        'name': 'DOGE',
-        'amount': '+4132.01DOGE',
-        'action': 'Buy',
-        'time': '9:20 AM'
-      },
-      {
-        'icon': 'assets/icons/ton.png',
-        'name': 'TON',
-        'amount': '+4132.01TON',
-        'action': 'Buy',
-        'time': '10:45 AM'
-      },
-      {
-        'icon': 'assets/icons/xrp.png',
-        'name': 'ETH',
-        'amount': '+4132.01ETH',
-        'action': 'Buy',
-        'time': '11:30 AM'
-      },
-      {
-        'icon': 'assets/icons/xrp.png',
-        'name': 'XRP',
-        'amount': '+4132.01XRP',
-        'action': 'Buy',
-        'time': '12:15 PM'
-      },
-      {
-        'icon': 'assets/icons/doge.png',
-        'name': 'DOGE',
-        'amount': '+4132.01DOGE',
-        'action': 'Buy',
-        'time': '1:05 PM'
-      },
-    ];
 
     return BlocConsumer<WalletSystemUserBalanceAndTradeCallingBloc,
             WalletSystemUserBalanceAndTradeCallingState>(
